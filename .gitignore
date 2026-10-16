@@ -1,0 +1,14 @@
+data/processed/**
+!data/processed/**/.gitkeep
+reports/figures/**/*.png
+reports/figures/**/*.jpg
+reports/figures/**/*.pdf
+!reports/figures/**/.gitkeep
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+.pytest_cache/
+
+.DS_Store
+Thumbs.db
