@@ -18,7 +18,7 @@ def perform_adf_test(series: pd.Series, title: str = "Original Series") -> float
     print(f"========== KIỂM ĐỊNH ADF CHO: {title.upper()} ==========")
     
     # Chạy hàm adfuller, regression="c" (có hằng số) là mặc định
-    result = adfuller(series.dropna(), autolag='AIC')
+    result = adfuller(series.dropna(), autolag='AIC', result_object=False)
     
     adf_statistic = result[0]
     p_value = result[1]
