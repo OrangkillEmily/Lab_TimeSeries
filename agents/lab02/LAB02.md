@@ -102,5 +102,5 @@ Sử dụng dataset1 (trong phần dataset bên dưới).
 **Dataset 2. AirPassengers - Monthly Airline Passengers**
 * Số hành khách hàng không theo tháng từ 1949 – 1960 (144 quan sát).
 * Tần suất: Monthly.
-* Chu kỳ mùa vụ: s = 12[cite: 20].
+* Chu kỳ mùa vụ: s = 12.
 * link: https://raw.githubusercontent.com/jbrownlee/Datasets/master/airline-passengers.csv
