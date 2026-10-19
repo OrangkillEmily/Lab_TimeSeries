@@ -1,6 +1,9 @@
 # src/lab02_utils/stats.py
+import numpy as np
 import pandas as pd
-from statsmodels.tsa.stattools import adfuller
+import matplotlib.pyplot as plt
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+from statsmodels.tsa.stattools import acf, adfuller, pacf
 
 def perform_adf_test(series: pd.Series, title: str = "Original Series") -> float:
     """
@@ -49,3 +52,71 @@ def perform_adf_test(series: pd.Series, title: str = "Original Series") -> float
         
     print("=" * 60 + "\n")
     return p_value
+
+
+def significant_lags(series: pd.Series, nlags: int = 36, pacf_method: str = "ywm") -> dict:
+    """
+    1. Mục đích:
+       Tính ACF và PACF của một chuỗi đã sai phân rồi liệt kê các lag có giá trị vượt
+       ngưỡng tin cậy 95% (±1.96/√n). Dùng để xác định lag bị "cắt cụt" một cách khách quan.
+
+    2. Tham số đầu vào:
+       - series (pd.Series): Chuỗi đã lấy sai phân (NaN sẽ bị loại).
+       - nlags (int): Số lag tối đa cần xét (mặc định 36 = 3 chu kỳ năm).
+       - pacf_method (str): Phương pháp tính PACF của statsmodels (mặc định 'ywm').
+
+    3. Kết quả đầu ra:
+       - dict: {'n', 'bound', 'acf_values', 'pacf_values', 'acf_sig', 'pacf_sig'};
+         *_values là mảng giá trị theo lag (chỉ số 0 = lag 0), *_sig là danh sách lag vượt ngưỡng.
+    """
+    x = series.dropna()
+    bound = 1.96 / np.sqrt(len(x))
+    acf_values = acf(x, nlags=nlags)
+    pacf_values = pacf(x, nlags=nlags, method=pacf_method)
+    return {
+        "n": len(x),
+        "bound": bound,
+        "acf_values": acf_values,
+        "pacf_values": pacf_values,
+        "acf_sig": [k for k in range(1, nlags + 1) if abs(acf_values[k]) > bound],
+        "pacf_sig": [k for k in range(1, nlags + 1) if abs(pacf_values[k]) > bound],
+    }
+
+
+def plot_acf_pacf(series: pd.Series, lags: int = 36, title: str = "",
+                  seasonal_period: int = 12, save_path: str = None) -> None:
+    """
+    1. Mục đích:
+       Vẽ cạnh nhau đồ thị ACF và PACF của chuỗi đã sai phân, kèm đường dọc đánh dấu các
+       lag mùa vụ (bội số của chu kỳ s) để dễ phân biệt lag ngắn (p, q) và lag mùa vụ (P, Q).
+
+    2. Tham số đầu vào:
+       - series (pd.Series): Chuỗi đã lấy sai phân (KHÔNG dùng chuỗi gốc).
+       - lags (int): Số lag hiển thị (mặc định 36).
+       - title (str): Tiêu đề chung của hình.
+       - seasonal_period (int): Chu kỳ mùa vụ s (mặc định 12 với dữ liệu tháng).
+       - save_path (str | None): Đường dẫn lưu ảnh .png (None = không lưu).
+
+    3. Kết quả đầu ra:
+       - None: Hiển thị (và lưu nếu có save_path) đồ thị.
+    """
+    x = series.dropna()
+    fig, axes = plt.subplots(1, 2, figsize=(15, 5))
+    plot_acf(x, lags=lags, zero=False, ax=axes[0])
+    plot_pacf(x, lags=lags, zero=False, method="ywm", ax=axes[1])
+    axes[0].set_title("ACF (gợi ý bậc q)")
+    axes[1].set_title("PACF (gợi ý bậc p)")
+    for ax in axes:
+        for k in range(seasonal_period, lags + 1, seasonal_period):
+            ax.axvline(k, color="tab:red", linestyle=":", alpha=0.6,
+                       label=f"Lag mùa vụ (bội của {seasonal_period})" if k == seasonal_period else None)
+        ax.set_xlabel("Lag (tháng)")
+        ax.set_ylabel("Hệ số tương quan")
+        ax.set_xticks(sorted(set([1, 2, 3, 4] + list(range(seasonal_period, lags + 1, seasonal_period)))))
+        ax.legend(loc="upper right")
+    fig.suptitle(title, fontsize=13, fontweight="bold")
+    plt.tight_layout()
+    if save_path:
+        plt.savefig(save_path, dpi=120, bbox_inches="tight")
+    plt.show()
+
