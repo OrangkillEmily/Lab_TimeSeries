@@ -17,6 +17,7 @@ Dự án tập trung vào việc khám phá dữ liệu (EDA), xử lý nhiễu,
 
 ## 2. Cấu trúc Thư mục (Repository Structure)
 
+```text
 ├── agents/                 # Chứa các file yêu cầu gốc của Lab 01 và Lab 02
 ├── data/
 │   ├── raw/                # Dữ liệu gốc (airline-passengers.csv)
@@ -32,7 +33,7 @@ Dự án tập trung vào việc khám phá dữ liệu (EDA), xử lý nhiễu,
     ├── data_loader.py      # Hàm load file CSV và thiết lập DatetimeIndex
     ├── lab01_utils/        # Các module hỗ trợ Lab 01: decomposition.py, plotting.py
     └── lab02_utils/        # Các module hỗ trợ Lab 02: stats.py (ADF/ACF), modeling.py (ARIMA/Metrics)
-
+```
 
 ## 3. Luồng Xử lý Tiêu chuẩn (Workflow)
 
