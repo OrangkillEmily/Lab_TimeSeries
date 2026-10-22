@@ -5,8 +5,24 @@ import matplotlib.dates as mdates
 from matplotlib.colors import Normalize
 import matplotlib.cm as cm
 
-def plot_missing_filling(ts_dirty, ts_ffill, ts_interp, ts_true, missing_dates, zoom_range):
-    """Vẽ đối chiếu điền dữ liệu khuyết thiếu (toàn chuỗi và phóng to)."""
+def plot_missing_filling(ts_dirty, ts_ffill, ts_interp, ts_true, missing_dates, zoom_range, zoom_only=False):
+    """Vẽ đối chiếu điền dữ liệu khuyết thiếu (toàn chuỗi và phóng to, hoặc chỉ phóng to để tránh trùng lặp)."""
+    if zoom_only:
+        fig, ax = plt.subplots(figsize=(10, 4.5))
+        zoom = slice(zoom_range[0], zoom_range[1])
+        ax.plot(ts_true[zoom].index, ts_true[zoom].values, color="gray", linestyle="--", marker="o", markersize=4, label="Giá trị thật (đáp án)")
+        ax.step(ts_ffill[zoom].index, ts_ffill[zoom].values, where="post", color="#ff7f0e", linewidth=1.8, label="Forward-fill (bậc thang)")
+        ax.plot(ts_interp[zoom].index, ts_interp[zoom].values, color="#2ca02c", linewidth=1.8, marker="^", markersize=5, label="Interpolation (nội suy)")
+        ax.set_title(f"Phóng to khoảng thiếu ({zoom_range[0][:7]} đến {zoom_range[1][:7]}): Forward-fill vs Interpolation", fontsize=12, fontweight="bold")
+        ax.set_xlabel("Thời gian")
+        ax.set_ylabel("Số hành khách (nghìn người)")
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%m/%Y"))
+        ax.legend(loc="upper left")
+        ax.grid(True, linestyle="--", alpha=0.4)
+        plt.tight_layout()
+        plt.show()
+        return
+
     fig, axes = plt.subplots(1, 2, figsize=(15, 4.8))
 
     # Biểu đồ 1: Toàn chuỗi
