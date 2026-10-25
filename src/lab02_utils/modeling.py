@@ -3,6 +3,7 @@ import warnings
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.graphics.tsaplots import plot_acf
@@ -183,35 +184,179 @@ def calculate_metrics(y_true, y_pred) -> dict:
     return metrics
 
 
-def plot_forecast(train, test, forecast, conf_int=None, title: str = "",
-                  save_path: str = None) -> None:
+def plot_forecast(train, test, forecast, conf_int=None, title: str = "", save_path: str = None) -> None:
     """
     1. Muc dich:
-       Ve do thi so sanh Train, Test (thuc te) va Forecast (kem khoang tin cay 95% neu co).
-
-    2. Tham so dau vao:
-       - train, test (pd.Series): Chuoi Train va Test thuc te.
-       - forecast (pd.Series): Gia tri du bao tren tap Test.
-       - conf_int (pd.DataFrame | None): Khoang tin cay 95% (2 cot: lower, upper).
-       - title (str): Tieu de do thi.
-       - save_path (str | None): Duong dan luu anh .png (None = khong luu).
-
-    3. Ket qua dau ra:
-       - None: Hien thi (va luu neu co save_path) do thi.
+       Ve do thi so sanh Train, Test (thuc te) va Forecast voi do phan giai cao, 
+       chi tiet den tung diem du lieu (co marker) va phan tach ro rang cac giai doan.
     """
-    plt.figure(figsize=(12, 6))
-    plt.plot(train.index, train.values, color="tab:blue", label="Train (80%)")
-    plt.plot(test.index, test.values, color="tab:orange", label="Test (thuc te)")
-    plt.plot(forecast.index, forecast.values, color="tab:green", linestyle="--",
-             linewidth=2, label="Forecast")
+    fig, ax = plt.subplots(figsize=(15, 7)) # Kéo dài form ngang thêm một chút
+    
+    # 1. Vẽ chuỗi Train (Thêm marker='.' để thấy rõ điểm dữ liệu của từng tháng)
+    ax.plot(train.index, train.values, color="tab:blue", linewidth=1.5, alpha=0.7, 
+            marker='.', markersize=4, label="Train (80%)")
+    
+    # 2. Vẽ chuỗi Test (Marker hình tròn nhỏ)
+    ax.plot(test.index, test.values, color="tab:orange", linewidth=2.2, 
+            marker='o', markersize=5, label="Test thực tế")
+    
+    # 3. Vẽ chuỗi Forecast (Marker hình thoi)
+    ax.plot(forecast.index, forecast.values, color="forestgreen", linestyle="--",
+            linewidth=2.2, marker='D', markersize=4, label="Dự báo (Forecast)")
+    
+    # 4. Vẽ khoảng tin cậy 95%
     if conf_int is not None:
-        plt.fill_between(conf_int.index, conf_int.iloc[:, 0], conf_int.iloc[:, 1],
-                         color="tab:green", alpha=0.15, label="Khoang tin cay 95%")
-    plt.title(title)
-    plt.xlabel("Nam")
-    plt.ylabel("So hanh khach (nghin nguoi)")
-    plt.legend()
+        ax.fill_between(conf_int.index, conf_int.iloc[:, 0], conf_int.iloc[:, 1],
+                        color="forestgreen", alpha=0.15, label="Khoảng tin cậy 95%")
+        
+    # 5. Vạch kẻ dọc phân chia ranh giới Train & Test
+    split_date = test.index[0]
+    ax.axvline(x=split_date, color='black', linestyle='--', linewidth=1.5, alpha=0.8)
+    
+    # Thêm text chú thích cho 2 giai đoạn 
+    ax.text(split_date - pd.DateOffset(months=3), ax.get_ylim()[1]*0.95, 
+            'Huấn luyện (Train)', ha='right', color='tab:blue', fontweight='bold')
+    ax.text(split_date + pd.DateOffset(months=2), ax.get_ylim()[1]*0.95, 
+            'Kiểm thử (Test)', ha='left', color='tab:orange', fontweight='bold')
+
+    # 6. TINH CHỈNH TRỤC X: Hiển thị nhãn mỗi 6 tháng, định dạng Tháng/Năm
+    ax.xaxis.set_major_locator(mdates.MonthLocator(interval=6))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%m/%Y'))
+    
+    # Giữ vạch chia nhỏ (minor ticks) cho từng tháng đơn lẻ
+    ax.xaxis.set_minor_locator(mdates.MonthLocator(interval=1))
+    
+    # Xoay nhãn 45 độ và căn lề phải để chữ không đâm vào trục
+    ax.tick_params(axis='x', rotation=45, labelsize=9)
+    for label in ax.get_xticklabels():
+        label.set_horizontalalignment('right')
+    
+    # 7. Tinh chỉnh Lưới, Tiêu đề và Legend
+    ax.grid(True, which='major', linestyle='-', alpha=0.6) 
+    ax.grid(True, which='minor', linestyle=':', alpha=0.4) 
+    
+    ax.set_title(title, fontsize=14, fontweight='bold', pad=15)
+    ax.set_xlabel("Thời gian (Tháng/Năm)", fontsize=11, fontweight='bold')
+    ax.set_ylabel("Số hành khách (nghìn người)", fontsize=11, fontweight='bold')
+    
+    # Viền legend có nền trắng tinh, đổ bóng nhẹ để không bị đường biểu đồ đâm xuyên
+    ax.legend(loc="upper left", frameon=True, shadow=True, fancybox=True, facecolor='white', framealpha=0.95)
+    
     plt.tight_layout()
     if save_path:
-        plt.savefig(save_path, dpi=120, bbox_inches="tight")
+        plt.savefig(save_path, dpi=150, bbox_inches="tight") 
     plt.show()
+
+
+    
+def plot_arima_vs_sarima(train, test, fc_arima1, fc_arima2, fc_sarima, conf_int_sarima, 
+                         names: dict, r2_scores: dict, title: str = "", save_path: str = None) -> None:
+    """
+    Hàm chuyên dụng để vẽ biểu đồ đối chiếu trực tiếp hiệu năng dự báo 
+    giữa 2 mô hình ARIMA và 1 mô hình SARIMA tốt nhất.
+    """
+    fig, ax = plt.subplots(figsize=(15, 7.5))
+    
+    # Vẽ tập Train (Làm mờ để nhường sự chú ý cho tập Test)
+    ax.plot(train.index, train.values, color='tab:blue', linewidth=1.5, alpha=0.5, 
+            label='Tập Huấn luyện (Train: 01/1949 - 07/1958)')
+    
+    # Vẽ tập Test (Đường màu đen đậm, có marker để thấy rõ thực tế)
+    ax.plot(test.index, test.values, color='black', linewidth=2.8, marker='o', markersize=4,
+            label='Thực tế (Test: 08/1958 - 12/1960)')
+    
+    # Vẽ 2 đường ARIMA (Nét đứt/chấm, màu cảnh báo)
+    ax.plot(test.index, fc_arima1.values, color='tab:red', linestyle=':', linewidth=2.2,
+            label=f"{names['arima1']} [Tuyến tính, R² = {r2_scores['arima1']:.2f}]")
+    
+    ax.plot(test.index, fc_arima2.values, color='tab:purple', linestyle='-.', linewidth=2.2,
+            label=f"{names['arima2']} [Tuyến tính, R² = {r2_scores['arima2']:.2f}]")
+    
+    # Vẽ đường SARIMA tốt nhất (Màu xanh lá đậm, nét liền nổi bật)
+    ax.plot(test.index, fc_sarima.values, color='forestgreen', linestyle='-', linewidth=2.8,
+            label=f"{names['sarima']} [Khớp chu kỳ mùa vụ, R² = {r2_scores['sarima']:.2f}]")
+    
+    # Vẽ dải tin cậy cho SARIMA
+    if conf_int_sarima is not None:
+        ax.fill_between(conf_int_sarima.index, conf_int_sarima.iloc[:, 0], conf_int_sarima.iloc[:, 1],
+                        color='forestgreen', alpha=0.15, label='SARIMA 95% Confidence Interval')
+
+    # Đường vạch dọc phân chia Train / Test
+    split_date = test.index[0]
+    ax.axvline(x=split_date, color='dimgrey', linestyle='--', linewidth=1.5, alpha=0.8)
+    
+    ax.text(split_date - pd.DateOffset(months=3), ax.get_ylim()[1]*0.95, 
+            'Huấn luyện', ha='right', color='dimgrey', fontstyle='italic', fontsize=11)
+    ax.text(split_date + pd.DateOffset(months=2), ax.get_ylim()[1]*0.95, 
+            'Dự báo (Ngoài mẫu)', ha='left', color='black', fontweight='bold', fontsize=11)
+
+    # Tinh chỉnh hiển thị (Lưới, Tiêu đề, Legend)
+    ax.xaxis.set_major_locator(mdates.YearLocator())
+    ax.xaxis.set_minor_locator(mdates.MonthLocator())
+    ax.grid(True, which='major', linestyle='-', alpha=0.6)
+    ax.grid(True, which='minor', linestyle=':', alpha=0.3)
+    
+    ax.set_title(title, fontsize=15, fontweight='bold', pad=15)
+    ax.set_xlabel('Năm', fontsize=12)
+    ax.set_ylabel('Số hành khách (nghìn người)', fontsize=12)
+    
+    # Khung Legend có viền bo tròn, đổ bóng để không bị chìm vào nền
+    ax.legend(loc='upper left', frameon=True, facecolor='white', framealpha=0.95, shadow=True, fontsize=10)
+    
+    plt.tight_layout()
+    if save_path:
+        plt.savefig(save_path, dpi=150, bbox_inches='tight') # dpi=150 cho ảnh sắc nét
+    plt.show()
+    
+    
+
+from pathlib import Path
+
+def plot_log_transformation(train, test=None, save_path: str | Path = None):
+    """"
+    Biến đổi Log tự nhiên để ổn định phương sai và vẽ biểu đồ chi tiết theo từng tháng.
+    Args:
+        train (pd.Series hoặc pd.DataFrame): Dữ liệu huấn luyện (index phải là Datetime).
+        test (pd.Series hoặc pd.DataFrame, optional): Dữ liệu kiểm thử.
+        fig_dir (str hoặc Path, optional): Đường dẫn thư mục để lưu ảnh.
+        
+    Returns:
+        train_log: Chuỗi train sau khi lấy log.
+        test_log: Chuỗi test sau khi lấy log (None nếu không truyền test).
+        diff_log: Chuỗi train sau khi lấy log và sai phân (d=1, D=1)
+    """
+    # 1. Biến đổi Log tự nhiên
+    train_log = np.log(train)
+    test_log = np.log(test) if test is not None else None
+
+    # 2. Trực quan hóa đặc tính chuỗi sau khi lấy Log
+    fig, axes = plt.subplots(2, 1, figsize=(18, 10))
+
+    # Ô 1: Chuỗi sau khi lấy ln(Train)
+    axes[0].plot(train_log.index, train_log.values, color='#2ca02c', linewidth=1.5, marker='.', markersize=4)
+    axes[0].set_title('1. Chuỗi sau khi lấy ln(Train): Biên độ sóng đều đặn (Homoscedasticity)', fontsize=12, fontweight='bold')
+    axes[0].set_ylabel('ln(Passengers)', fontsize=10, fontweight='bold')
+    
+    # Ô 2: Sai phân chuỗi Log (d=1, D=1)
+    diff_log = train_log.diff(1).diff(12).dropna()
+    axes[1].plot(diff_log.index, diff_log.values, color='#9467bd', linewidth=1.5, marker='.', markersize=4)
+    axes[1].axhline(0, color='black', linestyle='--', alpha=0.7)
+    axes[1].set_title('2. Sai phân chuỗi Log (d=1, D=1): Dao động dừng chuẩn & phương sai đồng nhất', fontsize=12, fontweight='bold')
+    axes[1].set_ylabel('Δ Δ₁₂ ln(Yₜ)', fontsize=10, fontweight='bold')
+    
+    for ax in axes:
+        # Cài đặt hiển thị từng tháng một
+        ax.xaxis.set_major_locator(mdates.MonthLocator())
+        # Định dạng nhãn theo kiểu Tháng/Năm (VD: 01/1949)
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%m/%Y'))
+        # Xoay nhãn 90 độ và thu nhỏ font chữ để không bị chồng chéo
+        ax.tick_params(axis='x', rotation=90, labelsize=8)
+        # Thêm lưới chi tiết cho trục x
+        ax.grid(True, which='major', linestyle='--', alpha=0.5)
+
+    plt.tight_layout()
+    
+    if save_path:
+         plt.savefig(save_path, dpi=150, bbox_inches='tight')
+    plt.show()
+    return train_log, test_log, diff_log
