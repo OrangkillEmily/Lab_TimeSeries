@@ -1,0 +1,220 @@
+# ==============================================================================
+# CẤU HÌNH TRUNG TÂM DỰ ÁN LAB04: MULTIVARIATE TIME SERIES FORECASTING
+# Học phần: Phân tích Chuỗi Thời gian (Time Series Analysis - UTH)
+# Bài toán 1 (Yêu cầu 1-11): Dự báo Phụ tải Điện năng & Thời tiết (VAR, XGBoost, LSTM)
+# Bài toán 2 (Yêu cầu 12)  : Dự báo Giao thông Đa bước PEMS-BAY với DCRNN (15m, 30m, 60m)
+# ==============================================================================
+
+project:
+  name: "LAB04_Multivariate_TimeSeries"
+  title: "Multivariate Time Series Forecasting — Electricity Load, Weather & Highway Traffic"
+  course: "Time Series Analysis — Practice 4 (Chapter 4-5: Multivariate Time Series Models)"
+  version: "1.0.0"
+  random_state: 42
+
+# ------------------------------------------------------------------------------
+# 1. CẤU HÌNH PHẦN CỨNG & TỰ ĐỘNG CHUYỂN ĐỔI GPU (AUTO-GPU ACCELERATION)
+# ------------------------------------------------------------------------------
+hardware:
+  device: "auto"                      # "auto": tự động ưu tiên CUDA GPU -> MPS -> CPU
+  prefer_dl_backend: "pytorch"        # "pytorch" (hỗ trợ CUDA native trên Windows 11 tốt nhất) hoặc "keras"
+  use_mixed_precision: true           # Bật AMP (FP16) trên GPU để giảm 50% VRAM và tăng tốc LSTM / DCRNN
+  cudnn_benchmark: true               # Tối ưu hóa kernel tích chập & RNN trên GPU NVIDIA
+  pin_memory: true                    # Tăng tốc truyền dữ liệu từ RAM sang VRAM
+  num_workers: 0                      # Đặt 0 trên Windows để tránh lỗi multiprocessing spawn
+  cpu_threads: -1                     # Sử dụng toàn bộ luồng CPU khi fallback hoặc chạy XGBoost/VAR trên CPU
+  clear_vram_each_fold: true          # Giải phóng VRAM sau mỗi Fold trong 5-Fold CV
+
+# ------------------------------------------------------------------------------
+# 2. CẤU HÌNH DỮ LIỆU BÀI TOÁN CHÍNH (YÊU CẦU 1-11: ELECTRICITY LOAD + WEATHER)
+# Nguồn: https://www.kaggle.com/datasets/jacopoferretti/electricity-load-diagrams-2011-2014-feature-engin
+# ------------------------------------------------------------------------------
+electricity_data:
+  dataset_name: "Electricity Load Diagrams Dataset (UCI / Kaggle)"
+  source_url: "https://www.kaggle.com/datasets/jacopoferretti/electricity-load-diagrams-2011-2014-feature-engin"
+  raw_path: "data/raw/electricity_load.csv"
+  processed_dir: "data/processed/electricity"
+  datetime_column: "datetime"
+  frequency: "1h"
+  target_column: "load"
+  feature_columns:
+    - "load"
+    - "temperature"
+    - "humidity"
+    - "wind_speed"
+  column_aliases:                     # Tự động ánh xạ nếu tên cột trong CSV khác biệt nhẹ
+    load: ["load", "Load", "total_load", "MT_total", "power_load", "kw"]
+    temperature: ["temperature", "temp", "Temperature", "TEMP", "t2m"]
+    humidity: ["humidity", "hum", "Humidity", "HUM", "rh"]
+    wind_speed: ["wind_speed", "wind", "Wind_Speed", "WIND", "ws", "wnd_spd"]
+  max_timesteps: null                 # null = dùng toàn bộ chuỗi; có thể đặt số giờ cụ thể khi chạy thử nghiệm nhanh
+
+# ------------------------------------------------------------------------------
+# 3. CẤU HÌNH TIỀN XỬ LÝ, CHIA TẬP DỮ LIỆU (70/15/15) & TEMPORAL K-FOLD CV
+# ------------------------------------------------------------------------------
+preprocessing:
+  scaler_type: "StandardScaler"       # Chuẩn hóa Z-score (mu=0, sigma=1) theo Mục 4.1
+  with_mean: true
+  with_std: true
+  handle_missing: "ffill_then_interp" # Điền khuyết nhân quả về phía trước kết hợp nội suy tuyến tính
+  outlier_detection:
+    method: "iqr_and_zscore"
+    iqr_multiplier: 1.5
+    zscore_threshold: 3.0
+    clip_extreme_outliers: false      # Giữ nguyên đỉnh phụ tải thật, chỉ đánh dấu trong báo cáo EDA
+  seasonality:
+    daily_period: 24                  # Chu kỳ ngày: 24 giờ
+    weekly_period: 168                # Chu kỳ tuần: 168 giờ (7 ngày x 24 giờ)
+
+splitting_and_validation:
+  chronological_split:
+    train_ratio: 0.70                 # 70% tập huấn luyện (Mục 4.2)
+    val_ratio: 0.15                   # 15% tập kiểm định (dùng cho EarlyStopping & chọn siêu tham số)
+    test_ratio: 0.15                  # 15% tập kiểm tra độc lập cuối cùng
+    shuffle: false                    # BẮT BUỘC false đối với chuỗi thời gian
+  kfold_cv:
+    enabled: true                     # Yêu cầu 4: Áp dụng K-Fold Cross-Validation bên cạnh Train-Val-Test
+    method: "TimeSeriesSplit"         # Cửa sổ mở rộng theo thời gian (Expanding Window Forward-Chaining)
+    n_splits: 5                       # K = 5 Folds
+    gap: 0                            # Khoảng cách bước thời gian giữa tập Train_k và Val_k
+    in_fold_scaling: true             # Bắt buộc fit StandardScaler riêng trên từng Train_k
+
+# ------------------------------------------------------------------------------
+# 4. CẤU HÌNH FEATURE ENGINEERING CHO ML & DL (MỤC 5)
+# ------------------------------------------------------------------------------
+feature_engineering:
+  lag_window: 24                      # L = 24 giờ gần nhất (Mục 5.1)
+  forecast_horizon: 1                 # Dự báo bước tiếp theo load_{t+1}
+  xgboost_rolling_features:           # Các đặc trưng trượt chỉ dùng thêm cho XGBoost (Mục 5.2)
+    enabled: true
+    rolling_mean_windows: [6]         # Rolling mean 6 giờ
+    rolling_std_windows: [24]         # Rolling standard deviation 24 giờ
+    include_load_trend_24h: true      # Load trend: load_t - load_{t-24}
+    include_cross_ratios: true        # Tương tác giữa các biến: load / (temperature + eps) (Slide 7)
+    include_calendar_cyclical: true   # Mã hóa sin/cos của giờ trong ngày (24h) và thứ trong tuần (7d)
+
+# ------------------------------------------------------------------------------
+# 5. CẤU HÌNH 3 MÔ HÌNH CHÍNH (YÊU CẦU 6, 7, 8)
+# ------------------------------------------------------------------------------
+var_model:
+  name: "VAR_Statistical_Baseline"
+  adf_significance: 0.05              # Ngưỡng p-value kiểm định tính dừng Augmented Dickey-Fuller
+  max_diff_order: 2                   # Số bậc sai phân tối đa nếu chuỗi không dừng
+  maxlags: 24                         # Bậc trễ tối đa xét duyệt (tương ứng chu kỳ 24 giờ)
+  information_criterion: "aic"        # Chọn bậc trễ tối ưu dựa trên "aic" hoặc "bic"
+  trend: "c"                          # Bao gồm vector hằng số c trong phương trình VAR(p)
+
+xgboost_model:
+  name: "XGBoost_Tabular_Regressor"
+  n_estimators: 600
+  max_depth: 6
+  learning_rate: 0.03
+  subsample: 0.85
+  colsample_bytree: 0.85
+  reg_alpha: 0.1
+  reg_lambda: 1.0
+  min_child_weight: 3
+  objective: "reg:squarederror"
+  tree_method: "hist"                 # Tự động kết hợp với device="cuda" khi có GPU
+  early_stopping_rounds: 35           # Dừng sớm trên tập Validation (15%)
+  random_state: 42
+
+lstm_model:
+  name: "Stacked_LSTM_Forecaster"
+  input_shape: [24, 4]                # Tensor 3D: (batch_samples, 24 bước thời gian, 4 biến)
+  lstm_units: [64, 32]                # Kiến trúc chuẩn đề bài: LSTM(64) -> LSTM(32) -> Dense(1)
+  dropout_rate: 0.15
+  dense_units: 1
+  output_activation: "linear"
+  loss: "mse"                         # Hàm mất mát MSE (Mục 8.2)
+  optimizer: "adam"                   # Bộ tối ưu Adam (Mục 8.2)
+  learning_rate: 0.001
+  weight_decay: 1.0e-5
+  batch_size: 64
+  epochs: 60
+  early_stopping:
+    enabled: true
+    monitor: "val_loss"
+    patience: 10
+    min_delta: 0.0001
+    restore_best_weights: true
+
+# ------------------------------------------------------------------------------
+# 6. CẤU HÌNH BACKTESTING / WALK-FORWARD VALIDATION (MỤC 9) & ĐÁNH GIÁ (MỤC 10)
+# ------------------------------------------------------------------------------
+backtesting:
+  enabled: true                       # Train -> predict t+1 -> thêm vào chuỗi -> predict t+2 -> ...
+  evaluation_window_hours: 168        # Số bước kiểm thử Walk-Forward chi tiết (168h = 7 ngày hoàn chỉnh)
+  refit_every_hours: 24               # Cập nhật trạng thái/mô hình định kỳ sau mỗi 24 giờ thực tế
+
+evaluation:
+  metrics:                            # Yêu cầu 6: Đầy đủ 5 chỉ số đánh giá
+    - "mse"                           # Mean Squared Error
+    - "rmse"                          # Root Mean Squared Error
+    - "mae"                           # Mean Absolute Error
+    - "mape"                          # Mean Absolute Percentage Error (%)
+    - "r2"                            # Coefficient of Determination (R^2 Score)
+  mape_epsilon: 1.0e-3                # Hằng số chống chia cho 0 khi tính MAPE
+  evaluate_on_original_scale: true    # Bắt buộc inverse_transform về đơn vị gốc trước khi tính 5 chỉ số
+
+# ------------------------------------------------------------------------------
+# 7. CẤU HÌNH BÀI TẬP 12 NÂNG CAO: TRAFFIC FORECASTING VỚI PEMS-BAY & DCRNN
+# Nguồn: Paper Diffusion Convolutional Recurrent Neural Network (ICLR 2018)
+# ------------------------------------------------------------------------------
+pems_bay_advanced:
+  enabled: true
+  dataset_name: "PEMS-BAY (California Highway Traffic Sensors)"
+  data_source_url: "https://drive.google.com/file/d/1wD-mHlqAb2mtHOe_68fZvDh1LpDegMMq/view?usp=drive_link"
+  graph_source_url: "https://github.com/liyaguang/dcrnn"
+  h5_path: "data/raw/pems-bay.h5"
+  adj_mx_path: "data/raw/sensor_graph/adj_mx_bay.pkl"
+  processed_dir: "data/processed/pems_bay"
+  frequency: "5min"
+  num_sensors_config: 207             # Đặt 207 để khớp công thức đề bài hoặc 325 để chạy toàn bộ trạm PEMS-BAY
+  input_window: 12                    # 12 bước thời gian quá khứ (60 phút)
+  forecast_horizons: [3, 6, 12]       # Dự báo trước 3 bước (15m), 6 bước (30m) và 12 bước (60m)
+  horizon_labels:
+    3: "15_min_ahead"
+    6: "30_min_ahead"
+    12: "60_min_ahead"
+  max_timesteps: 8640                 # 8640 bước = 30 ngày (5 phút/bước) giúp chạy mượt trên GPU Laptop; đặt null để chạy toàn bộ 6 tháng
+  dcrnn_model:
+    name: "DCRNN_Seq2Seq_Traffic_Forecaster"
+    filter_type: "dual_random_walk"   # Bước ngẫu nhiên hai chiều (xuôi dòng D_O^{-1}W & ngược dòng D_I^{-1}W^T)
+    max_diffusion_step: 2             # Bậc khuếch tán đồ thị K = 2
+    num_rnn_layers: 2                 # Số tầng DCGRU trong Encoder và Decoder
+    rnn_units: 64                     # Số chiều trạng thái ẩn của mỗi tế bào DCGRU
+    use_curriculum_learning: true     # Bật Scheduled Sampling khi huấn luyện Decoder
+    cl_decay_steps: 2000
+    loss: "mae"                       # Tối ưu hóa MAE / MSE trên đơn vị tốc độ mph
+    optimizer: "adam"
+    learning_rate: 0.003
+    batch_size: 32
+    epochs: 30
+    early_stopping_patience: 6
+
+# ------------------------------------------------------------------------------
+# 8. ĐƯỜNG DẪN LƯU TRỮ ARTIFACTS, LOGS & TỰ ĐỘNG XUẤT BÁO CÁO
+# ------------------------------------------------------------------------------
+paths:
+  agents_dir: "agents/lab04"
+  docs_dir: "docs"
+  models_dir: "models"
+  logs_dir: "logs"
+  progress_dir: "progress_results"
+  reports_dir: "reports"
+  figures_dir: "reports/figures"
+  metrics_dir: "reports/metrics"
+  predictions_dir: "reports/predictions"
+  experiment_log_csv: "docs/experiment_logs.csv"
+  report_md: "reports/LAB_04_REPORT.md"
+  report_html: "reports/LAB_04_REPORT.html"
+  report_pdf: "reports/LAB_04_REPORT.pdf"
+  docs_report_md: "docs/LAB_04_REPORT.md"
+  docs_report_html: "docs/LAB_04_REPORT.html"
+  docs_report_pdf: "docs/LAB_04_REPORT.pdf"
+
+logging:
+  level: "INFO"
+  encoding: "utf-8"
+  figure_dpi: 300
