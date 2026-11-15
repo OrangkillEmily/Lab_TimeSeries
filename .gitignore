@@ -6,8 +6,8 @@ data/processed/*
 !data/processed/**/.gitkeep
 
 # Bỏ qua ảnh/biểu đồ trong reports/figures nhưng giữ lại .gitkeep
-reports/figures/*
-!reports/figures/**/.gitkeep
+#reports/figures/*
+#!reports/figures/**/.gitkeep
 
 # Các file nặng và file rác hệ thống / Python
 *.h5
