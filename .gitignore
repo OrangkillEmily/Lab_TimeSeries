@@ -1,14 +1,18 @@
-# Bỏ qua dữ liệu trong data/raw và data/processed nhưng giữ lại .gitkeep
-data/raw/*
-!data/raw/**/.gitkeep
-
-data/processed/*
-!data/processed/**/.gitkeep
-
 # Bỏ qua ảnh/biểu đồ trong reports/figures nhưng giữ lại .gitkeep
 #reports/figures/*
 #!reports/figures/**/.gitkeep
 
+data/raw/**/*
+!data/raw/**/
+!data/raw/**/.gitkeep
+
+data/processed/**/*
+!data/processed/**/
+!data/processed/**/.gitkeep
+
+data/sensor_graph/**/*
+!data/sensor_graph/**/
+!data/sensor_graph/**/.gitkeep
 # Các file nặng và file rác hệ thống / Python
 *.h5
 __pycache__/
