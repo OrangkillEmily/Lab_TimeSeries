@@ -1,0 +1,13 @@
+Model,Model_Display,Horizon,Steps_Ahead,Minutes_Ahead,MSE,RMSE,MAE,MAPE,R2,Max_Error,Mean_Residual,Std_Residual,Train_Time_Sec
+DCRNN,DCRNN (Graph Diffusion + GRU),15_min,3,15,7.6291,2.7621,1.3094,2.7182,0.9196,47.1802,-0.0199,2.762,67.2227
+DCRNN,DCRNN (Graph Diffusion + GRU),30_min,6,30,15.4535,3.9311,1.7338,3.8915,0.8372,55.5159,-0.1243,3.9291,67.2227
+DCRNN,DCRNN (Graph Diffusion + GRU),60_min,12,60,27.8962,5.2817,2.304,5.6224,0.7063,58.6159,-0.2987,5.2732,67.2227
+DCRNN,DCRNN (Graph Diffusion + GRU),Average_All_Horizons,7,35,16.9929,3.9916,1.7824,4.0774,0.821,58.6159,-0.1476,3.9881,67.2227
+Multi_Horizon_TCN,Multi-Horizon TCN (Causal Conv1D),15_min,3,15,8.6841,2.9469,1.3542,2.8547,0.9085,50.9629,-0.0363,2.9467,15.3198
+Multi_Horizon_TCN,Multi-Horizon TCN (Causal Conv1D),30_min,6,30,19.0383,4.3633,1.8553,4.1755,0.7994,55.8628,-0.0716,4.3627,15.3198
+Multi_Horizon_TCN,Multi-Horizon TCN (Causal Conv1D),60_min,12,60,37.1623,6.0961,2.6243,6.5286,0.6087,58.893,-0.2729,6.09,15.3198
+Multi_Horizon_TCN,Multi-Horizon TCN (Causal Conv1D),Average_All_Horizons,7,35,21.6282,4.4688,1.9446,4.5196,0.7722,58.893,-0.1269,4.4665,15.3198
+Multi_Horizon_LSTM,Multi-Horizon LSTM (Temporal Only),15_min,3,15,8.4484,2.9066,1.4182,2.9199,0.911,47.0235,0.0986,2.9049,7.7795
+Multi_Horizon_LSTM,Multi-Horizon LSTM (Temporal Only),30_min,6,30,16.2314,4.0288,1.8885,4.0697,0.829,50.7904,0.2363,4.0219,7.7795
+Multi_Horizon_LSTM,Multi-Horizon LSTM (Temporal Only),60_min,12,60,28.6132,5.3491,2.4986,5.4961,0.6987,54.8376,0.4652,5.3289,7.7795
+Multi_Horizon_LSTM,Multi-Horizon LSTM (Temporal Only),Average_All_Horizons,7,35,17.7643,4.0948,1.9351,4.1619,0.8129,54.8376,0.2667,4.0852,7.7795

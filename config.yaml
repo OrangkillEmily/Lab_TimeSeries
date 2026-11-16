@@ -1,0 +1,133 @@
+project:
+  name: "Lab04_Multivariate_TimeSeries_Forecasting"
+  version: "2.0.0"
+  lab_id: "lab04"
+  course: "Time Series Analysis (Phân tích Chuỗi Thời gian)"
+  institution: "University of Transport in Ho Chi Minh City (UTH)"
+  random_seed: 42
+
+paths:
+  data_raw_electricity: "data/raw/electricity_load.csv"
+  data_raw_pems_bay: "data/raw/pems-bay.h5"
+  data_raw_adj_mx: "data/sensor_graph/adj_mx_bay.pkl"
+  data_processed_dir: "data/processed/lab04"
+  models_dir: "models/lab04"
+  reports_dir: "reports/lab04"
+  figures_dir: "reports/lab04/figures"
+  metrics_dir: "reports/lab04/metrics"
+  logs_dir: "logs/lab04"
+  progress_dir: "progress_results/lab04"
+  docs_dir: "docs/lab04"
+  notebooks_dir: "notebooks/lab04"
+  scripts_dir: "script/lab04"
+
+hardware:
+  auto_gpu: true
+  prefer_device: "cuda"
+  enable_amp_fp16: true
+  cudnn_benchmark: true
+  num_workers: 0
+
+data:
+  electricity:
+    target_col: "load"
+    exogenous_cols:
+      - "temperature"
+      - "humidity"
+      - "wind_speed"
+    freq: "1h"
+    resample_rule: "1h"
+    max_hours: null
+    normalize_active_meters: true
+    outlier_iqr_multiplier: 1.5
+    outlier_zscore_threshold: 3.0
+  pems_bay:
+    freq: "5min"
+    num_sensors_config: 207
+    max_timesteps: 8640
+    lookback_steps: 12
+    horizons:
+      15_min: 3
+      30_min: 6
+      60_min: 12
+
+preprocessing:
+  split:
+    train_ratio: 0.70
+    val_ratio: 0.15
+    test_ratio: 0.15
+    shuffle: false
+  cv:
+    enabled: true
+    n_splits: 5
+    gap: 0
+  scaling:
+    method: "StandardScaler"
+    fit_on_train_only: true
+  stationarity:
+    adf_significance: 0.05
+    max_diff_order: 2
+  windowing:
+    lookback_hours: 24
+    forecast_horizon: 1
+    lag_list: [1, 2, 3, 6, 12, 24, 48, 168]
+    rolling_windows: [6, 12, 24, 168]
+
+models:
+  var:
+    enabled: true
+    maxlags: 24
+    ic: "aic"
+    trend: "c"
+  xgboost:
+    enabled: true
+    n_estimators: 450
+    max_depth: 6
+    learning_rate: 0.045
+    subsample: 0.85
+    colsample_bytree: 0.85
+    reg_alpha: 0.1
+    reg_lambda: 1.0
+    early_stopping_rounds: 30
+  lstm:
+    enabled: true
+    hidden_dims: [64, 32]
+    dropout: 0.10
+    use_residual_highway: true
+    batch_size: 128
+    epochs: 30
+    learning_rate: 0.0015
+    weight_decay: 0.0001
+    patience: 7
+    grad_clip_norm: 1.0
+  dcrnn:
+    enabled: true
+    hidden_dim: 32
+    diffusion_k: 2
+    batch_size: 64
+    epochs: 12
+    learning_rate: 0.003
+    weight_decay: 0.0001
+    patience: 4
+    grad_clip_norm: 2.0
+    compare_baselines:
+      lstm_multi_horizon: true
+      tcn_multi_horizon: true
+      baseline_epochs: 10
+      tcn_channels: 32
+      tcn_kernel_size: 3
+
+evaluation:
+  metrics:
+    - "MSE"
+    - "RMSE"
+    - "MAE"
+    - "MAPE"
+    - "R2"
+  walk_forward:
+    enabled: true
+    eval_steps: 168
+    retrain_stride: 24
+  ablation:
+    enabled: true
+    compare_with_and_without_weather: true
