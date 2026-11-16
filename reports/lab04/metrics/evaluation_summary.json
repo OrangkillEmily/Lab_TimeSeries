@@ -18,8 +18,8 @@
       "Val_RMSE": 5604.2708,
       "Val_MAPE": 7.0705,
       "Val_R2": 0.9912,
-      "Train_Time_Sec": 5.5363,
-      "Pred_Time_Sec": 0.117984,
+      "Train_Time_Sec": 5.4901,
+      "Pred_Time_Sec": 0.118053,
       "Device": "cuda"
     },
     {
@@ -40,8 +40,8 @@
       "Val_RMSE": 5968.2838,
       "Val_MAPE": 7.1742,
       "Val_R2": 0.9901,
-      "Train_Time_Sec": 92.2012,
-      "Pred_Time_Sec": 0.775323,
+      "Train_Time_Sec": 86.7262,
+      "Pred_Time_Sec": 0.773854,
       "Device": "cuda"
     },
     {
@@ -62,8 +62,8 @@
       "Val_RMSE": 6501.0348,
       "Val_MAPE": 7.2729,
       "Val_R2": 0.9882,
-      "Train_Time_Sec": 3.0653,
-      "Pred_Time_Sec": 0.244528,
+      "Train_Time_Sec": 3.5746,
+      "Pred_Time_Sec": 0.30483,
       "Device": "cpu"
     }
   ],
@@ -139,14 +139,14 @@
     {
       "Model": "LSTM",
       "Eval_Steps": 168,
-      "MSE": 35112198.6916,
-      "RMSE": 5925.5547,
-      "MAE": 4313.8219,
-      "MAPE": 1.9865,
-      "R2": 0.9926,
-      "Max_Error": 26627.7875,
-      "Mean_Residual": 329.193,
-      "Std_Residual": 5916.4035
+      "MSE": 33764323.7447,
+      "RMSE": 5810.7077,
+      "MAE": 4238.7778,
+      "MAPE": 1.9522,
+      "R2": 0.9929,
+      "Max_Error": 26100.6662,
+      "Mean_Residual": 355.7829,
+      "Std_Residual": 5799.8054
     }
   ],
   "weather_ablation": [
@@ -205,7 +205,7 @@
       "Max_Error": 47.1802,
       "Mean_Residual": -0.0199,
       "Std_Residual": 2.762,
-      "Train_Time_Sec": 69.0303
+      "Train_Time_Sec": 67.2227
     },
     {
       "Model": "DCRNN",
@@ -221,7 +221,7 @@
       "Max_Error": 55.5159,
       "Mean_Residual": -0.1243,
       "Std_Residual": 3.9291,
-      "Train_Time_Sec": 69.0303
+      "Train_Time_Sec": 67.2227
     },
     {
       "Model": "DCRNN",
@@ -237,7 +237,7 @@
       "Max_Error": 58.6159,
       "Mean_Residual": -0.2987,
       "Std_Residual": 5.2732,
-      "Train_Time_Sec": 69.0303
+      "Train_Time_Sec": 67.2227
     }
   ],
   "pems_bay_benchmark": [
@@ -255,7 +255,7 @@
       "Max_Error": 47.1802,
       "Mean_Residual": -0.0199,
       "Std_Residual": 2.762,
-      "Train_Time_Sec": 69.0303
+      "Train_Time_Sec": 67.2227
     },
     {
       "Model": "DCRNN",
@@ -271,7 +271,7 @@
       "Max_Error": 55.5159,
       "Mean_Residual": -0.1243,
       "Std_Residual": 3.9291,
-      "Train_Time_Sec": 69.0303
+      "Train_Time_Sec": 67.2227
     },
     {
       "Model": "DCRNN",
@@ -287,7 +287,7 @@
       "Max_Error": 58.6159,
       "Mean_Residual": -0.2987,
       "Std_Residual": 5.2732,
-      "Train_Time_Sec": 69.0303
+      "Train_Time_Sec": 67.2227
     },
     {
       "Model": "DCRNN",
@@ -303,7 +303,7 @@
       "Max_Error": 58.6159,
       "Mean_Residual": -0.1476,
       "Std_Residual": 3.9881,
-      "Train_Time_Sec": 69.0303
+      "Train_Time_Sec": 67.2227
     },
     {
       "Model": "Multi_Horizon_TCN",
@@ -311,15 +311,15 @@
       "Horizon": "15_min",
       "Steps_Ahead": 3,
       "Minutes_Ahead": 15,
-      "MSE": 8.6839,
-      "RMSE": 2.9468,
-      "MAE": 1.3543,
-      "MAPE": 2.8553,
+      "MSE": 8.6841,
+      "RMSE": 2.9469,
+      "MAE": 1.3542,
+      "MAPE": 2.8547,
       "R2": 0.9085,
       "Max_Error": 50.9629,
       "Mean_Residual": -0.0363,
-      "Std_Residual": 2.9466,
-      "Train_Time_Sec": 15.1527
+      "Std_Residual": 2.9467,
+      "Train_Time_Sec": 15.3198
     },
     {
       "Model": "Multi_Horizon_TCN",
@@ -327,15 +327,15 @@
       "Horizon": "30_min",
       "Steps_Ahead": 6,
       "Minutes_Ahead": 30,
-      "MSE": 19.0384,
+      "MSE": 19.0383,
       "RMSE": 4.3633,
       "MAE": 1.8553,
-      "MAPE": 4.1753,
+      "MAPE": 4.1755,
       "R2": 0.7994,
       "Max_Error": 55.8628,
       "Mean_Residual": -0.0716,
       "Std_Residual": 4.3627,
-      "Train_Time_Sec": 15.1527
+      "Train_Time_Sec": 15.3198
     },
     {
       "Model": "Multi_Horizon_TCN",
@@ -343,15 +343,15 @@
       "Horizon": "60_min",
       "Steps_Ahead": 12,
       "Minutes_Ahead": 60,
-      "MSE": 37.1618,
-      "RMSE": 6.096,
+      "MSE": 37.1623,
+      "RMSE": 6.0961,
       "MAE": 2.6243,
-      "MAPE": 6.5287,
+      "MAPE": 6.5286,
       "R2": 0.6087,
       "Max_Error": 58.893,
       "Mean_Residual": -0.2729,
-      "Std_Residual": 6.0899,
-      "Train_Time_Sec": 15.1527
+      "Std_Residual": 6.09,
+      "Train_Time_Sec": 15.3198
     },
     {
       "Model": "Multi_Horizon_TCN",
@@ -359,15 +359,15 @@
       "Horizon": "Average_All_Horizons",
       "Steps_Ahead": 7,
       "Minutes_Ahead": 35,
-      "MSE": 21.628,
-      "RMSE": 4.4687,
+      "MSE": 21.6282,
+      "RMSE": 4.4688,
       "MAE": 1.9446,
-      "MAPE": 4.5198,
+      "MAPE": 4.5196,
       "R2": 0.7722,
       "Max_Error": 58.893,
       "Mean_Residual": -0.1269,
-      "Std_Residual": 4.4664,
-      "Train_Time_Sec": 15.1527
+      "Std_Residual": 4.4665,
+      "Train_Time_Sec": 15.3198
     },
     {
       "Model": "Multi_Horizon_LSTM",
@@ -383,7 +383,7 @@
       "Max_Error": 47.0235,
       "Mean_Residual": 0.0986,
       "Std_Residual": 2.9049,
-      "Train_Time_Sec": 8.2411
+      "Train_Time_Sec": 7.7795
     },
     {
       "Model": "Multi_Horizon_LSTM",
@@ -399,7 +399,7 @@
       "Max_Error": 50.7904,
       "Mean_Residual": 0.2363,
       "Std_Residual": 4.0219,
-      "Train_Time_Sec": 8.2411
+      "Train_Time_Sec": 7.7795
     },
     {
       "Model": "Multi_Horizon_LSTM",
@@ -415,7 +415,7 @@
       "Max_Error": 54.8376,
       "Mean_Residual": 0.4652,
       "Std_Residual": 5.3289,
-      "Train_Time_Sec": 8.2411
+      "Train_Time_Sec": 7.7795
     },
     {
       "Model": "Multi_Horizon_LSTM",
@@ -431,7 +431,7 @@
       "Max_Error": 54.8376,
       "Mean_Residual": 0.2667,
       "Std_Residual": 4.0852,
-      "Train_Time_Sec": 8.2411
+      "Train_Time_Sec": 7.7795
     }
   ],
   "section_11_answers": {
@@ -441,5 +441,5 @@
     "Q4_PEMS_BAY_SpatioTemporal_Benchmark": "Ở Bài tập 12 nâng cao trên bộ dữ liệu giao thông PEMS-BAY (207 trạm cảm biến × 8,640 bước 5 phút), mô hình DCRNN (tích hợp ma trận đồ thị không gian adj_mx_bay.pkl qua phép tích chập khuếch tán hai chiều) vượt trội hơn hẳn cả Multi-Horizon TCN và Multi-Horizon LSTM ở tất cả các tầm nhìn xa (15 phút, 30 phút, 60 phút). Đặc biệt ở tầm nhìn xa 60 phút (t+12), DCRNN đạt MAE = 2.304 mph, thấp hơn rõ rệt so với Multi-Horizon TCN (MAE = 2.624 mph) và Multi-Horizon LSTM không dùng đồ thị (MAE = 2.499 mph), chứng minh giá trị cốt lõi của cấu trúc mạng lưới không gian khi dự báo sóng lan truyền tắc nghẽn giao thông."
   },
   "best_holdout_model": "XGBoost",
-  "duration_sec": 0.7566
+  "duration_sec": 0.7089
 }

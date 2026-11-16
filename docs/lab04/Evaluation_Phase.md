@@ -2,13 +2,13 @@
 
 ## 1. Purpose — Mục đích
 
-**Giai đoạn Đánh giá (`Evaluation_Phase`)** thực hiện **Mục 10 (Đánh giá mô hình)**, **Mục 11 (6 Câu hỏi phân tích)** và **Mục 12 (Đánh giá Traffic Forecasting trên PEMS-BAY)** trong đề bài `practice 4.pdf`, kết hợp **Yêu cầu bổ sung số 4 (`5-Fold Cross-Validation`)** và **Yêu cầu bổ sung số 6 (Mở rộng thành bộ 5 chỉ số: `MSE`, `RMSE`, `MAE`, `MAPE (%)`, `R²`)**.
+**Giai đoạn Đánh giá (`Evaluation_Phase`)** thực hiện **Mục 10 (Đánh giá mô hình)**, **Mục 11 (Các câu hỏi phân tích chuyên sâu)** và **Mục 12 (Đánh giá Traffic Forecasting trên PEMS-BAY)** trong đề bài `practice 4.pdf`, kết hợp **Yêu cầu bổ sung số 4 (`5-Fold Cross-Validation`)** và **Yêu cầu bổ sung số 6 (Mở rộng thành bộ 5 chỉ số: `MSE`, `RMSE`, `MAE`, `MAPE (%)`, `R²`)**.
 
 Mục đích cốt lõi của giai đoạn này là:
-1. Định lượng toàn diện và công bằng hiệu năng của cả 3 nhóm mô hình dự báo phụ tải điện (`VAR`, `XGBoost`, `LSTM`) và mô hình giao thông nâng cao (`DCRNN`) trên cùng hệ quy chiếu **5 chỉ số hồi quy chuẩn**.
-2. Đối sánh kết quả trên cả 3 chế độ kiểm định: **Hold-out Test (`15%`)**, **Temporal 5-Fold CV (`Mean ± Std`)** và **Walk-Forward Backtesting**.
-3. Trả lời sâu sắc, có dẫn chứng toán học và đồ thị thực nghiệm cho **6 câu hỏi phân tích ở Mục 11** dựa trên lý thuyết **Chương 4–5** (`chapter4-5.pdf`).
-4. Cung cấp dữ liệu đầu vào chuẩn xác tuyệt đối để `src/lab04/report.py` và `script/lab04/render_report.py` tự động xuất `LAB_04_REPORT.pdf`, `LAB_04_REPORT.html` và `LAB_04_REPORT.md`.
+1. Định lượng toàn diện và công bằng hiệu năng của cả 3 mô hình dự báo phụ tải điện (`VAR`, `XGBoost`, `Residual LSTM`) và bộ 3 mô hình giao thông nâng cao (`DCRNN`, `Multi-Horizon TCN`, `Multi-Horizon LSTM`) trên cùng hệ quy chiếu **5 chỉ số hồi quy chuẩn**.
+2. Đối sánh kết quả trên cả 4 chế độ thực nghiệm: **Hold-out Test (`15% — 5,260 giờ`)**, **Temporal 5-Fold CV (`Mean ± Std`)**, **Walk-Forward Backtesting (`168 giờ`)** và **Weather Feature Ablation (`With vs. Without Weather`)**.
+3. Kết xuất tự động kho **23 biểu đồ học thuật** vào `reports/lab04/figures/` và trả lời định lượng cho các câu hỏi thảo luận ở Mục 11 & Mục 12.
+4. Cung cấp dữ liệu đầu vào chuẩn xác tuyệt đối để `src/lab04/report.py` và `script/lab04/render_report.py` tự động xuất đồng bộ bộ 3 báo cáo `LAB_04_REPORT.pdf`, `LAB_04_REPORT.html` và `LAB_04_REPORT.md`.
 
 ## 2. Input-Output
 
@@ -16,89 +16,81 @@ Mục đích cốt lõi của giai đoạn này là:
 
 | Đầu vào (Input) | Định dạng & Kích thước | Mô tả Chi tiết |
 |---|---|---|
-| `test_predictions_latest.csv` | `pd.DataFrame` | Chuỗi giá trị thực tế $y_t$ và dự báo $\hat{y}_t$ (đã `inverse_transform` về đơn vị gốc) của `VAR`, `XGBoost`, `LSTM` trên tập Test |
-| `walk_forward_predictions.csv` | `pd.DataFrame` | Kết quả dự báo cuốn chiếu từng bước từ giai đoạn `Inference_Phase` |
-| `kfold_fold_predictions` (`Fold 1..5`) | `List[Dict[str, Any]]` | Kết quả dự báo trên 5 tập kiểm định $Val^{(1)} \dots Val^{(5)}$ của `TimeSeriesSplit(n_splits=5)` |
-| `pems_bay_horizon_predictions.npz` | `Dict[str, np.ndarray]` | Kết quả dự báo tốc độ xe (mph) của `DCRNN` tại 3 chân trời $t+3$ (15m), $t+6$ (30m) và $t+12$ (60m) |
+| Dự báo trên tập `Hold-out Test` & `Train` | `5,260 giờ` (Test) & `24,521 giờ` (Train) | Chuỗi giá trị thực tế $y_t$ và dự báo $\hat{y}_t$ (đã `inverse_transform` về đơn vị `kW`) của `VAR`, `XGBoost`, `Residual LSTM` |
+| Dự báo `5-Fold CV` & `Walk-Forward 168h` | `5 Folds × 5,844 giờ` & `168 giờ` | Kết quả dự báo kiểm định chéo 5 Fold mở rộng và kiểm thử cuốn chiếu 168 bước |
+| Dự báo `Weather Ablation` | `With Weather` vs. `Without Weather` | Kết quả đối sánh mô hình Đa biến (có 3 biến thời tiết) và Đơn biến (chỉ dùng chuỗi `load`) |
+| Dự báo `PEMS-BAY` (`15m, 30m, 60m`) | `1,285 cửa sổ × 207 trạm` | Kết quả dự báo tốc độ xe (`mph`) của `DCRNN`, `Multi-Horizon TCN` và `Multi-Horizon LSTM` |
 
 ### Output
 
 | Đầu ra (Output) | Đường dẫn Lưu trữ | Mô tả Chi tiết |
 |---|---|---|
-| `evaluation_latest.json` | `reports/lab04/metrics/evaluation_latest.json` | Hồ sơ JSON trung tâm lưu toàn bộ 5 chỉ số (`MSE`, `RMSE`, `MAE`, `MAPE`, `R²`) của Hold-out Test, 5-Fold CV, Walk-Forward và PEMS-BAY |
-| `test_metrics_comparison.csv` | `reports/lab04/metrics/test_metrics_comparison.csv` | Bảng xếp hạng trực tiếp `VAR`, `XGBoost`, `LSTM` theo 5 chỉ số trên tập Test và Walk-Forward |
-| `kfold_cv_results.csv` | `reports/lab04/metrics/kfold_cv_results.csv` | Bảng kết quả chi tiết từng Fold (`Fold 1..5`) kèm `Mean` và `Std` của 5 chỉ số |
-| `pems_bay_metrics.csv` | `reports/lab04/metrics/pems_bay_metrics.csv` | Bảng kết quả `MSE`, `RMSE`, `MAE`, `MAPE (%)`, `R²` của `DCRNN` tại 15 phút, 30 phút, 60 phút |
-| Bộ 8+ biểu đồ đánh giá 300 DPI | `reports/figures/lab04/` | Gồm 5 biểu đồ cột cho từng chỉ số (`model_comparison_mse.png`, `rmse`, `mae`, `mape`, `r2`), `kfold_cv_comparison.png`, `residual_analysis_all.png`, `pems_bay_horizon_comparison.png` |
+| `holdout_test_metrics.csv` | `reports/lab04/metrics/holdout_test_metrics.csv` | Bảng đối sánh 5 chỉ số (`MSE`, `RMSE`, `MAE`, `MAPE`, `R2`) trên cả tập `Test (15%)`, `Validation (15%)` và `Train (70%)` |
+| `cv_5fold_summary.csv` & `cv_5fold_detailed.csv` | `reports/lab04/metrics/` | Bảng tổng hợp `Mean ± Std` và bảng chi tiết từng Fold (`Fold 1..5`) của 5 chỉ số đánh giá |
+| `walk_forward_metrics.csv` & `weather_ablation_metrics.csv` | `reports/lab04/metrics/` | Bảng kết quả Walk-Forward Backtesting `168h` và nghiên cứu loại bỏ đặc trưng thời tiết (`Feature Ablation`) |
+| `pems_bay_dcrnn_metrics.csv` & `pems_bay_benchmark_comparison.csv` | `reports/lab04/metrics/` | Bảng chi tiết `DCRNN` và bảng đối sánh toàn diện `DCRNN vs. Multi-Horizon TCN vs. Multi-Horizon LSTM` |
+| Kho **23 biểu đồ học thuật** | `reports/lab04/figures/` | Bao gồm `Forecast_Overlay_168h.png`, `actual_vs_predicted_scatter.png`, `Residual_Diagnostics.png`, `Metric_Comparison_Bars.png`, `Walk_Forward_Trajectory.png`, `XGBoost_Feature_Importance.png`, `Feature_Ablation_Impact.png`, `pems_bay_model_comparison.png`, `pems_bay_dcrnn_evaluation.png`, v.v. |
+| Bộ 3 Báo cáo Tự động (`HTML`, `PDF`, `MD`) | `reports/lab04/LAB_04_REPORT.{html,pdf,md}` | Báo cáo giao diện chuẩn `Lab04_ML` nhúng trực tiếp 23 biểu đồ Base64 và bảng nghiệm thu `AC01–AC15` |
 
-## 3. How to do — Quy trình thực hiện & Giải đáp 6 Câu hỏi Phân tích (Mục 11)
+## 3. How to do — Quy trình thực hiện & Giải đáp Câu hỏi Phân tích (Mục 11 & Mục 12)
 
-### Sơ đồ luồng đánh giá tổng hợp (`Evaluation Workflow`)
+### Sơ đồ luồng đánh giá tổng hợp (`Evaluation & Reporting Workflow`)
 
 ```text
-  Dự đoán Đã Khôi phục Đơn vị Gốc (VAR, XGBoost, LSTM, DCRNN)
-                                |
-        +-----------------------+-----------------------+
-        |                       |                       |
-        v                       v                       v
- [1. Hold-out Test 15%]  [2. 5-Fold TimeSeries]  [3. Walk-Forward & PEMS]
- Tính 5 chỉ số độc lập   Tính từng Fold k=1..5   Đánh giá cuốn chiếu t+1
- trên 15% cuối chuỗi     Tổng hợp Mean ± Std     & đa bước 15m, 30m, 60m
-        |                       |                       |
-        +-----------------------+-----------------------+
-                                |
-                                v
-  Xuất JSON/CSV + Vẽ bộ biểu đồ so sánh MSE, RMSE, MAE, MAPE (%), R^2
-  Tổng hợp phân tích trả lời 6 câu hỏi Mục 11 -> Kết xuất PDF / HTML / MD
+  Dự đoán Đã Khôi phục Đơn vị Gốc (VAR, XGBoost, Residual LSTM, DCRNN, TCN, PEMS-LSTM)
+                                            |
+        +-----------------------------------+-----------------------------------+
+        |                                   |                                   |
+        v                                   v                                   v
+ [1. Hold-out Test (5,260h)]         [2. 5-Fold CV & Walk-Forward]       [3. Ablation & PEMS-BAY]
+ - XGBoost: RMSE=6,482.45 (R2=.9946) - 5-Fold CV: VAR ổn định nhất       - Ablation: LSTM giảm 5.41% RMSE
+ - LSTM   : RMSE=6,570.41 (R2=.9944)   (RMSE Mean = 7,053.54 kW)         - PEMS-BAY (60m): DCRNN MAE=2.304
+ - VAR    : RMSE=7,122.36 (R2=.9935) - Walk-Forward 168h: XGB RMSE=4,871   < LSTM (2.499) < TCN (2.624 mph)
+        |                                   |                                   |
+        +-----------------------------------+-----------------------------------+
+                                            |
+                                            v
+  Xuất 8 file CSV Metrics + Kết xuất 23 biểu đồ tại reports/lab04/figures/
+  Trích xuất tự động section_11_answers -> Render LAB_04_REPORT.{html, pdf, md}
 ```
 
-### Khung Giải đáp Chuyên sâu 6 Câu hỏi Phân tích (Mục 11 `practice 4.pdf` & `chapter4-5.pdf`)
+### Khung Giải đáp Chuyên sâu Các Câu hỏi Phân tích (Đồng bộ với `eval_summary["section_11_answers"]`)
 
-1. **Câu hỏi 1: Biến thời tiết nào ảnh hưởng mạnh nhất đến điện năng?**
-   - **Cơ sở phân tích:** Kết hợp 3 bằng chứng định lượng từ pipeline gồm (a) hệ số tương quan tuyến tính & tương quan trễ $|r_{\text{load}, x_j}(\tau)|$ trong `eda_correlation_matrix.csv`, (b) kiểm định nhân quả Granger / độ lớn hệ số ma trận $\hat{\mathbf{A}}_i$ trong `VAR`, và (c) điểm `Gain Feature Importance` của `XGBoost`.
-   - **Bản chất vật lý:** Biến **`temperature` (nhiệt độ)** có ảnh hưởng mạnh nhất tới phụ tải điện (`load`) do nhu cầu điều hòa không khí/sưởi ấm phản ứng trực tiếp và mạnh mẽ với biến thiên nhiệt độ (thường có độ trễ $1\text{–}3$ giờ theo **Slide 4 Chương 4–5**), tiếp theo là **`humidity` (độ ẩm)** làm gia tăng cảm giác oi bức với độ trễ $6\text{–}12$ giờ, trong khi `wind_speed` có tác động yếu hơn.
+1. **Câu hỏi 1 (`Q1_Dominant_Weather_Variable` — Biến thời tiết ảnh hưởng mạnh nhất & Tác động Ablation):**
+   - **Phân tích tương quan:** Trên bộ dữ liệu thực nghiệm `electricity_load.csv`, biến thời tiết có hệ số tương quan tuyến tính và tương quan hạng mạnh nhất với phụ tải điện (`load`) là **`humidity` (độ ẩm tương đối `%`)** với Pearson $r = -0.9224$ ($|r| = 0.9224$, Spearman $\rho = -0.9208$), theo sát là **`temperature` (nhiệt độ `°C`)** với $r = +0.8853$ ($\rho = +0.8717$). Hai biến này có quan hệ nghịch biến chặt chẽ ($r = -0.9657$), phản ánh đặc trưng những giờ nắng nóng đỉnh điểm có độ ẩm giảm thấp khiến nhu cầu làm mát tăng vọt.
+   - **Phân tích Feature Ablation (`weather_ablation_metrics.csv`):** Khi đưa bộ 3 biến thời tiết vào mô hình, mạng tuần tự **`Residual LSTM` cải thiện mạnh mẽ nhất**, giảm `RMSE` từ `6,946.54 kW` xuống `6,570.41 kW` (**giảm `5.41%` RMSE** và **giảm `7.16%` MAPE**). Trong khi đó, `VAR` (`-0.02%`) và `XGBoost` (`-1.62%`) gần như giữ nguyên hiệu năng do chuỗi `load` tự hồi quy 24 giờ cùng các biến lịch chu kỳ (`cos_hour`, `sin_hour`) đã giải thích tới $>99.3\%$ phương sai. Tính trung bình trên cả 3 kiến trúc, việc tích hợp thời tiết giúp giảm trung bình `1.26%` sai số `RMSE`.
 
-2. **Câu hỏi 2: Khi nào VAR thất bại?**
-   - **Cơ sở lý thuyết (Slide 4 & Slide 5 Chương 4–5):** Mô hình $\text{VAR}(p)$ thất bại hoặc cho sai số `MSE`/`RMSE` cao trong 4 trường hợp:
-     - **Quan hệ phi tuyến mạnh (Non-linearity):** Phụ tải điện phụ thuộc phi tuyến (hình chữ U hoặc ngưỡng bậc thang) vào nhiệt độ, trong khi VAR chỉ biểu diễn được tổ hợp tuyến tính $\sum \mathbf{A}_i \mathbf{X}_{t-i}$.
-     - **Chuỗi không dừng và đa mùa vụ phức tạp (Non-stationarity & Multi-seasonality):** Dữ liệu có đồng thời chu kỳ ngày ($24\text{h}$) và chu kỳ tuần ($168\text{h}$) kèm nhiễu phương sai thay đổi.
-     - **Độ trễ tác động khác nhau (Lag heterogeneity):** Nhiệt độ tác động sau $1\text{–}3\text{h}$ nhưng độ ẩm tác động sau $6\text{–}12\text{h}$; nếu tăng bậc trễ $p$ lớn để bao phủ toàn bộ thì số tham số $p \times K^2$ tăng nhanh gây quá khớp (*Overfitting*).
+2. **Câu hỏi 2 (`Q2_Best_Model_And_Why` — Mô hình tốt nhất & Đối sánh Hold-out vs. 5-Fold CV):**
+   - **Trên tập Hold-out Test (`15% — 5,260 giờ`) và Walk-Forward (`168 giờ`):** Mô hình **`XGBoost`** đạt độ chính xác cao nhất với `RMSE = 6,482.45 kW`, `MAE = 4,337.53 kW`, `MAPE = 1.89%` và $R^2 = 0.9946$ (Walk-Forward `RMSE = 4,870.64 kW`, $R^2 = 0.9950$). Nhờ `105` đặc trưng kết hợp biến trễ, thống kê trượt và pha lượng giác giờ, `XGBoost` nắm bắt chính xác các ngưỡng chuyển pha phi tuyến. Mạng **`Residual LSTM`** bám rất sát ở vị trí thứ hai (`RMSE = 6,570.41 kW`, $R^2 = 0.9944$).
+   - **Trên kiểm định chéo 5-Fold (`cv_5fold_summary.csv`):** Khi kích thước tập huấn luyện ở các Fold đầu còn nhỏ (`Fold 1 = 5,845 giờ`, `Fold 2 = 11,689 giờ`), mô hình thống kê **`VAR(24)`** trên miền sai phân bậc 1 lại đạt độ ổn định cao nhất (`RMSE Mean = 7,053.54 ± 970.44 kW`, $R^2 = 0.9925$), trong khi `XGBoost` và `LSTM` chỉ vượt lên dẫn đầu từ `Fold 4` và `Fold 5` khi dữ liệu huấn luyện đạt trên `23,000 giờ`.
 
-3. **Câu hỏi 3: XGBoost học được thông tin gì từ thời tiết?**
-   - **Cơ sở lý thuyết (Slide 7 & Slide 9 Chương 4–5):** Thông qua phép chia nhánh cây quyết định trên không gian đặc trưng phẳng, `XGBoost` ([Kaggle XGBoost Multivariate TS](https://www.kaggle.com/code/davidandressanchez/xgboost-for-multivariate-ts)) học được:
-     - **Các ngưỡng nhiệt độ phi tuyến (Non-linear Thresholds):** Ví dụ khi nhiệt độ vượt ngưỡng nắng nóng kết hợp độ ẩm cao tại các độ trễ $t-1, t-2, t-3$, cây quyết định tạo nhánh dự báo phụ tải tăng vọt.
-     - **Tương tác giữa thời tiết và động lượng phụ tải:** Kết hợp các lag thời tiết với `rolling_mean_6h` (mức nền hiện tại), `rolling_std_24h` (độ biến động trong ngày) và `load_trend_24h` ($\text{load}_t - \text{load}_{t-24}$).
+3. **Câu hỏi 3 (`Q3_Model_Limitations_And_Challenges` — Hạn chế của VAR, XGBoost, LSTM & Kiểm tra Overfitting):**
+   - **Hạn chế của `VAR`:** Chỉ biểu diễn được quan hệ tuyến tính giữa các biến sai phân và số lượng tham số tăng bậc hai $\mathcal{O}(p \cdot K^2)$ theo số chuỗi $K$, không bắt được các điểm uốn phi tuyến bậc hai của thời tiết.
+   - **Hạn chế của `XGBoost`:** Phụ thuộc chặt vào việc thiết kế thủ công `105` đặc trưng trễ/cuốn và cây quyết định không thể ngoại suy vượt ngoài miền giá trị cực đại/cực tiểu của tập huấn luyện (dẫn tới sai số cao ở Fold 1–2 khi mẫu huấn luyện ít).
+   - **Hạn chế & Kiểm soát Overfitting của `LSTM`:** Đòi hỏi chuẩn hóa Z-Score nghiêm ngặt, nhánh kết nối tắt (`Autoregressive Residual Highway`) và lịch trình `CosineAnnealingLR`. Đối chiếu trên `holdout_test_metrics.csv`, `Residual LSTM` có `Train RMSE = 6,104.39 kW` ($R^2 = 0.9948$) và `Test RMSE = 6,570.41 kW` ($R^2 = 0.9944$), độ chênh lệch cực nhỏ chứng minh cơ chế `EarlyStopping(best_epoch = 27)` đã kiểm soát hoàn toàn hiện tượng Overfitting.
 
-4. **Câu hỏi 4: LSTM học được chu kỳ nào (ngày, tuần)?**
-   - **Cơ sở lý thuyết (Slide 8–10 Chương 4–5):**
-     - Với cửa sổ đầu vào Tensor 3D kích thước $L = 24$ bước giờ (`(batch_samples, 24, 4)`), mạng `LSTM(64) -> LSTM(32) -> Dense(1)` học **trực tiếp và trọn vẹn chu kỳ ngày (Daily Seasonality — 24 giờ)** bên trong trạng thái ẩn $\mathbf{h}_t$ và ô nhớ dài hạn $\mathbf{c}_t$ (nắm bắt rõ nhịp sinh hoạt giờ cao điểm sáng/tối và giờ thấp điểm ban đêm).
-     - Đối với **chu kỳ tuần (Weekly Seasonality — 168 giờ)**, do cửa sổ trượt trực tiếp có độ dài $L = 24 < 168$, LSTM nhận biết sự thay đổi giữa ngày thường và cuối tuần gián tiếp qua biên độ phụ tải của 24 giờ vừa qua (hoặc học trực tiếp nếu bổ sung kênh mã hóa thứ trong tuần / mở rộng cửa sổ trễ).
+4. **Câu hỏi 4 (`Q4_PEMS_BAY_SpatioTemporal_Benchmark` — Đối sánh DCRNN vs. Multi-Horizon TCN vs. Multi-Horizon LSTM ở Mục 12):**
+   - Trên bộ dữ liệu giao thông `PEMS-BAY` (`207` trạm cảm biến $\times$ `8,640` bước 5 phút), mô hình **`DCRNN`** (tích hợp ma trận đồ thị không gian `adj_mx_bay.pkl` qua phép tích chập khuếch tán hai chiều) vượt trội hoàn toàn so với cả **`Multi-Horizon TCN`** (Causal Conv1D — Slide 10 Chương 4–5) và **`Multi-Horizon LSTM`** (thuần thời gian) ở tất cả các tầm nhìn:
+     - **15 phút ($t+3$):** `DCRNN` đạt `MAE = 1.3094 mph` (`RMSE = 2.7621 mph`, $R^2 = 0.9196$) $<$ `TCN` (`MAE = 1.3543 mph`) $<$ `LSTM` (`MAE = 1.4182 mph`).
+     - **30 phút ($t+6$):** `DCRNN` đạt `MAE = 1.7338 mph` (`RMSE = 3.9311 mph`, $R^2 = 0.8372$) $<$ `TCN` (`MAE = 1.8553 mph`) $<$ `LSTM` (`MAE = 1.8885 mph`).
+     - **60 phút ($t+12$):** `DCRNN` đạt `MAE = 2.3040 mph` (`RMSE = 5.2817 mph`, $R^2 = 0.7063$), thấp hơn rõ rệt so với `Multi-Horizon LSTM` (`MAE = 2.4986 mph`, $R^2 = 0.6987$) và `Multi-Horizon TCN` (`MAE = 2.6243 mph`, $R^2 = 0.6087$), chứng minh giá trị cốt lõi của cấu trúc mạng lưới không gian khi dự báo sóng lan truyền tắc nghẽn giao thông ở tầm nhìn xa.
 
-5. **Câu hỏi 5: LSTM có bị overfitting không?**
-   - **Cơ sở phân tích (Slide 9 & 10 Chương 4–5):** Theo bảng so sánh trong bài giảng, các mô hình Deep Learning (`LSTM`) có nguy cơ **dễ bị Overfitting hơn `XGBoost`** khi dữ liệu nhỏ hoặc huấn luyện quá nhiều epochs vì số lượng tham số lớn.
-   - **Kiểm chứng và khắc phục trong dự án:** Biểu đồ `lstm_train_vs_val_loss.png` đối chiếu trực tiếp `Train MSE` và `Validation MSE`. Nhờ chuẩn hóa `StandardScaler`, thêm tầng `Dropout(0.15)`, điều chuẩn `weight_decay` và cơ chế **`EarlyStopping(restore_best_weights=True)`** trên tập `Validation (15%)`, quá trình huấn luyện tự động dừng ngay tại điểm cực tiểu của `val_loss`, ngăn chặn hiện tượng Overfitting trước khi đánh giá trên tập `Test`.
+## 4. Evaluation metrics — Công thức Toán học & Bảng Tổng hợp 5 Chỉ số Chuẩn
 
-6. **Câu hỏi 6: Sự khác biệt giữa Machine Learning và Deep Learning trong bài toán này?**
-   - **Tổng hợp theo Slide 9 Chương 4–5:**
-     - **Biểu diễn dữ liệu & Feature Engineering:** Machine Learning (`XGBoost`) bắt buộc phải làm phẳng chuỗi thành bảng 2D và phụ thuộc rất mạnh vào việc thiết kế đặc trưng thủ công (`Lag 24h`, `Rolling mean 6h`, `Rolling std 24h`, `Load trend`); ngược lại Deep Learning (`LSTM`, `DCRNN`) nhận trực tiếp Tensor 3D/4D và **tự động học biểu diễn thời gian – không gian** qua các tầng ẩn.
-     - **Khả năng mở rộng (Scalability) & Dự báo đa bước (Multi-step Forecasting):** Với bài toán ít biến ($K=4$, dự báo 1 bước $\text{load}_{t+1}$) như Yêu cầu 1–11, `XGBoost` huấn luyện rất nhanh trên CPU/GPU và đạt độ chính xác cạnh tranh sát sao với `LSTM`. Tuy nhiên, khi chuyển sang bài toán Yêu cầu 12 (`PEMS-BAY` với hàng trăm biến cảm biến $K=207\text{–}325$ và dự báo đa bước $15, 30, 60$ phút), `XGBoost` gặp rào cản không gian đặc trưng khổng lồ và phải lặp từng bước, trong khi kiến trúc Deep Learning (`LSTM` / `TCN` / `DCRNN`) xử lý tự nhiên trong một mạng duy nhất.
+Với $y_t$ là giá trị thực tế và $\hat{y}_t$ là giá trị dự báo (trên thang đo gốc `kW` hoặc `mph`), 5 chỉ số được tính nhất quán trên mọi bảng kết quả:
 
-## 4. Evaluation metrics — Công thức Toán học của 5 Chỉ số Đánh giá Chuẩn
-
-Với $y_t$ là giá trị thực tế, $\hat{y}_t$ là giá trị dự báo (đều ở thang đo gốc sau `inverse_transform`) và $\bar{y} = \frac{1}{N}\sum_{t=1}^{N} y_t$, hệ thống tính toán đầy đủ 5 chỉ số:
-
-| STT | Chỉ số (Metric) | Công thức Toán học | Quy tắc Xếp hạng & Ý nghĩa Học thuật |
+| STT | Chỉ số (Metric) | Công thức Toán học | Kết quả Hold-out Test (`XGBoost` / `LSTM` / `VAR`) |
 |---:|---|---|---|
-| 1 | **MSE (Mean Squared Error)** | $\text{MSE} = \frac{1}{N}\sum_{t=1}^{N}\left(y_t - \hat{y}_t\right)^2$ | **Càng thấp càng tốt ($\downarrow$):** Bình phương sai số, phạt rất nặng các sai lệch lớn tại đỉnh phụ tải |
-| 2 | **RMSE (Root Mean Squared Error)** | $\text{RMSE} = \sqrt{\frac{1}{N}\sum_{t=1}^{N}\left(y_t - \hat{y}_t\right)^2}$ | **Càng thấp càng tốt ($\downarrow$):** Cùng đơn vị đo với biến mục tiêu (`kW/MW` hoặc `mph`), dễ diễn giải vật lý |
-| 3 | **MAE (Mean Absolute Error)** | $\text{MAE} = \frac{1}{N}\sum_{t=1}^{N}\left|y_t - \hat{y}_t\right|$ | **Càng thấp càng tốt ($\downarrow$):** Độ lệch tuyệt đối trung bình, bền vững trước các điểm ngoại lai |
-| 4 | **MAPE (Mean Absolute Percentage Error)** | $\text{MAPE} = \frac{100\%}{N}\sum_{t=1}^{N}\left|\frac{y_t - \hat{y}_t}{\max(|y_t|, \epsilon)}\right|$ | **Càng thấp càng tốt ($\downarrow$):** Sai số tương đối tính theo phần trăm (`%`), cho phép so sánh giữa các bộ dữ liệu khác thang đo |
-| 5 | **$R^2$ Score (Coefficient of Determination)** | $R^2 = 1 - \frac{\sum_{t=1}^{N}\left(y_t - \hat{y}_t\right)^2}{\sum_{t=1}^{N}\left(y_t - \bar{y}\right)^2}$ | **Càng cao càng tốt ($\uparrow$, tối đa $1.0$):** Tỷ lệ phương sai của chuỗi thời gian thực tế được giải thích bởi mô hình |
+| 1 | **MSE (Mean Squared Error $\downarrow$)** | $\text{MSE} = \frac{1}{N}\sum_{t=1}^{N}\left(y_t - \hat{y}_t\right)^2$ | `4.2022e+07` / `4.3170e+07` / `5.0728e+07` ($\text{kW}^2$) |
+| 2 | **RMSE (Root Mean Squared Error $\downarrow$)** | $\text{RMSE} = \sqrt{\text{MSE}}$ | **`6,482.45 kW`** / `6,570.41 kW` / `7,122.36 kW` |
+| 3 | **MAE (Mean Absolute Error $\downarrow$)** | $\text{MAE} = \frac{1}{N}\sum_{t=1}^{N}\left|y_t - \hat{y}_t\right|$ | **`4,337.53 kW`** / `4,524.04 kW` / `4,576.49 kW` |
+| 4 | **MAPE (Mean Absolute Percentage Error $\downarrow$)** | $\text{MAPE} = \frac{100\%}{N}\sum_{t=1}^{N}\left|\frac{y_t - \hat{y}_t}{\max(|y_t|, \epsilon)}\right|$ | **`1.8922%`** / `2.0185%` / `2.0010%` |
+| 5 | **$R^2$ Score (Coefficient of Determination $\uparrow$)** | $R^2 = 1 - \frac{\sum_{t=1}^{N}\left(y_t - \hat{y}_t\right)^2}{\sum_{t=1}^{N}\left(y_t - \bar{y}\right)^2}$ | **`0.9946`** / `0.9944` / `0.9935` |
 
 ## 5. Used data — Dữ liệu sử dụng
 
-| Tập dữ liệu & Kết quả Kiểm định | Nguồn Dữ liệu | Vai trò trong `Evaluation_Phase` | Module Thực thi |
+| Tập dữ liệu & Bảng Chỉ số | Đường dẫn File Thực tế | Vai trò trong `Evaluation_Phase` | Module Thực thi |
 |---|---|---|---|
-| **Electricity Test Set (`15%`) & Walk-Forward** | `data/raw/electricity_load.csv` ([UCI / Kaggle](https://www.kaggle.com/datasets/jacopoferretti/electricity-load-diagrams-2011-2014-feature-engin)) | Đánh giá chính thức 5 chỉ số của `VAR`, `XGBoost`, `LSTM` và trả lời 6 câu hỏi Mục 11 | `src/lab04/evaluate.py`, `src/lab04/report.py` |
-| **Electricity 5-Fold CV (`TimeSeriesSplit`)** | 5 lát cắt kiểm định theo thời gian | Tính `Mean ± Std` của `MSE`, `RMSE`, `MAE`, `MAPE (%)`, `R²` để kiểm chứng độ ổn định | `src/lab04/evaluate.py`, `src/lab04/visualize.py` |
-| **PEMS-BAY Test Set (`15m, 30m, 60m`)** | `data/raw/pems-bay.h5` ([PEMS-BAY](https://drive.google.com/file/d/1wD-mHlqAb2mtHOe_68fZvDh1LpDegMMq/view?usp=drive_link)) + `data/raw/sensor_graph/adj_mx_bay.pkl` | Đánh giá 5 chỉ số của mô hình `DCRNN` theo từng chân trời dự báo giao thông | `src/lab04/evaluate.py`, `src/lab04/report.py` |
+| **Hold-out Test & Ablation** | `reports/lab04/metrics/holdout_test_metrics.csv`, `weather_ablation_metrics.csv` | Đánh giá chính thức 5 chỉ số của `VAR`, `XGBoost`, `Residual LSTM` và tác động biến thời tiết | `src/lab04/evaluate.py`, `src/lab04/visualize.py`, `src/lab04/report.py` |
+| **5-Fold CV & Walk-Forward** | `reports/lab04/metrics/cv_5fold_summary.csv`, `cv_5fold_detailed.csv`, `walk_forward_metrics.csv` | Đánh giá độ ổn định qua 5 Fold thời gian và kiểm thử cuốn chiếu 168 giờ | `src/lab04/evaluate.py`, `src/lab04/visualize.py` |
+| **PEMS-BAY Benchmark** | `reports/lab04/metrics/pems_bay_dcrnn_metrics.csv`, `pems_bay_benchmark_comparison.csv` | Đối sánh 5 chỉ số của `DCRNN`, `Multi-Horizon TCN` và `Multi-Horizon LSTM` ở 15m, 30m, 60m | `src/lab04/evaluate.py`, `src/lab04/report.py` |

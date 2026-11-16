@@ -759,7 +759,7 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
       padding: 8px;
     }}
     .image-card.card-full img {{
-      max-height: 520px;
+      max-height: 780px;
     }}
     .image-card figcaption {{
       padding: 14px 18px;
@@ -1047,38 +1047,45 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
         Cả 4 biến có phân phối liên tục, không bị suy biến tại điểm 0 và tỷ lệ điểm ngoại lai IQR nằm trong ngưỡng kiểm soát vật lý (&lt; 1%).
       </figcaption>
     </figure>
+    <figure class="image-card card-full">
+      <img src="{_b64('missing_values_audit.png')}" alt="Kiểm tra Missing Values và Tính liên tục Thời gian">
+      <figcaption>
+        <b>Hình 2.3: Kiểm định Toàn vẹn Dữ liệu — Missing Values &amp; Tính Liên tục Mốc Thời gian</b>
+        Xác nhận 0% giá trị thiếu trên cả 4 biến phụ tải/thời tiết và 207 trạm PEMS-BAY; không có bước thời gian bị đứt quãng.
+      </figcaption>
+    </figure>
     <figure class="image-card">
       <img src="{_b64('correlation_heatmap.png')}" alt="Ma trận tương quan Pearson và Spearman">
       <figcaption>
-        <b>Hình 2.3: Ma trận Tương quan Tuyến tính Pearson (r) &amp; Tương quan Hạng Spearman (&rho;)</b>
+        <b>Hình 2.4: Ma trận Tương quan Tuyến tính Pearson (r) &amp; Tương quan Hạng Spearman (&rho;)</b>
         Nhiệt độ (<code>temperature</code>) có tương quan dương mạnh nhất với phụ tải điện, trong khi độ ẩm (<code>humidity</code>) tương quan nghịch rõ rệt.
       </figcaption>
     </figure>
     <figure class="image-card">
       <img src="{_b64('weather_vs_load_joint.png')}" alt="Quan hệ phi tuyến giữa thời tiết và phụ tải điện">
       <figcaption>
-        <b>Hình 2.4: Quan hệ Phi tuyến (Quadratic Fit) giữa 3 Biến Thời tiết và Phụ tải Điện</b>
+        <b>Hình 2.5: Quan hệ Phi tuyến (Quadratic Fit) giữa 3 Biến Thời tiết và Phụ tải Điện</b>
         Đường cong bậc hai phản ánh nhu cầu tiêu thụ điện điều hòa tăng nhanh khi nhiệt độ vượt ngưỡng 24°C.
       </figcaption>
     </figure>
     <figure class="image-card card-full">
       <img src="{_b64('seasonal_decomposition.png')}" alt="Phân rã chuỗi thời gian 4 tầng">
       <figcaption>
-        <b>Hình 2.5: Phân rã Chuỗi Thời gian 4 Tầng (Observed – Trend – Daily Seasonal 24h – Residual)</b>
+        <b>Hình 2.6: Phân rã Chuỗi Thời gian 4 Tầng (Observed – Trend – Daily Seasonal 24h – Residual)</b>
         Tách biệt rõ xu hướng dài hạn, thành phần chu kỳ 24 giờ có biên độ ổn định và phần dư ngẫu nhiên.
       </figcaption>
     </figure>
     <figure class="image-card">
       <img src="{_b64('acf_pacf_load.png')}" alt="Biểu đồ tự tương quan ACF và PACF">
       <figcaption>
-        <b>Hình 2.6: Hàm Tự tương quan ACF (72h) &amp; PACF (48h) của Phụ tải Điện</b>
+        <b>Hình 2.7: Hàm Tự tương quan ACF (72h) &amp; PACF (48h) của Phụ tải Điện</b>
         Các đỉnh cực đại lặp lại đúng mỗi 24h, 48h, 72h là cơ sở toán học trực tiếp để chọn cửa sổ <code>lookback = 24h</code>.
       </figcaption>
     </figure>
     <figure class="image-card">
       <img src="{_b64('pems_bay_eda_overview.png')}" alt="Khám phá dữ liệu giao thông PEMS-BAY">
       <figcaption>
-        <b>Hình 2.7: Khám phá Cấu trúc Đồ thị Không gian <code>adj_mx_bay.pkl</code> &amp; Vận tốc PEMS-BAY (Mục 12)</b>
+        <b>Hình 2.8: Khám phá Cấu trúc Đồ thị Không gian <code>adj_mx_bay.pkl</code> &amp; Vận tốc PEMS-BAY (Mục 12)</b>
         Biểu đồ bên phải cho thấy vận tốc cao tốc sụt giảm sâu vào 2 khung giờ cao điểm sáng (08:00) và chiều (17:00).
       </figcaption>
     </figure>

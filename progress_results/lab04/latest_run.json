@@ -1,5 +1,5 @@
 {
-  "run_id": "20261116_174053_63f753",
+  "run_id": "20261116_232707_c29b03",
   "project": {
     "name": "Lab04_Multivariate_TimeSeries_Forecasting",
     "version": "2.0.0",
@@ -17,12 +17,12 @@
     "vram_gb": 6.0,
     "cuda_available": true
   },
-  "started_at": "2026-11-16T17:40:53",
-  "updated_at": "2026-11-16T17:42:03",
-  "status": "IN_PROGRESS",
+  "started_at": "2026-11-16T23:27:07",
+  "updated_at": "2026-11-16T23:35:19",
+  "status": "COMPLETED",
   "stages": {
     "data_loading": {
-      "updated_at": "2026-11-16T17:41:14",
+      "updated_at": "2026-11-16T23:27:16",
       "data": {
         "electricity": {
           "dataset_name": "Electricity Load & Weather Multivariate Time Series",
@@ -92,11 +92,11 @@
             "Mô tả Vật lý & Ý nghĩa Học thuật": "Tốc độ gió tự nhiên theo giờ — hỗ trợ tản nhiệt tự nhiên cho tòa nhà và lưới truyền tải điện."
           }
         ],
-        "duration_sec": 8.6368
+        "duration_sec": 8.802
       }
     },
     "eda": {
-      "updated_at": "2026-11-16T17:42:03",
+      "updated_at": "2026-11-16T23:27:44",
       "data": {
         "descriptive_stats": [
           {
@@ -211,13 +211,1086 @@
         "generated_figures": [
           "multivariate_overview.png",
           "feature_distributions_and_outliers.png",
+          "missing_values_audit.png",
           "correlation_heatmap.png",
           "weather_vs_load_joint.png",
           "seasonal_decomposition.png",
           "acf_pacf_load.png",
           "pems_bay_eda_overview.png"
         ],
-        "duration_sec": 15.723
+        "duration_sec": 17.9622
+      }
+    },
+    "preprocessing": {
+      "updated_at": "2026-11-16T23:27:58",
+      "data": {
+        "split_counts": {
+          "total_hours": 35065,
+          "train_hours_70pct": 24545,
+          "val_hours_15pct": 5260,
+          "test_hours_15pct": 5260,
+          "train_period": [
+            "2011-01-01 00:00:00",
+            "2013-10-19 16:00:00"
+          ],
+          "val_period": [
+            "2013-10-19 17:00:00",
+            "2014-05-26 20:00:00"
+          ],
+          "test_period": [
+            "2014-05-26 21:00:00",
+            "2015-01-01 00:00:00"
+          ],
+          "shuffle": false,
+          "temporal_leakage_check": true
+        },
+        "scaler_statistics": {
+          "method": "StandardScaler (Z-Score)",
+          "fit_on_train_only": true,
+          "train_samples_fitted": 24545,
+          "leakage_free_verified": true,
+          "columns": [
+            "load",
+            "temperature",
+            "humidity",
+            "wind_speed"
+          ],
+          "mean": {
+            "load": 244810.5838,
+            "temperature": 19.1475,
+            "humidity": 66.0641,
+            "wind_speed": 4.9278
+          },
+          "std": {
+            "load": 84767.5263,
+            "temperature": 8.2999,
+            "humidity": 14.7141,
+            "wind_speed": 1.1829
+          },
+          "load_mean": 244810.58381540957,
+          "load_std": 84767.52631344186
+        },
+        "stationarity_report": {
+          "adf_raw": [
+            {
+              "variable": "load",
+              "adf_statistic": -2.8161,
+              "p_value": 0.056005,
+              "used_lag": 24,
+              "n_obs": 14975,
+              "critical_values": {
+                "1%": -3.4308,
+                "5%": -2.8617,
+                "10%": -2.5669
+              },
+              "is_stationary": false,
+              "conclusion": "Non-Stationary (Không dừng - Cần lấy sai phân)"
+            },
+            {
+              "variable": "temperature",
+              "adf_statistic": -2.0663,
+              "p_value": 0.25826,
+              "used_lag": 24,
+              "n_obs": 14975,
+              "critical_values": {
+                "1%": -3.4308,
+                "5%": -2.8617,
+                "10%": -2.5669
+              },
+              "is_stationary": false,
+              "conclusion": "Non-Stationary (Không dừng - Cần lấy sai phân)"
+            },
+            {
+              "variable": "humidity",
+              "adf_statistic": -2.5623,
+              "p_value": 0.101033,
+              "used_lag": 24,
+              "n_obs": 14975,
+              "critical_values": {
+                "1%": -3.4308,
+                "5%": -2.8617,
+                "10%": -2.5669
+              },
+              "is_stationary": false,
+              "conclusion": "Non-Stationary (Không dừng - Cần lấy sai phân)"
+            },
+            {
+              "variable": "wind_speed",
+              "adf_statistic": -6.5418,
+              "p_value": 0.0,
+              "used_lag": 24,
+              "n_obs": 14975,
+              "critical_values": {
+                "1%": -3.4308,
+                "5%": -2.8617,
+                "10%": -2.5669
+              },
+              "is_stationary": true,
+              "conclusion": "Stationary (Chuỗi dừng - Bác bỏ H0)"
+            }
+          ],
+          "adf_after_diff1": [
+            {
+              "variable": "load",
+              "adf_statistic": -29.9928,
+              "p_value": 0.0,
+              "used_lag": 24,
+              "n_obs": 14975,
+              "critical_values": {
+                "1%": -3.4308,
+                "5%": -2.8617,
+                "10%": -2.5669
+              },
+              "is_stationary": true,
+              "conclusion": "Stationary (Chuỗi dừng - Bác bỏ H0)"
+            },
+            {
+              "variable": "temperature",
+              "adf_statistic": -34.5548,
+              "p_value": 0.0,
+              "used_lag": 24,
+              "n_obs": 14975,
+              "critical_values": {
+                "1%": -3.4308,
+                "5%": -2.8617,
+                "10%": -2.5669
+              },
+              "is_stationary": true,
+              "conclusion": "Stationary (Chuỗi dừng - Bác bỏ H0)"
+            },
+            {
+              "variable": "humidity",
+              "adf_statistic": -45.1783,
+              "p_value": 0.0,
+              "used_lag": 24,
+              "n_obs": 14975,
+              "critical_values": {
+                "1%": -3.4308,
+                "5%": -2.8617,
+                "10%": -2.5669
+              },
+              "is_stationary": true,
+              "conclusion": "Stationary (Chuỗi dừng - Bác bỏ H0)"
+            },
+            {
+              "variable": "wind_speed",
+              "adf_statistic": -41.6275,
+              "p_value": 0.0,
+              "used_lag": 24,
+              "n_obs": 14975,
+              "critical_values": {
+                "1%": -3.4308,
+                "5%": -2.8617,
+                "10%": -2.5669
+              },
+              "is_stationary": true,
+              "conclusion": "Stationary (Chuỗi dừng - Bác bỏ H0)"
+            }
+          ],
+          "diff_order_applied": 1,
+          "all_stationary_after_diff1": true
+        },
+        "window_shapes": {
+          "lag_window": 24,
+          "X_xgb_train": [
+            24521,
+            105
+          ],
+          "X_xgb_val": [
+            5260,
+            105
+          ],
+          "X_xgb_test": [
+            5260,
+            105
+          ],
+          "X_lstm_train": [
+            24521,
+            24,
+            4
+          ],
+          "X_lstm_val": [
+            5260,
+            24,
+            4
+          ],
+          "X_lstm_test": [
+            5260,
+            24,
+            4
+          ],
+          "num_tabular_features": 105,
+          "pems_X_train": [
+            6025,
+            12,
+            207
+          ],
+          "pems_X_val": [
+            1285,
+            12,
+            207
+          ],
+          "pems_X_test": [
+            1285,
+            12,
+            207
+          ]
+        },
+        "cv_folds_count": 5,
+        "cv_folds_meta": [
+          {
+            "fold": 1,
+            "train_size": 5845,
+            "val_size": 5844,
+            "train_period": [
+              "2011-01-01 00:00:00",
+              "2011-09-01 12:00:00"
+            ],
+            "val_period": [
+              "2011-09-01 13:00:00",
+              "2012-05-02 00:00:00"
+            ]
+          },
+          {
+            "fold": 2,
+            "train_size": 11689,
+            "val_size": 5844,
+            "train_period": [
+              "2011-01-01 00:00:00",
+              "2012-05-02 00:00:00"
+            ],
+            "val_period": [
+              "2012-05-02 01:00:00",
+              "2012-12-31 12:00:00"
+            ]
+          },
+          {
+            "fold": 3,
+            "train_size": 17533,
+            "val_size": 5844,
+            "train_period": [
+              "2011-01-01 00:00:00",
+              "2012-12-31 12:00:00"
+            ],
+            "val_period": [
+              "2012-12-31 13:00:00",
+              "2013-09-01 00:00:00"
+            ]
+          },
+          {
+            "fold": 4,
+            "train_size": 23377,
+            "val_size": 5844,
+            "train_period": [
+              "2011-01-01 00:00:00",
+              "2013-09-01 00:00:00"
+            ],
+            "val_period": [
+              "2013-09-01 01:00:00",
+              "2014-05-02 12:00:00"
+            ]
+          },
+          {
+            "fold": 5,
+            "train_size": 29221,
+            "val_size": 5844,
+            "train_period": [
+              "2011-01-01 00:00:00",
+              "2014-05-02 12:00:00"
+            ],
+            "val_period": [
+              "2014-05-02 13:00:00",
+              "2015-01-01 00:00:00"
+            ]
+          }
+        ],
+        "duration_sec": 13.1601
+      }
+    },
+    "training": {
+      "updated_at": "2026-11-16T23:34:53",
+      "data": {
+        "hardware": {
+          "torch_device": "cuda",
+          "xgb_device": "cuda",
+          "xgb_tree_method": "hist",
+          "device_name": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+          "amp_enabled": true,
+          "vram_gb": 6.0,
+          "cuda_available": true
+        },
+        "models": {
+          "VAR": {
+            "selected_lag": 24,
+            "train_time_sec": 3.5746,
+            "pred_time_sec": 0.30483,
+            "device": "cpu"
+          },
+          "XGBoost": {
+            "best_iteration": 449,
+            "train_time_sec": 5.4901,
+            "pred_time_sec": 0.118053,
+            "device": "cuda"
+          },
+          "LSTM": {
+            "history": {
+              "train_loss": [
+                0.016259,
+                0.012045,
+                0.011105,
+                0.010616,
+                0.009995,
+                0.00911,
+                0.008008,
+                0.007594,
+                0.007201,
+                0.006923,
+                0.006787,
+                0.006678,
+                0.006391,
+                0.006408,
+                0.006255,
+                0.006182,
+                0.005963,
+                0.005887,
+                0.005858,
+                0.005742,
+                0.005698,
+                0.005632,
+                0.005548,
+                0.005499,
+                0.005457,
+                0.005405,
+                0.005368,
+                0.005351,
+                0.005316,
+                0.005305
+              ],
+              "val_loss": [
+                0.009691,
+                0.008947,
+                0.008665,
+                0.008472,
+                0.007529,
+                0.006536,
+                0.006475,
+                0.006711,
+                0.005733,
+                0.00621,
+                0.00581,
+                0.005765,
+                0.005473,
+                0.006965,
+                0.005729,
+                0.005532,
+                0.005628,
+                0.005575,
+                0.005205,
+                0.005434,
+                0.005107,
+                0.005035,
+                0.005079,
+                0.004981,
+                0.005129,
+                0.005019,
+                0.004957,
+                0.004991,
+                0.004996,
+                0.005018
+              ],
+              "train_mae": [
+                0.089218,
+                0.075351,
+                0.072109,
+                0.070968,
+                0.069129,
+                0.065825,
+                0.061754,
+                0.060215,
+                0.058652,
+                0.057255,
+                0.056667,
+                0.056178,
+                0.054647,
+                0.054504,
+                0.054068,
+                0.05339,
+                0.05245,
+                0.052132,
+                0.051669,
+                0.051144,
+                0.050823,
+                0.050558,
+                0.050015,
+                0.049738,
+                0.049555,
+                0.049242,
+                0.049028,
+                0.048919,
+                0.048724,
+                0.048624
+              ],
+              "val_mae": [
+                0.060351,
+                0.05978,
+                0.059786,
+                0.059671,
+                0.055175,
+                0.051541,
+                0.052572,
+                0.05534,
+                0.049135,
+                0.051682,
+                0.04945,
+                0.049969,
+                0.047805,
+                0.056557,
+                0.049244,
+                0.047783,
+                0.048282,
+                0.04765,
+                0.046013,
+                0.047059,
+                0.045291,
+                0.044806,
+                0.045327,
+                0.04499,
+                0.045424,
+                0.044714,
+                0.044649,
+                0.044671,
+                0.044675,
+                0.044685
+              ],
+              "best_epoch": 27,
+              "best_val_loss": 0.004957,
+              "total_params": 30589,
+              "epochs_executed": 30
+            },
+            "train_time_sec": 86.7262,
+            "pred_time_sec": 0.773854,
+            "device": "cuda",
+            "hidden_dims": [
+              64,
+              32
+            ],
+            "use_residual_highway": true
+          },
+          "DCRNN": {
+            "history": {
+              "train_loss": [
+                0.11818,
+                0.10791,
+                0.10285,
+                0.10022,
+                0.09802,
+                0.09657,
+                0.09496,
+                0.09343,
+                0.09241,
+                0.09162,
+                0.09095,
+                0.09055
+              ],
+              "val_loss": [
+                0.25975,
+                0.25081,
+                0.24239,
+                0.24268,
+                0.24054,
+                0.23871,
+                0.23554,
+                0.23332,
+                0.23362,
+                0.23151,
+                0.23024,
+                0.23175
+              ],
+              "best_epoch": 11,
+              "best_val_loss": 0.23024,
+              "total_params": 21290,
+              "epochs_executed": 12
+            },
+            "train_time_sec": 67.2227,
+            "device": "cuda"
+          },
+          "Multi_Horizon_TCN": {
+            "history": {
+              "train_loss": [
+                0.11877,
+                0.11521,
+                0.11422,
+                0.11411,
+                0.11349,
+                0.11367,
+                0.113,
+                0.1129,
+                0.11273,
+                0.11264
+              ],
+              "val_loss": [
+                0.26513,
+                0.26258,
+                0.26152,
+                0.26247,
+                0.2634,
+                0.26296,
+                0.2595,
+                0.26105,
+                0.25993,
+                0.26018
+              ],
+              "best_epoch": 7,
+              "best_val_loss": 0.2595,
+              "total_params": 3370,
+              "epochs_executed": 10
+            },
+            "train_time_sec": 15.3198,
+            "device": "cuda"
+          },
+          "Multi_Horizon_LSTM": {
+            "history": {
+              "train_loss": [
+                0.10634,
+                0.08778,
+                0.08029,
+                0.07648,
+                0.07303,
+                0.07087,
+                0.06944,
+                0.06805
+              ],
+              "val_loss": [
+                0.23636,
+                0.2265,
+                0.22182,
+                0.21757,
+                0.21994,
+                0.21817,
+                0.22147,
+                0.2187
+              ],
+              "best_epoch": 4,
+              "best_val_loss": 0.21757,
+              "total_params": 110292,
+              "epochs_executed": 8
+            },
+            "train_time_sec": 7.7795,
+            "device": "cuda"
+          }
+        },
+        "total_duration_sec": 413.8802
+      }
+    },
+    "evaluation": {
+      "updated_at": "2026-11-16T23:34:54",
+      "data": {
+        "holdout_test_metrics": [
+          {
+            "Model": "XGBoost",
+            "MSE": 42022207.1643,
+            "RMSE": 6482.4538,
+            "MAE": 4337.5276,
+            "MAPE": 1.8922,
+            "R2": 0.9946,
+            "Max_Error": 129028.6527,
+            "Mean_Residual": -158.6351,
+            "Std_Residual": 6480.5125,
+            "Train_MSE": 13478457.2988,
+            "Train_RMSE": 3671.3019,
+            "Train_MAE": 2692.9497,
+            "Train_MAPE": 1.2392,
+            "Train_R2": 0.9981,
+            "Val_RMSE": 5604.2708,
+            "Val_MAPE": 7.0705,
+            "Val_R2": 0.9912,
+            "Train_Time_Sec": 5.4901,
+            "Pred_Time_Sec": 0.118053,
+            "Device": "cuda"
+          },
+          {
+            "Model": "LSTM",
+            "MSE": 43170232.1359,
+            "RMSE": 6570.4058,
+            "MAE": 4524.0441,
+            "MAPE": 2.0185,
+            "R2": 0.9944,
+            "Max_Error": 128134.0402,
+            "Mean_Residual": -363.1559,
+            "Std_Residual": 6560.362,
+            "Train_MSE": 37263627.4761,
+            "Train_RMSE": 6104.3941,
+            "Train_MAE": 4069.9218,
+            "Train_MAPE": 1.9624,
+            "Train_R2": 0.9948,
+            "Val_RMSE": 5968.2838,
+            "Val_MAPE": 7.1742,
+            "Val_R2": 0.9901,
+            "Train_Time_Sec": 86.7262,
+            "Pred_Time_Sec": 0.773854,
+            "Device": "cuda"
+          },
+          {
+            "Model": "VAR",
+            "MSE": 50728048.8075,
+            "RMSE": 7122.3626,
+            "MAE": 4576.4883,
+            "MAPE": 2.001,
+            "R2": 0.9935,
+            "Max_Error": 130203.9356,
+            "Mean_Residual": -25.5376,
+            "Std_Residual": 7122.3168,
+            "Train_MSE": 45418594.3215,
+            "Train_RMSE": 6739.3319,
+            "Train_MAE": 4197.6541,
+            "Train_MAPE": 2.0323,
+            "Train_R2": 0.9937,
+            "Val_RMSE": 6501.0348,
+            "Val_MAPE": 7.2729,
+            "Val_R2": 0.9882,
+            "Train_Time_Sec": 3.5746,
+            "Pred_Time_Sec": 0.30483,
+            "Device": "cpu"
+          }
+        ],
+        "cv_5fold_summary": [
+          {
+            "Model": "VAR",
+            "Folds": 5,
+            "MSE_Mean": 50505807.3648,
+            "MSE_Std": 14759398.5629,
+            "RMSE_Mean": 7053.538,
+            "RMSE_Std": 970.444,
+            "MAE_Mean": 4311.5947,
+            "MAE_Std": 745.3279,
+            "MAPE_Mean": 3.1191,
+            "MAPE_Std": 2.0182,
+            "R2_Mean": 0.9925,
+            "R2_Std": 0.0012
+          },
+          {
+            "Model": "LSTM",
+            "Folds": 5,
+            "MSE_Mean": 79762530.5965,
+            "MSE_Std": 59107639.123,
+            "RMSE_Mean": 8541.1816,
+            "RMSE_Std": 2917.7792,
+            "MAE_Mean": 5811.8898,
+            "MAE_Std": 1900.7594,
+            "MAPE_Mean": 3.8804,
+            "MAPE_Std": 1.8826,
+            "R2_Mean": 0.9888,
+            "R2_Std": 0.0053
+          },
+          {
+            "Model": "XGBoost",
+            "Folds": 5,
+            "MSE_Mean": 125540962.6345,
+            "MSE_Std": 121169604.7412,
+            "RMSE_Mean": 10229.3626,
+            "RMSE_Std": 5111.397,
+            "MAE_Mean": 6482.0795,
+            "MAE_Std": 2830.1909,
+            "MAPE_Mean": 4.1221,
+            "MAPE_Std": 1.8167,
+            "R2_Mean": 0.9824,
+            "R2_Std": 0.0143
+          }
+        ],
+        "walk_forward_metrics": [
+          {
+            "Model": "XGBoost",
+            "Eval_Steps": 168,
+            "MSE": 23723101.9398,
+            "RMSE": 4870.6367,
+            "MAE": 3582.8443,
+            "MAPE": 1.6381,
+            "R2": 0.995,
+            "Max_Error": 17249.5461,
+            "Mean_Residual": 920.165,
+            "Std_Residual": 4782.9278
+          },
+          {
+            "Model": "VAR",
+            "Eval_Steps": 168,
+            "MSE": 27908703.5346,
+            "RMSE": 5282.8689,
+            "MAE": 3937.5303,
+            "MAPE": 1.8182,
+            "R2": 0.9941,
+            "Max_Error": 18706.946,
+            "Mean_Residual": 379.6501,
+            "Std_Residual": 5269.2096
+          },
+          {
+            "Model": "LSTM",
+            "Eval_Steps": 168,
+            "MSE": 33764323.7447,
+            "RMSE": 5810.7077,
+            "MAE": 4238.7778,
+            "MAPE": 1.9522,
+            "R2": 0.9929,
+            "Max_Error": 26100.6662,
+            "Mean_Residual": 355.7829,
+            "Std_Residual": 5799.8054
+          }
+        ],
+        "weather_ablation": [
+          {
+            "Model": "VAR",
+            "With_Weather_RMSE": 7122.3626,
+            "Without_Weather_RMSE": 7120.9921,
+            "RMSE_Improvement_Pct": -0.02,
+            "With_Weather_MAE": 4576.4883,
+            "Without_Weather_MAE": 4569.4519,
+            "With_Weather_MAPE": 2.001,
+            "Without_Weather_MAPE": 1.9958,
+            "MAPE_Improvement_Pct": -0.26,
+            "With_Weather_R2": 0.9935,
+            "Without_Weather_R2": 0.9935
+          },
+          {
+            "Model": "XGBoost",
+            "With_Weather_RMSE": 6482.4538,
+            "Without_Weather_RMSE": 6379.2335,
+            "RMSE_Improvement_Pct": -1.62,
+            "With_Weather_MAE": 4337.5276,
+            "Without_Weather_MAE": 4280.1958,
+            "With_Weather_MAPE": 1.8922,
+            "Without_Weather_MAPE": 1.8586,
+            "MAPE_Improvement_Pct": -1.81,
+            "With_Weather_R2": 0.9946,
+            "Without_Weather_R2": 0.9947
+          },
+          {
+            "Model": "LSTM",
+            "With_Weather_RMSE": 6570.4058,
+            "Without_Weather_RMSE": 6946.5414,
+            "RMSE_Improvement_Pct": 5.41,
+            "With_Weather_MAE": 4524.0441,
+            "Without_Weather_MAE": 4862.9039,
+            "With_Weather_MAPE": 2.0185,
+            "Without_Weather_MAPE": 2.1741,
+            "MAPE_Improvement_Pct": 7.16,
+            "With_Weather_R2": 0.9944,
+            "Without_Weather_R2": 0.9938
+          }
+        ],
+        "pems_bay_dcrnn": [
+          {
+            "Model": "DCRNN",
+            "Model_Display": "DCRNN (Graph Diffusion + GRU)",
+            "Horizon": "15_min",
+            "Steps_Ahead": 3,
+            "Minutes_Ahead": 15,
+            "MSE": 7.6291,
+            "RMSE": 2.7621,
+            "MAE": 1.3094,
+            "MAPE": 2.7182,
+            "R2": 0.9196,
+            "Max_Error": 47.1802,
+            "Mean_Residual": -0.0199,
+            "Std_Residual": 2.762,
+            "Train_Time_Sec": 67.2227
+          },
+          {
+            "Model": "DCRNN",
+            "Model_Display": "DCRNN (Graph Diffusion + GRU)",
+            "Horizon": "30_min",
+            "Steps_Ahead": 6,
+            "Minutes_Ahead": 30,
+            "MSE": 15.4535,
+            "RMSE": 3.9311,
+            "MAE": 1.7338,
+            "MAPE": 3.8915,
+            "R2": 0.8372,
+            "Max_Error": 55.5159,
+            "Mean_Residual": -0.1243,
+            "Std_Residual": 3.9291,
+            "Train_Time_Sec": 67.2227
+          },
+          {
+            "Model": "DCRNN",
+            "Model_Display": "DCRNN (Graph Diffusion + GRU)",
+            "Horizon": "60_min",
+            "Steps_Ahead": 12,
+            "Minutes_Ahead": 60,
+            "MSE": 27.8962,
+            "RMSE": 5.2817,
+            "MAE": 2.304,
+            "MAPE": 5.6224,
+            "R2": 0.7063,
+            "Max_Error": 58.6159,
+            "Mean_Residual": -0.2987,
+            "Std_Residual": 5.2732,
+            "Train_Time_Sec": 67.2227
+          }
+        ],
+        "pems_bay_benchmark": [
+          {
+            "Model": "DCRNN",
+            "Model_Display": "DCRNN (Graph Diffusion + GRU)",
+            "Horizon": "15_min",
+            "Steps_Ahead": 3,
+            "Minutes_Ahead": 15,
+            "MSE": 7.6291,
+            "RMSE": 2.7621,
+            "MAE": 1.3094,
+            "MAPE": 2.7182,
+            "R2": 0.9196,
+            "Max_Error": 47.1802,
+            "Mean_Residual": -0.0199,
+            "Std_Residual": 2.762,
+            "Train_Time_Sec": 67.2227
+          },
+          {
+            "Model": "DCRNN",
+            "Model_Display": "DCRNN (Graph Diffusion + GRU)",
+            "Horizon": "30_min",
+            "Steps_Ahead": 6,
+            "Minutes_Ahead": 30,
+            "MSE": 15.4535,
+            "RMSE": 3.9311,
+            "MAE": 1.7338,
+            "MAPE": 3.8915,
+            "R2": 0.8372,
+            "Max_Error": 55.5159,
+            "Mean_Residual": -0.1243,
+            "Std_Residual": 3.9291,
+            "Train_Time_Sec": 67.2227
+          },
+          {
+            "Model": "DCRNN",
+            "Model_Display": "DCRNN (Graph Diffusion + GRU)",
+            "Horizon": "60_min",
+            "Steps_Ahead": 12,
+            "Minutes_Ahead": 60,
+            "MSE": 27.8962,
+            "RMSE": 5.2817,
+            "MAE": 2.304,
+            "MAPE": 5.6224,
+            "R2": 0.7063,
+            "Max_Error": 58.6159,
+            "Mean_Residual": -0.2987,
+            "Std_Residual": 5.2732,
+            "Train_Time_Sec": 67.2227
+          },
+          {
+            "Model": "DCRNN",
+            "Model_Display": "DCRNN (Graph Diffusion + GRU)",
+            "Horizon": "Average_All_Horizons",
+            "Steps_Ahead": 7,
+            "Minutes_Ahead": 35,
+            "MSE": 16.9929,
+            "RMSE": 3.9916,
+            "MAE": 1.7824,
+            "MAPE": 4.0774,
+            "R2": 0.821,
+            "Max_Error": 58.6159,
+            "Mean_Residual": -0.1476,
+            "Std_Residual": 3.9881,
+            "Train_Time_Sec": 67.2227
+          },
+          {
+            "Model": "Multi_Horizon_TCN",
+            "Model_Display": "Multi-Horizon TCN (Causal Conv1D)",
+            "Horizon": "15_min",
+            "Steps_Ahead": 3,
+            "Minutes_Ahead": 15,
+            "MSE": 8.6841,
+            "RMSE": 2.9469,
+            "MAE": 1.3542,
+            "MAPE": 2.8547,
+            "R2": 0.9085,
+            "Max_Error": 50.9629,
+            "Mean_Residual": -0.0363,
+            "Std_Residual": 2.9467,
+            "Train_Time_Sec": 15.3198
+          },
+          {
+            "Model": "Multi_Horizon_TCN",
+            "Model_Display": "Multi-Horizon TCN (Causal Conv1D)",
+            "Horizon": "30_min",
+            "Steps_Ahead": 6,
+            "Minutes_Ahead": 30,
+            "MSE": 19.0383,
+            "RMSE": 4.3633,
+            "MAE": 1.8553,
+            "MAPE": 4.1755,
+            "R2": 0.7994,
+            "Max_Error": 55.8628,
+            "Mean_Residual": -0.0716,
+            "Std_Residual": 4.3627,
+            "Train_Time_Sec": 15.3198
+          },
+          {
+            "Model": "Multi_Horizon_TCN",
+            "Model_Display": "Multi-Horizon TCN (Causal Conv1D)",
+            "Horizon": "60_min",
+            "Steps_Ahead": 12,
+            "Minutes_Ahead": 60,
+            "MSE": 37.1623,
+            "RMSE": 6.0961,
+            "MAE": 2.6243,
+            "MAPE": 6.5286,
+            "R2": 0.6087,
+            "Max_Error": 58.893,
+            "Mean_Residual": -0.2729,
+            "Std_Residual": 6.09,
+            "Train_Time_Sec": 15.3198
+          },
+          {
+            "Model": "Multi_Horizon_TCN",
+            "Model_Display": "Multi-Horizon TCN (Causal Conv1D)",
+            "Horizon": "Average_All_Horizons",
+            "Steps_Ahead": 7,
+            "Minutes_Ahead": 35,
+            "MSE": 21.6282,
+            "RMSE": 4.4688,
+            "MAE": 1.9446,
+            "MAPE": 4.5196,
+            "R2": 0.7722,
+            "Max_Error": 58.893,
+            "Mean_Residual": -0.1269,
+            "Std_Residual": 4.4665,
+            "Train_Time_Sec": 15.3198
+          },
+          {
+            "Model": "Multi_Horizon_LSTM",
+            "Model_Display": "Multi-Horizon LSTM (Temporal Only)",
+            "Horizon": "15_min",
+            "Steps_Ahead": 3,
+            "Minutes_Ahead": 15,
+            "MSE": 8.4484,
+            "RMSE": 2.9066,
+            "MAE": 1.4182,
+            "MAPE": 2.9199,
+            "R2": 0.911,
+            "Max_Error": 47.0235,
+            "Mean_Residual": 0.0986,
+            "Std_Residual": 2.9049,
+            "Train_Time_Sec": 7.7795
+          },
+          {
+            "Model": "Multi_Horizon_LSTM",
+            "Model_Display": "Multi-Horizon LSTM (Temporal Only)",
+            "Horizon": "30_min",
+            "Steps_Ahead": 6,
+            "Minutes_Ahead": 30,
+            "MSE": 16.2314,
+            "RMSE": 4.0288,
+            "MAE": 1.8885,
+            "MAPE": 4.0697,
+            "R2": 0.829,
+            "Max_Error": 50.7904,
+            "Mean_Residual": 0.2363,
+            "Std_Residual": 4.0219,
+            "Train_Time_Sec": 7.7795
+          },
+          {
+            "Model": "Multi_Horizon_LSTM",
+            "Model_Display": "Multi-Horizon LSTM (Temporal Only)",
+            "Horizon": "60_min",
+            "Steps_Ahead": 12,
+            "Minutes_Ahead": 60,
+            "MSE": 28.6132,
+            "RMSE": 5.3491,
+            "MAE": 2.4986,
+            "MAPE": 5.4961,
+            "R2": 0.6987,
+            "Max_Error": 54.8376,
+            "Mean_Residual": 0.4652,
+            "Std_Residual": 5.3289,
+            "Train_Time_Sec": 7.7795
+          },
+          {
+            "Model": "Multi_Horizon_LSTM",
+            "Model_Display": "Multi-Horizon LSTM (Temporal Only)",
+            "Horizon": "Average_All_Horizons",
+            "Steps_Ahead": 7,
+            "Minutes_Ahead": 35,
+            "MSE": 17.7643,
+            "RMSE": 4.0948,
+            "MAE": 1.9351,
+            "MAPE": 4.1619,
+            "R2": 0.8129,
+            "Max_Error": 54.8376,
+            "Mean_Residual": 0.2667,
+            "Std_Residual": 4.0852,
+            "Train_Time_Sec": 7.7795
+          }
+        ],
+        "section_11_answers": {
+          "Q1_Dominant_Weather_Variable": "Biến thời tiết ảnh hưởng mạnh nhất đến điện năng tiêu thụ (load) là 'humidity' (độ ẩm tương đối (%)) với hệ số tương quan tuyến tính Pearson r = -0.9224 (|r| = 0.9224). Kết quả nghiên cứu loại bỏ đặc trưng (Ablation Study) chứng minh việc đưa bộ 3 biến thời tiết (temperature, humidity, wind_speed) vào mô hình giúp giảm trung bình 1.26% sai số RMSE trên tập Test.",
+          "Q2_Best_Model_And_Why": "Trên tập kiểm tra độc lập Hold-out Test (15% - 5,260 giờ), mô hình 'XGBoost' đạt độ chính xác cao nhất với RMSE = 6,482.45 kW, MAE = 4,337.53 kW, MAPE = 1.89% và R² = 0.9946. Mô hình Stacked 2-Layer LSTM (tích hợp nhánh Autoregressive Residual Highway) và XGBoost nắm bắt xuất sắc cả tương tác phi tuyến của thời tiết lẫn chu kỳ tự hồi quy 24h/168h, trong khi VAR (R² = 0.9935) cực kỳ nhanh và ổn định trên miền sai phân bậc 1.",
+          "Q3_Model_Limitations_And_Challenges": "1. VAR: Giả định quan hệ tuyến tính giữa các biến sai phân và số lượng tham số tăng bậc hai O(p * K^2) theo số chuỗi K. 2. XGBoost: Đòi hỏi thiết kế thủ công 105 đặc trưng trễ/cuốn và không thể ngoại suy vượt ngoài miền giá trị cực đại của tập huấn luyện. 3. LSTM: Cần tinh chỉnh kiến trúc kết nối tắt (Residual Highway), lịch trình tốc độ học CosineAnnealingLR và chuẩn hóa nghiêm ngặt để tránh bão hòa đạo hàm.",
+          "Q4_PEMS_BAY_SpatioTemporal_Benchmark": "Ở Bài tập 12 nâng cao trên bộ dữ liệu giao thông PEMS-BAY (207 trạm cảm biến × 8,640 bước 5 phút), mô hình DCRNN (tích hợp ma trận đồ thị không gian adj_mx_bay.pkl qua phép tích chập khuếch tán hai chiều) vượt trội hơn hẳn cả Multi-Horizon TCN và Multi-Horizon LSTM ở tất cả các tầm nhìn xa (15 phút, 30 phút, 60 phút). Đặc biệt ở tầm nhìn xa 60 phút (t+12), DCRNN đạt MAE = 2.304 mph, thấp hơn rõ rệt so với Multi-Horizon TCN (MAE = 2.624 mph) và Multi-Horizon LSTM không dùng đồ thị (MAE = 2.499 mph), chứng minh giá trị cốt lõi của cấu trúc mạng lưới không gian khi dự báo sóng lan truyền tắc nghẽn giao thông."
+        },
+        "best_holdout_model": "XGBoost",
+        "duration_sec": 0.7089
+      }
+    },
+    "visualization": {
+      "updated_at": "2026-11-16T23:35:08",
+      "data": {
+        "newly_generated_figures": [
+          "chronological_split_diagram.png",
+          "stationarity_adf_comparison.png",
+          "Hourly_Profile.png",
+          "Weekly_Profile.png",
+          "Rolling_Volatility_30D.png",
+          "training_loss_curves.png",
+          "Forecast_Overlay_168h.png",
+          "actual_vs_predicted_scatter.png",
+          "Residual_Diagnostics.png",
+          "Metric_Comparison_Bars.png",
+          "training_time_comparison.png",
+          "Walk_Forward_Trajectory.png",
+          "XGBoost_Feature_Importance.png",
+          "Feature_Ablation_Impact.png",
+          "pems_bay_dcrnn_evaluation.png",
+          "pems_bay_model_comparison.png"
+        ],
+        "all_available_figures": [
+          "Feature_Ablation_Impact.png",
+          "Forecast_Overlay_168h.png",
+          "Hourly_Profile.png",
+          "Metric_Comparison_Bars.png",
+          "Residual_Diagnostics.png",
+          "Rolling_Volatility_30D.png",
+          "Walk_Forward_Trajectory.png",
+          "Weekly_Profile.png",
+          "XGBoost_Feature_Importance.png",
+          "acf_pacf_load.png",
+          "actual_vs_predicted_scatter.png",
+          "chronological_split_diagram.png",
+          "correlation_heatmap.png",
+          "feature_distributions_and_outliers.png",
+          "missing_values_audit.png",
+          "multivariate_overview.png",
+          "pems_bay_dcrnn_evaluation.png",
+          "pems_bay_eda_overview.png",
+          "pems_bay_model_comparison.png",
+          "seasonal_decomposition.png",
+          "stationarity_adf_comparison.png",
+          "training_loss_curves.png",
+          "training_time_comparison.png",
+          "weather_vs_load_joint.png"
+        ],
+        "total_figures_count": 24,
+        "duration_sec": 13.5772
+      }
+    },
+    "reporting": {
+      "updated_at": "2026-11-16T23:35:19",
+      "data": {
+        "html_report": "reports\\lab04\\LAB_04_REPORT.html",
+        "pdf_report": "reports\\lab04\\LAB_04_REPORT.pdf",
+        "md_report": "reports\\lab04\\LAB_04_REPORT.md",
+        "html_size_bytes": 13490598,
+        "pdf_size_bytes": 10566096,
+        "md_size_bytes": 10823,
+        "duration_sec": 10.1449
       }
     }
   }

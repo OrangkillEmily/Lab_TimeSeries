@@ -112,11 +112,12 @@
   "generated_figures": [
     "multivariate_overview.png",
     "feature_distributions_and_outliers.png",
+    "missing_values_audit.png",
     "correlation_heatmap.png",
     "weather_vs_load_joint.png",
     "seasonal_decomposition.png",
     "acf_pacf_load.png",
     "pems_bay_eda_overview.png"
   ],
-  "duration_sec": 15.723
+  "duration_sec": 17.9622
 }

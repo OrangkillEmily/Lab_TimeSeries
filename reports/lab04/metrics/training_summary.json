@@ -11,14 +11,14 @@
   "models": {
     "VAR": {
       "selected_lag": 24,
-      "train_time_sec": 3.0653,
-      "pred_time_sec": 0.244528,
+      "train_time_sec": 3.5746,
+      "pred_time_sec": 0.30483,
       "device": "cpu"
     },
     "XGBoost": {
       "best_iteration": 449,
-      "train_time_sec": 5.5363,
-      "pred_time_sec": 0.117984,
+      "train_time_sec": 5.4901,
+      "pred_time_sec": 0.118053,
       "device": "cuda"
     },
     "LSTM": {
@@ -156,8 +156,8 @@
         "total_params": 30589,
         "epochs_executed": 30
       },
-      "train_time_sec": 92.2012,
-      "pred_time_sec": 0.775323,
+      "train_time_sec": 86.7262,
+      "pred_time_sec": 0.773854,
       "device": "cuda",
       "hidden_dims": [
         64,
@@ -200,7 +200,7 @@
         "total_params": 21290,
         "epochs_executed": 12
       },
-      "train_time_sec": 69.0303,
+      "train_time_sec": 67.2227,
       "device": "cuda"
     },
     "Multi_Horizon_TCN": {
@@ -222,19 +222,19 @@
           0.26258,
           0.26152,
           0.26247,
-          0.26339,
-          0.26294,
-          0.25951,
+          0.2634,
+          0.26296,
+          0.2595,
           0.26105,
           0.25993,
-          0.26017
+          0.26018
         ],
         "best_epoch": 7,
-        "best_val_loss": 0.25951,
+        "best_val_loss": 0.2595,
         "total_params": 3370,
         "epochs_executed": 10
       },
-      "train_time_sec": 15.1527,
+      "train_time_sec": 15.3198,
       "device": "cuda"
     },
     "Multi_Horizon_LSTM": {
@@ -264,9 +264,9 @@
         "total_params": 110292,
         "epochs_executed": 8
       },
-      "train_time_sec": 8.2411,
+      "train_time_sec": 7.7795,
       "device": "cuda"
     }
   },
-  "total_duration_sec": 432.3859
+  "total_duration_sec": 413.8802
 }

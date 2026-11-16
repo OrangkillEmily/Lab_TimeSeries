@@ -77,6 +77,8 @@ def run_full_pipeline(run_id: Optional[str] = None) -> Dict[str, Any]:
         "total_duration_sec": round(total_sec, 4),
     }
 
+def main(run_id: Optional[str] = None) -> Dict[str, Any]:
+    return run_full_pipeline(run_id=run_id)
 
 if __name__ == "__main__":
-    run_full_pipeline()
+    main()

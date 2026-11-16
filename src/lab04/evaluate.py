@@ -108,7 +108,7 @@ def evaluate_walk_forward_backtesting(
         # Cập nhật hiệu chỉnh phần dư trượt 1 bước (Online 1-step Kalman/AR error feedback) khi append quan sát thực t vào cửa sổ
         corrected_pred = np.empty_like(raw_pred)
         prev_err = 0.0
-        gain = 0.25 if model_name != "LSTM" else 0.30
+        gain = 0.25
         for t in range(steps):
             corrected_pred[t] = raw_pred[t] + gain * prev_err
             prev_err = wf_y_true[t] - raw_pred[t]

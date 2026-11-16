@@ -97,8 +97,16 @@ def main(run_id: Optional[str] = None) -> Dict[str, Any]:
 
     write_log(active_run_id, "VISUALIZATION", "START", "Bắt đầu kết xuất bộ biểu đồ đánh giá, chẩn đoán phần dư và đối sánh đa mô hình.")
 
-    plt.rcParams["font.sans-serif"] = ["DejaVu Sans", "Segoe UI", "Arial"]
-    plt.rcParams["axes.unicode_minus"] = False
+    plt.rcParams.update({
+        "font.sans-serif": ["DejaVu Sans", "Segoe UI", "Arial"],
+        "axes.unicode_minus": False,
+        "font.size": 10.5,
+        "axes.titlesize": 12.0,
+        "axes.labelsize": 10.5,
+        "xtick.labelsize": 9.5,
+        "ytick.labelsize": 9.5,
+        "legend.fontsize": 9.5,
+    })
 
     proc_dir = get_path("data_processed_dir", cfg)
     metrics_dir = get_path("metrics_dir", cfg)
@@ -133,9 +141,11 @@ def main(run_id: Optional[str] = None) -> Dict[str, Any]:
     ax0.plot(te_d.index, te_d.values, color="#d95f02", linewidth=1.3, label=f"Test Set (15% — {len(te_df):,} giờ)")
     ax0.axvline(tr_df.index.max(), color="#0f172a", linestyle="--", linewidth=1.5)
     ax0.axvline(va_df.index.max(), color="#b91c1c", linestyle="--", linewidth=1.5)
+    y_lo, y_hi = ax0.get_ylim()
+    ax0.set_ylim(y_lo, y_hi + 0.18 * (y_hi - y_lo))
     ax0.set_title("Phân chia Chuỗi Thời gian Tuần tự Chống Rò rỉ Dữ liệu (Chronological Hold-out Split 70% / 15% / 15%)", fontsize=11.5, fontweight="bold", color="#183f35")
     ax0.set_ylabel("Phụ tải Điện (kW)")
-    ax0.legend(loc="upper right", fontsize=9.5)
+    ax0.legend(loc="upper center", ncol=3, frameon=True, facecolor="white", fontsize=9.5)
     ax0.grid(True, linestyle="--", alpha=0.35)
 
     ax1 = axes[1]
@@ -194,8 +204,15 @@ def main(run_id: Optional[str] = None) -> Dict[str, Any]:
 
     lines1, labels1 = ax1.get_legend_handles_labels()
     lines2, labels2 = ax2.get_legend_handles_labels()
-    ax1.legend(lines1 + lines2, labels1 + labels2, loc="upper left", fontsize=9.5)
-    plt.title("Biên dạng Chu kỳ Ngày/Đêm (Diurnal Profile): Đồng pha Giữa Nhiệt độ và Phụ tải Điện", fontsize=12.5, fontweight="bold", color="#183f35")
+    ax1.legend(
+        lines1 + lines2, labels1 + labels2,
+        loc="upper center", bbox_to_anchor=(0.5, 1.14),
+        ncol=3, frameon=True, facecolor="white", fontsize=9.5,
+    )
+    ax1.set_title(
+        "Biên dạng Chu kỳ Ngày/Đêm (Diurnal Profile): Đồng pha Giữa Nhiệt độ và Phụ tải Điện",
+        fontsize=12.5, fontweight="bold", color="#183f35", pad=34,
+    )
     fig.tight_layout()
     generated.append(_save_and_sync_fig(fig, "Hourly_Profile.png", active_run_id, cfg))
 
@@ -306,10 +323,13 @@ def main(run_id: Optional[str] = None) -> Dict[str, Any]:
             color=MODEL_COLORS[m_name],
             label=f"{m_name} (RMSE={rmse_v:,.1f} kW | MAPE={mape_v:.2f}% | R²={r2_v:.4f})",
         )
+    
+    y_lo, y_hi = ax.get_ylim()
+    ax.set_ylim(y_lo, y_hi + 0.22 * (y_hi - y_lo))
     ax.set_title("Đối chiếu Đường Dự báo Phụ tải Điện (Actual vs. VAR, XGBoost, LSTM — Cận cảnh 168 Giờ Cuối Tập Test)", fontsize=12.5, fontweight="bold", color="#183f35")
     ax.set_xlabel("Thời gian (Timestamp)")
     ax.set_ylabel("Phụ tải Điện (Load - kW)")
-    ax.legend(loc="upper right", fontsize=9.8, framealpha=0.92)
+    ax.legend(loc="upper right", ncol=2, frameon=True, facecolor="white", framealpha=0.95, fontsize=9.5)
     ax.grid(True, linestyle="--", alpha=0.35)
     fig.tight_layout()
     generated.append(_save_and_sync_fig(fig, "Forecast_Overlay_168h.png", active_run_id, cfg))
@@ -350,9 +370,11 @@ def main(run_id: Optional[str] = None) -> Dict[str, Any]:
         sns.histplot(resid, bins=45, kde=True, color=MODEL_COLORS[m_name], ax=ax_hist, alpha=0.4)
         ax_hist.axvline(0.0, color="#b91c1c", linestyle="--", linewidth=1.5, label="Zero Error")
         ax_hist.axvline(np.mean(resid), color="#0f172a", linestyle=":", linewidth=1.5, label=f"Mean: {np.mean(resid):.1f}")
+        _, yh = ax_hist.get_ylim()
+        ax_hist.set_ylim(0, yh * 1.22)
         ax_hist.set_title(f"Phân phối Phần dư {m_name}\n(Mean={np.mean(resid):.1f}, Std={np.std(resid):.1f} kW)", fontsize=10.5, fontweight="bold", color="#183f35")
         ax_hist.set_xlabel("Residual e = y - ŷ (kW)")
-        ax_hist.legend(fontsize=8.5)
+        ax_hist.legend(loc="upper right", frameon=True, facecolor="white", fontsize=8.5)
         ax_hist.grid(True, linestyle="--", alpha=0.3)
 
         ax_scat.scatter(yp, resid, alpha=0.22, s=10, color=MODEL_COLORS[m_name], edgecolors="none")
@@ -434,6 +456,8 @@ def main(run_id: Optional[str] = None) -> Dict[str, Any]:
     for b in bars1:
         h_v = b.get_height()
         axes[0].text(b.get_x() + b.get_width() / 2.0, h_v, f"{h_v:.2f}s", ha="center", va="bottom", fontweight="bold", fontsize=9.5)
+    
+    axes[0].set_ylim(0, max(tr_times) * 1.18)
     axes[0].set_title("Thời gian Huấn luyện Mô hình (Training Time ↓)", fontsize=11, fontweight="bold", color="#183f35")
     axes[0].set_ylabel("Giây (Seconds)")
     axes[0].grid(True, axis="y", linestyle="--", alpha=0.35)
@@ -442,6 +466,7 @@ def main(run_id: Optional[str] = None) -> Dict[str, Any]:
     for b in bars2:
         h_v = b.get_height()
         axes[1].text(b.get_x() + b.get_width() / 2.0, h_v, f"{h_v:.1f} ms", ha="center", va="bottom", fontweight="bold", fontsize=9.5)
+    axes[1].set_ylim(0, max(pr_times_ms) * 1.18)
     axes[1].set_title("Độ trễ Suy luận trên 5,260 Giờ Tập Test (Inference Latency ↓)", fontsize=11, fontweight="bold", color="#183f35")
     axes[1].set_ylabel("Mili-giây (ms)")
     axes[1].grid(True, axis="y", linestyle="--", alpha=0.35)
@@ -477,6 +502,8 @@ def main(run_id: Optional[str] = None) -> Dict[str, Any]:
     for b in bars:
         w_v = b.get_width()
         ax.text(w_v + 0.002, b.get_y() + b.get_height() / 2.0, f"{w_v:.4f}", va="center", fontsize=8.8, fontweight="bold")
+    
+    ax.set_xlim(0, float(top_imp["Importance"].max()) * 1.16)
     ax.set_title("Top 15 Đặc trưng Quan trọng Nhất trong Mô hình XGBoost Multivariate (Gain Importance)", fontsize=12, fontweight="bold", color="#183f35")
     ax.set_xlabel("Mức độ Đóng góp Tương đối (Feature Importance)")
     ax.grid(True, axis="x", linestyle="--", alpha=0.35)
@@ -491,9 +518,12 @@ def main(run_id: Optional[str] = None) -> Dict[str, Any]:
     axes[0].bar(x_abl + w_bar / 2, abl_df["With_Weather_RMSE"], w_bar, label="Có Đầy đủ 3 Biến Thời tiết (Multivariate)", color="#1d5843", edgecolor="black")
     axes[0].set_xticks(x_abl)
     axes[0].set_xticklabels(abl_df["Model"], fontweight="bold")
+    
+    max_rmse_abl = float(max(abl_df["Without_Weather_RMSE"].max(), abl_df["With_Weather_RMSE"].max()))
+    axes[0].set_ylim(0, max_rmse_abl * 1.20)
     axes[0].set_title("Tác động của Biến Ngoại sinh Thời tiết tới Sai số RMSE (kW ↓)", fontsize=11, fontweight="bold", color="#183f35")
     axes[0].set_ylabel("Test RMSE (kW)")
-    axes[0].legend(fontsize=9)
+    axes[0].legend(loc="upper right", frameon=True, facecolor="white", fontsize=9)
     axes[0].grid(True, axis="y", linestyle="--", alpha=0.35)
 
     bars_gain = axes[1].bar(abl_df["Model"], abl_df["RMSE_Improvement_Pct"], color=["#2b5c8f", "#1d5843", "#d95f02"], width=0.45, edgecolor="black")
@@ -501,6 +531,9 @@ def main(run_id: Optional[str] = None) -> Dict[str, Any]:
         v_h = b.get_height()
         axes[1].text(b.get_x() + b.get_width() / 2.0, v_h, f"{v_h:+.2f}%", ha="center", va="bottom", fontweight="bold", fontsize=9.8)
     axes[1].axhline(0, color="black", linewidth=0.9)
+    max_pct = float(abl_df["RMSE_Improvement_Pct"].max())
+    min_pct = float(abl_df["RMSE_Improvement_Pct"].min())
+    axes[1].set_ylim(min(0.0, min_pct * 1.15), max(1.0, max_pct * 1.18))
     axes[1].set_title("Tỷ lệ Cải thiện Độ chính xác Nhờ Tích hợp Biến Thời tiết (% Giảm RMSE ↑)", fontsize=11, fontweight="bold", color="#183f35")
     axes[1].set_ylabel("Mức giảm RMSE (%)")
     axes[1].grid(True, axis="y", linestyle="--", alpha=0.35)
@@ -520,12 +553,15 @@ def main(run_id: Optional[str] = None) -> Dict[str, Any]:
     axes[0].plot(t_axis, y_dcrnn[:slice_steps, 0, sensor_id], color="#1d5843", linestyle="-", linewidth=1.7, label="DCRNN Dự báo +15 Phút (t+3)")
     axes[0].plot(t_axis, y_dcrnn[:slice_steps, 1, sensor_id], color="#2b5c8f", linestyle="--", linewidth=1.6, label="DCRNN Dự báo +30 Phút (t+6)")
     axes[0].plot(t_axis, y_dcrnn[:slice_steps, 2, sensor_id], color="#d95f02", linestyle=":", linewidth=1.6, label="DCRNN Dự báo +60 Phút (t+12)")
+    y_p_min = float(y_pems_true[:slice_steps, 0, sensor_id].min())
+    y_p_max = float(y_pems_true[:slice_steps, 0, sensor_id].max())
+    axes[0].set_ylim(y_p_min - 7.0, y_p_max + 3.0)
     axes[0].set_title("Dự báo Vận tốc Giao thông Đa tầm nhìn bằng DCRNN (24 Giờ — 288 Bước 5 Phút)", fontsize=11, fontweight="bold", color="#183f35")
     axes[0].set_xlabel("Bước Thời gian 5 Phút (Steps)")
     axes[0].set_ylabel("Vận tốc (mph)")
-    axes[0].legend(loc="lower left", fontsize=8.8)
+    axes[0].legend(loc="lower left", frameon=True, facecolor="white", framealpha=0.95, fontsize=8.8)
     axes[0].grid(True, linestyle="--", alpha=0.35)
-
+    
     h_labels = ["15 Phút (t+3)", "30 Phút (t+6)", "60 Phút (t+12)"]
     x_h = np.arange(len(h_labels))
     axes[1].bar(x_h - 0.18, pems_dcrnn_df["RMSE"], 0.34, label="RMSE (mph ↓)", color="#1d5843", edgecolor="black")
@@ -535,9 +571,12 @@ def main(run_id: Optional[str] = None) -> Dict[str, Any]:
         axes[1].text(idx_h + 0.18, m_v + 0.08, f"{m_v:.2f}", ha="center", va="bottom", fontsize=8.8, fontweight="bold")
     axes[1].set_xticks(x_h)
     axes[1].set_xticklabels(h_labels, fontweight="bold")
+    
+    
+    axes[1].set_ylim(0, float(pems_dcrnn_df["RMSE"].max()) * 1.22)
     axes[1].set_title("Sai số Dự báo DCRNN theo Độ xa Tầm nhìn (15p → 30p → 60p)", fontsize=11, fontweight="bold", color="#183f35")
     axes[1].set_ylabel("Sai số Vận tốc (mph)")
-    axes[1].legend(fontsize=9)
+    axes[1].legend(loc="upper left", frameon=True, facecolor="white", fontsize=9)
     axes[1].grid(True, axis="y", linestyle="--", alpha=0.35)
     fig.tight_layout()
     generated.append(_save_and_sync_fig(fig, "pems_bay_dcrnn_evaluation.png", active_run_id, cfg))
@@ -572,17 +611,21 @@ def main(run_id: Optional[str] = None) -> Dict[str, Any]:
                 hv = b.get_height()
                 fmt_s = f"{hv:.2f}" if metric_col != "R2" else f"{hv:.3f}"
                 ax.text(b.get_x() + b.get_width() / 2.0, hv, fmt_s, ha="center", va="bottom", fontsize=7.8, fontweight="bold")
+
         ax.set_xticks(x_b)
         ax.set_xticklabels([h_Map_disp[h] for h in horizons_filter], fontweight="bold")
         ax.set_title(metric_title, fontsize=11, fontweight="bold", color="#183f35")
         ax.set_ylabel(y_lbl)
         if metric_col == "R2":
-            ax.set_ylim(0.45, 1.02)
-        ax.legend(fontsize=8.5, loc="best")
+            ax.set_ylim(0.45, 1.06)
+        else:
+            ax.set_ylim(0, float(sub_b[metric_col].max()) * 1.20)
         ax.grid(True, axis="y", linestyle="--", alpha=0.35)
 
-    fig.suptitle("Bài tập 12 Nâng cao (PEMS-BAY): Đối sánh DCRNN (Đồ thị Không gian) vs. Multi-Horizon TCN vs. Multi-Horizon LSTM", fontsize=13, fontweight="bold", y=1.03, color="#183f35")
-    fig.tight_layout()
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(0.5, 0.94), ncol=3, frameon=True, facecolor="white", fontsize=9.8)
+    fig.suptitle("Bài tập 12 Nâng cao (PEMS-BAY): Đối sánh DCRNN (Đồ thị Không gian) vs. Multi-Horizon TCN vs. Multi-Horizon LSTM", fontsize=13, fontweight="bold", y=1.00, color="#183f35")
+    fig.tight_layout(rect=[0, 0, 1, 0.88])
     generated.append(_save_and_sync_fig(fig, "pems_bay_model_comparison.png", active_run_id, cfg))
 
     # Kiểm kê toàn bộ các biểu đồ hiện có trong reports/lab04/figures/

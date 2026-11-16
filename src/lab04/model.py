@@ -758,17 +758,28 @@ class SpatioTemporalTrainer:
                 with torch.amp.autocast("cuda", enabled=self.amp_enabled):
                     pred = self.net(bx)
                     loss = criterion(pred, by)
-                scaler_amp.scale(loss).backward()
-                scaler_amp.unscale_(optimizer)
-                nn.utils.clip_grad_norm_(self.net.parameters(), 2.0)
-                scaler_amp.step(optimizer)
-                scaler_amp.update()
+                if self.amp_enabled:
+                    old_scale = scaler_amp.get_scale()
+                    scaler_amp.scale(loss).backward()
+                    scaler_amp.unscale_(optimizer)
+                    nn.utils.clip_grad_norm_(self.net.parameters(), 2.0)
+                    scaler_amp.step(optimizer)
+                    scaler_amp.update()
+                    if scaler_amp.get_scale() >= old_scale:
+                        optimizer_stepped = True
+                else:
+                    loss.backward()
+                    nn.utils.clip_grad_norm_(self.net.parameters(), 2.0)
+                    optimizer.step()
+                    optimizer_stepped = True
 
                 bs = bx.size(0)
                 ep_loss += loss.item() * bs
                 n_seen += bs
 
-            scheduler.step()
+            if optimizer_stepped:
+                scheduler.step()            
+            
             tr_l = ep_loss / max(n_seen, 1)
             val_preds = self.predict_scaled(X_val)
             val_l = float(np.mean(np.abs(val_preds - Y_val_scaled)))
