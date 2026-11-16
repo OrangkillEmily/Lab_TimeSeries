@@ -1,0 +1,4 @@
+[2026-11-16 17:41:06] [DATA_LOADING] [START] Bắt đầu nạp dữ liệu electricity_load.csv, pems-bay.h5 và sensor_graph/adj_mx_bay.pkl.
+[2026-11-16 17:41:14] [DATA_LOADING] [SUCCESS] Hoàn tất nạp dữ liệu trong 8.64s | Electricity: (35065, 4) | PEMS-BAY: (8640, 207), Adj: (207, 207).
+[2026-11-16 17:41:47] [EDA] [START] Bắt đầu phân tích khám phá dữ liệu (EDA) và khởi tạo 7 biểu đồ chuyên sâu.
+[2026-11-16 17:42:03] [EDA] [SUCCESS] Hoàn tất EDA trong 15.72s | Đã xuất 7 biểu đồ EDA | Biến thời tiết mạnh nhất: humidity (r=-0.9224).

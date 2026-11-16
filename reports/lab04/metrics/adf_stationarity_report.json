@@ -1,0 +1,120 @@
+{
+  "adf_raw": [
+    {
+      "variable": "load",
+      "adf_statistic": -2.8161,
+      "p_value": 0.056005,
+      "used_lag": 24,
+      "n_obs": 14975,
+      "critical_values": {
+        "1%": -3.4308,
+        "5%": -2.8617,
+        "10%": -2.5669
+      },
+      "is_stationary": false,
+      "conclusion": "Non-Stationary (Không dừng - Cần lấy sai phân)"
+    },
+    {
+      "variable": "temperature",
+      "adf_statistic": -2.0663,
+      "p_value": 0.25826,
+      "used_lag": 24,
+      "n_obs": 14975,
+      "critical_values": {
+        "1%": -3.4308,
+        "5%": -2.8617,
+        "10%": -2.5669
+      },
+      "is_stationary": false,
+      "conclusion": "Non-Stationary (Không dừng - Cần lấy sai phân)"
+    },
+    {
+      "variable": "humidity",
+      "adf_statistic": -2.5623,
+      "p_value": 0.101033,
+      "used_lag": 24,
+      "n_obs": 14975,
+      "critical_values": {
+        "1%": -3.4308,
+        "5%": -2.8617,
+        "10%": -2.5669
+      },
+      "is_stationary": false,
+      "conclusion": "Non-Stationary (Không dừng - Cần lấy sai phân)"
+    },
+    {
+      "variable": "wind_speed",
+      "adf_statistic": -6.5418,
+      "p_value": 0.0,
+      "used_lag": 24,
+      "n_obs": 14975,
+      "critical_values": {
+        "1%": -3.4308,
+        "5%": -2.8617,
+        "10%": -2.5669
+      },
+      "is_stationary": true,
+      "conclusion": "Stationary (Chuỗi dừng - Bác bỏ H0)"
+    }
+  ],
+  "adf_after_diff1": [
+    {
+      "variable": "load",
+      "adf_statistic": -29.9928,
+      "p_value": 0.0,
+      "used_lag": 24,
+      "n_obs": 14975,
+      "critical_values": {
+        "1%": -3.4308,
+        "5%": -2.8617,
+        "10%": -2.5669
+      },
+      "is_stationary": true,
+      "conclusion": "Stationary (Chuỗi dừng - Bác bỏ H0)"
+    },
+    {
+      "variable": "temperature",
+      "adf_statistic": -34.5548,
+      "p_value": 0.0,
+      "used_lag": 24,
+      "n_obs": 14975,
+      "critical_values": {
+        "1%": -3.4308,
+        "5%": -2.8617,
+        "10%": -2.5669
+      },
+      "is_stationary": true,
+      "conclusion": "Stationary (Chuỗi dừng - Bác bỏ H0)"
+    },
+    {
+      "variable": "humidity",
+      "adf_statistic": -45.1783,
+      "p_value": 0.0,
+      "used_lag": 24,
+      "n_obs": 14975,
+      "critical_values": {
+        "1%": -3.4308,
+        "5%": -2.8617,
+        "10%": -2.5669
+      },
+      "is_stationary": true,
+      "conclusion": "Stationary (Chuỗi dừng - Bác bỏ H0)"
+    },
+    {
+      "variable": "wind_speed",
+      "adf_statistic": -41.6275,
+      "p_value": 0.0,
+      "used_lag": 24,
+      "n_obs": 14975,
+      "critical_values": {
+        "1%": -3.4308,
+        "5%": -2.8617,
+        "10%": -2.5669
+      },
+      "is_stationary": true,
+      "conclusion": "Stationary (Chuỗi dừng - Bác bỏ H0)"
+    }
+  ],
+  "diff_order_applied": 1,
+  "all_stationary_after_diff1": true
+}

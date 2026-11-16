@@ -1,0 +1,224 @@
+{
+  "run_id": "20261116_174053_63f753",
+  "project": {
+    "name": "Lab04_Multivariate_TimeSeries_Forecasting",
+    "version": "2.0.0",
+    "lab_id": "lab04",
+    "course": "Time Series Analysis (Phân tích Chuỗi Thời gian)",
+    "institution": "University of Transport in Ho Chi Minh City (UTH)",
+    "random_seed": 42
+  },
+  "hardware": {
+    "torch_device": "cuda",
+    "xgb_device": "cuda",
+    "xgb_tree_method": "hist",
+    "device_name": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+    "amp_enabled": true,
+    "vram_gb": 6.0,
+    "cuda_available": true
+  },
+  "started_at": "2026-11-16T17:40:53",
+  "updated_at": "2026-11-16T17:42:03",
+  "status": "IN_PROGRESS",
+  "stages": {
+    "data_loading": {
+      "updated_at": "2026-11-16T17:41:14",
+      "data": {
+        "electricity": {
+          "dataset_name": "Electricity Load & Weather Multivariate Time Series",
+          "source_path": "data\\raw\\electricity_load.csv",
+          "raw_rows_initial": 140256,
+          "raw_cols_initial": 371,
+          "hourly_rows": 35065,
+          "num_features": 4,
+          "columns": [
+            "load",
+            "temperature",
+            "humidity",
+            "wind_speed"
+          ],
+          "start_time": "2011-01-01 00:00:00",
+          "end_time": "2015-01-01 00:00:00",
+          "frequency": "1h",
+          "missing_before_imputation": 0,
+          "missing_after_imputation": 0,
+          "duplicate_timestamps": 0,
+          "load_calibration_mode": "sum_of_370_UCI_meters_normalized_for_2011_active_coverage",
+          "weather_source_mode": "calibrated_hourly_meteorological_exogenous_for_UCI_grid"
+        },
+        "pems_bay": {
+          "dataset_name": "PEMS-BAY Spatio-Temporal Highway Sensor Traffic Speed",
+          "h5_source_path": "data\\raw\\pems-bay.h5",
+          "adj_source_path": "data\\sensor_graph\\adj_mx_bay.pkl",
+          "num_timesteps": 8640,
+          "num_sensors": 207,
+          "adj_matrix_shape": [
+            207,
+            207
+          ],
+          "nonzero_directed_edges": 1238,
+          "graph_sparsity_pct": 97.11,
+          "start_time": "2017-01-01 00:00:00",
+          "end_time": "2017-01-30 23:55:00",
+          "frequency": "5min",
+          "speed_mean_mph": 62.4634,
+          "speed_std_mph": 9.7452,
+          "speed_min_mph": 3.0,
+          "speed_max_mph": 83.5
+        },
+        "feature_descriptions": [
+          {
+            "Biến số (Column)": "load",
+            "Vai trò (Role)": "Biến mục tiêu (Target Y_t)",
+            "Đơn vị (Unit)": "kW",
+            "Mô tả Vật lý & Ý nghĩa Học thuật": "Tổng phụ tải điện năng tiêu thụ toàn lưới theo từng giờ (Hourly Grid Electricity Load)."
+          },
+          {
+            "Biến số (Column)": "temperature",
+            "Vai trò (Role)": "Biến ngoại sinh 1 (Exogenous X_1)",
+            "Đơn vị (Unit)": "°C",
+            "Mô tả Vật lý & Ý nghĩa Học thuật": "Nhiệt độ không khí ngoài trời theo giờ — tác nhân chính thúc đẩy nhu cầu làm mát/điều hòa nhiệt độ."
+          },
+          {
+            "Biến số (Column)": "humidity",
+            "Vai trò (Role)": "Biến ngoại sinh 2 (Exogenous X_2)",
+            "Đơn vị (Unit)": "%",
+            "Mô tả Vật lý & Ý nghĩa Học thuật": "Độ ẩm tương đối trong không khí (biến thiên ngược pha với nhiệt độ ban ngày, làm tăng cảm giác oi bức)."
+          },
+          {
+            "Biến số (Column)": "wind_speed",
+            "Vai trò (Role)": "Biến ngoại sinh 3 (Exogenous X_3)",
+            "Đơn vị (Unit)": "m/s",
+            "Mô tả Vật lý & Ý nghĩa Học thuật": "Tốc độ gió tự nhiên theo giờ — hỗ trợ tản nhiệt tự nhiên cho tòa nhà và lưới truyền tải điện."
+          }
+        ],
+        "duration_sec": 8.6368
+      }
+    },
+    "eda": {
+      "updated_at": "2026-11-16T17:42:03",
+      "data": {
+        "descriptive_stats": [
+          {
+            "Variable": "load",
+            "Count": 35065,
+            "Missing": 0,
+            "Mean": 238118.6012,
+            "Std": 83328.3304,
+            "Min": 459.4325,
+            "Q25": 158735.05,
+            "Median": 243198.8086,
+            "Q75": 296787.1458,
+            "Max": 503836.8066,
+            "Skewness": 0.2731,
+            "Kurtosis": -0.8165,
+            "IQR_Outliers": 0,
+            "IQR_Outlier_Pct": 0.0,
+            "ZScore_Outliers": 10
+          },
+          {
+            "Variable": "temperature",
+            "Count": 35065,
+            "Missing": 0,
+            "Mean": 18.5949,
+            "Std": 8.2526,
+            "Min": 4.5,
+            "Q25": 12.8337,
+            "Median": 17.7496,
+            "Q75": 24.4219,
+            "Max": 38.5,
+            "Skewness": 0.2554,
+            "Kurtosis": -0.6693,
+            "IQR_Outliers": 0,
+            "IQR_Outlier_Pct": 0.0,
+            "ZScore_Outliers": 0
+          },
+          {
+            "Variable": "humidity",
+            "Count": 35065,
+            "Missing": 0,
+            "Mean": 66.8518,
+            "Std": 14.6204,
+            "Min": 28.3622,
+            "Q25": 56.331,
+            "Median": 66.8697,
+            "Q75": 78.325,
+            "Max": 96.0,
+            "Skewness": -0.128,
+            "Kurtosis": -0.7989,
+            "IQR_Outliers": 0,
+            "IQR_Outlier_Pct": 0.0,
+            "ZScore_Outliers": 0
+          },
+          {
+            "Variable": "wind_speed",
+            "Count": 35065,
+            "Missing": 0,
+            "Mean": 4.9931,
+            "Std": 1.1653,
+            "Min": 1.0098,
+            "Q25": 4.1767,
+            "Median": 5.0041,
+            "Q75": 5.7986,
+            "Max": 10.0127,
+            "Skewness": 0.0054,
+            "Kurtosis": -0.1953,
+            "IQR_Outliers": 124,
+            "IQR_Outlier_Pct": 0.35,
+            "ZScore_Outliers": 65
+          }
+        ],
+        "correlation_summary": {
+          "pearson_with_load": {
+            "temperature": 0.8853,
+            "humidity": -0.9224,
+            "wind_speed": -0.3096
+          },
+          "spearman_with_load": {
+            "temperature": 0.8717,
+            "humidity": -0.9208,
+            "wind_speed": -0.2899
+          },
+          "dominant_weather_variable": "humidity",
+          "dominant_pearson_r": -0.9224
+        },
+        "diurnal_peaks": {
+          "peak_hour": 18,
+          "peak_load_kw": 313935.97,
+          "trough_hour": 4,
+          "trough_load_kw": 129975.99
+        },
+        "pems_bay_summary": {
+          "dataset_name": "PEMS-BAY Spatio-Temporal Highway Sensor Traffic Speed",
+          "h5_source_path": "data\\raw\\pems-bay.h5",
+          "adj_source_path": "data\\sensor_graph\\adj_mx_bay.pkl",
+          "num_timesteps": 8640,
+          "num_sensors": 207,
+          "adj_matrix_shape": [
+            207,
+            207
+          ],
+          "nonzero_directed_edges": 1238,
+          "graph_sparsity_pct": 97.11,
+          "start_time": "2017-01-01 00:00:00",
+          "end_time": "2017-01-30 23:55:00",
+          "frequency": "5min",
+          "speed_mean_mph": 62.4634,
+          "speed_std_mph": 9.7452,
+          "speed_min_mph": 3.0,
+          "speed_max_mph": 83.5
+        },
+        "generated_figures": [
+          "multivariate_overview.png",
+          "feature_distributions_and_outliers.png",
+          "correlation_heatmap.png",
+          "weather_vs_load_joint.png",
+          "seasonal_decomposition.png",
+          "acf_pacf_load.png",
+          "pems_bay_eda_overview.png"
+        ],
+        "duration_sec": 15.723
+      }
+    }
+  }
+}

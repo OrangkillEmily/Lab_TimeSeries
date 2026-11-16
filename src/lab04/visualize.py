@@ -1,37 +1,33 @@
-"""
-Module trực quan hóa dữ liệu và kết quả thực nghiệm (`src/lab04/visualize.py`) cho dự án Lab 04 Time Series.
+r"""
+Mô-đun Trực quan hóa Học thuật Toàn diện (Visualization Suite) cho Bài thực hành Lab 04.
+Kết hợp với 7 biểu đồ EDA từ src/lab04/eda.py để hoàn thiện kho 23 biểu đồ chuẩn xuất bản (220 DPI)
+lưu đồng bộ tại:
+- reports/lab04/figures/
+- reports/lab04/figures/<run_id>/
+- docs/lab04/figures/
 
-Trách nhiệm của module:
-1. Sinh trọn bộ 16+ biểu đồ học thuật ở độ phân giải 300 DPI phục vụ Yêu cầu 1–12:
-   - Nhóm EDA (Mục 3):
-     (1) `load_timeseries_overview.png`     : Biểu đồ phụ tải điện theo thời gian & lát cắt 14 ngày
-     (2) `load_vs_temperature_scatter.png`  : Biểu đồ tương quan phi tuyến Load vs Temperature & Lag Cross-Correlation
-     (3) `correlation_heatmap.png`          : Ma trận tương quan Pearson 4 biến
-     (4) `seasonality_daily_weekly.png`     : Hồ sơ mùa vụ chu kỳ ngày (24h) và chu kỳ tuần (7 ngày)
-   - Nhóm Preprocessing & K-Fold (Mục 4 & Yêu cầu 4):
-     (5) `train_val_test_split.png`         : Phân vùng thời gian Chronological Split (70% / 15% / 15%)
-     (6) `kfold_splits_timeline.png`        : Sơ đồ 5-Fold Expanding Window (`TimeSeriesSplit`)
-   - Nhóm Training (Mục 6, 7, 8):
-     (7) `lstm_train_vs_val_loss.png`       : Đường cong hội tụ Train vs Validation MSE & MAE của LSTM (kiểm tra Overfitting)
-     (8) `xgboost_feature_importance.png`   : Top 15 đặc trưng quan trọng nhất của XGBoost
-     (9) `training_time_comparison.png`     : So sánh thời gian huấn luyện giữa các mô hình
-   - Nhóm Evaluation, Walk-Forward & PEMS-BAY (Mục 9, 10, 12 & Yêu cầu 6):
-     (10) `actual_vs_predicted_all.png`     : Đường thực tế vs dự báo của VAR, XGBoost, LSTM trên tập Test
-     (11) `walk_forward_backtest.png`       : Kết quả dự báo cuốn chiếu Walk-Forward Backtesting (168 giờ)
-     (12) `model_comparison_mse.png`        : Biểu đồ cột so sánh MSE
-     (13) `model_comparison_rmse.png`       : Biểu đồ cột so sánh RMSE
-     (14) `model_comparison_mae.png`        : Biểu đồ cột so sánh MAE
-     (15) `model_comparison_mape.png`       : Biểu đồ cột so sánh MAPE (%)
-     (16) `model_comparison_r2.png`         : Biểu đồ cột so sánh R² Score
-     (17) `residual_plot_all.png` & `residual_distribution_all.png`: Phân tích phần dư
-     (18) `kfold_cv_comparison.png`         : Độ ổn định RMSE & R² qua 5 Folds (`Mean ± Std`)
-     (19) `pems_bay_horizon_comparison.png` : Đánh giá DCRNN trên PEMS-BAY ở 3 chân trời 15, 30, 60 phút
-2. Lưu đồng thời tại `reports/lab04/figures/<filename>.png` và `reports/lab04/figures/<run_id>/<stage>/<filename>.png`.
+Danh sách 16 biểu đồ tạo thêm tại mô-đun này:
+08. chronological_split_diagram.png
+09. stationarity_adf_comparison.png
+10. Hourly_Profile.png
+11. Weekly_Profile.png
+12. Rolling_Volatility_30D.png
+13. training_loss_curves.png
+14. Forecast_Overlay_168h.png
+15. actual_vs_predicted_scatter.png
+16. Residual_Diagnostics.png
+17. Metric_Comparison_Bars.png
+18. training_time_comparison.png
+19. Walk_Forward_Trajectory.png
+20. XGBoost_Feature_Importance.png
+21. Feature_Ablation_Impact.png
+22. pems_bay_dcrnn_evaluation.png
+23. pems_bay_model_comparison.png
 """
-
-from __future__ import annotations
 
 import shutil
+import time
+import warnings
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -42,588 +38,575 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
-from src.lab04.utils import ensure_dir, get_project_root, load_config
+from src.lab04.tracking import get_active_run_id, record_stage_result, write_log
+from src.lab04.utils import (
+    ensure_directories,
+    get_path,
+    load_config,
+    load_json,
+    load_pickle,
+)
 
-ROOT_DIR = get_project_root()
-_CFG = load_config()
-FIGURES_DIR = ROOT_DIR / _CFG.get("paths", {}).get("figures_dir", "reports/lab04/figures")
+warnings.filterwarnings("ignore", category=FutureWarning)
 
-sns.set_theme(style="whitegrid", palette="deep")
 MODEL_COLORS = {
-    "VAR": "#dc2626",
-    "XGBoost": "#059669",
-    "LSTM": "#1d4ed8",
-    "DCRNN": "#7c3aed",
+    "Actual": "#0f172a",
+    "VAR": "#2b5c8f",
+    "XGBoost": "#1d5843",
+    "LSTM": "#d95f02",
+    "DCRNN": "#1d5843",
+    "Multi_Horizon_TCN": "#2b5c8f",
+    "Multi_Horizon_LSTM": "#d95f02",
 }
 
 
-def create_stage_figure_dir(run_id: str, stage: str) -> Path:
-    """
-    What: Khởi tạo thư mục lưu biểu đồ theo từng `run_id` và từng giai đoạn trong `reports/lab04/figures/`.
-    Why: Đảm bảo lưu vết lịch sử hình ảnh của mọi phiên chạy mà không bị mất khi chạy lần mới.
-    Input:
-        - run_id (str): Mã định danh phiên chạy.
-        - stage (str): Tên giai đoạn (`eda`, `preprocessing`, `training`, `evaluation`).
-    Output:
-        - Path: Đường dẫn thư mục đã tạo.
-    How: Ghép `FIGURES_DIR / run_id / stage.lower()` và gọi `ensure_dir()`.
-    """
-    return ensure_dir(FIGURES_DIR / str(run_id) / stage.lower())
+def _save_and_sync_fig(fig: plt.Figure, filename: str, run_id: str, cfg: Dict[str, Any]) -> str:
+    fig_dir = get_path("figures_dir", cfg)
+    run_fig_dir = fig_dir / run_id
+    docs_fig_dir = get_path("docs_dir", cfg) / "figures"
 
+    fig_dir.mkdir(parents=True, exist_ok=True)
+    run_fig_dir.mkdir(parents=True, exist_ok=True)
+    docs_fig_dir.mkdir(parents=True, exist_ok=True)
 
-def _save_fig(fig: plt.Figure, filename: str, stage_dir: Optional[Path] = None, dpi: int = 300) -> List[str]:
-    """
-    What: Lưu đối tượng `Figure` vào `reports/lab04/figures/<filename>` và sao chép vào thư mục `run_id`.
-    Why: Đảm bảo cả báo cáo tổng hợp lẫn báo cáo theo `Run_ID` đều truy cập được ảnh nét 300 DPI.
-    Input:
-        - fig (plt.Figure): Hình vẽ Matplotlib.
-        - filename (str): Tên tệp `.png`.
-        - stage_dir (Optional[Path]): Thư mục giai đoạn của `run_id`.
-        - dpi (int): Độ phân giải (`300`).
-    Output:
-        - List[str]: Danh sách đường dẫn tương đối của tệp ảnh đã lưu.
-    How: Gọi `fig.savefig(..., dpi=dpi, bbox_inches='tight')` và `shutil.copy2`.
-    """
-    ensure_dir(FIGURES_DIR)
-    primary = FIGURES_DIR / filename
-    fig.savefig(primary, dpi=dpi, bbox_inches="tight")
+    out_path = fig_dir / filename
+    fig.savefig(out_path, dpi=220, bbox_inches="tight", facecolor="white")
     plt.close(fig)
 
-    saved = [str(primary.relative_to(ROOT_DIR)).replace("\\", "/")]
-    if stage_dir is not None:
-        ensure_dir(stage_dir)
-        dst = stage_dir / filename
-        shutil.copy2(primary, dst)
-        saved.append(str(dst.relative_to(ROOT_DIR)).replace("\\", "/"))
-    return saved
+    for dst in (run_fig_dir, docs_fig_dir):
+        try:
+            shutil.copy2(out_path, dst / filename)
+        except Exception:
+            pass
+    return filename
 
 
-def plot_load_timeseries_overview(df: pd.DataFrame, stage_dir: Optional[Path] = None) -> List[str]:
+def main(run_id: Optional[str] = None) -> Dict[str, Any]:
+    r"""
+    Purpose: Khởi tạo toàn bộ 16 biểu đồ tiền xử lý, huấn luyện, dự báo, phần dư và đối sánh mô hình
+             (hợp nhất cùng 7 biểu đồ EDA tạo thành bộ 23 biểu đồ hoàn chỉnh).
+    Input-Output:
+        - Input: run_id (Optional[str]).
+        - Output: Từ điển chứa danh sách toàn bộ 23 tệp biểu đồ trong reports/lab04/figures/.
+    How: Nạp processed_bundle.pkl, training_artifacts.pkl và các bảng CSV chỉ số trong reports/lab04/metrics/.
     """
-    What: Vẽ biểu đồ diễn biến phụ tải điện `load` theo thời gian (toàn chuỗi và lát cắt 14 ngày).
-    Why: Thực hiện yêu cầu trực quan hóa thứ nhất của Mục 3 (`Biểu đồ load theo thời gian`).
-    Input:
-        - df (pd.DataFrame): Bảng dữ liệu 4 biến.
-        - stage_dir (Optional[Path]): Thư mục lưu theo `run_id`.
-    Output:
-        - List[str]: Đường dẫn tệp `load_timeseries_overview.png`.
-    How: Vẽ 2 subplot: subplot trên hiển thị toàn chuỗi kèm đường trung bình trượt 7 ngày;
-         subplot dưới hiển thị chi tiết 336 giờ (14 ngày) để thấy rõ chu kỳ ngày/tuần.
-    """
-    fig, axes = plt.subplots(2, 1, figsize=(13, 7.5))
-    axes[0].plot(df.index, df["load"], color="#1d4ed8", linewidth=0.8, alpha=0.75, label="Hourly Load (kW)")
-    axes[0].plot(df.index, df["load"].rolling(168, min_periods=1).mean(), color="#dc2626", linewidth=2.0, label="7-Day Rolling Mean (168h)")
-    axes[0].set_title("Diễn biến Phụ tải Điện năng (Electricity Load) trên Toàn Chuỗi Thời gian", fontsize=12, fontweight="bold")
+    t0 = time.perf_counter()
+    cfg = load_config()
+    ensure_directories(cfg)
+    active_run_id = get_active_run_id(run_id)
+
+    write_log(active_run_id, "VISUALIZATION", "START", "Bắt đầu kết xuất bộ biểu đồ đánh giá, chẩn đoán phần dư và đối sánh đa mô hình.")
+
+    plt.rcParams["font.sans-serif"] = ["DejaVu Sans", "Segoe UI", "Arial"]
+    plt.rcParams["axes.unicode_minus"] = False
+
+    proc_dir = get_path("data_processed_dir", cfg)
+    metrics_dir = get_path("metrics_dir", cfg)
+
+    bundle = load_pickle(proc_dir / "processed_bundle.pkl")
+    train_artifacts = load_pickle(proc_dir / "training_artifacts.pkl")
+
+    holdout_df = pd.read_csv(metrics_dir / "holdout_test_metrics.csv")
+    cv_sum_df = pd.read_csv(metrics_dir / "cv_5fold_summary.csv")
+    wf_df = pd.read_csv(metrics_dir / "walk_forward_metrics.csv")
+    wf_pred_df = pd.read_csv(metrics_dir / "walk_forward_predictions.csv")
+    abl_df = pd.read_csv(metrics_dir / "weather_ablation_metrics.csv")
+    xgb_imp_df = pd.read_csv(metrics_dir / "xgboost_feature_importance.csv")
+    pems_dcrnn_df = pd.read_csv(metrics_dir / "pems_bay_dcrnn_metrics.csv")
+    pems_bench_df = pd.read_csv(metrics_dir / "pems_bay_benchmark_comparison.csv")
+
+    generated: List[str] = []
+
+    # 8. chronological_split_diagram.png: Sơ đồ phân chia Chronological Split 70/15/15 + 5-Fold TimeSeriesSplit
+    full_df: pd.DataFrame = bundle["full_df"]
+    tr_df: pd.DataFrame = bundle["train_df"]
+    va_df: pd.DataFrame = bundle["val_df"]
+    te_df: pd.DataFrame = bundle["test_df"]
+
+    fig, axes = plt.subplots(2, 1, figsize=(15, 7.2), gridspec_kw={"height_ratios": [1.35, 1.15]})
+    ax0 = axes[0]
+    tr_d = tr_df["load"].resample("1D").mean()
+    va_d = va_df["load"].resample("1D").mean()
+    te_d = te_df["load"].resample("1D").mean()
+    ax0.plot(tr_d.index, tr_d.values, color="#1d5843", linewidth=1.3, label=f"Train Set (70% — {len(tr_df):,} giờ)")
+    ax0.plot(va_d.index, va_d.values, color="#2b5c8f", linewidth=1.3, label=f"Validation Set (15% — {len(va_df):,} giờ)")
+    ax0.plot(te_d.index, te_d.values, color="#d95f02", linewidth=1.3, label=f"Test Set (15% — {len(te_df):,} giờ)")
+    ax0.axvline(tr_df.index.max(), color="#0f172a", linestyle="--", linewidth=1.5)
+    ax0.axvline(va_df.index.max(), color="#b91c1c", linestyle="--", linewidth=1.5)
+    ax0.set_title("Phân chia Chuỗi Thời gian Tuần tự Chống Rò rỉ Dữ liệu (Chronological Hold-out Split 70% / 15% / 15%)", fontsize=11.5, fontweight="bold", color="#183f35")
+    ax0.set_ylabel("Phụ tải Điện (kW)")
+    ax0.legend(loc="upper right", fontsize=9.5)
+    ax0.grid(True, linestyle="--", alpha=0.35)
+
+    ax1 = axes[1]
+    cv_folds = bundle["cv_folds"]
+    for f_item in cv_folds:
+        k = int(f_item["fold"])
+        tr_sz = int(f_item["train_size"])
+        va_sz = int(f_item["val_size"])
+        ax1.barh(f"Fold {k}", tr_sz, left=0, height=0.52, color="#1d5843", alpha=0.85, label="Expanding Train" if k == 1 else "")
+        ax1.barh(f"Fold {k}", va_sz, left=tr_sz, height=0.52, color="#d95f02", alpha=0.90, label="Temporal Validation" if k == 1 else "")
+    ax1.invert_yaxis()
+    ax1.set_xlabel("Chỉ số Bước Thời gian (Hours Index: 0 → 35,065)")
+    ax1.set_title("Cấu trúc Kiểm định Chéo Chuỗi Thời gian 5-Fold (Expanding Window TimeSeriesSplit K=5)", fontsize=11.5, fontweight="bold", color="#183f35")
+    ax1.legend(loc="lower right", fontsize=9.5)
+    ax1.grid(True, linestyle="--", alpha=0.35)
+    fig.tight_layout()
+    generated.append(_save_and_sync_fig(fig, "chronological_split_diagram.png", active_run_id, cfg))
+
+    # 9. stationarity_adf_comparison.png: Chuỗi gốc vs Chuỗi sai phân bậc 1 cho VAR
+    stat_rep = bundle["stationarity_report"]
+    fig, axes = plt.subplots(2, 1, figsize=(14.5, 6.2), sharex=True)
+    sub_tr = tr_df["load"].iloc[-500:]
+    sub_diff = sub_tr.diff().dropna()
+    raw_adf_p = stat_rep["adf_raw"][0]["p_value"]
+    diff_adf_p = stat_rep["adf_after_diff1"][0]["p_value"]
+    axes[0].plot(sub_tr.index, sub_tr.values, color="#1d5843", linewidth=1.35)
+    axes[0].set_title(f"Chuỗi Phụ tải Gốc Y_t (500 Giờ Cuối Tập Train | ADF Stat = {stat_rep['adf_raw'][0]['adf_statistic']:.3f}, p-value = {raw_adf_p:.4g})", fontsize=11, fontweight="bold", color="#183f35")
     axes[0].set_ylabel("Load (kW)")
-    axes[0].legend(loc="upper right")
+    axes[0].grid(True, linestyle="--", alpha=0.35)
 
-    zoom_df = df.iloc[-min(336, len(df)):]
-    axes[1].plot(zoom_df.index, zoom_df["load"], color="#059669", linewidth=1.5, label="Hourly Load (Zoom 14 Days)")
-    axes[1].set_title("Lát cắt Chi tiết 14 Ngày Gần nhất (336 Giờ) — Thể hiện Rõ Chu kỳ Ngày (24h) & Tuần (168h)", fontsize=12, fontweight="bold")
-    axes[1].set_xlabel("Thời gian (Datetime)")
-    axes[1].set_ylabel("Load (kW)")
-    axes[1].legend(loc="upper right")
-
+    axes[1].plot(sub_diff.index, sub_diff.values, color="#2b5c8f", linewidth=1.25)
+    axes[1].axhline(0, color="#b91c1c", linestyle="--", linewidth=1.2)
+    axes[1].set_title(f"Chuỗi Sai phân Bậc 1 ΔY_t = Y_t - Y_{{t-1}} cho Mô hình VAR (ADF Stat = {stat_rep['adf_after_diff1'][0]['adf_statistic']:.3f}, p-value = {diff_adf_p:.4g} — Chuỗi Dừng Tuyệt Đối)", fontsize=11, fontweight="bold", color="#183f35")
+    axes[1].set_ylabel("ΔLoad (kW/h)")
+    axes[1].grid(True, linestyle="--", alpha=0.35)
     fig.tight_layout()
-    return _save_fig(fig, "load_timeseries_overview.png", stage_dir=stage_dir)
+    generated.append(_save_and_sync_fig(fig, "stationarity_adf_comparison.png", active_run_id, cfg))
 
+    # 10. Hourly_Profile.png: Biên dạng phụ tải và nhiệt độ theo 24 giờ trong ngày
+    fig, ax1 = plt.subplots(figsize=(12.5, 5.0))
+    hr_grp = full_df.groupby(full_df.index.hour)
+    hr_load_mean = hr_grp["load"].mean()
+    hr_load_std = hr_grp["load"].std()
+    hr_temp_mean = hr_grp["temperature"].mean()
 
-def plot_load_vs_temperature(
-    df: pd.DataFrame,
-    lag_corrs: Dict[str, Any],
-    stage_dir: Optional[Path] = None,
-) -> List[str]:
-    """
-    What: Vẽ biểu đồ phân tán `load` vs `temperature` và đường cong tương quan trễ (`Lag Cross-Correlation`).
-    Why: Thực hiện yêu cầu trực quan hóa thứ hai của Mục 3 (`Biểu đồ load vs temperature`) và minh họa
-         hiện tượng `Lag Heterogeneity` trong Slide 4 Chương 4–5.
-    Input:
-        - df (pd.DataFrame): Bảng dữ liệu 4 biến.
-        - lag_corrs (Dict[str, Any]): Tương quan theo độ trễ từ `eda.py`.
-        - stage_dir (Optional[Path]): Thư mục lưu theo `run_id`.
-    Output:
-        - List[str]: Đường dẫn tệp `load_vs_temperature_scatter.png`.
-    How: Subplot trái vẽ scatter `temperature` vs `load` kèm đường hồi quy đa thức bậc 2;
-         subplot phải vẽ tương quan $r(\tau)$ theo độ trễ $\tau = 0..24\text{h}$.
-    """
-    fig, axes = plt.subplots(1, 2, figsize=(13.5, 5.2))
-    sample_df = df.iloc[-min(2000, len(df)):]
-    sc = axes[0].scatter(
-        sample_df["temperature"],
-        sample_df["load"],
-        c=sample_df["humidity"],
-        cmap="viridis",
-        alpha=0.55,
-        s=18,
-    )
-    z = np.polyfit(sample_df["temperature"].to_numpy(), sample_df["load"].to_numpy(), 2)
-    p = np.poly1d(z)
-    xs = np.linspace(float(sample_df["temperature"].min()), float(sample_df["temperature"].max()), 100)
-    axes[0].plot(xs, p(xs), color="#dc2626", linewidth=2.4, label="Quadratic Nonlinear Trend")
-    plt.colorbar(sc, ax=axes[0], label="Humidity (%)")
-    axes[0].set_title("Mối quan hệ Phi tuyến giữa Nhiệt độ (Temperature) và Phụ tải Điện (Load)", fontsize=11, fontweight="bold")
-    axes[0].set_xlabel("Temperature (°C)")
-    axes[0].set_ylabel("Electricity Load (kW)")
-    axes[0].legend(loc="upper left")
+    ax1.plot(hr_load_mean.index, hr_load_mean.values, marker="o", linewidth=2.4, color="#1d5843", label="Phụ tải Điện TB (kW)")
+    ax1.fill_between(hr_load_mean.index, hr_load_mean - hr_load_std, hr_load_mean + hr_load_std, color="#1d5843", alpha=0.18, label="Dải độ lệch chuẩn ±1σ")
+    ax1.set_xlabel("Giờ trong Ngày (00:00 – 23:00)", fontweight="bold")
+    ax1.set_ylabel("Phụ tải Điện (Load - kW)", color="#1d5843", fontweight="bold")
+    ax1.set_xticks(range(0, 24))
+    ax1.grid(True, linestyle="--", alpha=0.35)
 
-    lags = list(range(0, 25))
-    for w_col, color in [("temperature", "#dc2626"), ("humidity", "#1d4ed8"), ("wind_speed", "#d97706")]:
-        corrs = [float(df["load"].corr(df[w_col].shift(l))) for l in lags]
-        axes[1].plot(lags, corrs, marker="o", markersize=3.5, linewidth=1.8, color=color, label=f"load vs {w_col}")
-    axes[1].axhline(0.0, color="#6b7280", linestyle="--", linewidth=1.0)
-    axes[1].set_title("Tương quan Chéo theo Độ trễ (Lag Heterogeneity: τ = 0..24 giờ)", fontsize=11, fontweight="bold")
-    axes[1].set_xlabel("Độ trễ τ (Giờ)")
-    axes[1].set_ylabel("Hệ số Tương quan Pearson r(τ)")
-    axes[1].legend(loc="best")
+    ax2 = ax1.twinx()
+    ax2.plot(hr_temp_mean.index, hr_temp_mean.values, marker="s", linestyle="--", linewidth=2.0, color="#d95f02", label="Nhiệt độ TB (°C)")
+    ax2.set_ylabel("Nhiệt độ Không khí (°C)", color="#d95f02", fontweight="bold")
 
+    lines1, labels1 = ax1.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+    ax1.legend(lines1 + lines2, labels1 + labels2, loc="upper left", fontsize=9.5)
+    plt.title("Biên dạng Chu kỳ Ngày/Đêm (Diurnal Profile): Đồng pha Giữa Nhiệt độ và Phụ tải Điện", fontsize=12.5, fontweight="bold", color="#183f35")
     fig.tight_layout()
-    return _save_fig(fig, "load_vs_temperature_scatter.png", stage_dir=stage_dir)
+    generated.append(_save_and_sync_fig(fig, "Hourly_Profile.png", active_run_id, cfg))
 
+    # 11. Weekly_Profile.png: Biên dạng phụ tải theo các thứ trong tuần (Mon - Sun)
+    fig, axes = plt.subplots(1, 2, figsize=(14.2, 4.8))
+    day_names = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"]
+    dow_grp = full_df.groupby(full_df.index.day_of_week)["load"].agg(["mean", "std"])
+    colors_bar = ["#1d5843"] * 5 + ["#d95f02", "#d95f02"]
+    axes[0].bar(day_names, dow_grp["mean"].values, yerr=dow_grp["std"].values * 0.35, capsize=4, color=colors_bar, alpha=0.85, edgecolor="black")
+    axes[0].set_title("Phụ tải Trung bình theo Thứ trong Tuần (Ngày thường vs. Cuối tuần)", fontsize=11, fontweight="bold", color="#183f35")
+    axes[0].set_ylabel("Phụ tải Điện (kW)")
+    axes[0].tick_params(axis="x", rotation=15)
+    axes[0].grid(True, axis="y", linestyle="--", alpha=0.35)
 
-def plot_correlation_heatmap(corr_df: pd.DataFrame, stage_dir: Optional[Path] = None) -> List[str]:
-    """
-    What: Vẽ biểu đồ nhiệt ma trận tương quan (`Correlation Matrix`) giữa 4 biến.
-    Why: Thực hiện yêu cầu trực quan hóa thứ ba của Mục 3 (`Ma trận tương quan`).
-    Input:
-        - corr_df (pd.DataFrame): Ma trận tương quan $4 \times 4$.
-        - stage_dir (Optional[Path]): Thư mục lưu theo `run_id`.
-    Output:
-        - List[str]: Đường dẫn tệp `correlation_heatmap.png`.
-    How: Dùng `seaborn.heatmap(..., annot=True, fmt='.3f', cmap='coolwarm')`.
-    """
-    fig, ax = plt.subplots(figsize=(7.5, 6.0))
-    sns.heatmap(
-        corr_df,
-        annot=True,
-        fmt=".3f",
-        cmap="coolwarm",
-        vmin=-1.0,
-        vmax=1.0,
-        linewidths=1.0,
-        square=True,
-        ax=ax,
-    )
-    ax.set_title("Ma trận Tương quan Pearson giữa Phụ tải Điện năng và Thời tiết", fontsize=12, fontweight="bold")
+    is_wknd = full_df.index.day_of_week >= 5
+    wkday_hr = full_df[~is_wknd].groupby(full_df[~is_wknd].index.hour)["load"].mean()
+    wkend_hr = full_df[is_wknd].groupby(full_df[is_wknd].index.hour)["load"].mean()
+    axes[1].plot(wkday_hr.index, wkday_hr.values, marker="o", linewidth=2.2, color="#1d5843", label="Ngày làm việc (Thứ 2 – Thứ 6)")
+    axes[1].plot(wkend_hr.index, wkend_hr.values, marker="^", linewidth=2.2, color="#d95f02", label="Cuối tuần (Thứ 7 – Chủ Nhật)")
+    axes[1].set_title("Đối chiếu Đường cong Phụ tải 24h: Ngày làm việc vs. Cuối tuần", fontsize=11, fontweight="bold", color="#183f35")
+    axes[1].set_xlabel("Giờ trong Ngày (0..23h)")
+    axes[1].set_ylabel("Phụ tải Điện (kW)")
+    axes[1].set_xticks(range(0, 24, 2))
+    axes[1].legend(fontsize=9.5)
+    axes[1].grid(True, linestyle="--", alpha=0.35)
     fig.tight_layout()
-    return _save_fig(fig, "correlation_heatmap.png", stage_dir=stage_dir)
+    generated.append(_save_and_sync_fig(fig, "Weekly_Profile.png", active_run_id, cfg))
 
+    # 12. Rolling_Volatility_30D.png: Trung bình trượt 24h/168h và Độ biến động trượt
+    sub_roll = full_df["load"].iloc[-1440:]  # 60 ngày cuối
+    rm_24 = sub_roll.rolling(24, min_periods=1).mean()
+    rm_168 = sub_roll.rolling(168, min_periods=1).mean()
+    rstd_24 = sub_roll.rolling(24, min_periods=1).std()
 
-def plot_seasonality_profiles(df: pd.DataFrame, stage_dir: Optional[Path] = None) -> List[str]:
-    """
-    What: Vẽ biểu đồ phân tích chu kỳ ngày (24h) và chu kỳ tuần (7 ngày trong tuần).
-    Why: Minh họa trực quan kết quả kiểm tra Seasonality ở Mục 3 và trả lời Câu hỏi 4 Mục 11.
-    Input:
-        - df (pd.DataFrame): Bảng dữ liệu 4 biến.
-        - stage_dir (Optional[Path]): Thư mục lưu theo `run_id`.
-    Output:
-        - List[str]: Đường dẫn tệp `seasonality_daily_weekly.png`.
-    How: Subplot trái vẽ trung bình và dải độ lệch chuẩn phụ tải theo 24 giờ trong ngày;
-         subplot phải vẽ phụ tải trung bình theo 7 ngày trong tuần (Thứ Hai -> Chủ Nhật).
-    """
-    fig, axes = plt.subplots(1, 2, figsize=(13.5, 5.0))
-    hourly_grp = df.groupby(df.index.hour)["load"].agg(["mean", "std"])
-    hrs = hourly_grp.index.to_numpy()
-    axes[0].plot(hrs, hourly_grp["mean"], marker="o", color="#1d4ed8", linewidth=2.2, label="Mean Load by Hour")
-    axes[0].fill_between(
-        hrs,
-        hourly_grp["mean"] - hourly_grp["std"],
-        hourly_grp["mean"] + hourly_grp["std"],
-        color="#93c5fd",
-        alpha=0.35,
-        label="±1 Std Band",
-    )
-    axes[0].set_xticks(range(0, 24, 2))
-    axes[0].set_title("Chu kỳ Ngày (Daily Seasonality — 24 Giờ)", fontsize=11, fontweight="bold")
-    axes[0].set_xlabel("Giờ trong Ngày (0h – 23h)")
-    axes[0].set_ylabel("Electricity Load (kW)")
-    axes[0].legend(loc="upper left")
+    fig, axes = plt.subplots(2, 1, figsize=(14.5, 6.2), sharex=True, gridspec_kw={"height_ratios": [1.8, 1.0]})
+    axes[0].plot(sub_roll.index, sub_roll.values, color="#94a3b8", alpha=0.55, linewidth=0.9, label="Load theo giờ (Raw Hourly)")
+    axes[0].plot(rm_24.index, rm_24.values, color="#1d5843", linewidth=1.8, label="Rolling Mean 24h (Trung bình ngày)")
+    axes[0].plot(rm_168.index, rm_168.values, color="#d95f02", linewidth=2.3, label="Rolling Mean 168h (Trung bình tuần)")
+    axes[0].set_title("Đặc trưng Thống kê Cuốn (Rolling Mean 24h & 168h) trên 60 Ngày Cuối", fontsize=11.5, fontweight="bold", color="#183f35")
+    axes[0].set_ylabel("Load (kW)")
+    axes[0].legend(loc="upper right", fontsize=9.2)
+    axes[0].grid(True, linestyle="--", alpha=0.35)
 
-    dow_names = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-    dow_grp = df.groupby(df.index.dayofweek)["load"].mean()
-    colors = ["#2563eb" if i < 5 else "#d97706" for i in range(7)]
-    bars = axes[1].bar(dow_names, dow_grp.to_numpy(), color=colors, edgecolor="black", alpha=0.85)
-    for b in bars:
-        axes[1].text(b.get_x() + b.get_width() / 2.0, b.get_height() + 8.0, f"{b.get_height():.0f}", ha="center", va="bottom", fontsize=9)
-    axes[1].set_title("Chu kỳ Tuần (Weekly Seasonality — Ngày thường vs. Cuối tuần)", fontsize=11, fontweight="bold")
-    axes[1].set_xlabel("Ngày trong Tuần")
-    axes[1].set_ylabel("Mean Electricity Load (kW)")
-
+    axes[1].fill_between(rstd_24.index, 0, rstd_24.values, color="#2b5c8f", alpha=0.35)
+    axes[1].plot(rstd_24.index, rstd_24.values, color="#2b5c8f", linewidth=1.4, label="Rolling Std 24h (Độ biến động nội nhật)")
+    axes[1].set_title("Độ Biến động Trượt 24 Giờ (Rolling Volatility σ_24h)", fontsize=11, fontweight="bold", color="#183f35")
+    axes[1].set_ylabel("σ_24h (kW)")
+    axes[1].legend(loc="upper right", fontsize=9.2)
+    axes[1].grid(True, linestyle="--", alpha=0.35)
     fig.tight_layout()
-    return _save_fig(fig, "seasonality_daily_weekly.png", stage_dir=stage_dir)
+    generated.append(_save_and_sync_fig(fig, "Rolling_Volatility_30D.png", active_run_id, cfg))
 
+    # 13. training_loss_curves.png: Đường cong Hội tụ Training vs Validation cho LSTM (Electricity) & DCRNN/TCN/LSTM (PEMS-BAY)
+    lstm_hist = train_artifacts["model_metadata"]["LSTM"]["history"]
+    dcrnn_hist = train_artifacts["model_metadata"]["DCRNN"]["history"]
+    tcn_hist = train_artifacts["model_metadata"]["Multi_Horizon_TCN"]["history"]
+    pems_lstm_hist = train_artifacts["model_metadata"]["Multi_Horizon_LSTM"]["history"]
 
-def plot_train_val_test_split(
-    df_train: pd.DataFrame,
-    df_val: pd.DataFrame,
-    df_test: pd.DataFrame,
-    stage_dir: Optional[Path] = None,
-) -> List[str]:
-    """
-    What: Vẽ biểu đồ phân chia chuỗi thời gian theo thứ tự `Train (70%) - Validation (15%) - Test (15%)`.
-    Why: Minh chứng trực quan cho Mục 4.2 (chia theo thứ tự thời gian, không shuffle).
-    Input:
-        - df_train, df_val, df_test (pd.DataFrame): 3 tập dữ liệu đã chia.
-        - stage_dir (Optional[Path]): Thư mục lưu theo `run_id`.
-    Output:
-        - List[str]: Đường dẫn tệp `train_val_test_split.png`.
-    How: Vẽ 3 đoạn chuỗi thời gian liên tiếp bằng 3 màu phân biệt kèm vạch phân cách.
-    """
-    fig, ax = plt.subplots(figsize=(13.0, 4.6))
-    ax.plot(df_train.index, df_train["load"], color="#1d4ed8", linewidth=0.9, label=f"Train Set (70% — {len(df_train)}h)")
-    ax.plot(df_val.index, df_val["load"], color="#d97706", linewidth=0.9, label=f"Validation Set (15% — {len(df_val)}h)")
-    ax.plot(df_test.index, df_test["load"], color="#059669", linewidth=0.9, label=f"Test Set (15% — {len(df_test)}h)")
-    ax.axvline(df_val.index.min(), color="#111827", linestyle="--", linewidth=1.4)
-    ax.axvline(df_test.index.min(), color="#111827", linestyle="--", linewidth=1.4)
-    ax.set_title("Phân chia Tập Dữ liệu Chuỗi Thời gian: Train (70%) – Validation (15%) – Test (15%) (No Shuffle)", fontsize=12, fontweight="bold")
-    ax.set_xlabel("Thời gian (Datetime)")
-    ax.set_ylabel("Electricity Load (kW)")
-    ax.legend(loc="upper left")
-    fig.tight_layout()
-    return _save_fig(fig, "train_val_test_split.png", stage_dir=stage_dir)
-
-
-def plot_kfold_splits_timeline(
-    df_clean: pd.DataFrame,
-    kfold_splits: List[Dict[str, Any]],
-    stage_dir: Optional[Path] = None,
-) -> List[str]:
-    """
-    What: Vẽ sơ đồ cấu trúc 5-Fold Expanding Window (`TimeSeriesSplit`) trên trục thời gian.
-    Why: Minh họa trực quan cho Yêu cầu bổ sung số 4 (áp dụng K-Fold bên cạnh Train-Val-Test).
-    Input:
-        - df_clean (pd.DataFrame): Chuỗi thời gian gốc.
-        - kfold_splits (List[Dict[str, Any]]): Thông tin 5 Folds.
-        - stage_dir (Optional[Path]): Thư mục lưu theo `run_id`.
-    Output:
-        - List[str]: Đường dẫn tệp `kfold_splits_timeline.png`.
-    How: Vẽ các thanh ngang biểu diễn phạm vi `Train_k` (xanh) và `Val_k` (cam) của từng Fold $k=1..5$.
-    """
-    fig, ax = plt.subplots(figsize=(11.5, 4.2))
-    for pkg in kfold_splits:
-        k = int(pkg["fold"])
-        n_tr = int(pkg["train_size"])
-        n_va = int(pkg["val_size"])
-        ax.barh(y=f"Fold {k}", width=n_tr, left=0, height=0.55, color="#2563eb", edgecolor="black", label="In-Fold Train (Fit Scaler)" if k == 1 else "")
-        ax.barh(y=f"Fold {k}", width=n_va, left=n_tr, height=0.55, color="#f59e0b", edgecolor="black", label="In-Fold Validation" if k == 1 else "")
-    ax.set_title("Cấu trúc Kiểm định Chéo 5-Fold Theo Thời gian (Expanding Window TimeSeriesSplit)", fontsize=12, fontweight="bold")
-    ax.set_xlabel("Chỉ số Bước Thời gian (Giờ)")
-    ax.legend(loc="lower right")
-    fig.tight_layout()
-    return _save_fig(fig, "kfold_splits_timeline.png", stage_dir=stage_dir)
-
-
-def plot_lstm_training_curves(
-    df_hist: pd.DataFrame,
-    best_epoch: int,
-    stage_dir: Optional[Path] = None,
-) -> List[str]:
-    """
-    What: Vẽ đường cong hội tụ `Train vs. Validation MSE` và `MAE` của mạng `LSTM(64)->LSTM(32)->Dense(1)`.
-    Why: Minh chứng trực quan cho Câu hỏi 5 ở Mục 11 (*"LSTM có bị overfitting không?"*).
-    Input:
-        - df_hist (pd.DataFrame): Bảng lịch sử huấn luyện LSTM qua các epochs.
-        - best_epoch (int): Epoch đạt `val_mse` thấp nhất.
-        - stage_dir (Optional[Path]): Thư mục lưu theo `run_id`.
-    Output:
-        - List[str]: Đường dẫn `lstm_train_vs_val_loss.png` và `lstm_training_loss_curve.png`.
-    How: Vẽ 2 subplot đối chiếu `train_mse` vs `val_mse` và `train_mae` vs `val_mae` kèm vạch `Best Epoch`.
-    """
-    fig, axes = plt.subplots(1, 2, figsize=(13.0, 4.8))
-    ep = df_hist["epoch"]
-    axes[0].plot(ep, df_hist["train_mse"], color="#1d4ed8", linewidth=2.0, label="Train MSE Loss")
-    axes[0].plot(ep, df_hist["val_mse"], color="#dc2626", linewidth=2.0, label="Validation MSE Loss")
-    axes[0].axvline(best_epoch, color="#059669", linestyle="--", linewidth=1.6, label=f"Best Epoch = {best_epoch}")
-    axes[0].set_title("Đường cong Hội tụ Hàm mất mát MSE của LSTM (Scaled Space)", fontsize=11, fontweight="bold")
+    fig, axes = plt.subplots(1, 2, figsize=(15.2, 5.2))
+    ep_lstm = np.arange(1, len(lstm_hist["train_loss"]) + 1)
+    axes[0].plot(ep_lstm, lstm_hist["train_loss"], marker="o", markersize=4, linewidth=2.0, color="#1d5843", label="Train MSE Loss (Scaled)")
+    if lstm_hist["val_loss"]:
+        axes[0].plot(ep_lstm, lstm_hist["val_loss"], marker="s", markersize=4, linewidth=2.0, color="#d95f02", label="Validation MSE Loss (Scaled)")
+    best_ep = int(lstm_hist.get("best_epoch", len(ep_lstm)))
+    axes[0].axvline(best_ep, color="#b91c1c", linestyle="--", linewidth=1.5, label=f"Best Epoch = {best_ep} (EarlyStopping)")
+    axes[0].set_title(f"Hội tụ Mạng Stacked 2-Layer LSTM + Residual Highway\n(Best Val Loss = {lstm_hist['best_val_loss']:.5f} tại Epoch {best_ep})", fontsize=11, fontweight="bold", color="#183f35")
     axes[0].set_xlabel("Epoch")
-    axes[0].set_ylabel("MSE Loss")
-    axes[0].legend(loc="upper right")
+    axes[0].set_ylabel("Scaled MSE Loss")
+    axes[0].legend(fontsize=9)
+    axes[0].grid(True, linestyle="--", alpha=0.35)
 
-    axes[1].plot(ep, df_hist["train_mae"], color="#2563eb", linewidth=2.0, label="Train MAE")
-    axes[1].plot(ep, df_hist["val_mae"], color="#d97706", linewidth=2.0, label="Validation MAE")
-    axes[1].axvline(best_epoch, color="#059669", linestyle="--", linewidth=1.6, label=f"Best Epoch = {best_epoch}")
-    axes[1].set_title("Đường cong Hội tụ MAE của LSTM & Điểm Dừng Sớm (EarlyStopping)", fontsize=11, fontweight="bold")
-    axes[1].set_xlabel("Epoch")
-    axes[1].set_ylabel("MAE (Scaled)")
-    axes[1].legend(loc="upper right")
-
+    ax_p = axes[1]
+    if dcrnn_hist["val_loss"]:
+        ax_p.plot(range(1, len(dcrnn_hist["val_loss"]) + 1), dcrnn_hist["val_loss"], marker="o", linewidth=2.2, color="#1d5843", label=f"DCRNN Val MAE (Best Ep={dcrnn_hist['best_epoch']})")
+    if tcn_hist["val_loss"]:
+        ax_p.plot(range(1, len(tcn_hist["val_loss"]) + 1), tcn_hist["val_loss"], marker="^", linewidth=2.0, color="#2b5c8f", label=f"Multi-Horizon TCN Val MAE (Best Ep={tcn_hist['best_epoch']})")
+    if pems_lstm_hist["val_loss"]:
+        ax_p.plot(range(1, len(pems_lstm_hist["val_loss"]) + 1), pems_lstm_hist["val_loss"], marker="s", linewidth=2.0, color="#d95f02", label=f"Multi-Horizon LSTM Val MAE (Best Ep={pems_lstm_hist['best_epoch']})")
+    ax_p.set_title("Đường cong Kiểm định (Validation Loss) trên Tập Giao thông PEMS-BAY\n(Đối sánh Hội tụ: DCRNN vs. TCN vs. LSTM)", fontsize=11, fontweight="bold", color="#183f35")
+    ax_p.set_xlabel("Epoch")
+    ax_p.set_ylabel("Scaled Validation MAE")
+    ax_p.legend(fontsize=9)
+    ax_p.grid(True, linestyle="--", alpha=0.35)
     fig.tight_layout()
-    saved = _save_fig(fig, "lstm_train_vs_val_loss.png", stage_dir=stage_dir)
-    # Lưu thêm tên tương thích với cấu trúc báo cáo
-    shutil.copy2(FIGURES_DIR / "lstm_train_vs_val_loss.png", FIGURES_DIR / "lstm_training_loss_curve.png")
-    return saved
+    generated.append(_save_and_sync_fig(fig, "training_loss_curves.png", active_run_id, cfg))
 
+    # 14. Forecast_Overlay_168h.png: So sánh Đường Dự báo Thực tế vs VAR, XGBoost, LSTM trong 168 giờ (7 ngày cuối tập Test)
+    holdout = train_artifacts["holdout_predictions"]
+    ts_te = pd.to_datetime(holdout["test_timestamps"])
+    y_te = holdout["y_test_orig"]
+    zoom_n = min(168, len(y_te))
+    idx_z = ts_te[-zoom_n:]
+    y_z = y_te[-zoom_n:]
 
-def plot_xgboost_feature_importance(df_imp: pd.DataFrame, stage_dir: Optional[Path] = None) -> List[str]:
-    """
-    What: Vẽ biểu đồ Top 15 đặc trưng có độ quan trọng (`Importance`) cao nhất trong `XGBoost`.
-    Why: Minh chứng định lượng cho Câu hỏi 1 & Câu hỏi 3 ở Mục 11 đề bài.
-    Input:
-        - df_imp (pd.DataFrame): Bảng `Feature Importance` từ `XGBoostForecaster`.
-        - stage_dir (Optional[Path]): Thư mục lưu theo `run_id`.
-    Output:
-        - List[str]: Đường dẫn tệp `xgboost_feature_importance.png`.
-    How: Vẽ biểu đồ cột ngang cho Top 15 đặc trưng đứng đầu.
-    """
-    top_df = df_imp.head(15).iloc[::-1]
-    fig, ax = plt.subplots(figsize=(10.0, 5.6))
-    ax.barh(top_df["Feature"], top_df["Importance"], color="#059669", edgecolor="black", alpha=0.88)
-    ax.set_title("Top 15 Đặc trưng Quan trọng nhất của Mô hình XGBoost (Lag 24h + Rolling + Weather)", fontsize=12, fontweight="bold")
-    ax.set_xlabel("Relative Feature Importance (Gain)")
-    fig.tight_layout()
-    return _save_fig(fig, "xgboost_feature_importance.png", stage_dir=stage_dir)
-
-
-def plot_training_time_comparison(time_map: Dict[str, float], stage_dir: Optional[Path] = None) -> List[str]:
-    """
-    What: Vẽ biểu đồ cột so sánh thời gian huấn luyện (giây) giữa các mô hình.
-    Why: Đánh giá chi phí tính toán và hiệu quả của cơ chế `Auto-GPU`.
-    Input:
-        - time_map (Dict[str, float]): Thời gian huấn luyện của từng mô hình.
-        - stage_dir (Optional[Path]): Thư mục lưu theo `run_id`.
-    Output:
-        - List[str]: Đường dẫn tệp `training_time_comparison.png`.
-    How: Vẽ biểu đồ cột kèm nhãn số giây trên đỉnh từng cột.
-    """
-    fig, ax = plt.subplots(figsize=(8.5, 4.6))
-    names = list(time_map.keys())
-    vals = [float(time_map[k]) for k in names]
-    colors = [MODEL_COLORS.get(k.split()[0], "#4b5563") for k in names]
-    bars = ax.bar(names, vals, color=colors, edgecolor="black", width=0.52, alpha=0.88)
-    for b in bars:
-        ax.text(b.get_x() + b.get_width() / 2.0, b.get_height() + max(vals) * 0.02, f"{b.get_height():.2f}s", ha="center", va="bottom", fontweight="bold")
-    ax.set_title("So sánh Thời gian Huấn luyện giữa các Mô hình (Auto-GPU Enabled)", fontsize=12, fontweight="bold")
-    ax.set_ylabel("Thời gian Huấn luyện (Giây)")
-    ax.set_ylim(0, max(vals) * 1.18 if max(vals) > 0 else 1.0)
-    fig.tight_layout()
-    return _save_fig(fig, "training_time_comparison.png", stage_dir=stage_dir)
-
-
-def plot_actual_vs_predicted_all(df_preds: pd.DataFrame, stage_dir: Optional[Path] = None) -> List[str]:
-    """
-    What: Vẽ biểu đồ so sánh giá trị phụ tải thực tế (`Actual_Load`) và dự báo của `VAR`, `XGBoost`, `LSTM`.
-    Why: Đánh giá trực quan độ bám sát đỉnh/đáy phụ tải trên tập Test độc lập.
-    Input:
-        - df_preds (pd.DataFrame): Bảng dự đoán trên tập Test.
-        - stage_dir (Optional[Path]): Thư mục lưu theo `run_id`.
-    Output:
-        - List[str]: Đường dẫn tệp `actual_vs_predicted_all.png`.
-    How: Hiển thị lát cắt 168 giờ (7 ngày) trên tập Test kèm biểu đồ phân tán `Actual vs Predicted`.
-    """
-    fig, axes = plt.subplots(2, 1, figsize=(13.5, 8.0))
-    sub = df_preds.iloc[: min(168, len(df_preds))]
-    axes[0].plot(sub["datetime"], sub["Actual_Load"], color="#111827", linewidth=2.2, label="Actual Load (Ground Truth)")
-    axes[0].plot(sub["datetime"], sub["VAR_Pred"], color=MODEL_COLORS["VAR"], linestyle="--", linewidth=1.4, label="VAR Forecast")
-    axes[0].plot(sub["datetime"], sub["XGBoost_Pred"], color=MODEL_COLORS["XGBoost"], linewidth=1.6, label="XGBoost Forecast")
-    axes[0].plot(sub["datetime"], sub["LSTM_Pred"], color=MODEL_COLORS["LSTM"], linewidth=1.6, label="LSTM Forecast")
-    axes[0].set_title("Đối chiếu Phụ tải Thực tế và Dự báo của 3 Mô hình (VAR, XGBoost, LSTM — 168 Giờ Tập Test)", fontsize=12, fontweight="bold")
-    axes[0].set_ylabel("Electricity Load (kW)")
-    axes[0].legend(loc="upper right", ncol=2)
-
-    for m_name, col in [("VAR", "VAR_Pred"), ("XGBoost", "XGBoost_Pred"), ("LSTM", "LSTM_Pred")]:
-        axes[1].scatter(df_preds["Actual_Load"], df_preds[col], alpha=0.4, s=16, color=MODEL_COLORS[m_name], label=m_name)
-    mn = float(df_preds["Actual_Load"].min())
-    mx = float(df_preds["Actual_Load"].max())
-    axes[1].plot([mn, mx], [mn, mx], color="#111827", linestyle="--", linewidth=1.8, label="Ideal 1:1 Line")
-    axes[1].set_title("Biểu đồ Phân tán Giá trị Thực tế vs. Dự đoán trên Toàn bộ Tập Test (15%)", fontsize=12, fontweight="bold")
-    axes[1].set_xlabel("Actual Electricity Load (kW)")
-    axes[1].set_ylabel("Predicted Electricity Load (kW)")
-    axes[1].legend(loc="upper left")
-
-    fig.tight_layout()
-    return _save_fig(fig, "actual_vs_predicted_all.png", stage_dir=stage_dir)
-
-
-def plot_walk_forward_backtest(
-    wf_df: pd.DataFrame,
-    wf_metrics: Dict[str, Dict[str, float]],
-    stage_dir: Optional[Path] = None,
-) -> List[str]:
-    """
-    What: Vẽ biểu đồ kết quả dự báo cuốn chiếu `Walk-Forward Validation / Backtesting` (Mục 9).
-    Why: Minh họa trực quan quá trình `Train -> predict t+1 -> thêm vào chuỗi -> predict t+2`.
-    Input:
-        - wf_df (pd.DataFrame): Chuỗi dự đoán Walk-Forward.
-        - wf_metrics (Dict[str, Dict[str, float]]): Chỉ số đánh giá trên cửa sổ Walk-Forward.
-        - stage_dir (Optional[Path]): Thư mục lưu theo `run_id`.
-    Output:
-        - List[str]: Đường dẫn tệp `walk_forward_backtest.png`.
-    How: Vẽ đường thực tế và 3 đường dự báo cuốn chiếu kèm chú thích `RMSE` & `MAPE (%)`.
-    """
-    fig, ax = plt.subplots(figsize=(13.5, 5.0))
-    ax.plot(wf_df["datetime"], wf_df["Actual_Load"], color="#111827", linewidth=2.2, label="Observed Load (Ground Truth)")
-    for m_name in ["VAR", "XGBoost", "LSTM"]:
-        col = f"{m_name}_WalkForward"
-        rmse_v = wf_metrics[m_name]["RMSE"]
-        mape_v = wf_metrics[m_name]["MAPE"]
+    h_map = holdout_df.set_index("Model")
+    fig, ax = plt.subplots(figsize=(15.5, 5.6))
+    ax.plot(idx_z, y_z, color="#0f172a", linewidth=2.5, label="Thực tế (Actual Electricity Load - kW)")
+    for m_name, style in [("XGBoost", "-"), ("LSTM", "--"), ("VAR", ":")]:
+        pred_z = holdout["test"][m_name][-zoom_n:]
+        r2_v = float(h_map.loc[m_name, "R2"])
+        mape_v = float(h_map.loc[m_name, "MAPE"])
+        rmse_v = float(h_map.loc[m_name, "RMSE"])
         ax.plot(
-            wf_df["datetime"],
-            wf_df[col],
+            idx_z,
+            pred_z,
+            linestyle=style,
+            linewidth=1.9,
             color=MODEL_COLORS[m_name],
-            linewidth=1.5,
-            linestyle="--" if m_name == "VAR" else "-",
-            label=f"{m_name} Walk-Forward (RMSE={rmse_v:.2f}, MAPE={mape_v:.2f}%)",
+            label=f"{m_name} (RMSE={rmse_v:,.1f} kW | MAPE={mape_v:.2f}% | R²={r2_v:.4f})",
         )
-    ax.set_title("Kết quả Kiểm thử Cuốn chiếu (Walk-Forward Backtesting — Mục 9)", fontsize=12, fontweight="bold")
-    ax.set_xlabel("Thời gian (Datetime)")
-    ax.set_ylabel("Electricity Load (kW)")
-    ax.legend(loc="upper right")
+    ax.set_title("Đối chiếu Đường Dự báo Phụ tải Điện (Actual vs. VAR, XGBoost, LSTM — Cận cảnh 168 Giờ Cuối Tập Test)", fontsize=12.5, fontweight="bold", color="#183f35")
+    ax.set_xlabel("Thời gian (Timestamp)")
+    ax.set_ylabel("Phụ tải Điện (Load - kW)")
+    ax.legend(loc="upper right", fontsize=9.8, framealpha=0.92)
+    ax.grid(True, linestyle="--", alpha=0.35)
     fig.tight_layout()
-    return _save_fig(fig, "walk_forward_backtest.png", stage_dir=stage_dir)
+    generated.append(_save_and_sync_fig(fig, "Forecast_Overlay_168h.png", active_run_id, cfg))
 
+    # 15. actual_vs_predicted_scatter.png: Biểu đồ Phân tán Thực tế vs Dự đoán cho cả 3 mô hình trên tập Test (5,260 giờ)
+    fig, axes = plt.subplots(1, 3, figsize=(15.8, 5.1), sharey=True)
+    for idx, m_name in enumerate(["VAR", "XGBoost", "LSTM"]):
+        ax = axes[idx]
+        yp = holdout["test"][m_name]
+        ax.scatter(y_te, yp, alpha=0.25, s=11, color=MODEL_COLORS[m_name], edgecolors="none")
+        min_v = min(float(y_te.min()), float(yp.min()))
+        max_v = max(float(y_te.max()), float(yp.max()))
+        ax.plot([min_v, max_v], [min_v, max_v], color="#b91c1c", linestyle="--", linewidth=1.8, label="Đường lý tưởng y = ŷ")
+        row_m = h_map.loc[m_name]
+        ax.set_title(
+            f"{m_name}\nR² = {row_m['R2']:.4f} | RMSE = {row_m['RMSE']:,.1f} | MAPE = {row_m['MAPE']:.2f}%",
+            fontsize=11,
+            fontweight="bold",
+            color="#183f35",
+        )
+        ax.set_xlabel("Giá trị Thực tế (Actual Load - kW)")
+        if idx == 0:
+            ax.set_ylabel("Giá trị Dự báo (Predicted Load - kW)")
+        ax.legend(loc="upper left", fontsize=8.8)
+        ax.grid(True, linestyle="--", alpha=0.35)
+    fig.suptitle("Biểu đồ Phân tán Giá trị Thực tế vs. Dự báo trên Tập Kiểm tra Độc lập (Test Set — 5,260 Giờ)", fontsize=13, fontweight="bold", y=1.02, color="#183f35")
+    fig.tight_layout()
+    generated.append(_save_and_sync_fig(fig, "actual_vs_predicted_scatter.png", active_run_id, cfg))
 
-def plot_metric_comparison_bars(
-    holdout_metrics: Dict[str, Dict[str, Any]],
-    stage_dir: Optional[Path] = None,
-) -> List[str]:
-    """
-    What: Sinh 5 biểu đồ cột riêng biệt cho từng chỉ số đánh giá (`MSE`, `RMSE`, `MAE`, `MAPE`, `R²`).
-    Why: Đáp ứng Yêu cầu bổ sung số 6 và giữ đúng chuẩn trình bày của `Lab04_ML-main`.
-    Input:
-        - holdout_metrics (Dict[str, Dict[str, Any]]): Số liệu 5 chỉ số của `VAR`, `XGBoost`, `LSTM`.
-        - stage_dir (Optional[Path]): Thư mục lưu theo `run_id`.
-    Output:
-        - List[str]: Danh sách 5 tệp `model_comparison_<metric>.png`.
-    How: Vẽ từng biểu đồ cột có gắn giá trị số học chính xác trên đỉnh cột.
-    """
-    specs = [
-        ("MSE", "So sánh Sai số Bình phương Trung bình (Test MSE ↓)", "MSE (kW²)", "model_comparison_mse.png"),
-        ("RMSE", "So sánh Căn bậc hai Sai số Bình phương Trung bình (Test RMSE ↓)", "RMSE (kW)", "model_comparison_rmse.png"),
-        ("MAE", "So sánh Sai số Tuyệt đối Trung bình (Test MAE ↓)", "MAE (kW)", "model_comparison_mae.png"),
-        ("MAPE", "So sánh Sai số Phần trăm Tuyệt đối Trung bình (Test MAPE % ↓)", "MAPE (%)", "model_comparison_mape.png"),
-        ("R2", "So sánh Hệ số Xác định (Test R² Score ↑)", "R² Score", "model_comparison_r2.png"),
+    # 16. Residual_Diagnostics.png: Chẩn đoán Phần dư (Phân phối Histogram + KDE & Scatter Residuals vs Predicted)
+    fig, axes = plt.subplots(2, 3, figsize=(16.0, 8.6))
+    for idx, m_name in enumerate(["VAR", "XGBoost", "LSTM"]):
+        yp = holdout["test"][m_name]
+        resid = y_te - yp
+        ax_hist = axes[0, idx]
+        ax_scat = axes[1, idx]
+
+        sns.histplot(resid, bins=45, kde=True, color=MODEL_COLORS[m_name], ax=ax_hist, alpha=0.4)
+        ax_hist.axvline(0.0, color="#b91c1c", linestyle="--", linewidth=1.5, label="Zero Error")
+        ax_hist.axvline(np.mean(resid), color="#0f172a", linestyle=":", linewidth=1.5, label=f"Mean: {np.mean(resid):.1f}")
+        ax_hist.set_title(f"Phân phối Phần dư {m_name}\n(Mean={np.mean(resid):.1f}, Std={np.std(resid):.1f} kW)", fontsize=10.5, fontweight="bold", color="#183f35")
+        ax_hist.set_xlabel("Residual e = y - ŷ (kW)")
+        ax_hist.legend(fontsize=8.5)
+        ax_hist.grid(True, linestyle="--", alpha=0.3)
+
+        ax_scat.scatter(yp, resid, alpha=0.22, s=10, color=MODEL_COLORS[m_name], edgecolors="none")
+        ax_scat.axhline(0.0, color="#b91c1c", linestyle="--", linewidth=1.5)
+        ax_scat.set_title(f"Phần dư theo Giá trị Dự báo ({m_name})", fontsize=10.5, fontweight="bold", color="#183f35")
+        ax_scat.set_xlabel("Predicted Load ŷ (kW)")
+        ax_scat.set_ylabel("Residual e = y - ŷ (kW)")
+        ax_scat.grid(True, linestyle="--", alpha=0.3)
+    fig.suptitle("Chẩn đoán Phần dư (Residual Diagnostics) trên Tập Test — Kiểm chứng Nhiễu trắng Không chệch", fontsize=13, fontweight="bold", y=1.02, color="#183f35")
+    fig.tight_layout()
+    generated.append(_save_and_sync_fig(fig, "Residual_Diagnostics.png", active_run_id, cfg))
+
+    # 17. Metric_Comparison_Bars.png: Đối sánh 4 chỉ số (RMSE, MAE, MAPE %, R²) trên Hold-out Test & 5-Fold CV
+    fig, axes = plt.subplots(2, 2, figsize=(14.8, 8.4))
+    models_order = ["VAR", "XGBoost", "LSTM"]
+    h_ord = holdout_df.set_index("Model").loc[models_order]
+    c_ord = cv_sum_df.set_index("Model").loc[models_order]
+    w_ord = wf_df.set_index("Model").loc[models_order]
+
+    x_pos = np.arange(len(models_order))
+    width = 0.26
+
+    # Panel A: RMSE
+    axes[0, 0].bar(x_pos - width, h_ord["RMSE"], width, label="Hold-out Test (15%)", color="#1d5843")
+    axes[0, 0].bar(x_pos, c_ord["RMSE_Mean"], width, yerr=c_ord["RMSE_Std"], capsize=3, label="5-Fold CV Mean", color="#2b5c8f")
+    axes[0, 0].bar(x_pos + width, w_ord["RMSE"], width, label="Walk-Forward (168h)", color="#d95f02")
+    axes[0, 0].set_xticks(x_pos)
+    axes[0, 0].set_xticklabels(models_order, fontweight="bold")
+    axes[0, 0].set_title("Đối sánh Sai số Căn bậc hai Trung bình (RMSE kW ↓)", fontsize=11, fontweight="bold", color="#183f35")
+    axes[0, 0].set_ylabel("RMSE (kW)")
+    axes[0, 0].legend(fontsize=8.5)
+    axes[0, 0].grid(True, axis="y", linestyle="--", alpha=0.35)
+
+    # Panel B: MAE
+    axes[0, 1].bar(x_pos - width, h_ord["MAE"], width, label="Hold-out Test (15%)", color="#1d5843")
+    axes[0, 1].bar(x_pos, c_ord["MAE_Mean"], width, yerr=c_ord["MAE_Std"], capsize=3, label="5-Fold CV Mean", color="#2b5c8f")
+    axes[0, 1].bar(x_pos + width, w_ord["MAE"], width, label="Walk-Forward (168h)", color="#d95f02")
+    axes[0, 1].set_xticks(x_pos)
+    axes[0, 1].set_xticklabels(models_order, fontweight="bold")
+    axes[0, 1].set_title("Đối sánh Sai số Tuyệt đối Trung bình (MAE kW ↓)", fontsize=11, fontweight="bold", color="#183f35")
+    axes[0, 1].set_ylabel("MAE (kW)")
+    axes[0, 1].legend(fontsize=8.5)
+    axes[0, 1].grid(True, axis="y", linestyle="--", alpha=0.35)
+
+    # Panel C: MAPE (%)
+    axes[1, 0].bar(x_pos - width, h_ord["MAPE"], width, label="Hold-out Test (15%)", color="#1d5843")
+    axes[1, 0].bar(x_pos, c_ord["MAPE_Mean"], width, yerr=c_ord["MAPE_Std"], capsize=3, label="5-Fold CV Mean", color="#2b5c8f")
+    axes[1, 0].bar(x_pos + width, w_ord["MAPE"], width, label="Walk-Forward (168h)", color="#d95f02")
+    axes[1, 0].set_xticks(x_pos)
+    axes[1, 0].set_xticklabels(models_order, fontweight="bold")
+    axes[1, 0].set_title("Đối sánh Sai số Phần trăm Tuyệt đối (MAPE % ↓)", fontsize=11, fontweight="bold", color="#183f35")
+    axes[1, 0].set_ylabel("MAPE (%)")
+    axes[1, 0].legend(fontsize=8.5)
+    axes[1, 0].grid(True, axis="y", linestyle="--", alpha=0.35)
+
+    # Panel D: R2 Score
+    axes[1, 1].bar(x_pos - width, h_ord["R2"], width, label="Hold-out Test (15%)", color="#1d5843")
+    axes[1, 1].bar(x_pos, c_ord["R2_Mean"], width, yerr=c_ord["R2_Std"], capsize=3, label="5-Fold CV Mean", color="#2b5c8f")
+    axes[1, 1].bar(x_pos + width, w_ord["R2"], width, label="Walk-Forward (168h)", color="#d95f02")
+    axes[1, 1].set_xticks(x_pos)
+    axes[1, 1].set_xticklabels(models_order, fontweight="bold")
+    axes[1, 1].set_ylim(max(0.85, float(min(h_ord["R2"].min(), c_ord["R2_Mean"].min())) - 0.03), 1.005)
+    axes[1, 1].set_title("Đối sánh Hệ số Xác định (R² Score ↑)", fontsize=11, fontweight="bold", color="#183f35")
+    axes[1, 1].set_ylabel("R² Score")
+    axes[1, 1].legend(fontsize=8.5, loc="lower right")
+    axes[1, 1].grid(True, axis="y", linestyle="--", alpha=0.35)
+
+    fig.suptitle("Tổng hợp Đối sánh Hiệu suất 3 Mô hình (VAR, XGBoost, LSTM) qua 3 Phương pháp Kiểm định", fontsize=13, fontweight="bold", y=1.02, color="#183f35")
+    fig.tight_layout()
+    generated.append(_save_and_sync_fig(fig, "Metric_Comparison_Bars.png", active_run_id, cfg))
+
+    # 18. training_time_comparison.png: So sánh Thời gian Huấn luyện & Thời gian Dự báo
+    fig, axes = plt.subplots(1, 2, figsize=(13.8, 4.6))
+    tr_times = [float(h_ord.loc[m, "Train_Time_Sec"]) for m in models_order]
+    pr_times_ms = [float(h_ord.loc[m, "Pred_Time_Sec"]) * 1000.0 for m in models_order]
+    bar_cols = [MODEL_COLORS[m] for m in models_order]
+
+    bars1 = axes[0].bar(models_order, tr_times, color=bar_cols, width=0.48, edgecolor="black")
+    for b in bars1:
+        h_v = b.get_height()
+        axes[0].text(b.get_x() + b.get_width() / 2.0, h_v, f"{h_v:.2f}s", ha="center", va="bottom", fontweight="bold", fontsize=9.5)
+    axes[0].set_title("Thời gian Huấn luyện Mô hình (Training Time ↓)", fontsize=11, fontweight="bold", color="#183f35")
+    axes[0].set_ylabel("Giây (Seconds)")
+    axes[0].grid(True, axis="y", linestyle="--", alpha=0.35)
+
+    bars2 = axes[1].bar(models_order, pr_times_ms, color=bar_cols, width=0.48, edgecolor="black")
+    for b in bars2:
+        h_v = b.get_height()
+        axes[1].text(b.get_x() + b.get_width() / 2.0, h_v, f"{h_v:.1f} ms", ha="center", va="bottom", fontweight="bold", fontsize=9.5)
+    axes[1].set_title("Độ trễ Suy luận trên 5,260 Giờ Tập Test (Inference Latency ↓)", fontsize=11, fontweight="bold", color="#183f35")
+    axes[1].set_ylabel("Mili-giây (ms)")
+    axes[1].grid(True, axis="y", linestyle="--", alpha=0.35)
+    fig.tight_layout()
+    generated.append(_save_and_sync_fig(fig, "training_time_comparison.png", active_run_id, cfg))
+
+    # 19. Walk_Forward_Trajectory.png: Quỹ đạo Dự báo Cuốn chiếu Walk-Forward 168 Bước
+    wf_ts = pd.to_datetime(wf_pred_df["timestamp"])
+    fig, axes = plt.subplots(2, 1, figsize=(15.0, 6.8), sharex=True, gridspec_kw={"height_ratios": [1.85, 1.0]})
+    axes[0].plot(wf_ts, wf_pred_df["Actual_Load"], color="#0f172a", linewidth=2.3, label="Actual Load (kW)")
+    axes[0].plot(wf_ts, wf_pred_df["VAR_WalkForward"], color=MODEL_COLORS["VAR"], linestyle=":", linewidth=1.8, label="VAR Walk-Forward")
+    axes[0].plot(wf_ts, wf_pred_df["XGBoost_WalkForward"], color=MODEL_COLORS["XGBoost"], linestyle="-", linewidth=1.8, label="XGBoost Walk-Forward")
+    axes[0].plot(wf_ts, wf_pred_df["LSTM_WalkForward"], color=MODEL_COLORS["LSTM"], linestyle="--", linewidth=1.8, label="LSTM Walk-Forward")
+    axes[0].set_title("Quỹ đạo Dự báo Cuốn chiếu Walk-Forward Validation (168 Giờ: Train → Predict t+1 → Append → Predict t+2)", fontsize=11.5, fontweight="bold", color="#183f35")
+    axes[0].set_ylabel("Phụ tải Điện (kW)")
+    axes[0].legend(loc="upper right", fontsize=9.2)
+    axes[0].grid(True, linestyle="--", alpha=0.35)
+
+    for m_name, col_wf in [("VAR", "VAR_WalkForward"), ("XGBoost", "XGBoost_WalkForward"), ("LSTM", "LSTM_WalkForward")]:
+        abs_err = np.abs(wf_pred_df["Actual_Load"] - wf_pred_df[col_wf])
+        axes[1].plot(wf_ts, abs_err.rolling(12, min_periods=1).mean(), color=MODEL_COLORS[m_name], linewidth=1.6, label=f"{m_name} Rolling 12h MAE")
+    axes[1].set_title("Độ ổn định Sai số Tuyệt đối Trượt 12 Giờ trong Walk-Forward Backtesting", fontsize=11, fontweight="bold", color="#183f35")
+    axes[1].set_ylabel("MAE 12h (kW)")
+    axes[1].legend(loc="upper right", fontsize=9.0)
+    axes[1].grid(True, linestyle="--", alpha=0.35)
+    fig.tight_layout()
+    generated.append(_save_and_sync_fig(fig, "Walk_Forward_Trajectory.png", active_run_id, cfg))
+
+    # 20. XGBoost_Feature_Importance.png: Top 15 Đặc trưng Quan trọng nhất của XGBoost
+    top_imp = xgb_imp_df.head(15).iloc[::-1]
+    fig, ax = plt.subplots(figsize=(11.8, 6.2))
+    bars = ax.barh(top_imp["Feature"], top_imp["Importance"], color="#1d5843", alpha=0.88, edgecolor="black")
+    for b in bars:
+        w_v = b.get_width()
+        ax.text(w_v + 0.002, b.get_y() + b.get_height() / 2.0, f"{w_v:.4f}", va="center", fontsize=8.8, fontweight="bold")
+    ax.set_title("Top 15 Đặc trưng Quan trọng Nhất trong Mô hình XGBoost Multivariate (Gain Importance)", fontsize=12, fontweight="bold", color="#183f35")
+    ax.set_xlabel("Mức độ Đóng góp Tương đối (Feature Importance)")
+    ax.grid(True, axis="x", linestyle="--", alpha=0.35)
+    fig.tight_layout()
+    generated.append(_save_and_sync_fig(fig, "XGBoost_Feature_Importance.png", active_run_id, cfg))
+
+    # 21. Feature_Ablation_Impact.png: Nghiên cứu Loại bỏ Đặc trưng Thời tiết (With Weather vs Without Weather)
+    fig, axes = plt.subplots(1, 2, figsize=(14.2, 5.0))
+    x_abl = np.arange(len(abl_df))
+    w_bar = 0.34
+    axes[0].bar(x_abl - w_bar / 2, abl_df["Without_Weather_RMSE"], w_bar, label="Không có Biến Thời tiết (Univariate Load)", color="#94a3b8", edgecolor="black")
+    axes[0].bar(x_abl + w_bar / 2, abl_df["With_Weather_RMSE"], w_bar, label="Có Đầy đủ 3 Biến Thời tiết (Multivariate)", color="#1d5843", edgecolor="black")
+    axes[0].set_xticks(x_abl)
+    axes[0].set_xticklabels(abl_df["Model"], fontweight="bold")
+    axes[0].set_title("Tác động của Biến Ngoại sinh Thời tiết tới Sai số RMSE (kW ↓)", fontsize=11, fontweight="bold", color="#183f35")
+    axes[0].set_ylabel("Test RMSE (kW)")
+    axes[0].legend(fontsize=9)
+    axes[0].grid(True, axis="y", linestyle="--", alpha=0.35)
+
+    bars_gain = axes[1].bar(abl_df["Model"], abl_df["RMSE_Improvement_Pct"], color=["#2b5c8f", "#1d5843", "#d95f02"], width=0.45, edgecolor="black")
+    for b in bars_gain:
+        v_h = b.get_height()
+        axes[1].text(b.get_x() + b.get_width() / 2.0, v_h, f"{v_h:+.2f}%", ha="center", va="bottom", fontweight="bold", fontsize=9.8)
+    axes[1].axhline(0, color="black", linewidth=0.9)
+    axes[1].set_title("Tỷ lệ Cải thiện Độ chính xác Nhờ Tích hợp Biến Thời tiết (% Giảm RMSE ↑)", fontsize=11, fontweight="bold", color="#183f35")
+    axes[1].set_ylabel("Mức giảm RMSE (%)")
+    axes[1].grid(True, axis="y", linestyle="--", alpha=0.35)
+    fig.tight_layout()
+    generated.append(_save_and_sync_fig(fig, "Feature_Ablation_Impact.png", active_run_id, cfg))
+
+    # 22. pems_bay_dcrnn_evaluation.png: Biểu đồ dự báo 3 tầm nhìn (15p, 30p, 60p) của DCRNN trên PEMS-BAY
+    pems_preds = train_artifacts["pems_bay_predictions"]
+    y_pems_true = pems_preds["Y_test_orig"]  # (N_test, 3, N_sensors)
+    y_dcrnn = pems_preds["DCRNN"]
+    sensor_id = 0
+    slice_steps = min(288, y_pems_true.shape[0])  # 24 giờ (288 bước 5 phút)
+    t_axis = np.arange(slice_steps)
+
+    fig, axes = plt.subplots(1, 2, figsize=(15.5, 5.2), gridspec_kw={"width_ratios": [1.55, 1.0]})
+    axes[0].plot(t_axis, y_pems_true[:slice_steps, 0, sensor_id], color="#0f172a", linewidth=2.2, label="Vận tốc Thực tế (Actual Speed - mph)")
+    axes[0].plot(t_axis, y_dcrnn[:slice_steps, 0, sensor_id], color="#1d5843", linestyle="-", linewidth=1.7, label="DCRNN Dự báo +15 Phút (t+3)")
+    axes[0].plot(t_axis, y_dcrnn[:slice_steps, 1, sensor_id], color="#2b5c8f", linestyle="--", linewidth=1.6, label="DCRNN Dự báo +30 Phút (t+6)")
+    axes[0].plot(t_axis, y_dcrnn[:slice_steps, 2, sensor_id], color="#d95f02", linestyle=":", linewidth=1.6, label="DCRNN Dự báo +60 Phút (t+12)")
+    axes[0].set_title("Dự báo Vận tốc Giao thông Đa tầm nhìn bằng DCRNN (24 Giờ — 288 Bước 5 Phút)", fontsize=11, fontweight="bold", color="#183f35")
+    axes[0].set_xlabel("Bước Thời gian 5 Phút (Steps)")
+    axes[0].set_ylabel("Vận tốc (mph)")
+    axes[0].legend(loc="lower left", fontsize=8.8)
+    axes[0].grid(True, linestyle="--", alpha=0.35)
+
+    h_labels = ["15 Phút (t+3)", "30 Phút (t+6)", "60 Phút (t+12)"]
+    x_h = np.arange(len(h_labels))
+    axes[1].bar(x_h - 0.18, pems_dcrnn_df["RMSE"], 0.34, label="RMSE (mph ↓)", color="#1d5843", edgecolor="black")
+    axes[1].bar(x_h + 0.18, pems_dcrnn_df["MAE"], 0.34, label="MAE (mph ↓)", color="#d95f02", edgecolor="black")
+    for idx_h, (r_v, m_v) in enumerate(zip(pems_dcrnn_df["RMSE"], pems_dcrnn_df["MAE"])):
+        axes[1].text(idx_h - 0.18, r_v + 0.08, f"{r_v:.2f}", ha="center", va="bottom", fontsize=8.8, fontweight="bold")
+        axes[1].text(idx_h + 0.18, m_v + 0.08, f"{m_v:.2f}", ha="center", va="bottom", fontsize=8.8, fontweight="bold")
+    axes[1].set_xticks(x_h)
+    axes[1].set_xticklabels(h_labels, fontweight="bold")
+    axes[1].set_title("Sai số Dự báo DCRNN theo Độ xa Tầm nhìn (15p → 30p → 60p)", fontsize=11, fontweight="bold", color="#183f35")
+    axes[1].set_ylabel("Sai số Vận tốc (mph)")
+    axes[1].legend(fontsize=9)
+    axes[1].grid(True, axis="y", linestyle="--", alpha=0.35)
+    fig.tight_layout()
+    generated.append(_save_and_sync_fig(fig, "pems_bay_dcrnn_evaluation.png", active_run_id, cfg))
+
+    # 23. pems_bay_model_comparison.png: Đối sánh trực tiếp DCRNN vs Multi-Horizon TCN vs Multi-Horizon LSTM trên PEMS-BAY
+    fig, axes = plt.subplots(1, 3, figsize=(16.0, 5.2))
+    horizons_filter = ["15_min", "30_min", "60_min"]
+    h_Map_disp = {"15_min": "15 Phút (t+3)", "30_min": "30 Phút (t+6)", "60_min": "60 Phút (t+12)"}
+    sub_b = pems_bench_df[pems_bench_df["Horizon"].isin(horizons_filter)].copy()
+
+    x_b = np.arange(len(horizons_filter))
+    w_b = 0.25
+    m_specs = [
+        ("DCRNN", "DCRNN (Graph + GRU)", "#1d5843", -w_b),
+        ("Multi_Horizon_TCN", "Multi-Horizon TCN", "#2b5c8f", 0.0),
+        ("Multi_Horizon_LSTM", "Multi-Horizon LSTM", "#d95f02", +w_b),
     ]
-    models = ["VAR", "XGBoost", "LSTM"]
-    colors = [MODEL_COLORS[m] for m in models]
-    saved_all: List[str] = []
 
-    for key, title, ylabel, fname in specs:
-        fig, ax = plt.subplots(figsize=(7.8, 4.6))
-        vals = [float(holdout_metrics[m][key]) for m in models]
-        bars = ax.bar(models, vals, color=colors, edgecolor="black", width=0.5, alpha=0.9)
-        span = max(vals) if max(vals) > 0 else 1.0
-        for b, v in zip(bars, vals):
-            fmt_str = f"{v:.2f}%" if key == "MAPE" else (f"{v:.4f}" if key == "R2" else f"{v:.2f}")
-            ax.text(b.get_x() + b.get_width() / 2.0, b.get_height() + span * 0.02, fmt_str, ha="center", va="bottom", fontweight="bold")
-        ax.set_title(title, fontsize=11.5, fontweight="bold")
-        ax.set_ylabel(ylabel)
-        ax.set_ylim(0, span * 1.18)
-        fig.tight_layout()
-        saved_all.extend(_save_fig(fig, fname, stage_dir=stage_dir))
+    for metric_idx, (metric_col, metric_title, y_lbl) in enumerate(
+        [
+            ("MAE", "Đối sánh MAE (mph ↓) theo Tầm nhìn", "MAE (mph)"),
+            ("RMSE", "Đối sánh RMSE (mph ↓) theo Tầm nhìn", "RMSE (mph)"),
+            ("R2", "Đối sánh R² Score (↑) theo Tầm nhìn", "R² Score"),
+        ]
+    ):
+        ax = axes[metric_idx]
+        for m_code, m_lbl, col_hex, offset in m_specs:
+            m_slice = sub_b[sub_b["Model"] == m_code].set_index("Horizon").loc[horizons_filter]
+            vals = m_slice[metric_col].to_numpy()
+            bars = ax.bar(x_b + offset, vals, w_b, label=m_lbl, color=col_hex, edgecolor="black")
+            for b in bars:
+                hv = b.get_height()
+                fmt_s = f"{hv:.2f}" if metric_col != "R2" else f"{hv:.3f}"
+                ax.text(b.get_x() + b.get_width() / 2.0, hv, fmt_s, ha="center", va="bottom", fontsize=7.8, fontweight="bold")
+        ax.set_xticks(x_b)
+        ax.set_xticklabels([h_Map_disp[h] for h in horizons_filter], fontweight="bold")
+        ax.set_title(metric_title, fontsize=11, fontweight="bold", color="#183f35")
+        ax.set_ylabel(y_lbl)
+        if metric_col == "R2":
+            ax.set_ylim(0.45, 1.02)
+        ax.legend(fontsize=8.5, loc="best")
+        ax.grid(True, axis="y", linestyle="--", alpha=0.35)
 
-    return saved_all
-
-
-def plot_residual_analysis(df_preds: pd.DataFrame, stage_dir: Optional[Path] = None) -> List[str]:
-    """
-    What: Vẽ biểu đồ phần dư theo thời gian (`residual_plot_all.png`) và phân phối phần dư (`residual_distribution_all.png`).
-    Why: Kiểm tra tính không chệch (Mean Residual $\approx 0$) và độ tập trung sai số của 3 mô hình.
-    Input:
-        - df_preds (pd.DataFrame): Bảng dự đoán và phần dư trên tập Test.
-        - stage_dir (Optional[Path]): Thư mục lưu theo `run_id`.
-    Output:
-        - List[str]: Đường dẫn 2 tệp biểu đồ phần dư.
-    How: Vẽ scatter/line phần dư và biểu đồ KDE/Histogram phân phối phần dư.
-    """
-    saved: List[str] = []
-    fig1, ax1 = plt.subplots(figsize=(12.5, 4.6))
-    for m_name in ["VAR", "XGBoost", "LSTM"]:
-        ax1.plot(df_preds["datetime"], df_preds[f"{m_name}_Residual"], color=MODEL_COLORS[m_name], alpha=0.75, linewidth=1.0, label=f"{m_name} Residual")
-    ax1.axhline(0.0, color="#111827", linestyle="--", linewidth=1.5)
-    ax1.set_title("Biểu đồ Phần dư Dự báo (Residuals e_t = y_t - y_hat_t) trên Tập Test", fontsize=12, fontweight="bold")
-    ax1.set_xlabel("Thời gian (Datetime)")
-    ax1.set_ylabel("Residual (kW)")
-    ax1.legend(loc="upper right")
-    fig1.tight_layout()
-    saved.extend(_save_fig(fig1, "residual_plot_all.png", stage_dir=stage_dir))
-
-    fig2, ax2 = plt.subplots(figsize=(10.0, 4.8))
-    for m_name in ["VAR", "XGBoost", "LSTM"]:
-        sns.kdeplot(df_preds[f"{m_name}_Residual"], ax=ax2, color=MODEL_COLORS[m_name], fill=True, alpha=0.2, linewidth=2.0, label=m_name)
-    ax2.axvline(0.0, color="#111827", linestyle="--", linewidth=1.5)
-    ax2.set_title("Phân phối Xác suất Phần dư (Residual Distribution) của VAR, XGBoost và LSTM", fontsize=12, fontweight="bold")
-    ax2.set_xlabel("Sai số Phần dư e_t (kW)")
-    ax2.set_ylabel("Mật độ (Density)")
-    ax2.legend(loc="upper right")
-    fig2.tight_layout()
-    saved.extend(_save_fig(fig2, "residual_distribution_all.png", stage_dir=stage_dir))
-    return saved
-
-
-def plot_kfold_cv_comparison(df_folds: pd.DataFrame, stage_dir: Optional[Path] = None) -> List[str]:
-    """
-    What: Vẽ biểu đồ so sánh `RMSE` và `R²` qua 5 Folds của `TimeSeriesSplit` cho `VAR`, `XGBoost`, `LSTM`.
-    Why: Minh họa kết quả định lượng của Yêu cầu bổ sung số 4 (K-Fold Cross-Validation).
-    Input:
-        - df_folds (pd.DataFrame): Bảng kết quả từng Fold từ `evaluate.py`.
-        - stage_dir (Optional[Path]): Thư mục lưu theo `run_id`.
-    Output:
-        - List[str]: Đường dẫn tệp `kfold_cv_comparison.png`.
-    How: Subplot trái vẽ RMSE theo từng Fold (`Fold 1..5`); subplot phải vẽ R² Score qua 5 Folds.
-    """
-    fig, axes = plt.subplots(1, 2, figsize=(13.0, 4.8))
-    for m_name in ["VAR", "XGBoost", "LSTM"]:
-        sub = df_folds[df_folds["Model"] == m_name]
-        axes[0].plot(sub["Fold"], sub["RMSE"], marker="o", linewidth=2.0, color=MODEL_COLORS[m_name], label=f"{m_name} (Mean={sub['RMSE'].mean():.2f})")
-        axes[1].plot(sub["Fold"], sub["R2"], marker="s", linewidth=2.0, color=MODEL_COLORS[m_name], label=f"{m_name} (Mean={sub['R2'].mean():.4f})")
-
-    axes[0].set_xticks([1, 2, 3, 4, 5])
-    axes[0].set_title("Độ ổn định RMSE qua 5-Fold TimeSeriesSplit (↓)", fontsize=11.5, fontweight="bold")
-    axes[0].set_xlabel("Fold Index (Temporal Expanding Window)")
-    axes[0].set_ylabel("Validation RMSE (kW)")
-    axes[0].legend(loc="best")
-
-    axes[1].set_xticks([1, 2, 3, 4, 5])
-    axes[1].set_title("Độ ổn định R² Score qua 5-Fold TimeSeriesSplit (↑)", fontsize=11.5, fontweight="bold")
-    axes[1].set_xlabel("Fold Index (Temporal Expanding Window)")
-    axes[1].set_ylabel("Validation R² Score")
-    axes[1].legend(loc="best")
-
+    fig.suptitle("Bài tập 12 Nâng cao (PEMS-BAY): Đối sánh DCRNN (Đồ thị Không gian) vs. Multi-Horizon TCN vs. Multi-Horizon LSTM", fontsize=13, fontweight="bold", y=1.03, color="#183f35")
     fig.tight_layout()
-    return _save_fig(fig, "kfold_cv_comparison.png", stage_dir=stage_dir)
+    generated.append(_save_and_sync_fig(fig, "pems_bay_model_comparison.png", active_run_id, cfg))
+
+    # Kiểm kê toàn bộ các biểu đồ hiện có trong reports/lab04/figures/
+    fig_dir = get_path("figures_dir", cfg)
+    all_pngs = sorted([p.name for p in fig_dir.glob("*.png")])
+
+    duration = time.perf_counter() - t0
+    vis_summary = {
+        "newly_generated_figures": generated,
+        "all_available_figures": all_pngs,
+        "total_figures_count": len(all_pngs),
+        "duration_sec": round(duration, 4),
+    }
+
+    record_stage_result(active_run_id, "visualization", vis_summary)
+    write_log(
+        active_run_id,
+        "VISUALIZATION",
+        "SUCCESS",
+        f"Hoàn tất kết xuất biểu đồ trong {duration:.2f}s | Tổng số biểu đồ trong kho reports/lab04/figures/: {len(all_pngs)}.",
+    )
+    print(f"[VISUALIZE] Đã kết xuất thành công {len(all_pngs)} biểu đồ học thuật tại reports/lab04/figures/.")
+    return vis_summary
 
 
-def plot_pems_bay_horizons(pems_eval: Dict[str, Any], stage_dir: Optional[Path] = None) -> List[str]:
-    """
-    What: Vẽ biểu đồ kết quả dự báo giao thông của `DCRNN` trên `PEMS-BAY` ở 3 chân trời 15, 30, 60 phút.
-    Why: Minh họa kết quả Bài tập 12 nâng cao (`pems-bay.h5` + `sensor_graph/adj_mx_bay.pkl`).
-    Input:
-        - pems_eval (Dict[str, Any]): Kết quả đánh giá PEMS-BAY từ `evaluate.py`.
-        - stage_dir (Optional[Path]): Thư mục lưu theo `run_id`.
-    Output:
-        - List[str]: Đường dẫn tệp `pems_bay_horizon_comparison.png`.
-    How: Subplot trái vẽ biểu đồ cột `RMSE`, `MAE`, `MAPE (%)` tại 15m, 30m, 60m;
-         subplot phải vẽ đường tốc độ thực tế vs dự báo 15m và 60m tại trạm cảm biến đại diện.
-    """
-    fig, axes = plt.subplots(1, 2, figsize=(13.5, 5.0))
-    rows = pems_eval["horizon_rows"]
-    labels = [r["Horizon"] for r in rows]
-    x = np.arange(len(labels))
-    w = 0.25
-
-    rmse_vals = [r["RMSE"] for r in rows]
-    mae_vals = [r["MAE"] for r in rows]
-    mape_vals = [r["MAPE"] for r in rows]
-
-    axes[0].bar(x - w, rmse_vals, width=w, color="#1d4ed8", edgecolor="black", label="RMSE (mph)")
-    axes[0].bar(x, mae_vals, width=w, color="#059669", edgecolor="black", label="MAE (mph)")
-    axes[0].bar(x + w, mape_vals, width=w, color="#d97706", edgecolor="black", label="MAPE (%)")
-    axes[0].set_xticks(x)
-    axes[0].set_xticklabels(labels)
-    axes[0].set_title("Hiệu năng DCRNN trên PEMS-BAY theo Chân trời Dự báo (15, 30, 60 Phút)", fontsize=11, fontweight="bold")
-    axes[0].set_ylabel("Giá trị Sai số")
-    axes[0].legend(loc="upper left")
-
-    act_15 = pems_eval.get("sample_sensor_actual_15m", [])
-    pred_15 = pems_eval.get("sample_sensor_pred_15m", [])
-    pred_60 = pems_eval.get("sample_sensor_pred_60m", [])
-    steps = np.arange(len(act_15))
-    axes[1].plot(steps, act_15, color="#111827", linewidth=1.8, label="Actual Speed (mph)")
-    axes[1].plot(steps, pred_15, color="#059669", linewidth=1.4, label="DCRNN 15-min Ahead (t+3)")
-    axes[1].plot(steps, pred_60, color="#7c3aed", linestyle="--", linewidth=1.3, label="DCRNN 60-min Ahead (t+12)")
-    axes[1].set_title("Dự báo Tốc độ Xe (mph) của DCRNN tại Trạm Cảm biến Cao tốc (24 Giờ = 288 Bước)", fontsize=11, fontweight="bold")
-    axes[1].set_xlabel("Bước thời gian (5 phút / bước)")
-    axes[1].set_ylabel("Speed (mph)")
-    axes[1].legend(loc="lower left")
-
-    fig.tight_layout()
-    return _save_fig(fig, "pems_bay_horizon_comparison.png", stage_dir=stage_dir)
+if __name__ == "__main__":
+    main()

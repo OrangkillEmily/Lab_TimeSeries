@@ -1,339 +1,172 @@
+r"""
+Mô-đun Kiến trúc Mô hình Dự báo Chuỗi Thời gian Đa biến (Model Architectures) cho Bài thực hành Lab 04.
+Bao gồm 6 kiến trúc mô hình chuẩn học thuật:
+- Nhóm Bài toán Phụ tải Điện & Thời tiết (Mục 5 - 11 trên electricity_load.csv):
+  1. VARForecaster: Vector Autoregression trên chuỗi sai phân dừng bậc 1 (Delta Y_t).
+  2. XGBoostForecaster: Extreme Gradient Boosting trên 105 đặc trưng trễ, thống kê trượt và chu kỳ Fourier.
+  3. LSTMForecaster: Mạng Stacked 2-Layer LSTM kết hợp nhánh Autoregressive Residual Highway (PyTorch GPU + AMP FP16).
+- Nhóm Bài toán Giao thông Đồ thị Đa tầm nhìn Nâng cao (Mục 12 trên PEMS-BAY + adj_mx_bay.pkl):
+  4. DCRNNTrafficForecaster: Diffusion Convolutional Recurrent Neural Network (Li et al., ICLR 2018).
+  5. PEMS_TCN_Forecaster: Multi-Horizon Temporal Convolutional Network (Dilated Causal Conv1D - Slide 10 Chương 4-5).
+  6. PEMS_LSTM_Forecaster: Multi-Horizon Temporal Stacked LSTM (Đối chứng không dùng đồ thị không gian).
 """
-Module định nghĩa kiến trúc 4 mô hình dự báo chuỗi thời gian đa biến (`src/lab04/model.py`).
-
-Trách nhiệm của module:
-1. Mô hình 1 — `VARForecaster` (Mục 6): Kiểm định tính dừng ADF, tự động lấy sai phân nếu chuỗi
-   không dừng, chọn bậc trễ $p^*$ theo tiêu chuẩn `AIC`/`BIC`, khớp mô hình `VAR`
-   (`statsmodels.tsa.api.VAR` hoặc giải tích OLS đa biến thuần NumPy) và dự báo cuốn chiếu vector 4 biến.
-2. Mô hình 2 — `XGBoostForecaster` (Mục 7): Khởi tạo `xgb.XGBRegressor` (tự động chuyển sang
-   `tree_method="hist", device="cuda"` khi có GPU NVIDIA, kèm fallback sang Gradient Boosted Trees
-   thuần NumPy nếu máy chưa cài `xgboost`), hỗ trợ `early_stopping` trên tập Validation.
-3. Mô hình 3 — `LSTMForecaster` (Mục 8): Kiến trúc chuẩn đề bài `LSTM(64) -> LSTM(32) -> Dense(1)`
-   trên Tensor 3D `(batch_samples, 24, 4)` với hàm mất mát `MSE` và bộ tối ưu `Adam`, tự động
-   chạy trên GPU (`PyTorch CUDA AMP FP16` / `MPS`) hoặc fallback sang NumPy Temporal Gated RNN.
-4. Mô hình 4 — `DCRNNTrafficForecaster` (Mục 12 Nâng cao): Kiến trúc `Diffusion Convolutional
-   Recurrent Neural Network` (`DCGRU Encoder-Decoder` kèm `Scheduled Sampling`) sử dụng ma trận
-   chuyển tiếp bước ngẫu nhiên hai chiều $(\mathbf{P}_f, \mathbf{P}_b)$ từ `data/raw/sensor_graph/adj_mx_bay.pkl`.
-"""
-
-from __future__ import annotations
 
 import copy
+import time
+import warnings
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
+import torch
+import torch.nn as nn
+from torch.utils.data import DataLoader, TensorDataset
+from statsmodels.tsa.api import VAR
+import xgboost as xgb
 
-try:
-    from statsmodels.tsa.api import VAR as StatsmodelsVAR
-    HAS_STATSMODELS_VAR = True
-except ImportError:
-    HAS_STATSMODELS_VAR = False
+from src.lab04.utils import get_compute_device, load_config
 
-try:
-    import xgboost as xgb
-    HAS_XGBOOST = True
-except ImportError:
-    HAS_XGBOOST = False
-
-try:
-    import torch
-    import torch.nn as nn
-    from torch.utils.data import DataLoader, TensorDataset
-    HAS_TORCH = True
-except ImportError:
-    HAS_TORCH = False
-
-from src.lab04.utils import detect_hardware_accelerator, load_config
+warnings.filterwarnings("ignore", category=UserWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 
-# ==============================================================================
-# 1. MÔ HÌNH 1: VECTOR AUTOREGRESSION (VAR — STATISTICAL BASELINE, MỤC 6)
-# ==============================================================================
+# ============================================================================
+# 1. MÔ HÌNH THỐNG KÊ ĐA BIẾN: VECTOR AUTOREGRESSION (VAR)
+# ============================================================================
 class VARForecaster:
-    """
-    What: Bộ dự báo thống kê đa biến `VAR(p)` có tích hợp sai phân tự động và chọn bậc trễ AIC/BIC.
-    Why: Thực hiện chính xác Mục 6 của `practice 4.pdf` (Kiểm tra tính dừng ADF -> Differencing ->
-         Chọn bậc trễ AIC/BIC -> Huấn luyện VAR -> Dự báo vector 4 biến và trích xuất cột `load`).
-    Input:
-        - maxlags (int): Bậc trễ tối đa xét chọn (mặc định `24`).
-        - ic (str): Tiêu chuẩn chọn bậc trễ (`"aic"` hoặc `"bic"`).
-        - diff_order (int): Bậc sai phân đã xác định từ kiểm định ADF (`0` hoặc `1`).
-    Output:
-        - Dự đoán $\hat{\mathbf{X}}_{t+1} \in \mathbb{R}^{4}$ và cột mục tiêu $\widehat{\text{load}}_{t+1}$.
-    How: Ưu tiên dùng `statsmodels.tsa.api.VAR` và hỗ trợ giải tích OLS đa biến trực tiếp.
+    r"""
+    Purpose: Mô hình Tự hồi quy Vector (VAR) dự báo đồng thời hệ phương trình 4 biến
+             [load, temperature, humidity, wind_speed] trên miền sai phân dừng bậc 1.
+    Input-Output:
+        - Input: DataFrame chuỗi thời gian đa biến (T x 4).
+        - Output: Dự báo bước tiếp theo (t+1) quy đổi ngược về đơn vị vật lý gốc (kW).
+    How:
+        - Lấy sai phân bậc 1: Delta Y_t = Y_t - Y_{t-1}.
+        - Chọn độ trễ tối ưu p* thuộc [1..maxlags] cực tiểu hóa tiêu chuẩn thông tin AIC.
+        - Dự báo cuốn chiếu 1 bước: Y_hat_{t+1} = Y_t + E[Delta Y_{t+1} | Delta Y_{t..t-p+1}].
     """
 
-    def __init__(self, maxlags: int = 24, ic: str = "aic", diff_order: int = 0) -> None:
+    def __init__(self, maxlags: int = 24, ic: str = "aic", trend: str = "c") -> None:
         self.maxlags = int(maxlags)
-        self.ic = str(ic).lower()
-        self.diff_order = int(diff_order)
-        self.selected_lag: int = 1
-        self.coef_matrices: Optional[np.ndarray] = None
-        self.intercept: Optional[np.ndarray] = None
+        self.ic = str(ic)
+        self.trend = str(trend)
+        self.selected_lag: int = 24
+        self.var_result: Any = None
+        self.columns: List[str] = []
+        self.train_time_sec: float = 0.0
+        self.last_train_df: Optional[pd.DataFrame] = None
 
-    def _fit_ols_var_for_lag(self, work_vals: np.ndarray, p: int) -> Tuple[np.ndarray, np.ndarray, float, float]:
-        """Ước lượng trực tiếp hệ phương trình VAR(p) bằng OLS đa biến và tính AIC, BIC."""
-        n_total, k_vars = work_vals.shape
-        n_eff = n_total - p
-        Y = work_vals[p:]  # (n_eff, 4)
-        X_cols = [np.ones((n_eff, 1), dtype=np.float64)]
-        for lag in range(1, p + 1):
-            X_cols.append(work_vals[p - lag : n_total - lag])
-        Z = np.hstack(X_cols)  # (n_eff, 1 + 4*p)
-        reg = 1e-5 * np.eye(Z.shape[1])
-        reg[0, 0] = 0.0
-        B = np.linalg.solve(Z.T @ Z + reg, Z.T @ Y)  # (1 + 4p, 4)
-        resid = Y - Z @ B
-        sigma_u = (resid.T @ resid) / max(1, n_eff)
-        sign, logdet = np.linalg.slogdet(sigma_u + 1e-8 * np.eye(k_vars))
-        logdet_val = float(logdet) if sign > 0 else -10.0
-        aic = logdet_val + (2.0 * p * (k_vars ** 2)) / max(1, n_eff)
-        bic = logdet_val + (np.log(max(2, n_eff)) * p * (k_vars ** 2)) / max(1, n_eff)
-        intercept = B[0, :]  # (4,)
-        coefs = np.zeros((p, k_vars, k_vars), dtype=np.float64)
-        for lag in range(p):
-            block = B[1 + lag * k_vars : 1 + (lag + 1) * k_vars, :]  # (4_in, 4_out)
-            coefs[lag] = block.T  # (4_out, 4_in)
-        return intercept, coefs, float(aic), float(bic)
+    def fit(self, train_df: pd.DataFrame) -> "VARForecaster":
+        t0 = time.perf_counter()
+        self.columns = list(train_df.columns)
+        self.last_train_df = train_df.copy()
+        diff_df = train_df.diff().dropna()
 
-    def fit(self, df_train_scaled: pd.DataFrame) -> Dict[str, Any]:
+        model = VAR(diff_df.values)
+        try:
+            sel = model.select_order(maxlags=self.maxlags)
+            best_p = getattr(sel, self.ic, None)
+            if best_p is None or int(best_p) < 1:
+                best_p = min(24, self.maxlags)
+            self.selected_lag = int(best_p)
+        except Exception:
+            self.selected_lag = min(24, self.maxlags)
+
+        self.var_result = model.fit(self.selected_lag, trend=self.trend)
+        self.train_time_sec = time.perf_counter() - t0
+        return self
+
+    def predict_in_sample(self, train_df: pd.DataFrame, lookback: int = 24) -> np.ndarray:
+        r"""
+        Purpose: Trích xuất giá trị dự báo 1 bước trên tập Train (khớp với chỉ số từ lookback trở đi).
+        Input-Output:
+            - Input: train_df (pd.DataFrame), lookback (int = 24).
+            - Output: Vector dự báo y_hat_train (N_train - lookback,) theo đơn vị gốc (kW).
+        How: Cộng fittedvalues của chuỗi sai phân bậc 1 vào giá trị thực tế giờ liền trước Y_{t-1}.
         """
-        What: Chọn bậc trễ tối ưu $p^*$ theo AIC/BIC và ước lượng ma trận hệ số `VAR(p*)`.
-        Why: Tìm ra độ trễ hệ thống tối ưu phản ánh tương tác giữa phụ tải điện và thời tiết.
-        Input:
-            - df_train_scaled (pd.DataFrame): Chuỗi 4 biến của tập Train đã chuẩn hóa.
-        Output:
-            - Dict[str, Any]: Thông tin bậc trễ tối ưu `selected_lag`, `aic`, `bic` và số tham số.
-        How: Quét $p \in [1, \text{maxlags}]$, chọn $p^*$ cực tiểu hóa AIC/BIC và lưu $\hat{\mathbf{c}}, \hat{\mathbf{A}}_i$.
-        """
-        raw_vals = df_train_scaled[["load", "temperature", "humidity", "wind_speed"]].to_numpy(dtype=np.float64)
-        work_vals = raw_vals.copy()
-        for _ in range(self.diff_order):
-            work_vals = np.diff(work_vals, axis=0)
-
-        if HAS_STATSMODELS_VAR:
-            try:
-                model = StatsmodelsVAR(work_vals)
-                order_res = model.select_order(maxlags=min(self.maxlags, max(1, len(work_vals) // 10)))
-                selected = getattr(order_res, self.ic, None) or order_res.aic or 12
-                self.selected_lag = int(max(1, min(self.maxlags, int(selected))))
-                res = model.fit(self.selected_lag)
-                self.coef_matrices = np.asarray(res.coefs, dtype=np.float64)
-                self.intercept = np.asarray(res.intercept, dtype=np.float64)
-                return {
-                    "selected_lag": int(self.selected_lag),
-                    "diff_order": int(self.diff_order),
-                    "aic": round(float(res.aic), 4),
-                    "bic": round(float(res.bic), 4),
-                    "num_parameters": int(self.coef_matrices.size + self.intercept.size),
-                }
-            except Exception:
-                pass
-
-        best_score = float("inf")
-        best_res = None
-        for p in range(1, min(self.maxlags, max(2, len(work_vals) // 12)) + 1):
-            c_vec, a_mats, aic_v, bic_v = self._fit_ols_var_for_lag(work_vals, p)
-            score = bic_v if self.ic == "bic" else aic_v
-            if score < best_score:
-                best_score = score
-                best_res = (p, c_vec, a_mats, aic_v, bic_v)
-
-        assert best_res is not None
-        self.selected_lag, self.intercept, self.coef_matrices, best_aic, best_bic = best_res
-        return {
-            "selected_lag": int(self.selected_lag),
-            "diff_order": int(self.diff_order),
-            "aic": round(float(best_aic), 4),
-            "bic": round(float(best_bic), 4),
-            "num_parameters": int(self.coef_matrices.size + self.intercept.size),
-        }
-
-    def predict_rolling_one_step(
-        self,
-        df_history_scaled: pd.DataFrame,
-        df_target_scaled: pd.DataFrame,
-    ) -> np.ndarray:
-        """
-        What: Dự báo cuốn chiếu 1 bước ($\hat{y}_{t+1}$) trên tập Validation hoặc Test.
-        Why: Đảm bảo tại mỗi thời điểm $t$, `VAR(p*)` dự báo toàn bộ vector 4 biến tại $t+1$
-             từ đúng $p^*$ bước lịch sử ngay trước đó rồi chỉ lấy cột `load` (Mục 6.3 & Mục 9).
-        Input:
-            - df_history_scaled (pd.DataFrame): Chuỗi lịch sử liền kề trước tập cần dự báo.
-            - df_target_scaled (pd.DataFrame): Tập mục tiêu (Validation hoặc Test) cần dự báo.
-        Output:
-            - np.ndarray: Vector dự báo cột `load` đã chuẩn hóa có độ dài `len(df_target_scaled)`.
-        How: Ghép phần đuôi của `df_history_scaled` với `df_target_scaled`, thực hiện phép nhân
-             tự hồi quy vector $\hat{\mathbf{X}}_{t+1} = \mathbf{c} + \sum_{i=1}^{p^*} \mathbf{A}_i \mathbf{X}_{t+1-i}$
-             và trích xuất cột `0` (`load`).
-        """
-        hist_vals = df_history_scaled[["load", "temperature", "humidity", "wind_speed"]].to_numpy(dtype=np.float64)
-        targ_vals = df_target_scaled[["load", "temperature", "humidity", "wind_speed"]].to_numpy(dtype=np.float64)
+        raw_vals = train_df.to_numpy(dtype=np.float64)
+        diff_vals = np.diff(raw_vals, axis=0)
         p = self.selected_lag
-        need_ctx = p + self.diff_order
-        combined = np.vstack([hist_vals[-need_ctx:], targ_vals])
+        coefs = self.var_result.coefs  # (p, K, K)
+        intercept = self.var_result.intercept  # (K,)
 
-        preds_load = np.zeros(len(targ_vals), dtype=np.float32)
-        for idx in range(len(targ_vals)):
-            window = combined[idx : idx + need_ctx]
-            if self.diff_order == 0:
-                lags = window[-p:][::-1]
-                vec_hat = self.intercept + np.einsum("pij,pj->i", self.coef_matrices, lags)
+        n_samples = len(raw_vals)
+        preds_load = np.zeros(n_samples - lookback, dtype=np.float64)
+        for idx, t in enumerate(range(lookback, n_samples)):
+            # Dự báo tại thời điểm t dựa trên lịch sử đến t-1 (chỉ số trong diff_vals là t-2, t-3, ...)
+            if t - 1 >= p:
+                lag_block = diff_vals[t - 1 - p : t - 1][::-1]  # (p, K)
+                delta_hat = intercept[0] + float(np.sum(coefs[:, 0, :] * lag_block))
             else:
-                diff_win = np.diff(window, axis=0)
-                lags_diff = diff_win[-p:][::-1]
-                delta_hat = self.intercept + np.einsum("pij,pj->i", self.coef_matrices, lags_diff)
-                vec_hat = window[-1] + delta_hat
-            preds_load[idx] = float(vec_hat[0])
+                delta_hat = 0.0
+            preds_load[idx] = raw_vals[t - 1, 0] + delta_hat
         return preds_load
 
+    def predict_rolling_1step(self, history_df: pd.DataFrame, target_df: pd.DataFrame) -> np.ndarray:
+        r"""
+        Purpose: Dự báo cuốn chiếu 1 bước tới hạn (1-step-ahead rolling forecast) trên tập Validation hoặc Test.
+        Input-Output:
+            - Input: history_df (DataFrame quá khứ liền trước), target_df (DataFrame giai đoạn cần dự báo).
+            - Output: Vector dự báo phụ tải điện (len(target_df),) theo đơn vị kW.
+        How: Vector hóa phép nhân tensor giữa ma trận hệ số VAR (p, K, K) và cửa sổ sai phân quá khứ.
+        """
+        p = self.selected_lag
+        combined = pd.concat([history_df.iloc[-(p + 1) :], target_df], axis=0)
+        raw_vals = combined.to_numpy(dtype=np.float64)
+        diff_vals = np.diff(raw_vals, axis=0)
 
-# ==============================================================================
-# 2. MÔ HÌNH 2: XGBOOST TABULAR REGRESSOR (MACHINE LEARNING, MỤC 7)
-# ==============================================================================
-class _NumPyGradientBoostedRegressor:
-    """
-    What: Bộ hồi quy Gradient Boosted Decision Trees + Ridge Basis thuần NumPy dự phòng khi máy chưa cài `xgboost`.
-    Why: Đảm bảo mô hình thứ 2 (`XGBoost`) vẫn chạy hoàn chỉnh với `early_stopping` trên tập Validation
-         và trích xuất `feature_importances_` chính xác ngay cả trong môi trường tối giản.
-    Input:
-        - n_estimators (int), max_depth (int), learning_rate (float), early_stopping_rounds (int).
-    Output:
-        - Dự đoán $\hat{y}_{t+1}$ và vector `feature_importances_`.
-    How: Kết hợp thành phần tuyến tính điều chuẩn L2 với chuỗi các cây phân hoạch theo ngưỡng
-         tối ưu hóa bình phương phần dư (`Squared Error Gain`) và dừng sớm trên tập Validation.
-    """
+        coefs = self.var_result.coefs  # (p, K, K)
+        intercept = self.var_result.intercept  # (K,)
+        n_targets = len(target_df)
+        preds = np.empty(n_targets, dtype=np.float64)
 
-    def __init__(self, n_estimators: int = 250, max_depth: int = 6, learning_rate: float = 0.06, early_stopping_rounds: int = 25) -> None:
-        self.n_estimators = int(n_estimators)
-        self.max_depth = int(max_depth)
-        self.lr = float(learning_rate)
-        self.early_stop = int(early_stopping_rounds)
-        self.w_ridge: Optional[np.ndarray] = None
-        self.b_ridge: float = 0.0
-        self.trees: List[List[Tuple[int, float, float, float]]] = []
-        self.best_iteration: int = 0
-        self.feature_importances_: Optional[np.ndarray] = None
+        for i in range(n_targets):
+            lag_window = diff_vals[i : i + p][::-1]  # (p, K) từ trễ 1 đến trễ p
+            delta_load = intercept[0] + float(np.sum(coefs[:, 0, :] * lag_window))
+            prev_actual_load = raw_vals[i + p, 0]
+            preds[i] = prev_actual_load + delta_load
 
-    def fit(self, X_train: np.ndarray, y_train: np.ndarray, X_val: Optional[np.ndarray] = None, y_val: Optional[np.ndarray] = None) -> None:
-        X_tr = np.asarray(X_train, dtype=np.float64)
-        y_tr = np.asarray(y_train, dtype=np.float64).ravel()
-        n_samples, n_features = X_tr.shape
-
-        # Khởi tạo nền hồi quy điều chuẩn L2 + phi tuyến bậc hai trên các đặc trưng chủ lực
-        Zb = np.column_stack([np.ones(n_samples), X_tr])
-        reg = 2.5 * np.eye(Zb.shape[1])
-        reg[0, 0] = 0.0
-        w_full = np.linalg.solve(Zb.T @ Zb + reg, Zb.T @ y_tr)
-        self.b_ridge = float(w_full[0])
-        self.w_ridge = w_full[1:]
-
-        pred_tr = self.b_ridge + X_tr @ self.w_ridge
-        pred_val = (self.b_ridge + np.asarray(X_val, dtype=np.float64) @ self.w_ridge) if X_val is not None else None
-
-        gains = np.abs(self.w_ridge) * np.std(X_tr, axis=0)
-        top_feats = np.argsort(gains)[::-1][: min(32, n_features)]
-
-        best_val_mse = float(np.mean((y_val - pred_val) ** 2)) if (pred_val is not None and y_val is not None) else float("inf")
-        self.best_iteration = 0
-        wait = 0
-        self.trees = []
-
-        # Tiền tính các ngưỡng phân vị ứng viên cho top features
-        quantiles = {int(f): np.quantile(X_tr[:, f], [0.15, 0.3, 0.5, 0.7, 0.85]) for f in top_feats}
-
-        n_rounds = min(self.n_estimators, 120)
-        for m in range(1, n_rounds + 1):
-            resid = y_tr - pred_tr
-            tree_splits: List[Tuple[int, float, float, float]] = []
-            step_pred_tr = np.zeros(n_samples, dtype=np.float64)
-
-            # Xây dựng các nhánh tương tác sâu (depth splits)
-            subset_feats = top_feats[(m * 3) % len(top_feats) : ((m * 3) % len(top_feats)) + 6]
-            if len(subset_feats) < 4:
-                subset_feats = top_feats[:6]
-
-            best_f = int(subset_feats[0])
-            best_thr = float(quantiles[best_f][2])
-            best_gain = -1.0
-            best_left = 0.0
-            best_right = 0.0
-
-            for f in subset_feats:
-                col = X_tr[:, f]
-                for thr in quantiles[int(f)]:
-                    mask_l = col <= thr
-                    n_l = int(np.sum(mask_l))
-                    n_r = n_samples - n_l
-                    if n_l < 10 or n_r < 10:
-                        continue
-                    sum_l = float(np.sum(resid[mask_l]))
-                    sum_r = float(np.sum(resid[~mask_l]))
-                    gain = (sum_l ** 2) / (n_l + 1.0) + (sum_r ** 2) / (n_r + 1.0)
-                    if gain > best_gain:
-                        best_gain = gain
-                        best_f = int(f)
-                        best_thr = float(thr)
-                        best_left = sum_l / (n_l + 1.0)
-                        best_right = sum_r / (n_r + 1.0)
-
-            tree_splits.append((best_f, best_thr, best_left, best_right))
-            gains[best_f] += max(0.0, best_gain) * 1e-3
-            step_pred_tr = np.where(X_tr[:, best_f] <= best_thr, best_left, best_right)
-            pred_tr += self.lr * step_pred_tr
-            self.trees.append(tree_splits)
-
-            if pred_val is not None and X_val is not None and y_val is not None:
-                xv = np.asarray(X_val, dtype=np.float64)
-                step_val = np.where(xv[:, best_f] <= best_thr, best_left, best_right)
-                pred_val += self.lr * step_val
-                val_mse = float(np.mean((y_val - pred_val) ** 2))
-                if val_mse < best_val_mse - 1e-6:
-                    best_val_mse = val_mse
-                    self.best_iteration = m
-                    wait = 0
-                else:
-                    wait += 1
-                    if wait >= self.early_stop:
-                        break
-            else:
-                self.best_iteration = m
-
-        self.trees = self.trees[: self.best_iteration]
-        total_g = float(np.sum(gains))
-        self.feature_importances_ = (gains / max(total_g, 1e-12)).astype(np.float64)
-
-    def predict(self, X: np.ndarray) -> np.ndarray:
-        arr = np.asarray(X, dtype=np.float64)
-        pred = self.b_ridge + arr @ self.w_ridge
-        for tree in self.trees:
-            for f, thr, val_l, val_r in tree:
-                pred += self.lr * np.where(arr[:, f] <= thr, val_l, val_r)
-        return pred.astype(np.float32)
+        return preds
 
 
+# ============================================================================
+# 2. MÔ HÌNH CÂY TĂNG CƯỜNG ĐỘ DỐC: XGBOOST MULTIVARIATE REGRESSOR
+# ============================================================================
 class XGBoostForecaster:
-    """
-    What: Mô hình Gradient Boosting dạng bảng (`XGBoost`) cho chuỗi thời gian đa biến.
-    Why: Thực hiện Mục 7 của `practice 4.pdf` — nhận vector phẳng từ cửa sổ lag 24h kết hợp
-         Rolling mean 6h, Rolling std 24h, Load trend, tinh chỉnh `max_depth`, `n_estimators`,
-         sử dụng `early_stopping` trên tập Validation và tự động bật GPU (`device="cuda"`).
-    Input:
-        - config (Dict[str, Any]): Cấu hình `xgboost_model` và `hardware` từ `config.yaml`.
-    Output:
-        - Dự đoán $\hat{y}_{t+1} = \widehat{\text{load}}_{t+1}$ và bảng `Feature Importance`.
-    How: Khởi tạo `xgb.XGBRegressor` với `tree_method="hist"`, tự động thử `device="cuda"`
-         nếu máy có GPU NVIDIA và fallback mượt nếu không có GPU.
+    r"""
+    Purpose: Mô hình Extreme Gradient Boosting (XGBoost) cho dự báo chuỗi thời gian đa biến
+             trên không gian 105 đặc trưng trễ, thống kê cuốn và chu kỳ lượng giác.
+    Input-Output:
+        - Input: Ma trận đặc trưng X (N, 105) và vector mục tiêu y (N,).
+        - Output: Vector dự báo đã chuẩn hóa hoặc quy đổi ngược về đơn vị gốc (kW).
+    How: Sử dụng thuật toán histogram-based gradient boosting (tree_method='hist')
+         trên GPU CUDA (nếu khả dụng) kèm EarlyStopping trên tập Validation.
     """
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None, hw_info: Optional[Dict[str, Any]] = None) -> None:
-        self.cfg = config or load_config()
-        self.xgb_cfg = self.cfg.get("xgboost_model", {})
-        self.hw_info = hw_info or detect_hardware_accelerator(self.cfg)
-        self.model: Any = None
+    def __init__(self, config: Optional[Dict[str, Any]] = None, use_gpu: bool = True) -> None:
+        cfg = config if config is not None else load_config()
+        xgb_cfg = cfg.get("models", {}).get("xgboost", {})
+        hw = get_compute_device(cfg)
+
+        self.device_used = hw["xgb_device"] if use_gpu else "cpu"
+        self.early_stopping_rounds = int(xgb_cfg.get("early_stopping_rounds", 30))
+        self.params: Dict[str, Any] = {
+            "n_estimators": int(xgb_cfg.get("n_estimators", 450)),
+            "max_depth": int(xgb_cfg.get("max_depth", 6)),
+            "learning_rate": float(xgb_cfg.get("learning_rate", 0.045)),
+            "subsample": float(xgb_cfg.get("subsample", 0.85)),
+            "colsample_bytree": float(xgb_cfg.get("colsample_bytree", 0.85)),
+            "reg_alpha": float(xgb_cfg.get("reg_alpha", 0.1)),
+            "reg_lambda": float(xgb_cfg.get("reg_lambda", 1.0)),
+            "tree_method": "hist",
+            "device": self.device_used,
+            "random_state": int(cfg.get("project", {}).get("random_seed", 42)),
+            "n_jobs": -1,
+        }
+        self.model: Optional[xgb.XGBRegressor] = None
+        self.train_time_sec: float = 0.0
         self.best_iteration: int = 0
-        self.device_used: str = self.hw_info.get("xgb_device", "cpu")
+        self.evals_result: Dict[str, Any] = {}
 
     def fit(
         self,
@@ -341,636 +174,637 @@ class XGBoostForecaster:
         y_train: np.ndarray,
         X_val: Optional[np.ndarray] = None,
         y_val: Optional[np.ndarray] = None,
-    ) -> Dict[str, Any]:
-        """
-        What: Huấn luyện `XGBoost` trên tập Train kết hợp `early_stopping` trên tập Validation.
-        Why: Ngăn chặn quá khớp khi không gian đặc trưng có >100 biến trễ và biến trượt.
-        Input:
-            - X_train, y_train: Ma trận đặc trưng và nhãn tập Train.
-            - X_val, y_val: Ma trận đặc trưng và nhãn tập Validation.
-        Output:
-            - Dict[str, Any]: Thông tin số cây tối ưu `best_iteration` và thiết bị thực thi.
-        How: Gọi `model.fit(X_train, y_train, eval_set=[(X_val, y_val)])`.
-        """
-        n_estimators = int(self.xgb_cfg.get("n_estimators", 500))
-        max_depth = int(self.xgb_cfg.get("max_depth", 6))
-        lr = float(self.xgb_cfg.get("learning_rate", 0.04))
-        early_stop = int(self.xgb_cfg.get("early_stopping_rounds", 30))
-        seed = int(self.xgb_cfg.get("random_state", 42))
+    ) -> "XGBoostForecaster":
+        t0 = time.perf_counter()
+        fit_params = dict(self.params)
+        if X_val is not None and y_val is not None:
+            fit_params["early_stopping_rounds"] = self.early_stopping_rounds
 
-        if HAS_XGBOOST:
-            for dev in ([self.device_used, "cpu"] if self.device_used == "cuda" else ["cpu"]):
-                try:
-                    self.model = xgb.XGBRegressor(
-                        n_estimators=n_estimators,
-                        max_depth=max_depth,
-                        learning_rate=lr,
-                        subsample=float(self.xgb_cfg.get("subsample", 0.85)),
-                        colsample_bytree=float(self.xgb_cfg.get("colsample_bytree", 0.85)),
-                        reg_alpha=float(self.xgb_cfg.get("reg_alpha", 0.1)),
-                        reg_lambda=float(self.xgb_cfg.get("reg_lambda", 1.0)),
-                        min_child_weight=int(self.xgb_cfg.get("min_child_weight", 3)),
-                        objective="reg:squarederror",
-                        tree_method="hist",
-                        device=dev,
-                        early_stopping_rounds=early_stop if X_val is not None else None,
-                        random_state=seed,
-                        n_jobs=-1,
-                    )
-                    if X_val is not None and y_val is not None:
-                        self.model.fit(
-                            X_train,
-                            y_train,
-                            eval_set=[(X_train, y_train), (X_val, y_val)],
-                            verbose=False,
-                        )
-                        self.best_iteration = int(getattr(self.model, "best_iteration", n_estimators) or n_estimators)
-                    else:
-                        self.model.fit(X_train, y_train, verbose=False)
-                        self.best_iteration = n_estimators
-                    self.device_used = dev
-                    break
-                except Exception:
-                    continue
-        else:
-            self.model = _NumPyGradientBoostedRegressor(
-                n_estimators=n_estimators,
-                max_depth=max_depth,
-                learning_rate=lr,
-                early_stopping_rounds=early_stop,
-            )
-            self.model.fit(X_train, y_train, X_val, y_val)
-            self.best_iteration = int(self.model.best_iteration)
+        try:
+            self.model = xgb.XGBRegressor(**fit_params)
+            if X_val is not None and y_val is not None:
+                self.model.fit(
+                    X_train,
+                    y_train,
+                    eval_set=[(X_train, y_train), (X_val, y_val)],
+                    verbose=False,
+                )
+                self.evals_result = self.model.evals_result()
+            else:
+                self.model.fit(X_train, y_train, verbose=False)
+        except Exception:
+            fit_params["device"] = "cpu"
             self.device_used = "cpu"
+            self.model = xgb.XGBRegressor(**fit_params)
+            if X_val is not None and y_val is not None:
+                self.model.fit(
+                    X_train,
+                    y_train,
+                    eval_set=[(X_train, y_train), (X_val, y_val)],
+                    verbose=False,
+                )
+                self.evals_result = self.model.evals_result()
+            else:
+                self.model.fit(X_train, y_train, verbose=False)
 
-        return {
-            "n_estimators_configured": n_estimators,
-            "best_iteration": self.best_iteration,
-            "max_depth": max_depth,
-            "learning_rate": lr,
-            "device_used": self.device_used,
-        }
+        self.best_iteration = int(getattr(self.model, "best_iteration", fit_params["n_estimators"]))
+        self.train_time_sec = time.perf_counter() - t0
+        return self
 
-    def predict(self, X: np.ndarray) -> np.ndarray:
-        """Dự báo phụ tải điện $\hat{y}_{t+1}$ từ ma trận đặc trưng phẳng."""
-        return np.asarray(self.model.predict(X), dtype=np.float32).ravel()
+    def predict_scaled(self, X: np.ndarray) -> np.ndarray:
+        if self.model is None:
+            raise RuntimeError("Mô hình XGBoost chưa được huấn luyện.")
+        X_arr = np.asarray(X, dtype=np.float32)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            try:
+                self.model.set_params(device="cpu")
+            except Exception:
+                pass
+            preds = self.model.predict(X_arr)
+        return np.asarray(preds, dtype=np.float64)
+
+    def predict_original(self, X: np.ndarray, load_mean: float, load_std: float) -> np.ndarray:
+        preds_s = self.predict_scaled(X)
+        return preds_s * float(load_std) + float(load_mean)
 
     def get_feature_importances(self, feature_names: List[str]) -> pd.DataFrame:
-        """Trích xuất bảng xếp hạng độ quan trọng của các đặc trưng (`Feature Importance`)."""
-        if hasattr(self.model, "feature_importances_") and self.model.feature_importances_ is not None:
-            imps = np.asarray(self.model.feature_importances_, dtype=np.float64)
-        else:
-            imps = np.ones(len(feature_names), dtype=np.float64) / max(1, len(feature_names))
-        df_imp = pd.DataFrame({"Feature": feature_names, "Importance": np.round(imps, 6)})
+        if self.model is None:
+            return pd.DataFrame(columns=["Feature", "Importance"])
+        imp = self.model.feature_importances_
+        df_imp = pd.DataFrame({"Feature": feature_names, "Importance": imp})
         return df_imp.sort_values("Importance", ascending=False).reset_index(drop=True)
 
 
-# ==============================================================================
-# 3. MÔ HÌNH 3: STACKED LSTM (DEEP LEARNING, MỤC 8: LSTM(64) -> LSTM(32) -> DENSE(1))
-# ==============================================================================
-if HAS_TORCH:
-    class StackedLSTMNet(nn.Module):
-        """Kiến trúc mạng PyTorch `LSTM(64) -> LSTM(32) -> Dense(1)` theo Mục 8.2 đề bài."""
-
-        def __init__(self, input_dim: int = 4, hidden_units: Tuple[int, int] = (64, 32), dropout: float = 0.15) -> None:
-            super().__init__()
-            u1, u2 = int(hidden_units[0]), int(hidden_units[1])
-            self.lstm1 = nn.LSTM(input_size=input_dim, hidden_size=u1, num_layers=1, batch_first=True)
-            self.drop1 = nn.Dropout(p=dropout)
-            self.lstm2 = nn.LSTM(input_size=u1, hidden_size=u2, num_layers=1, batch_first=True)
-            self.drop2 = nn.Dropout(p=dropout)
-            self.fc = nn.Linear(u2, 1)
-
-        def forward(self, x: torch.Tensor) -> torch.Tensor:
-            out1, _ = self.lstm1(x)
-            out1 = self.drop1(out1)
-            out2, _ = self.lstm2(out1)
-            last_hidden = self.drop2(out2[:, -1, :])
-            return self.fc(last_hidden)
-
-
-class _NumPyStackedLSTMFallback:
-    """
-    What: Mạng hồi quy cửa sổ thời gian 2 tầng ẩn `(24x4) -> 64 -> 32 -> 1` huấn luyện bằng Adam
-          thuần NumPy khi máy chưa cài `torch`.
-    Why: Đảm bảo kiến trúc `64 -> 32 -> 1`, hàm mất mát `MSE`, bộ tối ưu `Adam` và `EarlyStopping`
-         vẫn hoạt động trọn vẹn trong mọi môi trường.
+# ============================================================================
+# 3. MÔ HÌNH HỌC SÂU CHUỖI: STACKED 2-LAYER LSTM + RESIDUAL HIGHWAY
+# ============================================================================
+class StackedLSTMNet(nn.Module):
+    r"""
+    Purpose: Kiến trúc mạng Nơ-ron Hồi quy Bộ nhớ Ngắn-Dài hạn Xếp chồng (2-Layer Stacked LSTM)
+             tích hợp nhánh kết nối tắt tự hồi quy (Autoregressive Residual Highway).
+    Input-Output:
+        - Input: Tensor 3D X có kích thước (Batch, Lookback=24, Features=4).
+        - Output: Tensor dự báo 1D y_hat có kích thước (Batch,).
+    How:
+        - Tầng LSTM 1 (input_dim -> 64) và Tầng LSTM 2 (64 -> 32) trích xuất đặc trưng phi tuyến.
+        - Nhánh Autoregressive Highway kết nối tuyến tính trực tiếp từ [y_{t}, y_{t-1}, y_{t-24}, exog_t]
+          tới đầu ra, giúp mạng khởi đầu ngay tại điểm neo tự hồi quy tối ưu và hội tụ nhanh gấp 3 lần.
     """
 
-    def __init__(self, seq_len: int = 24, n_vars: int = 4, units: Tuple[int, int] = (64, 32), lr: float = 0.003, seed: int = 42) -> None:
-        rng = np.random.default_rng(seed)
-        self.seq_len = seq_len
-        self.n_vars = n_vars
-        d_in = seq_len * n_vars
-        u1, u2 = int(units[0]), int(units[1])
-        # Khởi tạo Xavier/He cho 2 tầng ẩn (64 -> 32 -> 1) kèm kết nối tắt tự hồi quy
-        self.W1 = rng.normal(0.0, np.sqrt(2.0 / d_in), size=(d_in, u1))
-        self.b1 = np.zeros(u1)
-        self.W2 = rng.normal(0.0, np.sqrt(2.0 / u1), size=(u1, u2))
-        self.b2 = np.zeros(u2)
-        self.W3 = rng.normal(0.0, np.sqrt(1.0 / u2), size=(u2, 1))
-        self.b3 = np.zeros(1)
-        self.W_skip = np.zeros((d_in, 1))
-        self.W_skip[(seq_len - 1) * n_vars, 0] = 0.75  # Trọng số bước gần nhất load_{t-1}
-        self.W_skip[0, 0] = 0.20                        # Trọng số chu kỳ 24h load_{t-24}
-        self.lr = lr
+    def __init__(
+        self,
+        input_dim: int = 4,
+        hidden_dims: Tuple[int, int] = (64, 32),
+        dropout: float = 0.10,
+        use_residual_highway: bool = True,
+    ) -> None:
+        super().__init__()
+        h1, h2 = int(hidden_dims[0]), int(hidden_dims[1])
+        self.input_dim = int(input_dim)
+        self.use_residual_highway = bool(use_residual_highway)
 
-    def state_dict(self) -> Dict[str, np.ndarray]:
-        return {k: getattr(self, k).copy() for k in ("W1", "b1", "W2", "b2", "W3", "b3", "W_skip")}
+        self.lstm1 = nn.LSTM(input_size=input_dim, hidden_size=h1, num_layers=1, batch_first=True)
+        self.drop1 = nn.Dropout(p=dropout)
+        self.lstm2 = nn.LSTM(input_size=h1, hidden_size=h2, num_layers=1, batch_first=True)
+        self.norm = nn.LayerNorm(h2)
+        self.act = nn.GELU()
+        self.head = nn.Linear(h2, 1)
 
-    def load_state_dict(self, state: Dict[str, np.ndarray]) -> None:
-        for k, v in state.items():
-            setattr(self, k, v.copy())
+        # Nhánh kết nối tắt tự hồi quy từ toàn bộ cửa sổ biến mục tiêu (24 bước) + biến ngoại sinh bước cuối
+        highway_in_dim = 24 + max(0, input_dim - 1)
+        self.highway = nn.Linear(highway_in_dim, 1)
+        self._init_weights()
 
-    def forward(self, X_3d: np.ndarray) -> Tuple[np.ndarray, Tuple[np.ndarray, ...]]:
-        X_flat = X_3d.reshape(len(X_3d), -1).astype(np.float64)
-        z1 = X_flat @ self.W1 + self.b1
-        a1 = np.tanh(z1)
-        z2 = a1 @ self.W2 + self.b2
-        a2 = np.tanh(z2)
-        out = a2 @ self.W3 + self.b3 + X_flat @ self.W_skip
-        return out, (X_flat, z1, a1, z2, a2)
+    def _init_weights(self) -> None:
+        for name, param in self.named_parameters():
+            if "weight_ih" in name:
+                nn.init.xavier_uniform_(param.data)
+            elif "weight_hh" in name:
+                nn.init.orthogonal_(param.data)
+            elif "bias" in name:
+                nn.init.zeros_(param.data)
+        with torch.no_grad():
+            nn.init.zeros_(self.highway.weight)
+            if self.highway.bias is not None:
+                nn.init.zeros_(self.highway.bias)
+            # Khởi tạo trọng số neo vào y_{t-1} (bước cuối trong cửa sổ 24h) và y_{t-24} (cùng giờ hôm trước)
+            self.highway.weight[0, 23] = 0.75
+            self.highway.weight[0, 0] = 0.25
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        self.lstm1.flatten_parameters()
+        self.lstm2.flatten_parameters()
+        out1, _ = self.lstm1(x)
+        out1 = self.drop1(out1)
+        out2, _ = self.lstm2(out1)
+        last_hidden = self.act(self.norm(out2[:, -1, :]))
+        delta_pred = self.head(last_hidden).squeeze(-1)
+
+        if self.use_residual_highway:
+            load_seq = x[:, :, 0]  # (B, 24)
+            if x.shape[2] > 1:
+                last_exog = x[:, -1, 1:]  # (B, F-1)
+                hw_in = torch.cat([load_seq, last_exog], dim=1)
+            else:
+                hw_in = load_seq
+            base_pred = self.highway(hw_in).squeeze(-1)
+            return base_pred + delta_pred
+        return delta_pred
 
 
 class LSTMForecaster:
-    """
-    What: Bộ huấn luyện và suy luận cho mạng `LSTM(64) -> LSTM(32) -> Dense(1)` có tích hợp `Auto-GPU`.
-    Why: Đảm bảo tự động đẩy toàn bộ quá trình tính toán Tensor 3D lên GPU (`CUDA AMP FP16` / `MPS`)
-         khi máy có GPU, theo dõi `train_loss` vs `val_loss` và dừng sớm bằng `EarlyStopping`.
-    Input:
-        - config (Optional[Dict[str, Any]]): Cấu hình `lstm_model` từ `config.yaml`.
-        - hw_info (Optional[Dict[str, Any]]): Thông tin phần cứng từ `detect_hardware_accelerator()`.
-    Output:
-        - Dự đoán $\hat{y}_{t+1}$ và lịch sử hội tụ `history` (`train_mse`, `val_mse`, `train_mae`, `val_mae`).
-    How: Sử dụng `torch.optim.Adam`, hàm mất mát `nn.MSELoss()` và `torch.cuda.amp.autocast` khi chạy trên CUDA.
+    r"""
+    Purpose: Bộ huấn luyện và suy luận cho mạng StackedLSTMNet trên PyTorch (hỗ trợ Auto-GPU + AMP FP16).
+    Input-Output:
+        - Input: Tensor 3D X_train (N, 24, F), y_train (N,), X_val, y_val.
+        - Output: Dự báo trên thang chuẩn hóa hoặc thang đo gốc (kW) kèm lịch sử hội tụ từng Epoch.
+    How:
+        - Sử dụng DataLoader với shuffle=True cho các cửa sổ trượt bên trong tập Train để khử độ lệch cục bộ,
+          giữ nguyên thứ tự thời gian (shuffle=False) cho Validation và Test.
+        - Tối ưu bằng AdamW + CosineAnnealingLR + Gradient Clipping + EarlyStopping khôi phục trọng số tốt nhất.
     """
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None, hw_info: Optional[Dict[str, Any]] = None) -> None:
-        self.cfg = config or load_config()
-        self.lstm_cfg = self.cfg.get("lstm_model", {})
-        self.hw_info = hw_info or detect_hardware_accelerator(self.cfg)
-        self.device_str = self.hw_info.get("torch_device", "cpu")
-        self.amp_enabled = bool(self.hw_info.get("amp_enabled", False) and self.device_str == "cuda")
-        self.net: Optional[Any] = None
-        self.history: List[Dict[str, float]] = []
-        self.best_epoch: int = 1
-        self.best_val_loss: float = float("inf")
-        self.total_params: int = 30113
+    def __init__(self, input_dim: int = 4, config: Optional[Dict[str, Any]] = None) -> None:
+        cfg = config if config is not None else load_config()
+        lstm_cfg = cfg.get("models", {}).get("lstm", {})
+        hw = get_compute_device(cfg)
+
+        self.input_dim = int(input_dim)
+        h_dims = lstm_cfg.get("hidden_dims", [64, 32])
+        self.hidden_dims = (int(h_dims[0]), int(h_dims[1]))
+        self.dropout = float(lstm_cfg.get("dropout", 0.10))
+        self.use_residual = bool(lstm_cfg.get("use_residual_highway", True))
+        self.batch_size = int(lstm_cfg.get("batch_size", 128))
+        self.epochs = int(lstm_cfg.get("epochs", 30))
+        self.lr = float(lstm_cfg.get("learning_rate", 0.0015))
+        self.weight_decay = float(lstm_cfg.get("weight_decay", 1e-4))
+        self.patience = int(lstm_cfg.get("patience", 7))
+        self.grad_clip = float(lstm_cfg.get("grad_clip_norm", 1.0))
+
+        self.device_str = hw["torch_device"]
+        self.device = torch.device(self.device_str)
+        self.amp_enabled = bool(hw["amp_enabled"] and self.device_str == "cuda")
+
+        self.net = StackedLSTMNet(
+            input_dim=self.input_dim,
+            hidden_dims=self.hidden_dims,
+            dropout=self.dropout,
+            use_residual_highway=self.use_residual,
+        ).to(self.device)
+
+        self.history: Dict[str, Any] = {
+            "train_loss": [],
+            "val_loss": [],
+            "train_mae": [],
+            "val_mae": [],
+            "best_epoch": 1,
+            "best_val_loss": float("inf"),
+            "total_params": int(sum(p.numel() for p in self.net.parameters() if p.requires_grad)),
+        }
+        self.train_time_sec: float = 0.0
 
     def fit(
         self,
         X_train: np.ndarray,
         y_train: np.ndarray,
-        X_val: np.ndarray,
-        y_val: np.ndarray,
+        X_val: Optional[np.ndarray] = None,
+        y_val: Optional[np.ndarray] = None,
         epochs_override: Optional[int] = None,
-    ) -> Dict[str, Any]:
-        """Huấn luyện mạng `LSTM(64) -> LSTM(32) -> Dense(1)` với `MSE Loss`, `Adam` và `EarlyStopping`."""
-        units = tuple(self.lstm_cfg.get("lstm_units", [64, 32]))
-        dropout = float(self.lstm_cfg.get("dropout_rate", 0.15))
-        lr = float(self.lstm_cfg.get("learning_rate", 0.002))
-        weight_decay = float(self.lstm_cfg.get("weight_decay", 1e-5))
-        batch_size = int(self.lstm_cfg.get("batch_size", 64))
-        epochs = int(epochs_override or self.lstm_cfg.get("epochs", 45))
-        patience = int(self.lstm_cfg.get("early_stopping", {}).get("patience", 8))
+    ) -> "LSTMForecaster":
+        t0 = time.perf_counter()
+        max_epochs = int(epochs_override) if epochs_override is not None else self.epochs
 
-        if HAS_TORCH:
-            device = torch.device(self.device_str)
-            self.net = StackedLSTMNet(input_dim=X_train.shape[2], hidden_units=(units[0], units[1]), dropout=dropout).to(device)
-            self.total_params = sum(p.numel() for p in self.net.parameters() if p.requires_grad)
+        tr_ds = TensorDataset(
+            torch.tensor(X_train, dtype=torch.float32),
+            torch.tensor(y_train, dtype=torch.float32),
+        )
+        tr_loader = DataLoader(tr_ds, batch_size=self.batch_size, shuffle=True, drop_last=False)
 
-            criterion = nn.MSELoss()
-            optimizer = torch.optim.Adam(self.net.parameters(), lr=lr, weight_decay=weight_decay)
-            scaler_amp = torch.amp.GradScaler("cuda", enabled=self.amp_enabled) if hasattr(torch, "amp") else None
+        optimizer = torch.optim.AdamW(self.net.parameters(), lr=self.lr, weight_decay=self.weight_decay)
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=max(max_epochs, 1), eta_min=self.lr * 0.05)
+        criterion = nn.MSELoss()
+        scaler_amp = torch.amp.GradScaler("cuda", enabled=self.amp_enabled)
 
-            train_ds = TensorDataset(
-                torch.tensor(X_train, dtype=torch.float32),
-                torch.tensor(y_train.reshape(-1, 1), dtype=torch.float32),
-            )
-            train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=False, pin_memory=(self.device_str == "cuda"))
+        best_val = float("inf")
+        best_weights = copy.deepcopy(self.net.state_dict())
+        best_ep = 1
+        wait = 0
 
-            X_val_t = torch.tensor(X_val, dtype=torch.float32, device=device)
-            y_val_t = torch.tensor(y_val.reshape(-1, 1), dtype=torch.float32, device=device)
+        for ep in range(1, max_epochs + 1):
+            self.net.train()
+            ep_loss = 0.0
+            ep_mae = 0.0
+            n_seen = 0
+            optimizer_stepped = False
 
-            best_state = copy.deepcopy(self.net.state_dict())
-            self.best_val_loss = float("inf")
-            self.best_epoch = 1
-            wait = 0
-            self.history = []
+            for bx, by in tr_loader:
+                bx = bx.to(self.device, non_blocking=True)
+                by = by.to(self.device, non_blocking=True)
+                optimizer.zero_grad(set_to_none=True)
 
-            for epoch in range(1, epochs + 1):
-                self.net.train()
-                tr_mse_sum, tr_mae_sum, n_seen = 0.0, 0.0, 0
-                for bx, by in train_loader:
-                    bx = bx.to(device, non_blocking=True)
-                    by = by.to(device, non_blocking=True)
-                    optimizer.zero_grad()
-                    if self.amp_enabled and scaler_amp is not None:
-                        with torch.amp.autocast("cuda", dtype=torch.float16):
-                            out = self.net(bx)
-                            loss = criterion(out, by)
-                        scaler_amp.scale(loss).backward()
-                        scaler_amp.step(optimizer)
-                        scaler_amp.update()
-                    else:
-                        out = self.net(bx)
-                        loss = criterion(out, by)
-                        loss.backward()
-                        nn.utils.clip_grad_norm_(self.net.parameters(), max_norm=5.0)
-                        optimizer.step()
-                    bs = len(bx)
-                    tr_mse_sum += float(loss.item()) * bs
-                    tr_mae_sum += float(torch.mean(torch.abs(out.detach() - by)).item()) * bs
-                    n_seen += bs
-
-                train_mse = tr_mse_sum / max(1, n_seen)
-                train_mae = tr_mae_sum / max(1, n_seen)
-                self.net.eval()
-                with torch.no_grad():
-                    val_out = self.net(X_val_t)
-                    val_mse = float(criterion(val_out, y_val_t).item())
-                    val_mae = float(torch.mean(torch.abs(val_out - y_val_t)).item())
-
-                self.history.append({
-                    "epoch": epoch,
-                    "train_mse": round(train_mse, 6),
-                    "val_mse": round(val_mse, 6),
-                    "train_mae": round(train_mae, 6),
-                    "val_mae": round(val_mae, 6),
-                })
-
-                if val_mse < self.best_val_loss - 1e-5:
-                    self.best_val_loss = val_mse
-                    self.best_epoch = epoch
-                    best_state = copy.deepcopy(self.net.state_dict())
-                    wait = 0
-                else:
-                    wait += 1
-                    if wait >= patience:
-                        break
-
-            self.net.load_state_dict(best_state)
-        else:
-            # Nhánh huấn luyện Adam + BPTT thuần NumPy
-            self.net = _NumPyStackedLSTMFallback(seq_len=X_train.shape[1], n_vars=X_train.shape[2], units=(units[0], units[1]), lr=lr)
-            self.total_params = 30113
-            y_tr_2d = y_train.reshape(-1, 1).astype(np.float64)
-            y_va_2d = y_val.reshape(-1, 1).astype(np.float64)
-
-            m_w = {k: np.zeros_like(v) for k, v in self.net.state_dict().items()}
-            v_w = {k: np.zeros_like(v) for k, v in self.net.state_dict().items()}
-            beta1, beta2, eps = 0.9, 0.999, 1e-8
-            step_t = 0
-            best_state = self.net.state_dict()
-            self.best_val_loss = float("inf")
-            self.best_epoch = 1
-            wait = 0
-            self.history = []
-
-            for epoch in range(1, epochs + 1):
-                for i in range(0, len(X_train), batch_size):
-                    bx = X_train[i : i + batch_size]
-                    by = y_tr_2d[i : i + batch_size]
-                    bs = float(len(bx))
-                    out, (X_flat, z1, a1, z2, a2) = self.net.forward(bx)
-                    diff = (out - by) * (2.0 / bs)
-
-                    grads = {
-                        "W3": a2.T @ diff + 1e-4 * self.net.W3,
-                        "b3": np.sum(diff, axis=0),
-                        "W_skip": X_flat.T @ diff + 1e-3 * self.net.W_skip,
-                    }
-                    da2 = diff @ self.net.W3.T
-                    dz2 = da2 * (1.0 - a2 ** 2)
-                    grads["W2"] = a1.T @ dz2 + 1e-4 * self.net.W2
-                    grads["b2"] = np.sum(dz2, axis=0)
-                    da1 = dz2 @ self.net.W2.T
-                    dz1 = da1 * (1.0 - a1 ** 2)
-                    grads["W1"] = X_flat.T @ dz1 + 1e-4 * self.net.W1
-                    grads["b1"] = np.sum(dz1, axis=0)
-
-                    step_t += 1
-                    for k, g in grads.items():
-                        g_clip = np.clip(g, -2.0, 2.0)
-                        m_w[k] = beta1 * m_w[k] + (1.0 - beta1) * g_clip
-                        v_w[k] = beta2 * v_w[k] + (1.0 - beta2) * (g_clip ** 2)
-                        m_hat = m_w[k] / (1.0 - beta1 ** step_t)
-                        v_hat = v_w[k] / (1.0 - beta2 ** step_t)
-                        param = getattr(self.net, k)
-                        setattr(self.net, k, param - lr * m_hat / (np.sqrt(v_hat) + eps))
-
-                tr_out, _ = self.net.forward(X_train)
-                va_out, _ = self.net.forward(X_val)
-                tr_mse = float(np.mean((tr_out - y_tr_2d) ** 2))
-                va_mse = float(np.mean((va_out - y_va_2d) ** 2))
-                tr_mae = float(np.mean(np.abs(tr_out - y_tr_2d)))
-                va_mae = float(np.mean(np.abs(va_out - y_va_2d)))
-
-                self.history.append({
-                    "epoch": epoch,
-                    "train_mse": round(tr_mse, 6),
-                    "val_mse": round(va_mse, 6),
-                    "train_mae": round(tr_mae, 6),
-                    "val_mae": round(va_mae, 6),
-                })
-
-                if va_mse < self.best_val_loss - 1e-5:
-                    self.best_val_loss = va_mse
-                    self.best_epoch = epoch
-                    best_state = self.net.state_dict()
-                    wait = 0
-                else:
-                    wait += 1
-                    if wait >= patience:
-                        break
-
-            self.net.load_state_dict(best_state)
-
-        return {
-            "architecture": f"LSTM({units[0]}) -> LSTM({units[1]}) -> Dense(1)",
-            "total_params": int(self.total_params),
-            "epochs_ran": int(len(self.history)),
-            "best_epoch": int(self.best_epoch),
-            "best_val_mse_scaled": round(float(self.best_val_loss), 6),
-            "device_used": self.device_str,
-            "amp_fp16": self.amp_enabled,
-        }
-
-    def predict(self, X: np.ndarray, batch_size: int = 256) -> np.ndarray:
-        """Suy luận dự đoán $\hat{y}_{t+1}$ từ Tensor 3D `(N, 24, 4)` trên GPU/CPU."""
-        if HAS_TORCH and isinstance(self.net, nn.Module):
-            device = torch.device(self.device_str)
-            self.net.eval()
-            preds = []
-            with torch.no_grad():
-                for i in range(0, len(X), batch_size):
-                    bx = torch.tensor(X[i : i + batch_size], dtype=torch.float32, device=device)
-                    out = self.net(bx).cpu().numpy().ravel()
-                    preds.append(out)
-            return np.concatenate(preds, axis=0).astype(np.float32)
-
-        out, _ = self.net.forward(X)
-        return out.ravel().astype(np.float32)
-
-
-# ==============================================================================
-# 4. MÔ HÌNH 4: DCRNN SEQ2SEQ (YÊU CẦU 12 NÂNG CAO: TRAFFIC FORECASTING PEMS-BAY)
-# ==============================================================================
-if HAS_TORCH:
-    class DiffusionGraphConv(nn.Module):
-        """Tầng Tích chập Khuếch tán Hai chiều trên Đồ thị (`Bidirectional Diffusion Convolution`)."""
-
-        def __init__(self, in_features: int, out_features: int, max_diffusion_step: int = 2) -> None:
-            super().__init__()
-            self.max_k = int(max_diffusion_step)
-            self.num_matrices = 2 * self.max_k + 1
-            self.weight = nn.Linear(in_features * self.num_matrices, out_features)
-
-        def forward(self, x: torch.Tensor, supports: List[torch.Tensor]) -> torch.Tensor:
-            out_list = [x]
-            for p_mat in supports:
-                x_k = torch.einsum("ij,bjk->bik", p_mat, x)
-                out_list.append(x_k)
-                for _ in range(2, self.max_k + 1):
-                    x_k = torch.einsum("ij,bjk->bik", p_mat, x_k)
-                    out_list.append(x_k)
-            concat_x = torch.cat(out_list, dim=-1)
-            return self.weight(concat_x)
-
-
-    class DCGRUCell(nn.Module):
-        """Tế bào `Diffusion Convolutional Gated Recurrent Unit (DCGRU)` của mô hình `DCRNN`."""
-
-        def __init__(self, input_dim: int, hidden_dim: int, max_diffusion_step: int = 2) -> None:
-            super().__init__()
-            self.hidden_dim = int(hidden_dim)
-            self.gate_conv = DiffusionGraphConv(input_dim + hidden_dim, 2 * hidden_dim, max_diffusion_step)
-            self.cand_conv = DiffusionGraphConv(input_dim + hidden_dim, hidden_dim, max_diffusion_step)
-
-        def forward(self, x_t: torch.Tensor, h_prev: torch.Tensor, supports: List[torch.Tensor]) -> torch.Tensor:
-            combined = torch.cat([x_t, h_prev], dim=-1)
-            gates = torch.sigmoid(self.gate_conv(combined, supports))
-            r_t, u_t = torch.split(gates, self.hidden_dim, dim=-1)
-            cand_in = torch.cat([x_t, r_t * h_prev], dim=-1)
-            c_t = torch.tanh(self.cand_conv(cand_in, supports))
-            return u_t * h_prev + (1.0 - u_t) * c_t
-
-
-    class DCRNNSeq2SeqNet(nn.Module):
-        """Kiến trúc `Sequence-to-Sequence DCRNN` dự báo đa chân trời ($t+3, t+6, t+12$)."""
-
-        def __init__(self, hidden_dim: int = 32, max_diffusion_step: int = 2, num_horizons: int = 3) -> None:
-            super().__init__()
-            self.hidden_dim = int(hidden_dim)
-            self.num_horizons = int(num_horizons)
-            self.encoder_cell = DCGRUCell(1, hidden_dim, max_diffusion_step)
-            self.decoder_cell = DCGRUCell(1, hidden_dim, max_diffusion_step)
-            self.proj = nn.Linear(hidden_dim, 1)
-
-        def forward(
-            self,
-            x_seq: torch.Tensor,
-            supports: List[torch.Tensor],
-            targets: Optional[torch.Tensor] = None,
-            teacher_forcing_ratio: float = 0.0,
-        ) -> torch.Tensor:
-            bsz, seq_len, n_sensors = x_seq.shape
-            h = torch.zeros(bsz, n_sensors, self.hidden_dim, device=x_seq.device, dtype=x_seq.dtype)
-            for t in range(seq_len):
-                x_t = x_seq[:, t, :].unsqueeze(-1)
-                h = self.encoder_cell(x_t, h, supports)
-
-            dec_in = x_seq[:, -1, :].unsqueeze(-1)
-            outputs = []
-            for step_idx in range(self.num_horizons):
-                h = self.decoder_cell(dec_in, h, supports)
-                pred_step = self.proj(h)
-                pred_val = x_seq[:, -1, :].unsqueeze(-1) + pred_step
-                outputs.append(pred_val.squeeze(-1))
-                if targets is not None and teacher_forcing_ratio > 0.0 and torch.rand(1).item() < teacher_forcing_ratio:
-                    dec_in = targets[:, step_idx, :].unsqueeze(-1)
-                else:
-                    dec_in = pred_val
-            return torch.stack(outputs, dim=1)
-
-
-class DCRNNTrafficForecaster:
-    """
-    What: Bộ điều phối huấn luyện và suy luận cho mô hình `DCRNN` trên dữ liệu `PEMS-BAY` (Mục 12).
-    Why: Tích hợp `Auto-GPU (CUDA AMP FP16)`, `Scheduled Sampling` và đánh giá đa chân trời
-         15, 30, 60 phút trên `data/raw/pems-bay.h5` + `data/raw/sensor_graph/adj_mx_bay.pkl`.
-    """
-
-    def __init__(self, config: Optional[Dict[str, Any]] = None, hw_info: Optional[Dict[str, Any]] = None) -> None:
-        self.cfg = config or load_config()
-        self.pems_cfg = self.cfg.get("pems_bay_advanced", {}).get("dcrnn_model", {})
-        self.hw_info = hw_info or detect_hardware_accelerator(self.cfg)
-        self.device_str = self.hw_info.get("torch_device", "cpu")
-        self.net: Optional[Any] = None
-        self.supports: List[Any] = []
-        self.history: List[Dict[str, float]] = []
-        self.best_epoch: int = 1
-        self.total_params: int = 16801
-        self.theta_diffusion: Optional[np.ndarray] = None
-        self.p_f_np: Optional[np.ndarray] = None
-        self.p_b_np: Optional[np.ndarray] = None
-
-    def fit(self, pems_bundle: Dict[str, Any]) -> Dict[str, Any]:
-        """Huấn luyện mô hình `DCRNN` trên cửa sổ không gian – thời gian của `PEMS-BAY`."""
-        rnn_units = int(self.pems_cfg.get("rnn_units", 32))
-        max_k = int(self.pems_cfg.get("max_diffusion_step", 2))
-        lr = float(self.pems_cfg.get("learning_rate", 0.003))
-        batch_size = int(self.pems_cfg.get("batch_size", 32))
-        epochs = int(self.pems_cfg.get("epochs", 20))
-        patience = int(self.pems_cfg.get("early_stopping_patience", 5))
-
-        if HAS_TORCH:
-            device = torch.device(self.device_str)
-            p_f = torch.tensor(pems_bundle["P_forward"], dtype=torch.float32, device=device)
-            p_b = torch.tensor(pems_bundle["P_backward"], dtype=torch.float32, device=device)
-            self.supports = [p_f, p_b]
-
-            self.net = DCRNNSeq2SeqNet(
-                hidden_dim=rnn_units,
-                max_diffusion_step=max_k,
-                num_horizons=len(pems_bundle["horizons"]),
-            ).to(device)
-            self.total_params = sum(p.numel() for p in self.net.parameters() if p.requires_grad)
-
-            optimizer = torch.optim.Adam(self.net.parameters(), lr=lr)
-            criterion = nn.L1Loss()
-
-            train_ds = TensorDataset(
-                torch.tensor(pems_bundle["X_train"], dtype=torch.float32),
-                torch.tensor(pems_bundle["Y_train"], dtype=torch.float32),
-            )
-            train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=False)
-
-            X_val_t = torch.tensor(pems_bundle["X_val"], dtype=torch.float32, device=device)
-            Y_val_t = torch.tensor(pems_bundle["Y_val"], dtype=torch.float32, device=device)
-
-            best_val = float("inf")
-            best_state = copy.deepcopy(self.net.state_dict())
-            wait = 0
-            self.history = []
-
-            for epoch in range(1, epochs + 1):
-                self.net.train()
-                tf_ratio = max(0.0, 1.0 - float(epoch - 1) / max(1.0, float(epochs)))
-                tr_loss_sum, n_seen = 0.0, 0
-                for bx, by in train_loader:
-                    bx, by = bx.to(device), by.to(device)
-                    optimizer.zero_grad()
-                    pred = self.net(bx, self.supports, targets=by, teacher_forcing_ratio=tf_ratio)
+                with torch.amp.autocast("cuda", enabled=self.amp_enabled):
+                    pred = self.net(bx)
                     loss = criterion(pred, by)
-                    loss.backward()
-                    nn.utils.clip_grad_norm_(self.net.parameters(), max_norm=5.0)
-                    optimizer.step()
-                    bs = len(bx)
-                    tr_loss_sum += float(loss.item()) * bs
-                    n_seen += bs
+                
+                if self.amp_enabled:
+                  old_scale = scaler_amp.get_scale()
+                  scaler_amp.scale(loss).backward()
+                  scaler_amp.unscale_(optimizer)
+                  nn.utils.clip_grad_norm_(self.net.parameters(), self.grad_clip)  # (ở SpatioTemporalTrainer là 2.0)
+                  scaler_amp.step(optimizer)
+                  scaler_amp.update()
+                  if scaler_amp.get_scale() >= old_scale:
+                    optimizer_stepped = True
+                else:
+                   loss.backward()
+                   nn.utils.clip_grad_norm_(self.net.parameters(), self.grad_clip)  # (ở SpatioTemporalTrainer là 2.0)
+                   optimizer.step()
+                   optimizer_stepped = True
 
-                tr_mae = tr_loss_sum / max(1, n_seen)
-                self.net.eval()
-                with torch.no_grad():
-                    val_pred = self.net(X_val_t, self.supports, targets=None, teacher_forcing_ratio=0.0)
-                    val_mae = float(criterion(val_pred, Y_val_t).item())
 
-                self.history.append({
-                    "epoch": epoch,
-                    "train_mae_scaled": round(tr_mae, 6),
-                    "val_mae_scaled": round(val_mae, 6),
-                    "scheduled_sampling_ratio": round(tf_ratio, 4),
-                })
+                bs = bx.size(0)
+                ep_loss += loss.item() * bs
+                ep_mae += torch.abs(pred - by).sum().item()
+                n_seen += bs
+            if optimizer_stepped:
+               scheduler.step()
+               
+            tr_mse = ep_loss / max(n_seen, 1)
+            tr_mae = ep_mae / max(n_seen, 1)
+            self.history["train_loss"].append(round(float(tr_mse), 6))
+            self.history["train_mae"].append(round(float(tr_mae), 6))
 
-                if val_mae < best_val - 1e-4:
-                    best_val = val_mae
-                    self.best_epoch = epoch
-                    best_state = copy.deepcopy(self.net.state_dict())
+            if X_val is not None and y_val is not None:
+                val_preds = self.predict_scaled(X_val)
+                val_mse = float(np.mean((val_preds - y_val) ** 2))
+                val_mae = float(np.mean(np.abs(val_preds - y_val)))
+                self.history["val_loss"].append(round(val_mse, 6))
+                self.history["val_mae"].append(round(val_mae, 6))
+
+                if val_mse < best_val - 1e-6:
+                    best_val = val_mse
+                    best_ep = ep
+                    best_weights = copy.deepcopy(self.net.state_dict())
                     wait = 0
                 else:
                     wait += 1
-                    if wait >= patience:
+                    if wait >= self.patience:
                         break
+            else:
+                best_weights = copy.deepcopy(self.net.state_dict())
+                best_ep = ep
 
-            self.net.load_state_dict(best_state)
-        else:
-            # Nhánh Diffusion Convolution + Autoregressive Seq2Seq thuần NumPy
-            self.p_f_np = np.asarray(pems_bundle["P_forward"], dtype=np.float64)
-            self.p_b_np = np.asarray(pems_bundle["P_backward"], dtype=np.float64)
-            X_tr = np.asarray(pems_bundle["X_train"], dtype=np.float64)  # (B, 12, N)
-            Y_tr = np.asarray(pems_bundle["Y_train"], dtype=np.float64)  # (B, 3, N)
-            X_va = np.asarray(pems_bundle["X_val"], dtype=np.float64)
-            Y_va = np.asarray(pems_bundle["Y_val"], dtype=np.float64)
+        self.net.load_state_dict(best_weights)
+        self.history["best_epoch"] = int(best_ep)
+        self.history["best_val_loss"] = round(float(best_val if best_val < float("inf") else self.history["train_loss"][-1]), 6)
+        self.history["epochs_executed"] = int(len(self.history["train_loss"]))
+        self.train_time_sec = time.perf_counter() - t0
+        return self
 
-            def _build_diff_basis(X_seq: np.ndarray) -> np.ndarray:
-                x_last = X_seq[:, -1, :]
-                x_lag3 = X_seq[:, -3, :]
-                x_lag6 = X_seq[:, -6, :]
-                x_mean = np.mean(X_seq, axis=1)
-                pf1 = x_last @ self.p_f_np.T
-                pb1 = x_last @ self.p_b_np.T
-                pf2 = pf1 @ self.p_f_np.T
-                pb2 = pb1 @ self.p_b_np.T
-                return np.stack([np.ones_like(x_last), x_last, x_lag3, x_lag6, x_mean, pf1, pb1, pf2, pb2], axis=-1)
+    def predict_scaled(self, X: np.ndarray) -> np.ndarray:
+        self.net.eval()
+        ds = TensorDataset(torch.tensor(X, dtype=torch.float32))
+        loader = DataLoader(ds, batch_size=self.batch_size * 2, shuffle=False)
+        preds_list: List[np.ndarray] = []
+        with torch.no_grad():
+            for (bx,) in loader:
+                bx = bx.to(self.device, non_blocking=True)
+                with torch.amp.autocast("cuda", enabled=self.amp_enabled):
+                    out = self.net(bx)
+                preds_list.append(out.detach().cpu().numpy())
+        return np.concatenate(preds_list, axis=0).astype(np.float64)
 
-            Phi_tr = _build_diff_basis(X_tr).reshape(-1, 9)
-            Phi_va = _build_diff_basis(X_va).reshape(-1, 9)
+    def predict_original(self, X: np.ndarray, load_mean: float, load_std: float) -> np.ndarray:
+        return self.predict_scaled(X) * float(load_std) + float(load_mean)
 
-            self.theta_diffusion = np.zeros((3, 9), dtype=np.float64)
-            for h_idx in range(3):
-                target_h = Y_tr[:, h_idx, :].reshape(-1)
-                reg = 1e-2 * np.eye(9)
-                self.theta_diffusion[h_idx] = np.linalg.solve(Phi_tr.T @ Phi_tr + reg, Phi_tr.T @ target_h)
 
-            self.history = []
-            for ep in range(1, min(epochs, 12) + 1):
-                alpha = float(ep) / float(min(epochs, 12))
-                cur_theta = alpha * self.theta_diffusion
-                pred_tr = np.stack([(Phi_tr @ cur_theta[h]).reshape(len(X_tr), -1) for h in range(3)], axis=1)
-                pred_va = np.stack([(Phi_va @ cur_theta[h]).reshape(len(X_va), -1) for h in range(3)], axis=1)
-                self.history.append({
-                    "epoch": ep,
-                    "train_mae_scaled": round(float(np.mean(np.abs(pred_tr - Y_tr))), 6),
-                    "val_mae_scaled": round(float(np.mean(np.abs(pred_va - Y_va))), 6),
-                    "scheduled_sampling_ratio": round(1.0 - alpha, 4),
-                })
-            self.best_epoch = len(self.history)
-            best_val = self.history[-1]["val_mae_scaled"]
+# ============================================================================
+# 4. BÀI TẬP 12 NÂNG CAO (PEMS-BAY): DCRNN vs. MULTI-HORIZON TCN vs. LSTM
+# ============================================================================
+def compute_dual_random_walk_supports(adj_mx: np.ndarray, max_diffusion_step: int = 2) -> List[torch.Tensor]:
+    r"""
+    Purpose: Tính danh sách ma trận hỗ trợ khuếch tán đồ thị hai chiều (Dual Bidirectional Random-Walk Supports)
+             theo bài báo gốc DCRNN (Li et al., ICLR 2018).
+    Input-Output:
+        - Input: adj_mx (ndarray N x N), max_diffusion_step (int K = 2).
+        - Output: Danh sách các Tensor (N, N) gồm [I, P_f, T_2(P_f), P_b, T_2(P_b)].
+    How: Chuẩn hóa hàng D_O^-1 * W (xuôi dòng giao thông) và D_I^-1 * W^T (ngược dòng lan truyền tắc đường),
+         sau đó tính đa thức Chebyshev truy hồi T_k(P) = 2 * P * T_{k-1}(P) - T_{k-2}(P).
+    """
+    adj = np.asarray(adj_mx, dtype=np.float32)
+    n = adj.shape[0]
+    supports: List[np.ndarray] = [np.eye(n, dtype=np.float32)]
 
-        return {
-            "model_name": "DCRNN (DCGRU Encoder-Decoder with Bidirectional Diffusion)",
-            "total_params": int(self.total_params),
-            "rnn_units": rnn_units,
-            "max_diffusion_step": max_k,
-            "epochs_ran": int(len(self.history)),
-            "best_epoch": int(self.best_epoch),
-            "best_val_mae_scaled": round(float(best_val), 6),
-            "device_used": self.device_str,
+    for mat in (adj, adj.T):
+        row_sum = np.sum(mat, axis=1, keepdims=True)
+        d_inv = np.where(row_sum > 1e-6, 1.0 / np.maximum(row_sum, 1e-6), 0.0)
+        p_rw = (mat * d_inv).astype(np.float32)
+        if max_diffusion_step >= 1:
+            supports.append(p_rw)
+        t_k_minus_2 = np.eye(n, dtype=np.float32)
+        t_k_minus_1 = p_rw
+        for _ in range(2, max_diffusion_step + 1):
+            t_k = 2.0 * (p_rw @ t_k_minus_1) - t_k_minus_2
+            supports.append(t_k.astype(np.float32))
+            t_k_minus_2, t_k_minus_1 = t_k_minus_1, t_k
+
+    return [torch.tensor(s, dtype=torch.float32) for s in supports]
+
+
+class DiffusionConvGRUCell(nn.Module):
+    r"""
+    Purpose: Tế bào Hồi quy Có cổng Tích chập Khuếch tán Đồ thị (DCGRU Cell) vector hóa hoàn toàn trên GPU.
+    Input-Output:
+        - Input: x_t (B, N, C_in), h_prev (B, N, H), supports_stack (S, N, N).
+        - Output: Trạng thái ẩn cập nhật h_t (B, N, H).
+    How: Thay thế phép nhân ma trận thông thường trong cổng Reset r_t, Update u_t và Candidate c_t của GRU
+         bằng phép tích chập khuếch tán đồ thị hai chiều qua torch.einsum('snm,bmc->bsnc').
+    """
+
+    def __init__(self, num_supports: int, input_dim: int, hidden_dim: int) -> None:
+        super().__init__()
+        self.num_supports = int(num_supports)
+        self.input_dim = int(input_dim)
+        self.hidden_dim = int(hidden_dim)
+        total_in = self.num_supports * (self.input_dim + self.hidden_dim)
+
+        self.gate_linear = nn.Linear(total_in, 2 * self.hidden_dim)
+        self.cand_linear = nn.Linear(total_in, self.hidden_dim)
+
+    def _graph_conv(self, x_cat: torch.Tensor, supports_stack: torch.Tensor) -> torch.Tensor:
+        # x_cat: (B, N, C) | supports_stack: (S, N, N) -> out: (B, N, S*C)
+        diffused = torch.einsum("snm,bmc->bnsc", supports_stack, x_cat)
+        b, n, s, c = diffused.shape
+        return diffused.reshape(b, n, s * c)
+
+    def forward(self, x_t: torch.Tensor, h_prev: torch.Tensor, supports_stack: torch.Tensor) -> torch.Tensor:
+        xh = torch.cat([x_t, h_prev], dim=-1)  # (B, N, C_in + H)
+        g_feat = self._graph_conv(xh, supports_stack)
+        gates = torch.sigmoid(self.gate_linear(g_feat))
+        r_t, u_t = torch.chunk(gates, 2, dim=-1)
+
+        x_rh = torch.cat([x_t, r_t * h_prev], dim=-1)
+        c_feat = self._graph_conv(x_rh, supports_stack)
+        c_t = torch.tanh(self.cand_linear(c_feat))
+        h_next = u_t * h_prev + (1.0 - u_t) * c_t
+        return h_next
+
+
+class DCRNNNet(nn.Module):
+    r"""
+    Purpose: Mạng Diffusion Convolutional Recurrent Neural Network (DCRNN) dự báo đa tầm nhìn (15p, 30p, 60p)
+             đồng thời trên toàn bộ N=207 trạm cảm biến PEMS-BAY.
+    Input-Output:
+        - Input: Tensor X (Batch, Lookback=12, Num_Sensors=207).
+        - Output: Tensor Y_hat (Batch, Horizons=3, Num_Sensors=207).
+    How: Kết hợp Encoder DCGRU + Spatial Diffusion Context + Nhánh Autoregressive Highway đa tầm nhìn.
+    """
+
+    def __init__(
+        self,
+        supports: List[torch.Tensor],
+        num_sensors: int = 207,
+        lookback: int = 12,
+        hidden_dim: int = 32,
+        num_horizons: int = 3,
+    ) -> None:
+        super().__init__()
+        self.num_sensors = int(num_sensors)
+        self.lookback = int(lookback)
+        self.hidden_dim = int(hidden_dim)
+        self.num_horizons = int(num_horizons)
+
+        supports_stack = torch.stack(supports, dim=0)  # (S, N, N)
+        self.register_buffer("supports_stack", supports_stack)
+
+        self.cell1 = DiffusionConvGRUCell(len(supports), input_dim=1, hidden_dim=hidden_dim)
+        self.norm = nn.LayerNorm(hidden_dim)
+        self.proj = nn.Sequential(
+            nn.Linear(hidden_dim * len(supports), hidden_dim),
+            nn.GELU(),
+            nn.Linear(hidden_dim, num_horizons),
+        )
+        # Nhánh kết nối tắt thời gian + không gian cho từng tầm nhìn
+        self.ar_highway = nn.Linear(lookback, num_horizons)
+        with torch.no_grad():
+            nn.init.zeros_(self.ar_highway.weight)
+            nn.init.zeros_(self.ar_highway.bias)
+            self.ar_highway.weight[:, -1] = 0.85
+            self.ar_highway.weight[:, -2] = 0.15
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # x: (B, L, N)
+        b, l_steps, n_nodes = x.shape
+        h = torch.zeros(b, n_nodes, self.hidden_dim, device=x.device, dtype=x.dtype)
+        for t in range(l_steps):
+            x_t = x[:, t, :].unsqueeze(-1)  # (B, N, 1)
+            h = self.cell1(x_t, h, self.supports_stack)
+
+        h_norm = self.norm(h)
+        # Tích hợp ngữ cảnh không gian từ các trạm lân cận trên trạng thái ẩn cuối
+        spatial_ctx = torch.einsum("snm,bmh->bnsh", self.supports_stack, h_norm).reshape(b, n_nodes, -1)
+        delta_out = self.proj(spatial_ctx).permute(0, 2, 1)  # (B, H_out=3, N)
+
+        ar_base = self.ar_highway(x.permute(0, 2, 1)).permute(0, 2, 1)  # (B, H_out=3, N)
+        return ar_base + delta_out
+
+
+class MultiHorizonTCNNet(nn.Module):
+    r"""
+    Purpose: Kiến trúc Mạng Tích chập Thời gian Đa tầm nhìn (Multi-Horizon Temporal Convolutional Network - TCN)
+             theo bảng đối sánh tại Slide 10 Chương 4-5 (Dilated Causal Conv1D không dùng ma trận đồ thị A).
+    Input-Output:
+        - Input: Tensor X (Batch, Lookback=12, Num_Sensors=207).
+        - Output: Tensor Y_hat (Batch, Horizons=3, Num_Sensors=207).
+    How: Áp dụng 2 khối Causal Conv1D giãn nở (dilation = 1, 2; kernel_size = 3) độc lập trên chuỗi thời gian
+         của từng trạm cảm biến (B*N, 1, L) để đối chứng trực tiếp với DCRNN.
+    """
+
+    def __init__(self, lookback: int = 12, channels: int = 24, num_horizons: int = 3) -> None:
+        super().__init__()
+        self.lookback = int(lookback)
+        self.channels = int(channels)
+        self.num_horizons = int(num_horizons)
+
+        self.conv1 = nn.Conv1d(1, channels, kernel_size=3, dilation=1, padding=2)
+        self.conv2 = nn.Conv1d(channels, channels, kernel_size=3, dilation=2, padding=4)
+        self.act = nn.GELU()
+        self.head = nn.Linear(channels, num_horizons)
+        self.ar_linear = nn.Linear(lookback, num_horizons)
+        with torch.no_grad():
+            nn.init.zeros_(self.ar_linear.weight)
+            nn.init.zeros_(self.ar_linear.bias)
+            self.ar_linear.weight[:, -1] = 0.78
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # x: (B, L, N) -> (B*N, 1, L)
+        b, l_steps, n_nodes = x.shape
+        x_flat = x.permute(0, 2, 1).reshape(b * n_nodes, 1, l_steps)
+
+        c1 = self.act(self.conv1(x_flat)[:, :, :l_steps])
+        c2 = self.act(self.conv2(c1)[:, :, :l_steps] + c1)
+        last_feat = c2[:, :, -1]  # (B*N, C)
+        delta = self.head(last_feat).reshape(b, n_nodes, self.num_horizons).permute(0, 2, 1)
+        base = self.ar_linear(x.permute(0, 2, 1)).permute(0, 2, 1)
+        return base + delta * 0.35
+
+
+class MultiHorizonPemsLSTMNet(nn.Module):
+    r"""
+    Purpose: Kiến trúc Multi-Horizon LSTM thuần thời gian trên PEMS-BAY (không sử dụng ma trận kề adj_mx_bay.pkl)
+             để làm mô hình đối chứng (Ablation / Baseline) chứng minh giá trị không gian của DCRNN.
+    Input-Output:
+        - Input: Tensor X (Batch, Lookback=12, Num_Sensors=207).
+        - Output: Tensor Y_hat (Batch, Horizons=3, Num_Sensors=207).
+    How: Mã hóa chuỗi 12 bước thời gian bằng mạng LSTM rồi chiếu tuyến tính ra 3 mốc tương lai [t+3, t+6, t+12].
+    """
+
+    def __init__(self, num_sensors: int = 207, lookback: int = 12, hidden_dim: int = 64, num_horizons: int = 3) -> None:
+        super().__init__()
+        self.num_sensors = int(num_sensors)
+        self.lookback = int(lookback)
+        self.num_horizons = int(num_horizons)
+        self.lstm = nn.LSTM(input_size=num_sensors, hidden_size=hidden_dim, num_layers=1, batch_first=True)
+        self.head = nn.Linear(hidden_dim, num_horizons * num_sensors)
+        self.ar_linear = nn.Linear(lookback, num_horizons)
+        with torch.no_grad():
+            nn.init.zeros_(self.ar_linear.weight)
+            nn.init.zeros_(self.ar_linear.bias)
+            self.ar_linear.weight[:, -1] = 0.72
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        self.lstm.flatten_parameters()
+        b, _, n_nodes = x.shape
+        out, _ = self.lstm(x)
+        delta = self.head(out[:, -1, :]).reshape(b, self.num_horizons, n_nodes)
+        base = self.ar_linear(x.permute(0, 2, 1)).permute(0, 2, 1)
+        return base + delta * 0.25
+
+
+class SpatioTemporalTrainer:
+    r"""
+    Purpose: Bộ huấn luyện và suy luận thống nhất trên GPU (CUDA + AMP FP16) cho cả 3 mô hình giao thông
+             đa tầm nhìn trên tập PEMS-BAY: DCRNN, Multi-Horizon TCN và Multi-Horizon LSTM.
+    Input-Output:
+        - Input: Mạng PyTorch (DCRNNNet / MultiHorizonTCNNet / MultiHorizonPemsLSTMNet) và các tensor PEMS-BAY.
+        - Output: Trọng số tối ưu, lịch sử hội tụ và dự báo tốc độ giao thông (mph) tại 3 mốc 15p, 30p, 60p.
+    How: Tối ưu hàm mất mát MAE/Huber kết hợp AdamW + CosineAnnealingLR + EarlyStopping trên GPU.
+    """
+
+    def __init__(
+        self,
+        model_name: str,
+        net: nn.Module,
+        config: Optional[Dict[str, Any]] = None,
+        epochs: int = 12,
+        batch_size: int = 64,
+        lr: float = 0.003,
+    ) -> None:
+        cfg = config if config is not None else load_config()
+        hw = get_compute_device(cfg)
+        self.model_name = model_name
+        self.device_str = hw["torch_device"]
+        self.device = torch.device(self.device_str)
+        self.amp_enabled = bool(hw["amp_enabled"] and self.device_str == "cuda")
+        self.epochs = int(epochs)
+        self.batch_size = int(batch_size)
+        self.lr = float(lr)
+        self.net = net.to(self.device)
+        self.train_time_sec: float = 0.0
+        self.history: Dict[str, Any] = {
+            "train_loss": [],
+            "val_loss": [],
+            "best_epoch": 1,
+            "best_val_loss": float("inf"),
+            "total_params": int(sum(p.numel() for p in self.net.parameters() if p.requires_grad)),
         }
 
-    def predict(self, X: np.ndarray, batch_size: int = 128) -> np.ndarray:
-        """Suy luận tốc độ xe dự báo ở 3 chân trời 15m, 30m, 60m trên tập Test của `PEMS-BAY`."""
-        if HAS_TORCH and isinstance(self.net, nn.Module):
-            device = torch.device(self.device_str)
-            self.net.eval()
-            preds = []
-            with torch.no_grad():
-                for i in range(0, len(X), batch_size):
-                    bx = torch.tensor(X[i : i + batch_size], dtype=torch.float32, device=device)
-                    out = self.net(bx, self.supports, targets=None, teacher_forcing_ratio=0.0).cpu().numpy()
-                    preds.append(out)
-            return np.concatenate(preds, axis=0).astype(np.float32)
+    def fit(
+        self,
+        X_train: np.ndarray,
+        Y_train_scaled: np.ndarray,
+        X_val: np.ndarray,
+        Y_val_scaled: np.ndarray,
+    ) -> "SpatioTemporalTrainer":
+        t0 = time.perf_counter()
+        tr_ds = TensorDataset(
+            torch.tensor(X_train, dtype=torch.float32),
+            torch.tensor(Y_train_scaled, dtype=torch.float32),
+        )
+        tr_loader = DataLoader(tr_ds, batch_size=self.batch_size, shuffle=True, drop_last=False)
 
-        X_seq = np.asarray(X, dtype=np.float64)
-        x_last = X_seq[:, -1, :]
-        x_lag3 = X_seq[:, -3, :]
-        x_lag6 = X_seq[:, -6, :]
-        x_mean = np.mean(X_seq, axis=1)
-        pf1 = x_last @ self.p_f_np.T
-        pb1 = x_last @ self.p_b_np.T
-        pf2 = pf1 @ self.p_f_np.T
-        pb2 = pb1 @ self.p_b_np.T
-        Phi = np.stack([np.ones_like(x_last), x_last, x_lag3, x_lag6, x_mean, pf1, pb1, pf2, pb2], axis=-1).reshape(-1, 9)
-        preds = np.stack([(Phi @ self.theta_diffusion[h]).reshape(len(X_seq), -1) for h in range(3)], axis=1)
-        return preds.astype(np.float32)
+        optimizer = torch.optim.AdamW(self.net.parameters(), lr=self.lr, weight_decay=1e-4)
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=max(self.epochs, 1), eta_min=self.lr * 0.1)
+        criterion = nn.SmoothL1Loss(beta=0.5)
+        scaler_amp = torch.amp.GradScaler("cuda", enabled=self.amp_enabled)
+
+        best_val = float("inf")
+        best_w = copy.deepcopy(self.net.state_dict())
+        best_ep = 1
+        patience = 4
+        wait = 0
+
+        for ep in range(1, self.epochs + 1):
+            self.net.train()
+            ep_loss = 0.0
+            n_seen = 0
+            optimizer_stepped = False
+            
+            for bx, by in tr_loader:
+                bx = bx.to(self.device, non_blocking=True)
+                by = by.to(self.device, non_blocking=True)
+                optimizer.zero_grad(set_to_none=True)
+                with torch.amp.autocast("cuda", enabled=self.amp_enabled):
+                    pred = self.net(bx)
+                    loss = criterion(pred, by)
+                scaler_amp.scale(loss).backward()
+                scaler_amp.unscale_(optimizer)
+                nn.utils.clip_grad_norm_(self.net.parameters(), 2.0)
+                scaler_amp.step(optimizer)
+                scaler_amp.update()
+
+                bs = bx.size(0)
+                ep_loss += loss.item() * bs
+                n_seen += bs
+
+            scheduler.step()
+            tr_l = ep_loss / max(n_seen, 1)
+            val_preds = self.predict_scaled(X_val)
+            val_l = float(np.mean(np.abs(val_preds - Y_val_scaled)))
+
+            self.history["train_loss"].append(round(float(tr_l), 5))
+            self.history["val_loss"].append(round(float(val_l), 5))
+
+            if val_l < best_val - 1e-5:
+                best_val = val_l
+                best_ep = ep
+                best_w = copy.deepcopy(self.net.state_dict())
+                wait = 0
+            else:
+                wait += 1
+                if wait >= patience:
+                    break
+
+        self.net.load_state_dict(best_w)
+        self.history["best_epoch"] = int(best_ep)
+        self.history["best_val_loss"] = round(float(best_val), 5)
+        self.history["epochs_executed"] = int(len(self.history["train_loss"]))
+        self.train_time_sec = time.perf_counter() - t0
+        return self
+
+    def predict_scaled(self, X: np.ndarray) -> np.ndarray:
+        self.net.eval()
+        ds = TensorDataset(torch.tensor(X, dtype=torch.float32))
+        loader = DataLoader(ds, batch_size=self.batch_size * 2, shuffle=False)
+        preds: List[np.ndarray] = []
+        with torch.no_grad():
+            for (bx,) in loader:
+                bx = bx.to(self.device, non_blocking=True)
+                with torch.amp.autocast("cuda", enabled=self.amp_enabled):
+                    out = self.net(bx)
+                preds.append(out.detach().cpu().numpy())
+        return np.concatenate(preds, axis=0).astype(np.float32)
+
+    def predict_original(self, X: np.ndarray, mean_val: float, std_val: float) -> np.ndarray:
+        return self.predict_scaled(X) * float(std_val) + float(mean_val)
