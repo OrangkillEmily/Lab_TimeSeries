@@ -942,7 +942,7 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
       <!-- Hàng 1: Data, EDA, Chronological Split & Anti-Leakage Scaling -->
       <a href="#eda"><rect x="18" y="22" width="225" height="72" rx="10" fill="#edf5e8" stroke="#acc7ac"/><text x="130" y="50" text-anchor="middle" class="title">1. Nạp Dữ liệu Đa biến</text><text x="130" y="72" text-anchor="middle">Electricity ({n_total:,}×4) &amp; PEMS-BAY</text></a>
       <path d="M243 58H298" fill="none" stroke="#789887" stroke-width="2" marker-end="url(#arrow)"/>
-      <a href="#eda"><rect x="298" y="22" width="210" height="72" rx="10" fill="#edf5e8" stroke="#acc7ac"/><text x="403" y="50" text-anchor="middle" class="title">2. Khám phá EDA (7 Hình)</text><text x="403" y="72" text-anchor="middle">Pearson · Spearman · ACF/PACF</text></a>
+      <a href="#eda"><rect x="298" y="22" width="210" height="72" rx="10" fill="#edf5e8" stroke="#acc7ac"/><text x="403" y="50" text-anchor="middle" class="title">2. Khám phá EDA (8 Hình)</text><text x="403" y="72" text-anchor="middle">Pearson · Spearman · ACF/PACF</text></a>
       <path d="M508 58H563" fill="none" stroke="#789887" stroke-width="2" marker-end="url(#arrow)"/>
       <a href="#preprocess"><rect x="563" y="22" width="215" height="72" rx="10" fill="#edf5e8" stroke="#acc7ac"/><text x="670" y="50" text-anchor="middle" class="title">3. Chia 70/15/15 &amp; 5-Fold</text><text x="670" y="72" text-anchor="middle">shuffle=False · TimeSeriesSplit</text></a>
       <path d="M778 58H832" fill="none" stroke="#789887" stroke-width="2" marker-end="url(#arrow)"/>
@@ -1007,7 +1007,7 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
     </div>
   </div>
   <div class="mini-flow">electricity_load.csv ({n_total:,}×4) → Phân phối &amp; Boxplot → Tương quan Pearson/Spearman → Decomposition &amp; ACF/PACF → Đồ thị PEMS-BAY</div>
-  <p class="intro">Mô-đun <code>src/lab04/data_loader.py</code> và <code>src/lab04/eda.py</code> thực hiện chuẩn hóa tỷ lệ trạm công tơ hoạt động, đồng bộ các biến khí tượng vật lý (<code>temperature</code> °C, <code>humidity</code> %, <code>wind_speed</code> m/s) và xuất trực tiếp <b>7 biểu đồ khám phá chuyên sâu</b> dưới đây:</p>
+  <p class="intro">Mô-đun <code>src/lab04/data_loader.py</code> và <code>src/lab04/eda.py</code> thực hiện chuẩn hóa tỷ lệ trạm công tơ hoạt động, đồng bộ các biến khí tượng vật lý (<code>temperature</code> °C, <code>humidity</code> %, <code>wind_speed</code> m/s) và xuất trực tiếp <b>8 biểu đồ khám phá chuyên sâu</b> dưới đây:</p>
 
   <table>
     <thead>

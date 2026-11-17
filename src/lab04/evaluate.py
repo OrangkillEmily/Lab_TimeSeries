@@ -466,6 +466,9 @@ def main(run_id: Optional[str] = None) -> Dict[str, Any]:
         f"[EVALUATE] Best Hold-out Model: {best_model_name} "
         f"(RMSE={best_rmse:.2f} kW, MAE={float(best_holdout_row['MAE']):.2f} kW, MAPE={best_mape:.2f}%, R²={best_r2:.4f})"
     )
+     # Tự động xuất bộ hồ sơ thống kê chi tiết cho toàn bộ 36 thực thể mô hình vào reports/model_summary/lab04/
+    from src.lab04 import model_summary
+    eval_summary["model_summary"] = model_summary.main(active_run_id)
     return eval_summary
 
 

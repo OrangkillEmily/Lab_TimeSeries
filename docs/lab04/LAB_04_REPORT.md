@@ -1,6 +1,6 @@
 # BÁO CÁO KỸ THUẬT LAB 04: DỰ BÁO CHUỖI THỜI GIAN ĐA BIẾN (MULTIVARIATE TIME SERIES FORECASTING)
 
-- **Mã phiên chạy (Run ID)**: `20261116_232707_c29b03`
+- **Mã phiên chạy (Run ID)**: `20261117_160932_3fe70f`
 - **Phần cứng thực thi**: `NVIDIA GeForce RTX 3050 6GB Laptop GPU` (`torch=cuda`, `xgb=cuda`, `AMP_FP16=True`)
 - **Bộ dữ liệu chính (Mục 1–11)**: `data/raw/electricity_load.csv` (35,065 giờ × 4 biến: `load`, `temperature`, `humidity`, `wind_speed`)
 - **Bộ dữ liệu nâng cao (Mục 12)**: `data/raw/pems-bay.h5` & `data/sensor_graph/adj_mx_bay.pkl` (8,640 bước × 207 trạm cảm biến)
@@ -9,9 +9,9 @@
 
 | Model   |         MSE |    RMSE |     MAE |   MAPE |     R2 |   Max_Error |   Mean_Residual |   Std_Residual |   Train_MSE |   Train_RMSE |   Train_MAE |   Train_MAPE |   Train_R2 |   Val_RMSE |   Val_MAPE |   Val_R2 |   Train_Time_Sec |   Pred_Time_Sec | Device   |
 |:--------|------------:|--------:|--------:|-------:|-------:|------------:|----------------:|---------------:|------------:|-------------:|------------:|-------------:|-----------:|-----------:|-----------:|---------:|-----------------:|----------------:|:---------|
-| XGBoost | 4.20222e+07 | 6482.45 | 4337.53 | 1.8922 | 0.9946 |      129029 |       -158.635  |        6480.51 | 1.34785e+07 |      3671.3  |     2692.95 |       1.2392 |     0.9981 |    5604.27 |     7.0705 |   0.9912 |           5.4901 |        0.118053 | cuda     |
-| LSTM    | 4.31702e+07 | 6570.41 | 4524.04 | 2.0185 | 0.9944 |      128134 |       -363.156  |        6560.36 | 3.72636e+07 |      6104.39 |     4069.92 |       1.9624 |     0.9948 |    5968.28 |     7.1742 |   0.9901 |          86.7262 |        0.773854 | cuda     |
-| VAR     | 5.0728e+07  | 7122.36 | 4576.49 | 2.001  | 0.9935 |      130204 |        -25.5376 |        7122.32 | 4.54186e+07 |      6739.33 |     4197.65 |       2.0323 |     0.9937 |    6501.03 |     7.2729 |   0.9882 |           3.5746 |        0.30483  | cpu      |
+| XGBoost | 4.20222e+07 | 6482.45 | 4337.53 | 1.8922 | 0.9946 |      129029 |       -158.635  |        6480.51 | 1.34785e+07 |      3671.3  |     2692.95 |       1.2392 |     0.9981 |    5604.27 |     7.0705 |   0.9912 |           5.6949 |        0.112537 | cuda     |
+| LSTM    | 4.31702e+07 | 6570.41 | 4524.04 | 2.0185 | 0.9944 |      128134 |       -363.156  |        6560.36 | 3.72636e+07 |      6104.39 |     4069.92 |       1.9624 |     0.9948 |    5968.28 |     7.1742 |   0.9901 |          92.2252 |        0.756715 | cuda     |
+| VAR     | 5.0728e+07  | 7122.36 | 4576.49 | 2.001  | 0.9935 |      130204 |        -25.5376 |        7122.32 | 4.54186e+07 |      6739.33 |     4197.65 |       2.0323 |     0.9937 |    6501.03 |     7.2729 |   0.9882 |           2.9913 |        0.25455  | cpu      |
 
 ## 2. Kết quả Kiểm định Chéo 5-Fold TimeSeriesSplit (K = 5)
 
@@ -41,18 +41,18 @@
 
 | Model              | Model_Display                      | Horizon              |   Steps_Ahead |   Minutes_Ahead |     MSE |   RMSE |    MAE |   MAPE |     R2 |   Max_Error |   Mean_Residual |   Std_Residual |   Train_Time_Sec |
 |:-------------------|:-----------------------------------|:---------------------|--------------:|----------------:|--------:|-------:|-------:|-------:|-------:|------------:|----------------:|---------------:|-----------------:|
-| DCRNN              | DCRNN (Graph Diffusion + GRU)      | 15_min               |             3 |              15 |  7.6291 | 2.7621 | 1.3094 | 2.7182 | 0.9196 |     47.1802 |         -0.0199 |         2.762  |          67.2227 |
-| DCRNN              | DCRNN (Graph Diffusion + GRU)      | 30_min               |             6 |              30 | 15.4535 | 3.9311 | 1.7338 | 3.8915 | 0.8372 |     55.5159 |         -0.1243 |         3.9291 |          67.2227 |
-| DCRNN              | DCRNN (Graph Diffusion + GRU)      | 60_min               |            12 |              60 | 27.8962 | 5.2817 | 2.304  | 5.6224 | 0.7063 |     58.6159 |         -0.2987 |         5.2732 |          67.2227 |
-| DCRNN              | DCRNN (Graph Diffusion + GRU)      | Average_All_Horizons |             7 |              35 | 16.9929 | 3.9916 | 1.7824 | 4.0774 | 0.821  |     58.6159 |         -0.1476 |         3.9881 |          67.2227 |
-| Multi_Horizon_TCN  | Multi-Horizon TCN (Causal Conv1D)  | 15_min               |             3 |              15 |  8.6841 | 2.9469 | 1.3542 | 2.8547 | 0.9085 |     50.9629 |         -0.0363 |         2.9467 |          15.3198 |
-| Multi_Horizon_TCN  | Multi-Horizon TCN (Causal Conv1D)  | 30_min               |             6 |              30 | 19.0383 | 4.3633 | 1.8553 | 4.1755 | 0.7994 |     55.8628 |         -0.0716 |         4.3627 |          15.3198 |
-| Multi_Horizon_TCN  | Multi-Horizon TCN (Causal Conv1D)  | 60_min               |            12 |              60 | 37.1623 | 6.0961 | 2.6243 | 6.5286 | 0.6087 |     58.893  |         -0.2729 |         6.09   |          15.3198 |
-| Multi_Horizon_TCN  | Multi-Horizon TCN (Causal Conv1D)  | Average_All_Horizons |             7 |              35 | 21.6282 | 4.4688 | 1.9446 | 4.5196 | 0.7722 |     58.893  |         -0.1269 |         4.4665 |          15.3198 |
-| Multi_Horizon_LSTM | Multi-Horizon LSTM (Temporal Only) | 15_min               |             3 |              15 |  8.4484 | 2.9066 | 1.4182 | 2.9199 | 0.911  |     47.0235 |          0.0986 |         2.9049 |           7.7795 |
-| Multi_Horizon_LSTM | Multi-Horizon LSTM (Temporal Only) | 30_min               |             6 |              30 | 16.2314 | 4.0288 | 1.8885 | 4.0697 | 0.829  |     50.7904 |          0.2363 |         4.0219 |           7.7795 |
-| Multi_Horizon_LSTM | Multi-Horizon LSTM (Temporal Only) | 60_min               |            12 |              60 | 28.6132 | 5.3491 | 2.4986 | 5.4961 | 0.6987 |     54.8376 |          0.4652 |         5.3289 |           7.7795 |
-| Multi_Horizon_LSTM | Multi-Horizon LSTM (Temporal Only) | Average_All_Horizons |             7 |              35 | 17.7643 | 4.0948 | 1.9351 | 4.1619 | 0.8129 |     54.8376 |          0.2667 |         4.0852 |           7.7795 |
+| DCRNN              | DCRNN (Graph Diffusion + GRU)      | 15_min               |             3 |              15 |  7.6291 | 2.7621 | 1.3094 | 2.7182 | 0.9196 |     47.1802 |         -0.0199 |         2.762  |          66.9065 |
+| DCRNN              | DCRNN (Graph Diffusion + GRU)      | 30_min               |             6 |              30 | 15.4535 | 3.9311 | 1.7338 | 3.8915 | 0.8372 |     55.5159 |         -0.1243 |         3.9291 |          66.9065 |
+| DCRNN              | DCRNN (Graph Diffusion + GRU)      | 60_min               |            12 |              60 | 27.8962 | 5.2817 | 2.304  | 5.6224 | 0.7063 |     58.6159 |         -0.2987 |         5.2732 |          66.9065 |
+| DCRNN              | DCRNN (Graph Diffusion + GRU)      | Average_All_Horizons |             7 |              35 | 16.9929 | 3.9916 | 1.7824 | 4.0774 | 0.821  |     58.6159 |         -0.1476 |         3.9881 |          66.9065 |
+| Multi_Horizon_TCN  | Multi-Horizon TCN (Causal Conv1D)  | 15_min               |             3 |              15 |  8.6841 | 2.9469 | 1.3541 | 2.8546 | 0.9085 |     50.9629 |         -0.0368 |         2.9466 |          14.5001 |
+| Multi_Horizon_TCN  | Multi-Horizon TCN (Causal Conv1D)  | 30_min               |             6 |              30 | 19.0388 | 4.3633 | 1.8552 | 4.1751 | 0.7994 |     55.8628 |         -0.072  |         4.3628 |          14.5001 |
+| Multi_Horizon_TCN  | Multi-Horizon TCN (Causal Conv1D)  | 60_min               |            12 |              60 | 37.1624 | 6.0961 | 2.6242 | 6.5286 | 0.6087 |     58.8953 |         -0.2736 |         6.09   |          14.5001 |
+| Multi_Horizon_TCN  | Multi-Horizon TCN (Causal Conv1D)  | Average_All_Horizons |             7 |              35 | 21.6284 | 4.4688 | 1.9445 | 4.5194 | 0.7722 |     58.8953 |         -0.1275 |         4.4665 |          14.5001 |
+| Multi_Horizon_LSTM | Multi-Horizon LSTM (Temporal Only) | 15_min               |             3 |              15 |  8.4484 | 2.9066 | 1.4182 | 2.9199 | 0.911  |     47.0235 |          0.0986 |         2.9049 |           8.1749 |
+| Multi_Horizon_LSTM | Multi-Horizon LSTM (Temporal Only) | 30_min               |             6 |              30 | 16.2314 | 4.0288 | 1.8885 | 4.0697 | 0.829  |     50.7904 |          0.2363 |         4.0219 |           8.1749 |
+| Multi_Horizon_LSTM | Multi-Horizon LSTM (Temporal Only) | 60_min               |            12 |              60 | 28.6132 | 5.3491 | 2.4986 | 5.4961 | 0.6987 |     54.8376 |          0.4652 |         5.3289 |           8.1749 |
+| Multi_Horizon_LSTM | Multi-Horizon LSTM (Temporal Only) | Average_All_Horizons |             7 |              35 | 17.7643 | 4.0948 | 1.9351 | 4.1619 | 0.8129 |     54.8376 |          0.2667 |         4.0852 |           8.1749 |
 
 ## 6. Trả lời Câu hỏi Thảo luận Chuyên sâu (Mục 11 & Mục 12)
 
