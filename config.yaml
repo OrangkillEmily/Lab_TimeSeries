@@ -131,3 +131,90 @@ evaluation:
   ablation:
     enabled: true
     compare_with_and_without_weather: true
+
+# ==============================================================================
+# CẤU HÌNH LAB 01 — EDA, WHITE NOISE, DECOMPOSITION & DATA QUALITY
+# ==============================================================================
+lab01:
+  project:
+    name: "Lab01_TimeSeries_EDA_Decomposition_Quality"
+    version: "2.0.0"
+    lab_id: "lab01"
+    course: "Time Series Analysis (Phân tích Chuỗi Thời gian)"
+    institution: "University of Transport in Ho Chi Minh City (UTH)"
+    random_seed: 42
+  paths:
+    data_raw: "data/raw/AirPassengers.csv"
+    data_processed_dir: "data/processed/lab01"
+    models_dir: "models/lab01"
+    reports_dir: "reports/lab01"
+    figures_dir: "reports/lab01/figures"
+    metrics_dir: "reports/lab01/metrics"
+    logs_dir: "logs/lab01"
+    progress_dir: "progress_results/lab01"
+    docs_dir: "docs/lab01"
+    notebooks_dir: "notebooks/lab01"
+    scripts_dir: "script/lab01"
+  data:
+    date_col: "Month"
+    value_col: "Passengers"
+    freq: "MS"
+    seasonal_period: 12
+  analysis:
+    acf_pacf_nlags: 40
+    white_noise_n: 1000
+    white_noise_mean: 0.0
+    white_noise_std: 1.0
+    decomposition_period: 12
+    rolling_window: 12
+    missing_simulation_count: 8
+    zscore_threshold: 3.0
+    iqr_multiplier: 1.5
+
+# ==============================================================================
+# CẤU HÌNH LAB 02 — ADF STATIONARITY, ACF/PACF & ARIMA/SARIMA
+# ==============================================================================
+lab02:
+  project:
+    name: "Lab02_Stationarity_ADF_ARIMA_SARIMA"
+    version: "2.0.0"
+    lab_id: "lab02"
+    course: "Time Series Analysis (Phân tích Chuỗi Thời gian)"
+    institution: "University of Transport in Ho Chi Minh City (UTH)"
+    random_seed: 42
+  paths:
+    data_processed_dir: "data/processed/lab02"
+    models_dir: "models/lab02"
+    reports_dir: "reports/lab02"
+    figures_dir: "reports/lab02/figures"
+    metrics_dir: "reports/lab02/metrics"
+    model_summary_dir: "reports/model_summary/lab02"
+    logs_dir: "logs/lab02"
+    progress_dir: "progress_results/lab02"
+    docs_dir: "docs/lab02"
+    notebooks_dir: "notebooks/lab02"
+    scripts_dir: "script/lab02"
+  split:
+    test_ratio: 0.20
+    shuffle: false
+  datasets:
+    dataset1:
+      dataset_key: "dataset1"
+      dataset_title: "Monthly Retail Sales (US, 07/1991 - 06/2008)"
+      raw_path: "data/raw/Monthly Retail Sales.csv"
+      date_col: "date"
+      value_col: "value"
+      freq: "MS"
+      seasonal_period: 12
+      report_prefix: "LAB_02_DATASET1_REPORT"
+    dataset2:
+      dataset_key: "dataset2"
+      dataset_title: "AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)"
+      raw_path: "data/raw/AirPassengers.csv"
+      date_col: "Month"
+      value_col: "Passengers"
+      freq: "MS"
+      seasonal_period: 12
+      report_prefix: "LAB_02_DATASET2_REPORT"
+
+

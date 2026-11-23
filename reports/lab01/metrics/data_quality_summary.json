@@ -1,0 +1,92 @@
+{
+  "imputation": {
+    "missing_simulated_count": 11,
+    "missing_pct": 7.64,
+    "missing_dates": [
+      "1949-12-01",
+      "1953-11-01",
+      "1955-05-01",
+      "1955-06-01",
+      "1955-07-01",
+      "1956-09-01",
+      "1957-06-01",
+      "1957-11-01",
+      "1959-04-01",
+      "1960-08-01",
+      "1960-10-01"
+    ],
+    "missing_after_ffill": 0,
+    "missing_after_interp": 0,
+    "forward_fill": {
+      "MAE": 38.0909,
+      "RMSE": 46.3357,
+      "MAPE": 11.7501
+    },
+    "time_interpolation": {
+      "MAE": 19.4069,
+      "RMSE": 23.4042,
+      "MAPE": 6.2623
+    },
+    "best_method": "Time Interpolation"
+  },
+  "outliers": {
+    "injected_outlier_dates": [
+      "1952-08-01",
+      "1955-02-01",
+      "1958-11-01"
+    ],
+    "methods_comparison": {
+      "Rolling_3sigma": {
+        "detected_count": 2,
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8
+      },
+      "ZScore_Global": {
+        "detected_count": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 3,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "IQR_Global": {
+        "detected_count": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 3,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "STL_Log_Robust_MAD": {
+        "detected_count": 3,
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    "outliers_replaced_count": 3,
+    "missing_remaining_after_clean": 0
+  },
+  "final_cleaning_metrics_on_damaged_points": {
+    "MAE": 21.1379,
+    "RMSE": 24.5704,
+    "MAPE": 7.1345
+  },
+  "generated_figures": [
+    "08_missing_imputation_eval.png",
+    "09_rolling_outliers_detection.png",
+    "10_stl_log_outliers_detection.png",
+    "11_before_after_cleaning.png",
+    "12_residuals_comparison.png"
+  ],
+  "duration_sec": 3.8431
+}

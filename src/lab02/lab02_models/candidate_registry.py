@@ -17,7 +17,7 @@ PURPOSE:
 """
 from typing import List, Dict, Any
 import pandas as pd
-from src.lab02.lab02_utils.logging_config import normalize_dataset_key
+from src.lab02.logging_config import normalize_dataset_key
 
 
 DATASET1_CANDIDATES: List[Dict[str, Any]] = [
@@ -359,8 +359,8 @@ def get_candidate_models(
 
 
 def _detect_differencing_orders(series: pd.Series, label: str, s: int, dataset_name: str) -> Dict[str, Any]:
-    from src.lab02.lab02_utils.stats import perform_adf_test
-    from src.lab02.lab02_utils.acf_pacf_analysis import analyze_acf_pacf
+    from src.lab02.stats import perform_adf_test
+    from src.lab02.acf_pacf_analysis import analyze_acf_pacf
 
     adf_raw = perform_adf_test(series, f"{dataset_name} [{label}] (Train Raw)", return_dict=True)
     d = 1 if float(adf_raw.get("p_value", 1.0)) >= 0.05 else 0
@@ -396,6 +396,59 @@ def _detect_differencing_orders(series: pd.Series, label: str, s: int, dataset_n
         "diff_1": diff_1,
     }
 
+import itertools
+
+
+def _append_full_grid(
+    candidates: List[Dict[str, Any]],
+    p_vals: List[int],
+    q_vals: List[int],
+    P_vals: List[int],
+    Q_vals: List[int],
+    include_log: bool = False,
+    s: int = 12,
+) -> None:
+    existing = {c["model_name"] for c in candidates}
+    for use_log in ([False, True] if include_log else [False]):
+        prefix = "Log-SARIMA" if use_log else "SARIMA"
+        for p, q, P, Q in itertools.product(p_vals, q_vals, P_vals, Q_vals):
+            name = f"{prefix}({p},1,{q})x({P},1,{Q})_{s}"
+            if name in existing:
+                continue
+            existing.add(name)
+            candidates.append(
+                {
+                    "model_name": name,
+                    "model_family": prefix,
+                    "order": (p, 1, q),
+                    "seasonal_order": (P, 1, Q, s),
+                    "use_log_transform": use_log,
+                    "tier": "full",
+                    "rationale": f"Cấu hình trong không gian lưới {prefix} xác định từ ACF/PACF (d=1, D=1, s={s}).",
+                }
+            )
+
+
+# Dataset 1: đủ 6 AR/MA/ARIMA + 18 SARIMA + 3 Log-SARIMA = 27 mô hình
+# (đổi include_log=True nếu muốn thêm đủ cả 18 Log-SARIMA cho Dataset 1)
+_append_full_grid(
+    DATASET1_CANDIDATES,
+    p_vals=[0, 1, 2],
+    q_vals=[0, 1, 3],
+    P_vals=[0],
+    Q_vals=[0, 1],
+    include_log=False,
+)
+
+# Dataset 2: đủ 6 AR/MA/ARIMA + 24 SARIMA + 24 Log-SARIMA = 54 mô hình
+_append_full_grid(
+    DATASET2_CANDIDATES,
+    p_vals=[0, 1],
+    q_vals=[0, 1, 3],
+    P_vals=[0, 1],
+    Q_vals=[0, 1],
+    include_log=True,
+)
 
 def auto_identify_candidates_from_data(
     train_series: Any,
@@ -429,8 +482,8 @@ def auto_identify_candidates_from_data(
     """
     import numpy as np
     import pandas as pd
-    from src.lab02.lab02_utils.stats import perform_adf_test
-    from src.lab02.lab02_utils.acf_pacf_analysis import analyze_acf_pacf
+    from src.lab02.stats import perform_adf_test
+    from src.lab02.acf_pacf_analysis import analyze_acf_pacf
 
     s = int(seasonal_period)
     y = pd.Series(train_series).astype(float).dropna()

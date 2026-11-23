@@ -1,0 +1,28 @@
+{
+  "period": 12,
+  "classical_comparison": {
+    "additive_resid_variance": 371.2225,
+    "multiplicative_resid_variance": 0.001106,
+    "recommended_model": "Multiplicative"
+  },
+  "stl": {
+    "trend_strength": 0.9957,
+    "seasonal_strength": 0.972,
+    "mean": -0.6682,
+    "std": 7.3585,
+    "ci_limit_95": 0.1633,
+    "lags_inside_ci": 27,
+    "total_lags": 30,
+    "inside_ci_pct": 90.0,
+    "ljung_box_p10": 0.0356,
+    "ljung_box_p20": 0.2567
+  },
+  "trend_direction": "Tăng trưởng mạnh và ổn định suốt giai đoạn 1949–1960",
+  "seasonality_level": "Rất mạnh (biên độ giãn nở theo xu hướng — dạng Multiplicative)",
+  "generated_figures": [
+    "05_classical_decomposition_multiplicative.png",
+    "06_stl_decomposition.png",
+    "07_stl_residual_diagnostics.png"
+  ],
+  "duration_sec": 1.9285
+}

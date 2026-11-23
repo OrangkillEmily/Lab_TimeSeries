@@ -1,0 +1,332 @@
+{
+  "run_id": "20261123_154119_4f8c41",
+  "project": {
+    "name": "Lab01_TimeSeries_EDA_Decomposition_Quality",
+    "version": "2.0.0",
+    "lab_id": "lab01",
+    "course": "Time Series Analysis (Phân tích Chuỗi Thời gian)",
+    "institution": "University of Transport in Ho Chi Minh City (UTH)",
+    "random_seed": 42
+  },
+  "started_at": "2026-11-23T15:41:19",
+  "updated_at": "2026-11-23T15:41:36",
+  "status": "COMPLETED",
+  "stages": {
+    "data_loading": {
+      "updated_at": "2026-11-23T15:41:19",
+      "data": {
+        "file_path": "D:\\Lab_TimeSeries\\data\\raw\\AirPassengers.csv",
+        "n_obs": 144,
+        "start_date": "1949-01-01",
+        "end_date": "1960-12-01",
+        "frequency": "MS",
+        "columns": [
+          "Month",
+          "Passengers"
+        ],
+        "value_columns": [
+          "Passengers"
+        ],
+        "missing_values": 0,
+        "duplicate_timestamps": 0,
+        "is_monotonic": true,
+        "dataset_name": "AirPassengers (Monthly Airline Passengers 1949-1960)",
+        "value_col": "Passengers",
+        "mean": 280.2986,
+        "std": 119.9663,
+        "min": 104.0,
+        "q25": 180.0,
+        "median": 265.5,
+        "q75": 360.5,
+        "max": 622.0,
+        "skewness": 0.5832,
+        "kurtosis": -0.3649,
+        "growth_ratio": 3.8571,
+        "duration_sec": 0.0569
+      }
+    },
+    "eda": {
+      "updated_at": "2026-11-23T15:41:23",
+      "data": {
+        "eda_profile": {
+          "n_obs": 144,
+          "start_date": "1949-01-01",
+          "end_date": "1960-12-01",
+          "frequency": "MS (Monthly Start)",
+          "dtype": "int64",
+          "missing_count": 0,
+          "duplicate_dates": 0,
+          "mean": 280.3,
+          "std": 119.97,
+          "cv_pct": 42.8,
+          "skewness": 0.583,
+          "min": 104.0,
+          "min_date": "11/1949",
+          "q25": 180.0,
+          "median": 265.5,
+          "q75": 360.5,
+          "max": 622.0,
+          "max_date": "07/1960",
+          "growth_ratio": 3.86,
+          "first_year": "1949",
+          "last_year": "1960",
+          "first_year_amp": 44.0,
+          "last_year_amp": 232.0,
+          "recommended_split": {
+            "ratio": "80% Train / 20% Test (shuffle=False)",
+            "train_n": 115,
+            "train_range": "01/1949 → 07/1958",
+            "test_n": 29,
+            "test_range": "08/1958 → 12/1960",
+            "note": "Lab 01 tập trung phân tích cấu trúc, phân rã và làm sạch; bước chia Train/Test tuần tự được áp dụng ở Lab 02 để chống Data Leakage."
+          }
+        },
+        "acf_pacf": {
+          "nlags": 40,
+          "conf_bound_95": 0.1633,
+          "acf_lag1": 0.948,
+          "acf_lag12": 0.7604,
+          "acf_lag24": 0.5322,
+          "acf_lag36": 0.337,
+          "significant_acf_count": 40,
+          "significant_pacf_count": 6,
+          "significant_pacf_lags": [
+            1,
+            2,
+            9,
+            10,
+            11,
+            13
+          ],
+          "top_pacf_lags": [
+            {
+              "lag": 1,
+              "pacf": 0.948
+            },
+            {
+              "lag": 13,
+              "pacf": -0.5397
+            },
+            {
+              "lag": 9,
+              "pacf": 0.2325
+            },
+            {
+              "lag": 2,
+              "pacf": -0.2294
+            },
+            {
+              "lag": 11,
+              "pacf": 0.1713
+            }
+          ],
+          "has_strong_autocorrelation": true,
+          "has_seasonal_peaks_12": true
+        },
+        "white_noise": {
+          "n_points": 1000,
+          "mean": -0.0289,
+          "std": 0.9892,
+          "conf_bound_95": 0.062,
+          "outside_lags": [
+            1
+          ],
+          "inside_95_pct": 97.5,
+          "ljung_box_wn_p10": 0.3282,
+          "ljung_box_wn_p20": 0.1443,
+          "ljung_box_ap_p20": 5.300472631050203e-292,
+          "is_white_noise_confirmed": true,
+          "comparison_5_lines": [
+            "1. Tính ngẫu nhiên & cấu trúc: White Noise dao động ngẫu nhiên quanh trung bình 0 (mean=-0.029, std=0.989), còn AirPassengers có xu hướng tăng trưởng dài hạn và mùa vụ rõ rệt.",
+            "2. Ngưỡng tin cậy 95%: White Noise có 97.5% số lag nằm trong dải tin cậy ±0.0620 (1/40 lag vượt nhẹ do ngẫu nhiên), trong khi AirPassengers vượt xa ngưỡng ở hầu hết các lag đầu.",
+            "3. Tốc độ suy giảm ACF: ACF của White Noise xấp xỉ 0 ngay từ lag 1 (ACF(1)=0.0871), còn AirPassengers suy giảm rất chậm (ACF(1)=0.9480) chứng tỏ chuỗi không dừng.",
+            "4. Kiểm định Ljung-Box (lag 20): White Noise đạt p-value=0.1443 (> 0.05, không bác bỏ H0 — không có tự tương quan), còn AirPassengers có p-value=5.30e-292 (<< 0.05, tự tương quan cực mạnh).",
+            "5. Khả năng dự báo: White Noise không chứa quy luật quá khứ để dự báo, ngược lại AirPassengers có cấu trúc tự tương quan và chu kỳ 12 tháng rất giàu thông tin cho mô hình SARIMA/ETS."
+          ]
+        },
+        "generated_figures": [
+          "01_full_series_overview.png",
+          "02_acf_pacf_airpassengers.png",
+          "03_white_noise_series.png",
+          "04_white_noise_vs_airpassengers_acf.png"
+        ],
+        "duration_sec": 3.4427
+      }
+    },
+    "decomposition": {
+      "updated_at": "2026-11-23T15:41:25",
+      "data": {
+        "period": 12,
+        "classical_comparison": {
+          "additive_resid_variance": 371.2225,
+          "multiplicative_resid_variance": 0.001106,
+          "recommended_model": "Multiplicative"
+        },
+        "stl": {
+          "trend_strength": 0.9957,
+          "seasonal_strength": 0.972,
+          "mean": -0.6682,
+          "std": 7.3585,
+          "ci_limit_95": 0.1633,
+          "lags_inside_ci": 27,
+          "total_lags": 30,
+          "inside_ci_pct": 90.0,
+          "ljung_box_p10": 0.0356,
+          "ljung_box_p20": 0.2567
+        },
+        "trend_direction": "Tăng trưởng mạnh và ổn định suốt giai đoạn 1949–1960",
+        "seasonality_level": "Rất mạnh (biên độ giãn nở theo xu hướng — dạng Multiplicative)",
+        "generated_figures": [
+          "05_classical_decomposition_multiplicative.png",
+          "06_stl_decomposition.png",
+          "07_stl_residual_diagnostics.png"
+        ],
+        "duration_sec": 1.9285
+      }
+    },
+    "data_quality": {
+      "updated_at": "2026-11-23T15:41:29",
+      "data": {
+        "imputation": {
+          "missing_simulated_count": 11,
+          "missing_pct": 7.64,
+          "missing_dates": [
+            "1949-12-01",
+            "1953-11-01",
+            "1955-05-01",
+            "1955-06-01",
+            "1955-07-01",
+            "1956-09-01",
+            "1957-06-01",
+            "1957-11-01",
+            "1959-04-01",
+            "1960-08-01",
+            "1960-10-01"
+          ],
+          "missing_after_ffill": 0,
+          "missing_after_interp": 0,
+          "forward_fill": {
+            "MAE": 38.0909,
+            "RMSE": 46.3357,
+            "MAPE": 11.7501
+          },
+          "time_interpolation": {
+            "MAE": 19.4069,
+            "RMSE": 23.4042,
+            "MAPE": 6.2623
+          },
+          "best_method": "Time Interpolation"
+        },
+        "outliers": {
+          "injected_outlier_dates": [
+            "1952-08-01",
+            "1955-02-01",
+            "1958-11-01"
+          ],
+          "methods_comparison": {
+            "Rolling_3sigma": {
+              "detected_count": 2,
+              "tp": 2,
+              "fp": 0,
+              "fn": 1,
+              "precision": 1.0,
+              "recall": 0.6667,
+              "f1": 0.8
+            },
+            "ZScore_Global": {
+              "detected_count": 0,
+              "tp": 0,
+              "fp": 0,
+              "fn": 3,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "IQR_Global": {
+              "detected_count": 0,
+              "tp": 0,
+              "fp": 0,
+              "fn": 3,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "STL_Log_Robust_MAD": {
+              "detected_count": 3,
+              "tp": 3,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            }
+          },
+          "outliers_replaced_count": 3,
+          "missing_remaining_after_clean": 0
+        },
+        "final_cleaning_metrics_on_damaged_points": {
+          "MAE": 21.1379,
+          "RMSE": 24.5704,
+          "MAPE": 7.1345
+        },
+        "generated_figures": [
+          "08_missing_imputation_eval.png",
+          "09_rolling_outliers_detection.png",
+          "10_stl_log_outliers_detection.png",
+          "11_before_after_cleaning.png",
+          "12_residuals_comparison.png"
+        ],
+        "duration_sec": 3.8431
+      }
+    },
+    "visualization": {
+      "updated_at": "2026-11-23T15:41:32",
+      "data": {
+        "peak_month": 7,
+        "peak_month_avg": 351.33,
+        "peak_seasonal_index": 1.2364,
+        "trough_month": 11,
+        "trough_month_avg": 232.83,
+        "trough_seasonal_index": 0.832,
+        "rolling_mean_std_corr": 0.9591,
+        "annual_cagr_pct": 12.79,
+        "generated_figures": [
+          "13_rolling_statistics.png",
+          "14_seasonal_trends.png",
+          "15_heatmaps_seasonality.png"
+        ],
+        "all_available_figures": [
+          "01_full_series_overview.png",
+          "02_acf_pacf_airpassengers.png",
+          "03_white_noise_series.png",
+          "04_white_noise_vs_airpassengers_acf.png",
+          "05_classical_decomposition_multiplicative.png",
+          "06_stl_decomposition.png",
+          "07_stl_residual_diagnostics.png",
+          "08_missing_imputation_eval.png",
+          "09_rolling_outliers_detection.png",
+          "10_stl_log_outliers_detection.png",
+          "11_before_after_cleaning.png",
+          "12_residuals_comparison.png",
+          "13_rolling_statistics.png",
+          "14_seasonal_trends.png",
+          "15_heatmaps_seasonality.png"
+        ],
+        "total_figures_count": 15,
+        "duration_sec": 3.1152
+      }
+    },
+    "reporting": {
+      "updated_at": "2026-11-23T15:41:36",
+      "data": {
+        "html_report": "reports\\lab01\\LAB_01_REPORT.html",
+        "pdf_report": "reports\\lab01\\LAB_01_REPORT.pdf",
+        "md_report": "reports\\lab01\\LAB_01_REPORT.md",
+        "html_size_bytes": 3982187,
+        "pdf_size_bytes": 3016905,
+        "md_size_bytes": 4684,
+        "duration_sec": 4.1994
+      }
+    }
+  }
+}

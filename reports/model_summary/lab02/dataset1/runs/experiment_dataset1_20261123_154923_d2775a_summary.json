@@ -1,0 +1,3822 @@
+{
+  "run_id": "dataset1_20261123_154923_d2775a",
+  "generated_at": "2026-11-23 15:49:33",
+  "dataset_info": {
+    "dataset_name": "dataset1",
+    "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+    "n_obs": 204,
+    "date_range": "1991-07-01 to 2008-06-01",
+    "frequency": "MS",
+    "train_size": 163,
+    "test_size": 41
+  },
+  "total_candidates": 27,
+  "succeeded_count": 27,
+  "failed_count": 0,
+  "automatic_interpretation": {
+    "run_id": "dataset1_20261123_154923_d2775a",
+    "best_rmse_model": "Log-SARIMA(1,1,1)x(0,1,1)_12",
+    "best_mae_model": "Log-SARIMA(1,1,1)x(0,1,1)_12",
+    "best_by_criterion": {
+      "lowest_test_rmse": {
+        "model": "Log-SARIMA(1,1,1)x(0,1,1)_12",
+        "value": 1.49
+      },
+      "lowest_test_mae": {
+        "model": "Log-SARIMA(1,1,1)x(0,1,1)_12",
+        "value": 1.18
+      },
+      "lowest_test_mape": {
+        "model": "Log-SARIMA(0,1,1)x(0,1,1)_12",
+        "value": 6.38
+      },
+      "highest_test_r2": {
+        "model": "Log-SARIMA(0,1,1)x(0,1,1)_12",
+        "value": 0.8698
+      },
+      "lowest_test_rmse_with_white_noise_adequacy": "SARIMA(0,1,1)x(0,1,1)_12",
+      "best_information_criteria_by_scale_group": {
+        "log_d1_D1_s12": {
+          "lowest_aic_model": "Log-SARIMA(2,1,3)x(0,1,1)_12",
+          "aic": -402.78,
+          "lowest_bic_model": "Log-SARIMA(0,1,1)x(0,1,1)_12",
+          "bic": -386.8,
+          "test_rmse_of_lowest_aic": 1.5
+        },
+        "original_d1": {
+          "lowest_aic_model": "ARIMA(1,1,1)",
+          "aic": 582.47,
+          "lowest_bic_model": "ARIMA(1,1,1)",
+          "bic": 591.73,
+          "test_rmse_of_lowest_aic": 4.62
+        },
+        "original_d1_D1_s12": {
+          "lowest_aic_model": "SARIMA(2,1,3)x(0,1,1)_12",
+          "aic": 223.07,
+          "lowest_bic_model": "SARIMA(1,1,1)x(0,1,1)_12",
+          "bic": 241.1,
+          "test_rmse_of_lowest_aic": 1.87
+        }
+      }
+    },
+    "best_aic_by_scale_group": {
+      "log_d1_D1_s12": {
+        "lowest_aic_model": "Log-SARIMA(2,1,3)x(0,1,1)_12",
+        "aic": -402.78,
+        "lowest_bic_model": "Log-SARIMA(0,1,1)x(0,1,1)_12",
+        "bic": -386.8,
+        "test_rmse_of_lowest_aic": 1.5
+      },
+      "original_d1": {
+        "lowest_aic_model": "ARIMA(1,1,1)",
+        "aic": 582.47,
+        "lowest_bic_model": "ARIMA(1,1,1)",
+        "bic": 591.73,
+        "test_rmse_of_lowest_aic": 4.62
+      },
+      "original_d1_D1_s12": {
+        "lowest_aic_model": "SARIMA(2,1,3)x(0,1,1)_12",
+        "aic": 223.07,
+        "lowest_bic_model": "SARIMA(1,1,1)x(0,1,1)_12",
+        "bic": 241.1,
+        "test_rmse_of_lowest_aic": 1.87
+      }
+    },
+    "passed_ljung_box_models": [
+      "Log-SARIMA(2,1,3)x(0,1,1)_12",
+      "SARIMA(0,1,1)x(0,1,1)_12",
+      "SARIMA(2,1,3)x(0,1,1)_12",
+      "SARIMA(1,1,1)x(0,1,1)_12",
+      "SARIMA(0,1,3)x(0,1,1)_12",
+      "SARIMA(2,1,1)x(0,1,1)_12",
+      "SARIMA(1,1,3)x(0,1,1)_12",
+      "SARIMA(2,1,0)x(0,1,1)_12",
+      "SARIMA(0,1,1)x(0,1,0)_12",
+      "SARIMA(1,1,1)x(0,1,0)_12",
+      "SARIMA(2,1,3)x(0,1,0)_12",
+      "SARIMA(0,1,3)x(0,1,0)_12",
+      "SARIMA(2,1,1)x(0,1,0)_12",
+      "SARIMA(1,1,3)x(0,1,0)_12",
+      "SARIMA(2,1,0)x(0,1,0)_12"
+    ],
+    "failed_ljung_box_models": [
+      "Log-SARIMA(1,1,1)x(0,1,1)_12",
+      "Log-SARIMA(0,1,1)x(0,1,1)_12",
+      "SARIMA(1,1,0)x(0,1,1)_12",
+      "SARIMA(0,1,0)x(0,1,1)_12",
+      "SARIMA(1,1,0)x(0,1,0)_12",
+      "SARIMA(0,1,0)x(0,1,0)_12",
+      "MA(1) [ARIMA(0,1,1)]",
+      "AR(2) [ARIMA(2,1,0)]",
+      "AR(1) [ARIMA(1,1,0)]",
+      "MA(3) [ARIMA(0,1,3)]",
+      "ARIMA(1,1,1)",
+      "ARIMA(2,1,1)"
+    ],
+    "non_converged_models": [
+      "Log-SARIMA(2,1,3)x(0,1,1)_12",
+      "SARIMA(1,1,0)x(0,1,0)_12"
+    ],
+    "failed_runs": [],
+    "recommended_model": "SARIMA(0,1,1)x(0,1,1)_12",
+    "summary_markdown": "### Diễn giải Đa Tiêu chí Tự động (Run ID: `dataset1_20261123_154923_d2775a` — Monthly Retail Sales (US, 07/1991 - 06/2008))\n\n#### A. Mô hình Tốt nhất theo Từng Tiêu chí Độc lập (Criterion-Specific Leaders)\n- **Tiêu chí 1 — Sai số RMSE trên tập Test thấp nhất (Thang đo gốc)**: **Log-SARIMA(1,1,1)x(0,1,1)_12** (`RMSE = 1.49`, `R² = 0.8697`).\n- **Tiêu chí 2 — Sai số tuyệt đối MAE trên tập Test thấp nhất**: **Log-SARIMA(1,1,1)x(0,1,1)_12** (`MAE = 1.18`).\n- **Tiêu chí 3 — Sai số phần trăm MAPE (%) trên tập Test thấp nhất**: **Log-SARIMA(0,1,1)x(0,1,1)_12** (`MAPE = 6.38%`).\n- **Tiêu chí 4 — Mô hình thỏa mãn đồng thời Chuẩn Nhiễu trắng (Ljung-Box $p \\ge 0.05$), Hội tụ và có RMSE thấp nhất**: **SARIMA(0,1,1)x(0,1,1)_12**.\n- **Tiêu chí 5 — Tiêu chuẩn Thông tin (AIC / BIC) trên Tập Train theo từng nhóm thang đo hợp lệ (`Scale_Group`)**:\n  - Nhóm `log_d1_D1_s12`: AIC thấp nhất là **Log-SARIMA(2,1,3)x(0,1,1)_12** (`AIC = -402.78`, `Test RMSE = 1.50`); BIC thấp nhất là **Log-SARIMA(0,1,1)x(0,1,1)_12** (`BIC = -386.80`).\n  - Nhóm `original_d1`: AIC thấp nhất là **ARIMA(1,1,1)** (`AIC = 582.47`, `Test RMSE = 4.62`); BIC thấp nhất là **ARIMA(1,1,1)** (`BIC = 591.73`).\n  - Nhóm `original_d1_D1_s12`: AIC thấp nhất là **SARIMA(2,1,3)x(0,1,1)_12** (`AIC = 223.07`, `Test RMSE = 1.87`); BIC thấp nhất là **SARIMA(1,1,1)x(0,1,1)_12** (`BIC = 241.10`).\n\n#### B. Kiểm định Phần dư & Trạng thái Hội tụ\n- **Các mô hình vượt qua kiểm định Ljung-Box ($p \\ge 0.05$, phần dư đạt chuẩn White Noise)**: `Log-SARIMA(2,1,3)x(0,1,1)_12`, `SARIMA(0,1,1)x(0,1,1)_12`, `SARIMA(2,1,3)x(0,1,1)_12`, `SARIMA(1,1,1)x(0,1,1)_12`, `SARIMA(0,1,3)x(0,1,1)_12`, `SARIMA(2,1,1)x(0,1,1)_12`, `SARIMA(1,1,3)x(0,1,1)_12`, `SARIMA(2,1,0)x(0,1,1)_12`, `SARIMA(0,1,1)x(0,1,0)_12`, `SARIMA(1,1,1)x(0,1,0)_12`, `SARIMA(2,1,3)x(0,1,0)_12`, `SARIMA(0,1,3)x(0,1,0)_12`, `SARIMA(2,1,1)x(0,1,0)_12`, `SARIMA(1,1,3)x(0,1,0)_12`, `SARIMA(2,1,0)x(0,1,0)_12`.\n- **Các mô hình vi phạm kiểm định Ljung-Box ($p < 0.05$, phần dư còn tự tương quan)**: `Log-SARIMA(1,1,1)x(0,1,1)_12`, `Log-SARIMA(0,1,1)x(0,1,1)_12`, `SARIMA(1,1,0)x(0,1,1)_12`, `SARIMA(0,1,0)x(0,1,1)_12`, `SARIMA(1,1,0)x(0,1,0)_12`, `SARIMA(0,1,0)x(0,1,0)_12`, `MA(1) [ARIMA(0,1,1)]`, `AR(2) [ARIMA(2,1,0)]`, `AR(1) [ARIMA(1,1,0)]`, `MA(3) [ARIMA(0,1,3)]`, `ARIMA(1,1,1)`, `ARIMA(2,1,1)`.\n- **Các mô hình có cảnh báo không hội tụ (`Converged = False`)**: `Log-SARIMA(2,1,3)x(0,1,1)_12`, `SARIMA(1,1,0)x(0,1,0)_12`.\n- **Các mô hình gặp lỗi thực thi (`Status = FAILED`)**: Không có (0 lỗi).\n\n#### C. Lưu ý Phương pháp luận (Tại sao không khẳng định một mô hình tốt nhất tuyệt đối duy nhất?)\n1. **Không so sánh chéo AIC/BIC giữa các nhóm khác bậc sai phân hoặc khác phép biến đổi**: Giá trị Log-Likelihood của nhóm `log_d1_D1_s12` được tính trên biến $\\ln(Y_t)$ nên có AIC âm, không thể đem so sánh trực tiếp với AIC dương của nhóm `original_d1_D1_s12` hoặc `original_d1`.\n2. **Sự đánh đổi giữa Statistical Fit (AIC/BIC), Residual Adequacy (Ljung-Box) và Out-of-Sample Error (RMSE/MAE)**: Một mô hình có thể đạt RMSE thấp nhất trên tập Test nhờ biến đổi Logarit nhưng phần dư trên không gian Log vẫn còn tự tương quan nhẹ (như trên Dataset 1), hoặc một mô hình bậc cao có AIC thấp nhất nhưng tốn nhiều tham số hơn cấu hình tối giản (như `SARIMA(2,1,3)` so với `SARIMA(0,1,1)`). Do đó, việc lựa chọn mô hình cuối cùng phụ thuộc vào mục tiêu ưu tiên độ chính xác dự báo ngoài mẫu hay tính chặt chẽ của giả định nhiễu trắng."
+  },
+  "comparison_table": [
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "Log-SARIMA(1,1,1)x(0,1,1)_12",
+      "Family": "Log-SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(1,1,1)",
+      "Seasonal (P,D,Q,s)": "(0,1,1,12)",
+      "Transformation": "Log Transformation ln(Y_t) + Inverse exp() | d=1, D=1, s=12",
+      "Scale_Group": "log_d1_D1_s12",
+      "AIC": -396.57,
+      "BIC": -384.92,
+      "LogLik": 202.28,
+      "MAE": 1.18,
+      "RMSE": 1.49,
+      "MAPE (%)": 6.4,
+      "R²": 0.8697,
+      "Resid Mean": -0.0022,
+      "Resid Std": 0.0556,
+      "Ljung-Box Q": 40.93,
+      "Ljung-Box p": 0.017,
+      "Jarque-Bera p": 0.0,
+      "Het p": 0.2515,
+      "White Noise": "Fail (Không đạt)",
+      "Converged": true,
+      "Duration (s)": 0.3887
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "Log-SARIMA(0,1,1)x(0,1,1)_12",
+      "Family": "Log-SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(0,1,1)",
+      "Seasonal (P,D,Q,s)": "(0,1,1,12)",
+      "Transformation": "Log Transformation ln(Y_t) + Inverse exp() | d=1, D=1, s=12",
+      "Scale_Group": "log_d1_D1_s12",
+      "AIC": -395.54,
+      "BIC": -386.8,
+      "LogLik": 200.77,
+      "MAE": 1.19,
+      "RMSE": 1.49,
+      "MAPE (%)": 6.38,
+      "R²": 0.8698,
+      "Resid Mean": -0.0031,
+      "Resid Std": 0.056,
+      "Ljung-Box Q": 46.5,
+      "Ljung-Box p": 0.0039,
+      "Jarque-Bera p": 0.0004,
+      "Het p": 0.3588,
+      "White Noise": "Fail (Không đạt)",
+      "Converged": true,
+      "Duration (s)": 0.4422
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "Log-SARIMA(2,1,3)x(0,1,1)_12",
+      "Family": "Log-SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(2,1,3)",
+      "Seasonal (P,D,Q,s)": "(0,1,1,12)",
+      "Transformation": "Log Transformation ln(Y_t) + Inverse exp() | d=1, D=1, s=12",
+      "Scale_Group": "log_d1_D1_s12",
+      "AIC": -402.78,
+      "BIC": -382.49,
+      "LogLik": 208.39,
+      "MAE": 1.2,
+      "RMSE": 1.5,
+      "MAPE (%)": 6.53,
+      "R²": 0.8686,
+      "Resid Mean": -0.0059,
+      "Resid Std": 0.0624,
+      "Ljung-Box Q": 17.52,
+      "Ljung-Box p": 0.8259,
+      "Jarque-Bera p": 0.0,
+      "Het p": 0.5638,
+      "White Noise": "Pass (Đạt)",
+      "Converged": false,
+      "Duration (s)": 1.1124
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "SARIMA(0,1,1)x(0,1,1)_12",
+      "Family": "SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(0,1,1)",
+      "Seasonal (P,D,Q,s)": "(0,1,1,12)",
+      "Transformation": "Original Scale | d=1, D=1, s=12",
+      "Scale_Group": "original_d1_D1_s12",
+      "AIC": 233.85,
+      "BIC": 242.59,
+      "LogLik": -113.93,
+      "MAE": 1.45,
+      "RMSE": 1.84,
+      "MAPE (%)": 8.21,
+      "R²": 0.8012,
+      "Resid Mean": 0.062,
+      "Resid Std": 0.5399,
+      "Ljung-Box Q": 32.94,
+      "Ljung-Box p": 0.1053,
+      "Jarque-Bera p": 0.4558,
+      "Het p": 0.0,
+      "White Noise": "Pass (Đạt)",
+      "Converged": true,
+      "Duration (s)": 0.092
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "SARIMA(2,1,3)x(0,1,1)_12",
+      "Family": "SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(2,1,3)",
+      "Seasonal (P,D,Q,s)": "(0,1,1,12)",
+      "Transformation": "Original Scale | d=1, D=1, s=12",
+      "Scale_Group": "original_d1_D1_s12",
+      "AIC": 223.07,
+      "BIC": 243.35,
+      "LogLik": -104.54,
+      "MAE": 1.48,
+      "RMSE": 1.87,
+      "MAPE (%)": 8.38,
+      "R²": 0.7956,
+      "Resid Mean": 0.0528,
+      "Resid Std": 0.5151,
+      "Ljung-Box Q": 12.67,
+      "Ljung-Box p": 0.9712,
+      "Jarque-Bera p": 0.8357,
+      "Het p": 0.0016,
+      "White Noise": "Pass (Đạt)",
+      "Converged": true,
+      "Duration (s)": 0.6731
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "SARIMA(1,1,0)x(0,1,1)_12",
+      "Family": "SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(1,1,0)",
+      "Seasonal (P,D,Q,s)": "(0,1,1,12)",
+      "Transformation": "Original Scale | d=1, D=1, s=12",
+      "Scale_Group": "original_d1_D1_s12",
+      "AIC": 258.39,
+      "BIC": 267.15,
+      "LogLik": -126.19,
+      "MAE": 1.47,
+      "RMSE": 1.91,
+      "MAPE (%)": 8.48,
+      "R²": 0.7866,
+      "Resid Mean": 0.0253,
+      "Resid Std": 0.5946,
+      "Ljung-Box Q": 66.99,
+      "Ljung-Box p": 0.0,
+      "Jarque-Bera p": 0.3517,
+      "Het p": 0.0002,
+      "White Noise": "Fail (Không đạt)",
+      "Converged": true,
+      "Duration (s)": 0.0851
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "SARIMA(1,1,1)x(0,1,1)_12",
+      "Family": "SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(1,1,1)",
+      "Seasonal (P,D,Q,s)": "(0,1,1,12)",
+      "Transformation": "Original Scale | d=1, D=1, s=12",
+      "Scale_Group": "original_d1_D1_s12",
+      "AIC": 229.45,
+      "BIC": 241.1,
+      "LogLik": -110.73,
+      "MAE": 1.47,
+      "RMSE": 1.91,
+      "MAPE (%)": 8.48,
+      "R²": 0.7862,
+      "Resid Mean": 0.0587,
+      "Resid Std": 0.5303,
+      "Ljung-Box Q": 24.1,
+      "Ljung-Box p": 0.4558,
+      "Jarque-Bera p": 0.2871,
+      "Het p": 0.0001,
+      "White Noise": "Pass (Đạt)",
+      "Converged": true,
+      "Duration (s)": 0.1387
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "SARIMA(0,1,3)x(0,1,1)_12",
+      "Family": "SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(0,1,3)",
+      "Seasonal (P,D,Q,s)": "(0,1,1,12)",
+      "Transformation": "Original Scale | d=1, D=1, s=12",
+      "Scale_Group": "original_d1_D1_s12",
+      "AIC": 229.34,
+      "BIC": 243.83,
+      "LogLik": -109.67,
+      "MAE": 1.5,
+      "RMSE": 1.95,
+      "MAPE (%)": 8.72,
+      "R²": 0.7767,
+      "Resid Mean": 0.0532,
+      "Resid Std": 0.53,
+      "Ljung-Box Q": 21.25,
+      "Ljung-Box p": 0.6242,
+      "Jarque-Bera p": 0.3124,
+      "Het p": 0.0002,
+      "White Noise": "Pass (Đạt)",
+      "Converged": true,
+      "Duration (s)": 0.1934
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "SARIMA(2,1,1)x(0,1,1)_12",
+      "Family": "SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(2,1,1)",
+      "Seasonal (P,D,Q,s)": "(0,1,1,12)",
+      "Transformation": "Original Scale | d=1, D=1, s=12",
+      "Scale_Group": "original_d1_D1_s12",
+      "AIC": 229.46,
+      "BIC": 244.02,
+      "LogLik": -109.73,
+      "MAE": 1.54,
+      "RMSE": 2.0,
+      "MAPE (%)": 8.97,
+      "R²": 0.7666,
+      "Resid Mean": 0.0505,
+      "Resid Std": 0.5288,
+      "Ljung-Box Q": 18.32,
+      "Ljung-Box p": 0.7873,
+      "Jarque-Bera p": 0.5613,
+      "Het p": 0.0003,
+      "White Noise": "Pass (Đạt)",
+      "Converged": true,
+      "Duration (s)": 0.2557
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "SARIMA(1,1,3)x(0,1,1)_12",
+      "Family": "SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(1,1,3)",
+      "Seasonal (P,D,Q,s)": "(0,1,1,12)",
+      "Transformation": "Original Scale | d=1, D=1, s=12",
+      "Scale_Group": "original_d1_D1_s12",
+      "AIC": 230.78,
+      "BIC": 248.17,
+      "LogLik": -109.39,
+      "MAE": 1.54,
+      "RMSE": 2.0,
+      "MAPE (%)": 8.98,
+      "R²": 0.7661,
+      "Resid Mean": 0.0507,
+      "Resid Std": 0.5319,
+      "Ljung-Box Q": 20.54,
+      "Ljung-Box p": 0.6654,
+      "Jarque-Bera p": 0.5359,
+      "Het p": 0.0002,
+      "White Noise": "Pass (Đạt)",
+      "Converged": true,
+      "Duration (s)": 0.28
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "SARIMA(0,1,0)x(0,1,1)_12",
+      "Family": "SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(0,1,0)",
+      "Seasonal (P,D,Q,s)": "(0,1,1,12)",
+      "Transformation": "Original Scale | d=1, D=1, s=12",
+      "Scale_Group": "original_d1_D1_s12",
+      "AIC": 313.37,
+      "BIC": 319.21,
+      "LogLik": -154.69,
+      "MAE": 1.57,
+      "RMSE": 2.02,
+      "MAPE (%)": 9.12,
+      "R²": 0.7606,
+      "Resid Mean": 0.0193,
+      "Resid Std": 0.7247,
+      "Ljung-Box Q": 96.38,
+      "Ljung-Box p": 0.0,
+      "Jarque-Bera p": 0.7656,
+      "Het p": 0.0,
+      "White Noise": "Fail (Không đạt)",
+      "Converged": true,
+      "Duration (s)": 0.0976
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "SARIMA(2,1,0)x(0,1,1)_12",
+      "Family": "SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(2,1,0)",
+      "Seasonal (P,D,Q,s)": "(0,1,1,12)",
+      "Transformation": "Original Scale | d=1, D=1, s=12",
+      "Scale_Group": "original_d1_D1_s12",
+      "AIC": 230.05,
+      "BIC": 241.73,
+      "LogLik": -111.03,
+      "MAE": 1.59,
+      "RMSE": 2.06,
+      "MAPE (%)": 9.32,
+      "R²": 0.7527,
+      "Resid Mean": 0.038,
+      "Resid Std": 0.5355,
+      "Ljung-Box Q": 19.07,
+      "Ljung-Box p": 0.7484,
+      "Jarque-Bera p": 0.9484,
+      "Het p": 0.0005,
+      "White Noise": "Pass (Đạt)",
+      "Converged": true,
+      "Duration (s)": 0.126
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "SARIMA(1,1,0)x(0,1,0)_12",
+      "Family": "SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(1,1,0)",
+      "Seasonal (P,D,Q,s)": "(0,1,0,12)",
+      "Transformation": "Original Scale | d=1, D=1, s=12",
+      "Scale_Group": "original_d1_D1_s12",
+      "AIC": 278.02,
+      "BIC": 284.02,
+      "LogLik": -137.01,
+      "MAE": 1.85,
+      "RMSE": 2.32,
+      "MAPE (%)": 10.77,
+      "R²": 0.6835,
+      "Resid Mean": 0.0252,
+      "Resid Std": 0.6065,
+      "Ljung-Box Q": 60.31,
+      "Ljung-Box p": 0.0001,
+      "Jarque-Bera p": 0.0069,
+      "Het p": 0.0001,
+      "White Noise": "Fail (Không đạt)",
+      "Converged": false,
+      "Duration (s)": 0.065
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "SARIMA(0,1,1)x(0,1,0)_12",
+      "Family": "SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(0,1,1)",
+      "Seasonal (P,D,Q,s)": "(0,1,0,12)",
+      "Transformation": "Original Scale | d=1, D=1, s=12",
+      "Scale_Group": "original_d1_D1_s12",
+      "AIC": 251.6,
+      "BIC": 257.59,
+      "LogLik": -123.8,
+      "MAE": 1.87,
+      "RMSE": 2.34,
+      "MAPE (%)": 10.87,
+      "R²": 0.6787,
+      "Resid Mean": 0.0601,
+      "Resid Std": 0.5537,
+      "Ljung-Box Q": 35.2,
+      "Ljung-Box p": 0.0654,
+      "Jarque-Bera p": 0.0244,
+      "Het p": 0.0,
+      "White Noise": "Pass (Đạt)",
+      "Converged": true,
+      "Duration (s)": 0.0377
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "SARIMA(1,1,1)x(0,1,0)_12",
+      "Family": "SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(1,1,1)",
+      "Seasonal (P,D,Q,s)": "(0,1,0,12)",
+      "Transformation": "Original Scale | d=1, D=1, s=12",
+      "Scale_Group": "original_d1_D1_s12",
+      "AIC": 248.92,
+      "BIC": 257.91,
+      "LogLik": -121.46,
+      "MAE": 2.02,
+      "RMSE": 2.5,
+      "MAPE (%)": 11.71,
+      "R²": 0.6353,
+      "Resid Mean": 0.0566,
+      "Resid Std": 0.5454,
+      "Ljung-Box Q": 28.09,
+      "Ljung-Box p": 0.2564,
+      "Jarque-Bera p": 0.0043,
+      "Het p": 0.0003,
+      "White Noise": "Pass (Đạt)",
+      "Converged": true,
+      "Duration (s)": 0.0441
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "SARIMA(2,1,3)x(0,1,0)_12",
+      "Family": "SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(2,1,3)",
+      "Seasonal (P,D,Q,s)": "(0,1,0,12)",
+      "Transformation": "Original Scale | d=1, D=1, s=12",
+      "Scale_Group": "original_d1_D1_s12",
+      "AIC": 246.42,
+      "BIC": 264.32,
+      "LogLik": -117.21,
+      "MAE": 2.08,
+      "RMSE": 2.55,
+      "MAPE (%)": 12.04,
+      "R²": 0.6186,
+      "Resid Mean": 0.0559,
+      "Resid Std": 0.5336,
+      "Ljung-Box Q": 20.96,
+      "Ljung-Box p": 0.6411,
+      "Jarque-Bera p": 0.0644,
+      "Het p": 0.0004,
+      "White Noise": "Pass (Đạt)",
+      "Converged": true,
+      "Duration (s)": 0.1383
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "SARIMA(0,1,3)x(0,1,0)_12",
+      "Family": "SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(0,1,3)",
+      "Seasonal (P,D,Q,s)": "(0,1,0,12)",
+      "Transformation": "Original Scale | d=1, D=1, s=12",
+      "Scale_Group": "original_d1_D1_s12",
+      "AIC": 248.47,
+      "BIC": 260.41,
+      "LogLik": -120.24,
+      "MAE": 2.09,
+      "RMSE": 2.57,
+      "MAPE (%)": 12.1,
+      "R²": 0.6135,
+      "Resid Mean": 0.0556,
+      "Resid Std": 0.5447,
+      "Ljung-Box Q": 27.38,
+      "Ljung-Box p": 0.2871,
+      "Jarque-Bera p": 0.007,
+      "Het p": 0.0005,
+      "White Noise": "Pass (Đạt)",
+      "Converged": true,
+      "Duration (s)": 0.0832
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "SARIMA(0,1,0)x(0,1,0)_12",
+      "Family": "SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(0,1,0)",
+      "Seasonal (P,D,Q,s)": "(0,1,0,12)",
+      "Transformation": "Original Scale | d=1, D=1, s=12",
+      "Scale_Group": "original_d1_D1_s12",
+      "AIC": 333.47,
+      "BIC": 336.48,
+      "LogLik": -165.74,
+      "MAE": 2.11,
+      "RMSE": 2.59,
+      "MAPE (%)": 12.21,
+      "R²": 0.6072,
+      "Resid Mean": 0.0171,
+      "Resid Std": 0.7359,
+      "Ljung-Box Q": 100.59,
+      "Ljung-Box p": 0.0,
+      "Jarque-Bera p": 0.2212,
+      "Het p": 0.0,
+      "White Noise": "Fail (Không đạt)",
+      "Converged": true,
+      "Duration (s)": 0.0474
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "SARIMA(2,1,1)x(0,1,0)_12",
+      "Family": "SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(2,1,1)",
+      "Seasonal (P,D,Q,s)": "(0,1,0,12)",
+      "Transformation": "Original Scale | d=1, D=1, s=12",
+      "Scale_Group": "original_d1_D1_s12",
+      "AIC": 249.82,
+      "BIC": 261.81,
+      "LogLik": -120.91,
+      "MAE": 2.14,
+      "RMSE": 2.62,
+      "MAPE (%)": 12.38,
+      "R²": 0.5974,
+      "Resid Mean": 0.0537,
+      "Resid Std": 0.5437,
+      "Ljung-Box Q": 26.33,
+      "Ljung-Box p": 0.3366,
+      "Jarque-Bera p": 0.0179,
+      "Het p": 0.0006,
+      "White Noise": "Pass (Đạt)",
+      "Converged": true,
+      "Duration (s)": 0.0634
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "SARIMA(1,1,3)x(0,1,0)_12",
+      "Family": "SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(1,1,3)",
+      "Seasonal (P,D,Q,s)": "(0,1,0,12)",
+      "Transformation": "Original Scale | d=1, D=1, s=12",
+      "Scale_Group": "original_d1_D1_s12",
+      "AIC": 249.43,
+      "BIC": 264.34,
+      "LogLik": -119.71,
+      "MAE": 2.16,
+      "RMSE": 2.64,
+      "MAPE (%)": 12.45,
+      "R²": 0.5927,
+      "Resid Mean": 0.0552,
+      "Resid Std": 0.543,
+      "Ljung-Box Q": 25.26,
+      "Ljung-Box p": 0.3919,
+      "Jarque-Bera p": 0.043,
+      "Het p": 0.0004,
+      "White Noise": "Pass (Đạt)",
+      "Converged": true,
+      "Duration (s)": 0.0852
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "SARIMA(2,1,0)x(0,1,0)_12",
+      "Family": "SARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(2,1,0)",
+      "Seasonal (P,D,Q,s)": "(0,1,0,12)",
+      "Transformation": "Original Scale | d=1, D=1, s=12",
+      "Scale_Group": "original_d1_D1_s12",
+      "AIC": 250.4,
+      "BIC": 259.39,
+      "LogLik": -122.2,
+      "MAE": 2.27,
+      "RMSE": 2.75,
+      "MAPE (%)": 13.07,
+      "R²": 0.5558,
+      "Resid Mean": 0.0386,
+      "Resid Std": 0.5496,
+      "Ljung-Box Q": 29.18,
+      "Ljung-Box p": 0.2134,
+      "Jarque-Bera p": 0.1775,
+      "Het p": 0.0021,
+      "White Noise": "Pass (Đạt)",
+      "Converged": true,
+      "Duration (s)": 0.0245
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "MA(1) [ARIMA(0,1,1)]",
+      "Family": "MA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(0,1,1)",
+      "Seasonal (P,D,Q,s)": "(0,0,0,0)",
+      "Transformation": "Original Scale (Sai phân bậc d=1)",
+      "Scale_Group": "original_d1",
+      "AIC": 587.92,
+      "BIC": 594.09,
+      "LogLik": -291.96,
+      "MAE": 3.46,
+      "RMSE": 4.15,
+      "MAPE (%)": 18.39,
+      "R²": -0.0068,
+      "Resid Mean": 0.2073,
+      "Resid Std": 1.4554,
+      "Ljung-Box Q": 266.74,
+      "Ljung-Box p": 0.0,
+      "Jarque-Bera p": 0.0,
+      "Het p": 0.0,
+      "White Noise": "Fail (Không đạt)",
+      "Converged": true,
+      "Duration (s)": 0.0356
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "AR(2) [ARIMA(2,1,0)]",
+      "Family": "AR",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(2,1,0)",
+      "Seasonal (P,D,Q,s)": "(0,0,0,0)",
+      "Transformation": "Original Scale (Sai phân bậc d=1)",
+      "Scale_Group": "original_d1",
+      "AIC": 593.58,
+      "BIC": 602.84,
+      "LogLik": -293.79,
+      "MAE": 3.5,
+      "RMSE": 4.15,
+      "MAPE (%)": 19.29,
+      "R²": -0.0063,
+      "Resid Mean": 0.1596,
+      "Resid Std": 1.4789,
+      "Ljung-Box Q": 261.75,
+      "Ljung-Box p": 0.0,
+      "Jarque-Bera p": 0.0,
+      "Het p": 0.0,
+      "White Noise": "Fail (Không đạt)",
+      "Converged": true,
+      "Duration (s)": 0.0396
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "AR(1) [ARIMA(1,1,0)]",
+      "Family": "AR",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(1,1,0)",
+      "Seasonal (P,D,Q,s)": "(0,0,0,0)",
+      "Transformation": "Original Scale (Sai phân bậc d=1)",
+      "Scale_Group": "original_d1",
+      "AIC": 597.93,
+      "BIC": 604.1,
+      "LogLik": -296.96,
+      "MAE": 3.56,
+      "RMSE": 4.21,
+      "MAPE (%)": 19.99,
+      "R²": -0.0358,
+      "Resid Mean": 0.1363,
+      "Resid Std": 1.5112,
+      "Ljung-Box Q": 264.57,
+      "Ljung-Box p": 0.0,
+      "Jarque-Bera p": 0.0,
+      "Het p": 0.0,
+      "White Noise": "Fail (Không đạt)",
+      "Converged": true,
+      "Duration (s)": 0.0289
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "MA(3) [ARIMA(0,1,3)]",
+      "Family": "MA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(0,1,3)",
+      "Seasonal (P,D,Q,s)": "(0,0,0,0)",
+      "Transformation": "Original Scale (Sai phân bậc d=1)",
+      "Scale_Group": "original_d1",
+      "AIC": 584.61,
+      "BIC": 596.96,
+      "LogLik": -288.3,
+      "MAE": 3.64,
+      "RMSE": 4.59,
+      "MAPE (%)": 17.96,
+      "R²": -0.2352,
+      "Resid Mean": 0.2985,
+      "Resid Std": 1.405,
+      "Ljung-Box Q": 240.11,
+      "Ljung-Box p": 0.0,
+      "Jarque-Bera p": 0.0,
+      "Het p": 0.0,
+      "White Noise": "Fail (Không đạt)",
+      "Converged": true,
+      "Duration (s)": 0.0546
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "ARIMA(1,1,1)",
+      "Family": "ARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(1,1,1)",
+      "Seasonal (P,D,Q,s)": "(0,0,0,0)",
+      "Transformation": "Original Scale (Sai phân bậc d=1)",
+      "Scale_Group": "original_d1",
+      "AIC": 582.47,
+      "BIC": 591.73,
+      "LogLik": -288.23,
+      "MAE": 3.67,
+      "RMSE": 4.62,
+      "MAPE (%)": 18.04,
+      "R²": -0.252,
+      "Resid Mean": 0.2983,
+      "Resid Std": 1.4045,
+      "Ljung-Box Q": 239.86,
+      "Ljung-Box p": 0.0,
+      "Jarque-Bera p": 0.0,
+      "Het p": 0.0,
+      "White Noise": "Fail (Không đạt)",
+      "Converged": true,
+      "Duration (s)": 0.0444
+    },
+    {
+      "Run_ID": "dataset1_20261123_154923_d2775a",
+      "Model": "ARIMA(2,1,1)",
+      "Family": "ARIMA",
+      "Status": "SUCCESS",
+      "Order (p,d,q)": "(2,1,1)",
+      "Seasonal (P,D,Q,s)": "(0,0,0,0)",
+      "Transformation": "Original Scale (Sai phân bậc d=1)",
+      "Scale_Group": "original_d1",
+      "AIC": 584.46,
+      "BIC": 596.81,
+      "LogLik": -288.23,
+      "MAE": 3.67,
+      "RMSE": 4.63,
+      "MAPE (%)": 18.06,
+      "R²": -0.2543,
+      "Resid Mean": 0.298,
+      "Resid Std": 1.4045,
+      "Ljung-Box Q": 239.98,
+      "Ljung-Box p": 0.0,
+      "Jarque-Bera p": 0.0,
+      "Het p": 0.0,
+      "White Noise": "Fail (Không đạt)",
+      "Converged": true,
+      "Duration (s)": 0.0496
+    }
+  ],
+  "models": [
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "AR(1) [ARIMA(1,1,0)]",
+        "model_family": "AR",
+        "order": [
+          1,
+          1,
+          0
+        ],
+        "seasonal_order": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "p": 1,
+        "d": 1,
+        "q": 0,
+        "P": 0,
+        "D": 0,
+        "Q": 0,
+        "s": 0,
+        "transformation": "Original Scale (Sai phân bậc d=1)",
+        "scale_for_ic": "original_d1",
+        "training_config": "PACF trên chuỗi d=1 cắt cụt mạnh nhất tại lag 1 (PACF[1] = -0.32), kiểm tra quán tính tự hồi quy bậc 1."
+      },
+      "statistical_results": {
+        "aic": 597.9296239800677,
+        "bic": 604.1048166505325,
+        "hqic": 600.4368459251143,
+        "log_likelihood": -296.96481199003387,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ar.L1",
+            "coef": -0.3144807209409287,
+            "std_err": 0.0922359586256332,
+            "z_stat": -3.4095240687782224,
+            "p_value": 0.0006507633532757175,
+            "ci_lower": -0.49525987792669635,
+            "ci_upper": -0.13370156395516108
+          },
+          {
+            "param": "sigma2",
+            "coef": 2.288047274492795,
+            "std_err": 0.18741357896389566,
+            "z_stat": 12.208545864937442,
+            "p_value": 2.7984601242100803e-34,
+            "ci_lower": 1.9207234095098058,
+            "ci_upper": 2.655371139475784
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.1362785732442806,
+        "residual_std": 1.511183749824601,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 264.57153379707,
+        "ljung_box_p": 2.0984291935478946e-42,
+        "jarque_bera_stat": 367.6685454277238,
+        "jarque_bera_p": 1.451408879401866e-80,
+        "skew": -2.058576181355188,
+        "kurtosis": 9.125232286180577,
+        "heteroskedasticity_stat": 5.200690526776004,
+        "heteroskedasticity_p": 9.809240263978365e-09,
+        "is_white_noise": false
+      },
+      "forecast_evaluation": {
+        "mae": 3.5600028522705753,
+        "rmse": 4.206044858248632,
+        "mape": 19.993751788526005,
+        "r2": -0.03581165494769256
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:24",
+        "duration_seconds": 0.028863799991086125,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "AR(2) [ARIMA(2,1,0)]",
+        "model_family": "AR",
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "seasonal_order": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "p": 2,
+        "d": 1,
+        "q": 0,
+        "P": 0,
+        "D": 0,
+        "Q": 0,
+        "s": 0,
+        "transformation": "Original Scale (Sai phân bậc d=1)",
+        "scale_for_ic": "original_d1",
+        "training_config": "PACF trên chuỗi d=1 vượt ngưỡng tin cậy 95% (±0.154) tại cả lag 1 (-0.32) và lag 2 (-0.20) trước khi cắt cụt ở lag 3."
+      },
+      "statistical_results": {
+        "aic": 593.5788901224676,
+        "bic": 602.8416791281647,
+        "hqic": 597.3397230400375,
+        "log_likelihood": -293.7894450612338,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ar.L1",
+            "coef": -0.3781967688542147,
+            "std_err": 0.10086276398429031,
+            "z_stat": -3.749617340578928,
+            "p_value": 0.00017710461221939189,
+            "ci_lower": -0.5758841536445874,
+            "ci_upper": -0.180509384063842
+          },
+          {
+            "param": "ar.L2",
+            "coef": -0.19662976491835002,
+            "std_err": 0.0936448426366836,
+            "z_stat": -2.099739391748671,
+            "p_value": 0.035751772375749113,
+            "ci_lower": -0.38017028382417073,
+            "ci_upper": -0.013089246012529282
+          },
+          {
+            "param": "sigma2",
+            "coef": 2.1990161708047826,
+            "std_err": 0.2480027292981732,
+            "z_stat": 8.866903106380372,
+            "p_value": 7.520830069294071e-19,
+            "ci_lower": 1.7129397533127266,
+            "ci_upper": 2.685092588296839
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.15957200799348883,
+        "residual_std": 1.478907810068413,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 261.75435108066785,
+        "ljung_box_p": 7.636830996676843e-42,
+        "jarque_bera_stat": 247.23420484637074,
+        "jarque_bera_p": 2.059560475220206e-54,
+        "skew": -1.7120626669458534,
+        "kurtosis": 7.9902560359836,
+        "heteroskedasticity_stat": 5.2646730513885265,
+        "heteroskedasticity_p": 7.803816062457262e-09,
+        "is_white_noise": false
+      },
+      "forecast_evaluation": {
+        "mae": 3.496091728383975,
+        "rmse": 4.145698597895347,
+        "mape": 19.286972528513292,
+        "r2": -0.006302246708071557
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:24",
+        "duration_seconds": 0.039640900009544566,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "MA(1) [ARIMA(0,1,1)]",
+        "model_family": "MA",
+        "order": [
+          0,
+          1,
+          1
+        ],
+        "seasonal_order": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "p": 0,
+        "d": 1,
+        "q": 1,
+        "P": 0,
+        "D": 0,
+        "Q": 0,
+        "s": 0,
+        "transformation": "Original Scale (Sai phân bậc d=1)",
+        "scale_for_ic": "original_d1",
+        "training_config": "Ở độ trễ ngắn hạn trên chuỗi d=1, ACF chỉ có duy nhất 1 gai vượt ngưỡng tại lag 1 (ACF[1] = -0.32) rồi cắt cụt."
+      },
+      "statistical_results": {
+        "aic": 587.9166097097711,
+        "bic": 594.0918023802359,
+        "hqic": 590.4238316548177,
+        "log_likelihood": -291.95830485488557,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ma.L1",
+            "coef": -0.5329736149935921,
+            "std_err": 0.051067737174390455,
+            "z_stat": -10.436601355050223,
+            "p_value": 1.6874423630046617e-25,
+            "ci_lower": -0.6330645406273546,
+            "ci_upper": -0.43288268935982954
+          },
+          {
+            "param": "sigma2",
+            "coef": 2.1478705596463845,
+            "std_err": 0.20791580575175486,
+            "z_stat": 10.330482340582018,
+            "p_value": 5.130196072229036e-25,
+            "ci_lower": 1.7403630685563192,
+            "ci_upper": 2.55537805073645
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.2072850209091263,
+        "residual_std": 1.455396863818832,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 266.7371668649457,
+        "ljung_box_p": 7.767183642690081e-43,
+        "jarque_bera_stat": 125.49203581929706,
+        "jarque_bera_p": 5.620185633234578e-28,
+        "skew": -1.2686980150435354,
+        "kurtosis": 6.486120207403684,
+        "heteroskedasticity_stat": 4.9913793997975695,
+        "heteroskedasticity_p": 2.099031032726652e-08,
+        "is_white_noise": false
+      },
+      "forecast_evaluation": {
+        "mae": 3.459802044542675,
+        "rmse": 4.146793804644319,
+        "mape": 18.38765867097415,
+        "r2": -0.0068340048970148
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:25",
+        "duration_seconds": 0.0355604000214953,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "MA(3) [ARIMA(0,1,3)]",
+        "model_family": "MA",
+        "order": [
+          0,
+          1,
+          3
+        ],
+        "seasonal_order": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "p": 0,
+        "d": 1,
+        "q": 3,
+        "P": 0,
+        "D": 0,
+        "Q": 0,
+        "s": 0,
+        "transformation": "Original Scale (Sai phân bậc d=1)",
+        "scale_for_ic": "original_d1",
+        "training_config": "Khảo sát khả năng hấp thụ dư chấn ngắn hạn theo quý (lag 3) của mô hình trung bình trượt phi mùa vụ."
+      },
+      "statistical_results": {
+        "aic": 584.6083214307619,
+        "bic": 596.9587067716914,
+        "hqic": 589.622765320855,
+        "log_likelihood": -288.30416071538093,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ma.L1",
+            "coef": -0.48143697985298295,
+            "std_err": 0.11007185369966019,
+            "z_stat": -4.373842755175379,
+            "p_value": 1.2207832749424848e-05,
+            "ci_lower": -0.6971738488158788,
+            "ci_upper": -0.26570011089008705
+          },
+          {
+            "param": "ma.L2",
+            "coef": -0.15172899024699685,
+            "std_err": 0.10919934438482663,
+            "z_stat": -1.3894679597369428,
+            "p_value": 0.16469049730023355,
+            "ci_lower": -0.36575577237664325,
+            "ci_upper": 0.06229779188264953
+          },
+          {
+            "param": "ma.L3",
+            "coef": -0.07520554049090379,
+            "std_err": 0.15075665681309208,
+            "z_stat": -0.49885386211597627,
+            "p_value": 0.6178823393788464,
+            "ci_lower": -0.3706831582742292,
+            "ci_upper": 0.22027207729242165
+          },
+          {
+            "param": "sigma2",
+            "coef": 2.0502951819590396,
+            "std_err": 0.20211532797897974,
+            "z_stat": 10.14418452306731,
+            "p_value": 3.517034679463515e-24,
+            "ci_lower": 1.6541564183967385,
+            "ci_upper": 2.4464339455213406
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.29848780929686375,
+        "residual_std": 1.4050043478875278,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 240.11072681588922,
+        "ljung_box_p": 1.4927963273629112e-37,
+        "jarque_bera_stat": 112.16359214735891,
+        "jarque_bera_p": 4.405400837042671e-25,
+        "skew": -0.977109330898345,
+        "kurtosis": 6.577409382243099,
+        "heteroskedasticity_stat": 5.45314878751288,
+        "heteroskedasticity_p": 4.018867580364279e-09,
+        "is_white_noise": false
+      },
+      "forecast_evaluation": {
+        "mae": 3.6449203862810133,
+        "rmse": 4.593091438419515,
+        "mape": 17.95544025701251,
+        "r2": -0.23521675986031632
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:26",
+        "duration_seconds": 0.05464479999500327,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "ARIMA(1,1,1)",
+        "model_family": "ARIMA",
+        "order": [
+          1,
+          1,
+          1
+        ],
+        "seasonal_order": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "p": 1,
+        "d": 1,
+        "q": 1,
+        "P": 0,
+        "D": 0,
+        "Q": 0,
+        "s": 0,
+        "transformation": "Original Scale (Sai phân bậc d=1)",
+        "scale_for_ic": "original_d1",
+        "training_config": "Mô hình kết hợp AR(1) và MA(1) cơ bản từ điểm cắt cụt ngắn hạn lag 1 trên cả PACF và ACF (Bài 5 đề LAB02)."
+      },
+      "statistical_results": {
+        "aic": 582.4673514862773,
+        "bic": 591.7301404919745,
+        "hqic": 586.2281844038472,
+        "log_likelihood": -288.23367574313863,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ar.L1",
+            "coef": 0.33224964378362914,
+            "std_err": 0.23665317156980234,
+            "z_stat": 1.4039517897846132,
+            "p_value": 0.16033320610432278,
+            "ci_lower": -0.13158204932036166,
+            "ci_upper": 0.79608133688762
+          },
+          {
+            "param": "ma.L1",
+            "coef": -0.8059066084961444,
+            "std_err": 0.13394937711741825,
+            "z_stat": -6.0165013517733446,
+            "p_value": 1.7822701074882315e-09,
+            "ci_lower": -1.0684425633978578,
+            "ci_upper": -0.5433706535944309
+          },
+          {
+            "param": "sigma2",
+            "coef": 2.0486989160216225,
+            "std_err": 0.18697823034773384,
+            "z_stat": 10.956884725090953,
+            "p_value": 6.15828853045796e-28,
+            "ci_lower": 1.68222831864703,
+            "ci_upper": 2.415169513396215
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.298279188351744,
+        "residual_std": 1.4044838031344613,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 239.85884637240235,
+        "ljung_box_p": 1.6738894200233761e-37,
+        "jarque_bera_stat": 117.63464927400592,
+        "jarque_bera_p": 2.857330452854211e-26,
+        "skew": -1.0213826825494086,
+        "kurtosis": 6.640668223163651,
+        "heteroskedasticity_stat": 5.464072262186854,
+        "heteroskedasticity_p": 3.868992474778511e-09,
+        "is_white_noise": false
+      },
+      "forecast_evaluation": {
+        "mae": 3.666720937706332,
+        "rmse": 4.624258249147362,
+        "mape": 18.038680901222673,
+        "r2": -0.2520369701297924
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:27",
+        "duration_seconds": 0.04435040001408197,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "ARIMA(2,1,1)",
+        "model_family": "ARIMA",
+        "order": [
+          2,
+          1,
+          1
+        ],
+        "seasonal_order": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "p": 2,
+        "d": 1,
+        "q": 1,
+        "P": 0,
+        "D": 0,
+        "Q": 0,
+        "s": 0,
+        "transformation": "Original Scale (Sai phân bậc d=1)",
+        "scale_for_ic": "original_d1",
+        "training_config": "Mô hình kết hợp AR(2) (PACF vượt ngưỡng ở lag 1, 2) và MA(1) (ACF cắt cụt ở lag 1) theo yêu cầu Bài 5."
+      },
+      "statistical_results": {
+        "aic": 584.4601118640994,
+        "bic": 596.8104972050289,
+        "hqic": 589.4745557541926,
+        "log_likelihood": -288.2300559320497,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ar.L1",
+            "coef": 0.33257845886339255,
+            "std_err": 0.27846362991443285,
+            "z_stat": 1.1943335614980968,
+            "p_value": 0.2323475143043202,
+            "ci_lower": -0.21320022677318629,
+            "ci_upper": 0.8783571444999714
+          },
+          {
+            "param": "ar.L2",
+            "coef": 0.007535274392774328,
+            "std_err": 0.1504642067702726,
+            "z_stat": 0.0500801788978233,
+            "p_value": 0.9600584948636433,
+            "ci_lower": -0.28736915183934775,
+            "ci_upper": 0.30243970062489645
+          },
+          {
+            "param": "ma.L1",
+            "coef": -0.8080986310235433,
+            "std_err": 0.1945792458294333,
+            "z_stat": -4.153056650923174,
+            "p_value": 3.280634803342821e-05,
+            "ci_lower": -1.189466944988198,
+            "ci_upper": -0.4267303170588885
+          },
+          {
+            "param": "sigma2",
+            "coef": 2.0486809779427784,
+            "std_err": 0.18728031422644303,
+            "z_stat": 10.9391154452341,
+            "p_value": 7.49273605032356e-28,
+            "ci_lower": 1.6816183070456057,
+            "ci_upper": 2.415743648839951
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.2979993449901915,
+        "residual_std": 1.4045289134318772,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 239.97732101032926,
+        "ljung_box_p": 1.5861277343341276e-37,
+        "jarque_bera_stat": 118.64408446694262,
+        "jarque_bera_p": 1.724901908750269e-26,
+        "skew": -1.0294257754249079,
+        "kurtosis": 6.6521270095758345,
+        "heteroskedasticity_stat": 5.449345048621132,
+        "heteroskedasticity_p": 4.0724552320260125e-09,
+        "is_white_noise": false
+      },
+      "forecast_evaluation": {
+        "mae": 3.6701796581048414,
+        "rmse": 4.628463066708441,
+        "mape": 18.055110351968338,
+        "r2": -0.2543149486890315
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:27",
+        "duration_seconds": 0.049579499987885356,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "SARIMA(0,1,1)x(0,1,0)_12",
+        "model_family": "SARIMA",
+        "order": [
+          0,
+          1,
+          1
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          0,
+          12
+        ],
+        "p": 0,
+        "d": 1,
+        "q": 1,
+        "P": 0,
+        "D": 1,
+        "Q": 0,
+        "s": 12,
+        "transformation": "Original Scale | d=1, D=1, s=12",
+        "scale_for_ic": "original_d1_D1_s12",
+        "training_config": "Ứng viên SARIMA nhóm Q=0 (vì sau sai phân D=1, lag 12 trên ACF/PACF không còn vượt ngưỡng ±0.160)."
+      },
+      "statistical_results": {
+        "aic": 251.59673359729226,
+        "bic": 257.5911581448205,
+        "hqic": 254.03225444409537,
+        "log_likelihood": -123.79836679864613,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ma.L1",
+            "coef": -0.7426190802842781,
+            "std_err": 0.05259987328666068,
+            "z_stat": -14.118267476370637,
+            "p_value": 2.931090505606958e-45,
+            "ci_lower": -0.8457129375175035,
+            "ci_upper": -0.6395252230510527
+          },
+          {
+            "param": "sigma2",
+            "coef": 0.31155245345197,
+            "std_err": 0.029687550859816784,
+            "z_stat": 10.494380453379467,
+            "p_value": 9.167714535540515e-26,
+            "ci_lower": 0.253365922977528,
+            "ci_upper": 0.369738983926412
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.06012163610601346,
+        "residual_std": 0.5537143456214593,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 35.20465727393398,
+        "ljung_box_p": 0.0654233299997475,
+        "jarque_bera_stat": 7.425824862061288,
+        "jarque_bera_p": 0.024406337884905357,
+        "skew": 0.055533271387650025,
+        "kurtosis": 4.084341367377335,
+        "heteroskedasticity_stat": 3.349488385787331,
+        "heteroskedasticity_p": 4.288923108159458e-05,
+        "is_white_noise": true
+      },
+      "forecast_evaluation": {
+        "mae": 1.8671871858807787,
+        "rmse": 2.3424845313733393,
+        "mape": 10.868734365655081,
+        "r2": 0.678717954333697
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:28",
+        "duration_seconds": 0.03765250000287779,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "SARIMA(1,1,1)x(0,1,0)_12",
+        "model_family": "SARIMA",
+        "order": [
+          1,
+          1,
+          1
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          0,
+          12
+        ],
+        "p": 1,
+        "d": 1,
+        "q": 1,
+        "P": 0,
+        "D": 1,
+        "Q": 0,
+        "s": 12,
+        "transformation": "Original Scale | d=1, D=1, s=12",
+        "scale_for_ic": "original_d1_D1_s12",
+        "training_config": "Ứng viên SARIMA nhóm Q=0 kết hợp ARMA(1,1) ngắn hạn với sai phân mùa vụ D=1."
+      },
+      "statistical_results": {
+        "aic": 248.91547940261353,
+        "bic": 257.90711622390586,
+        "hqic": 252.56876067281817,
+        "log_likelihood": -121.45773970130676,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ar.L1",
+            "coef": -0.2263517495430093,
+            "std_err": 0.09339260904874332,
+            "z_stat": -2.4236580586893357,
+            "p_value": 0.015365065312886643,
+            "ci_lower": -0.4093978997007758,
+            "ci_upper": -0.04330559938524284
+          },
+          {
+            "param": "ma.L1",
+            "coef": -0.6475826326911504,
+            "std_err": 0.07048010694339935,
+            "z_stat": -9.188161891002894,
+            "p_value": 3.9961115261308494e-20,
+            "ci_lower": -0.7857211039267444,
+            "ci_upper": -0.5094441614555563
+          },
+          {
+            "param": "sigma2",
+            "coef": 0.30201328563477675,
+            "std_err": 0.02808362416664644,
+            "z_stat": 10.754070907752116,
+            "p_value": 5.670253731161252e-27,
+            "ci_lower": 0.24697039371279103,
+            "ci_upper": 0.35705617755676244
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.05664281852480141,
+        "residual_std": 0.5454032082923282,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 28.08766358870598,
+        "ljung_box_p": 0.2563597053623964,
+        "jarque_bera_stat": 10.897494914884764,
+        "jarque_bera_p": 0.004301689366781961,
+        "skew": -0.14280839417744345,
+        "kurtosis": 4.289194413807088,
+        "heteroskedasticity_stat": 2.8821394313342172,
+        "heteroskedasticity_p": 0.0003116509664354193,
+        "is_white_noise": true
+      },
+      "forecast_evaluation": {
+        "mae": 2.0200176219174555,
+        "rmse": 2.49589736763243,
+        "mape": 11.706240890218865,
+        "r2": 0.6352574424840045
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:28",
+        "duration_seconds": 0.044060799991711974,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "SARIMA(0,1,1)x(0,1,1)_12",
+        "model_family": "SARIMA",
+        "order": [
+          0,
+          1,
+          1
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          1,
+          12
+        ],
+        "p": 0,
+        "d": 1,
+        "q": 1,
+        "P": 0,
+        "D": 1,
+        "Q": 1,
+        "s": 12,
+        "transformation": "Original Scale | d=1, D=1, s=12",
+        "scale_for_ic": "original_d1_D1_s12",
+        "training_config": "Mô hình Airline Box-Jenkins kinh điển: kết hợp q=1 (ACF lag 1 = -0.57) và Q=1 để khử nhiễu quá sai phân mùa vụ."
+      },
+      "statistical_results": {
+        "aic": 233.85167988154342,
+        "bic": 242.58964453875157,
+        "hqic": 237.40256691515162,
+        "log_likelihood": -113.92583994077171,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ma.L1",
+            "coef": -0.7488339697848682,
+            "std_err": 0.059850683617992985,
+            "z_stat": -12.511702866493998,
+            "p_value": 6.44280599010934e-36,
+            "ci_lower": -0.8661391541262358,
+            "ci_upper": -0.6315287854435006
+          },
+          {
+            "param": "ma.S.L12",
+            "coef": -0.31098931711223016,
+            "std_err": 0.07051963947376023,
+            "z_stat": -4.409967484702565,
+            "p_value": 1.0338614150169014e-05,
+            "ci_lower": -0.4492052706835493,
+            "ci_upper": -0.17277336354091097
+          },
+          {
+            "param": "sigma2",
+            "coef": 0.31238451436737913,
+            "std_err": 0.036428482626869374,
+            "z_stat": 8.57528208262418,
+            "p_value": 9.884423647543296e-18,
+            "ci_lower": 0.24098600040727208,
+            "ci_upper": 0.3837830283274862
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.06195439022758318,
+        "residual_std": 0.539890507035858,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 32.941752834583504,
+        "ljung_box_p": 0.10530845635401004,
+        "jarque_bera_stat": 1.5715019312523344,
+        "jarque_bera_p": 0.45577730015020135,
+        "skew": 0.14387006007224043,
+        "kurtosis": 3.4106652313741854,
+        "heteroskedasticity_stat": 3.598141585757401,
+        "heteroskedasticity_p": 3.506126018748386e-05,
+        "is_white_noise": true
+      },
+      "forecast_evaluation": {
+        "mae": 1.4515247658021668,
+        "rmse": 1.8426030078728985,
+        "mape": 8.211586772506408,
+        "r2": 0.801209079589734
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:28",
+        "duration_seconds": 0.09197609999682754,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "SARIMA(1,1,0)x(0,1,1)_12",
+        "model_family": "SARIMA",
+        "order": [
+          1,
+          1,
+          0
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          1,
+          12
+        ],
+        "p": 1,
+        "d": 1,
+        "q": 0,
+        "P": 0,
+        "D": 1,
+        "Q": 1,
+        "s": 12,
+        "transformation": "Original Scale | d=1, D=1, s=12",
+        "scale_for_ic": "original_d1_D1_s12",
+        "training_config": "Ứng viên SARIMA kết hợp p=1 (PACF lag 1 = -0.57) và Q=1 mùa vụ."
+      },
+      "statistical_results": {
+        "aic": 258.38594619607136,
+        "bic": 267.1458889735557,
+        "hqic": 261.94577411786634,
+        "log_likelihood": -126.19297309803568,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ar.L1",
+            "coef": -0.5829627677411362,
+            "std_err": 0.06170703242134695,
+            "z_stat": -9.447266297957084,
+            "p_value": 3.47795094895557e-21,
+            "ci_lower": -0.7039063288798216,
+            "ci_upper": -0.4620192066024507
+          },
+          {
+            "param": "ma.S.L12",
+            "coef": -0.3281911159020395,
+            "std_err": 0.06502851583984477,
+            "z_stat": -5.046879998158404,
+            "p_value": 4.4908321477087823e-07,
+            "ci_lower": -0.4556446649162277,
+            "ci_upper": -0.2007375668878513
+          },
+          {
+            "param": "sigma2",
+            "coef": 0.36910142349537023,
+            "std_err": 0.04380638231217471,
+            "z_stat": 8.425745382603512,
+            "p_value": 3.584609133103796e-17,
+            "ci_lower": 0.2832424918705153,
+            "ci_upper": 0.45496035512022515
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.025279106619503885,
+        "residual_std": 0.5945558602717369,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 66.98707924110766,
+        "ljung_box_p": 6.19327073288236e-06,
+        "jarque_bera_stat": 2.090070445070078,
+        "jarque_bera_p": 0.35167943211879255,
+        "skew": -0.21485655084581526,
+        "kurtosis": 3.3869856863577397,
+        "heteroskedasticity_stat": 3.1451095218410563,
+        "heteroskedasticity_p": 0.00016542675053693922,
+        "is_white_noise": false
+      },
+      "forecast_evaluation": {
+        "mae": 1.4736675950749225,
+        "rmse": 1.909011163415295,
+        "mape": 8.47786058670574,
+        "r2": 0.7866218580504103
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:29",
+        "duration_seconds": 0.085087499988731,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "SARIMA(1,1,1)x(0,1,1)_12",
+        "model_family": "SARIMA",
+        "order": [
+          1,
+          1,
+          1
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          1,
+          12
+        ],
+        "p": 1,
+        "d": 1,
+        "q": 1,
+        "P": 0,
+        "D": 1,
+        "Q": 1,
+        "s": 12,
+        "transformation": "Original Scale | d=1, D=1, s=12",
+        "scale_for_ic": "original_d1_D1_s12",
+        "training_config": "Ứng viên SARIMA kết hợp đồng thời AR(1), MA(1) ngắn hạn và SMA(1) mùa vụ."
+      },
+      "statistical_results": {
+        "aic": 229.45407305919792,
+        "bic": 241.10469260214214,
+        "hqic": 234.18858910400886,
+        "log_likelihood": -110.72703652959896,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ar.L1",
+            "coef": -0.27098897182189746,
+            "std_err": 0.09170611277536815,
+            "z_stat": -2.9549717420220203,
+            "p_value": 0.0031269769034476054,
+            "ci_lower": -0.45072965002378756,
+            "ci_upper": -0.09124829362000736
+          },
+          {
+            "param": "ma.L1",
+            "coef": -0.6379607575952673,
+            "std_err": 0.07579949590130199,
+            "z_stat": -8.416424806122084,
+            "p_value": 3.881479534091361e-17,
+            "ci_lower": -0.7865250396081106,
+            "ci_upper": -0.48939647558242394
+          },
+          {
+            "param": "ma.S.L12",
+            "coef": -0.319064614441811,
+            "std_err": 0.07135732607327552,
+            "z_stat": -4.4713644975173175,
+            "p_value": 7.772209891120353e-06,
+            "ci_lower": -0.458922403578512,
+            "ci_upper": -0.17920682530511
+          },
+          {
+            "param": "sigma2",
+            "coef": 0.29804408500567015,
+            "std_err": 0.03396893268409182,
+            "z_stat": 8.774019713173056,
+            "p_value": 1.7239903112010202e-18,
+            "ci_lower": 0.23146620035158466,
+            "ci_upper": 0.36462196965975563
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.058664480113569555,
+        "residual_std": 0.5302934538743481,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 24.101551201665544,
+        "ljung_box_p": 0.45580269151901354,
+        "jarque_bera_stat": 2.49603817900232,
+        "jarque_bera_p": 0.28707289971494326,
+        "skew": -0.05814378115957631,
+        "kurtosis": 3.621162870340976,
+        "heteroskedasticity_stat": 3.2641340589740935,
+        "heteroskedasticity_p": 0.0001231766032152786,
+        "is_white_noise": true
+      },
+      "forecast_evaluation": {
+        "mae": 1.4727127236200994,
+        "rmse": 1.9107482891830914,
+        "mape": 8.481837956013281,
+        "r2": 0.7862333497787207
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:29",
+        "duration_seconds": 0.1387496999814175,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "SARIMA(0,1,3)x(0,1,1)_12",
+        "model_family": "SARIMA",
+        "order": [
+          0,
+          1,
+          3
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          1,
+          12
+        ],
+        "p": 0,
+        "d": 1,
+        "q": 3,
+        "P": 0,
+        "D": 1,
+        "Q": 1,
+        "s": 12,
+        "transformation": "Original Scale | d=1, D=1, s=12",
+        "scale_for_ic": "original_d1_D1_s12",
+        "training_config": "Ứng viên SARIMA bắt thêm gai vượt ngưỡng tại lag 3 trên ACF của chuỗi sai phân đôi (ACF[3] = 0.18 > 0.160)."
+      },
+      "statistical_results": {
+        "aic": 229.34041707720715,
+        "bic": 243.8296160769617,
+        "hqic": 235.22835958478336,
+        "log_likelihood": -109.67020853860357,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ma.L1",
+            "coef": -0.9250130044150202,
+            "std_err": 0.09231210950938766,
+            "z_stat": -10.020494703578962,
+            "p_value": 1.2388130532283924e-23,
+            "ci_lower": -1.1059414143903374,
+            "ci_upper": -0.744084594439703
+          },
+          {
+            "param": "ma.L2",
+            "coef": 0.2483943653479309,
+            "std_err": 0.11276367329514038,
+            "z_stat": 2.202787104121728,
+            "p_value": 0.027609757519418854,
+            "ci_lower": 0.027381626925014696,
+            "ci_upper": 0.46940710377084716
+          },
+          {
+            "param": "ma.L3",
+            "coef": -0.02043904955717979,
+            "std_err": 0.10703938285491633,
+            "z_stat": -0.19094887332154514,
+            "p_value": 0.8485656491970535,
+            "ci_lower": -0.23023238488020994,
+            "ci_upper": 0.18935428576585037
+          },
+          {
+            "param": "ma.S.L12",
+            "coef": -0.31738555217731135,
+            "std_err": 0.07743653298699421,
+            "z_stat": -4.09865395485381,
+            "p_value": 4.155597849773198e-05,
+            "ci_lower": -0.46915836791946786,
+            "ci_upper": -0.16561273643515484
+          },
+          {
+            "param": "sigma2",
+            "coef": 0.30058472282969023,
+            "std_err": 0.03509581934298206,
+            "z_stat": 8.564687431632699,
+            "p_value": 1.0836941640834228e-17,
+            "ci_lower": 0.2317981809095212,
+            "ci_upper": 0.36937126474985926
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.053194787034903365,
+        "residual_std": 0.5299963004274415,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 21.246234583808445,
+        "ljung_box_p": 0.6241599628966674,
+        "jarque_bera_stat": 2.327066969864307,
+        "jarque_bera_p": 0.31238043690134853,
+        "skew": -0.06793303521541114,
+        "kurtosis": 3.5948706801347465,
+        "heteroskedasticity_stat": 3.098766630823012,
+        "heteroskedasticity_p": 0.00023403315901566544,
+        "is_white_noise": true
+      },
+      "forecast_evaluation": {
+        "mae": 1.5047997293061879,
+        "rmse": 1.9527497655508543,
+        "mape": 8.71971922835953,
+        "r2": 0.7767321544364599
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:29",
+        "duration_seconds": 0.19337959997938015,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "SARIMA(2,1,1)x(0,1,1)_12",
+        "model_family": "SARIMA",
+        "order": [
+          2,
+          1,
+          1
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          1,
+          12
+        ],
+        "p": 2,
+        "d": 1,
+        "q": 1,
+        "P": 0,
+        "D": 1,
+        "Q": 1,
+        "s": 12,
+        "transformation": "Original Scale | d=1, D=1, s=12",
+        "scale_for_ic": "original_d1_D1_s12",
+        "training_config": "Ứng viên SARIMA bắt cả 2 độ trễ PACF ngắn hạn (PACF[1] = -0.57, PACF[2] = -0.42) cùng Q=1."
+      },
+      "statistical_results": {
+        "aic": 229.4597976577915,
+        "bic": 244.02307208647179,
+        "hqic": 235.3779427138052,
+        "log_likelihood": -109.72989882889576,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ar.L1",
+            "coef": -0.4837659383630197,
+            "std_err": 0.16680127927041044,
+            "z_stat": -2.9002531663966495,
+            "p_value": 0.0037286137445615183,
+            "ci_lower": -0.8106904383082316,
+            "ci_upper": -0.15684143841780773
+          },
+          {
+            "param": "ar.L2",
+            "coef": -0.22043081723683788,
+            "std_err": 0.1392483551898334,
+            "z_stat": -1.5830048185224932,
+            "p_value": 0.11342036612887063,
+            "ci_lower": -0.49335257831535245,
+            "ci_upper": 0.052490943841676685
+          },
+          {
+            "param": "ma.L1",
+            "coef": -0.43832783011122994,
+            "std_err": 0.1669935047115693,
+            "z_stat": -2.624819635160712,
+            "p_value": 0.008669487802692336,
+            "ci_lower": -0.7656290849980256,
+            "ci_upper": -0.11102657522443432
+          },
+          {
+            "param": "ma.S.L12",
+            "coef": -0.31898542345570235,
+            "std_err": 0.07530740664344836,
+            "z_stat": -4.235777563898539,
+            "p_value": 2.2776216137472005e-05,
+            "ci_lower": -0.46658522824597354,
+            "ci_upper": -0.17138561866543117
+          },
+          {
+            "param": "sigma2",
+            "coef": 0.293682040773264,
+            "std_err": 0.035270712740235216,
+            "z_stat": 8.326512790830137,
+            "p_value": 8.325855018597482e-17,
+            "ci_lower": 0.22455271409334493,
+            "ci_upper": 0.36281136745318304
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.050495616302292476,
+        "residual_std": 0.5287705989593885,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 18.3177747615493,
+        "ljung_box_p": 0.7873267051336169,
+        "jarque_bera_stat": 1.1550404248240564,
+        "jarque_bera_p": 0.5612885185137328,
+        "skew": -0.0234327242761073,
+        "kurtosis": 3.4273290274529087,
+        "heteroskedasticity_stat": 3.007645018986141,
+        "heteroskedasticity_p": 0.0003351750146156766,
+        "is_white_noise": true
+      },
+      "forecast_evaluation": {
+        "mae": 1.5409477860095617,
+        "rmse": 1.9967190445439598,
+        "mape": 8.971611135990857,
+        "r2": 0.766564494195481
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:29",
+        "duration_seconds": 0.2557109000044875,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "SARIMA(2,1,3)x(0,1,1)_12",
+        "model_family": "SARIMA",
+        "order": [
+          2,
+          1,
+          3
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          1,
+          12
+        ],
+        "p": 2,
+        "d": 1,
+        "q": 3,
+        "P": 0,
+        "D": 1,
+        "Q": 1,
+        "s": 12,
+        "transformation": "Original Scale | d=1, D=1, s=12",
+        "scale_for_ic": "original_d1_D1_s12",
+        "training_config": "Ứng viên SARIMA bậc cao nhất từ tập ứng viên ACF/PACF (p=2, q=3, Q=1), dùng để kiểm tra đánh đổi giữa AIC và độ phức tạp."
+      },
+      "statistical_results": {
+        "aic": 223.07006548731414,
+        "bic": 243.35494408697053,
+        "hqic": 231.3131849979208,
+        "log_likelihood": -104.53503274365707,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ar.L1",
+            "coef": -0.6734885972601571,
+            "std_err": 0.04462727459598475,
+            "z_stat": -15.09141222172579,
+            "p_value": 1.8445171412528316e-51,
+            "ci_lower": -0.7609564481964665,
+            "ci_upper": -0.5860207463238477
+          },
+          {
+            "param": "ar.L2",
+            "coef": -0.9015505370648019,
+            "std_err": 0.04950993570770447,
+            "z_stat": -18.20948712976227,
+            "p_value": 4.33993177440915e-74,
+            "ci_lower": -0.9985882279287963,
+            "ci_upper": -0.8045128462008075
+          },
+          {
+            "param": "ma.L1",
+            "coef": -0.15835566424409778,
+            "std_err": 4382.4368520001635,
+            "z_stat": -3.613415768257415e-05,
+            "p_value": 0.9999711691134737,
+            "ci_lower": -8589.576750105654,
+            "ci_upper": 8589.260038777167
+          },
+          {
+            "param": "ma.L2",
+            "coef": 0.6100528461405579,
+            "std_err": 12822.479024145976,
+            "z_stat": 4.757682543225604e-05,
+            "p_value": 0.9999620391855499,
+            "ci_lower": -25130.987027000272,
+            "ci_upper": 25132.20713269255
+          },
+          {
+            "param": "ma.L3",
+            "coef": -0.7086350833294028,
+            "std_err": 11287.144465829684,
+            "z_stat": -6.278249432127855e-05,
+            "p_value": 0.9999499068171253,
+            "ci_lower": -22123.105276410097,
+            "ci_upper": 22121.688006243436
+          },
+          {
+            "param": "ma.S.L12",
+            "coef": -0.3672381311333153,
+            "std_err": 0.07053782164592305,
+            "z_stat": -5.2062584662272595,
+            "p_value": 1.9268621367695587e-07,
+            "ci_lower": -0.5054897211072343,
+            "ci_upper": -0.22898654115939632
+          },
+          {
+            "param": "sigma2",
+            "coef": 0.2704299581312406,
+            "std_err": 4307.4136583736445,
+            "z_stat": 6.278244431098989e-05,
+            "p_value": 0.9999499068570277,
+            "ci_lower": -8442.105206970129,
+            "ci_upper": 8442.646066886391
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.05275830536752248,
+        "residual_std": 0.5151257805023302,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 12.672109229775112,
+        "ljung_box_p": 0.9712227266426798,
+        "jarque_bera_stat": 0.35887290067518596,
+        "jarque_bera_p": 0.8357410603178413,
+        "skew": -0.026121651490167864,
+        "kurtosis": 3.233859576245521,
+        "heteroskedasticity_stat": 2.619200311022732,
+        "heteroskedasticity_p": 0.0016159756582544366,
+        "is_white_noise": true
+      },
+      "forecast_evaluation": {
+        "mae": 1.4821873816399496,
+        "rmse": 1.8683542909561381,
+        "mape": 8.381407019967364,
+        "r2": 0.79561385114142
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:30",
+        "duration_seconds": 0.6730867000005674,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "Log-SARIMA(0,1,1)x(0,1,1)_12",
+        "model_family": "Log-SARIMA",
+        "order": [
+          0,
+          1,
+          1
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          1,
+          12
+        ],
+        "p": 0,
+        "d": 1,
+        "q": 1,
+        "P": 0,
+        "D": 1,
+        "Q": 1,
+        "s": 12,
+        "transformation": "Log Transformation ln(Y_t) + Inverse exp() | d=1, D=1, s=12",
+        "scale_for_ic": "log_d1_D1_s12",
+        "training_config": "Mô hình Box-Jenkins Airline cổ điển trên chuỗi logarit kèm biến đổi ngược exp() về thang đo gốc."
+      },
+      "statistical_results": {
+        "aic": -395.5374669519303,
+        "bic": -386.7995022947221,
+        "hqic": -391.9865799183221,
+        "log_likelihood": 200.76873347596515,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ma.L1",
+            "coef": -0.7999342149473602,
+            "std_err": 0.05389774685487259,
+            "z_stat": -14.841700472216356,
+            "p_value": 7.873452623597162e-50,
+            "ci_lower": -0.9055718576307674,
+            "ci_upper": -0.6942965722639529
+          },
+          {
+            "param": "ma.S.L12",
+            "coef": -0.6445860336162893,
+            "std_err": 0.06124659337146415,
+            "z_stat": -10.524438962781774,
+            "p_value": 6.665735300905534e-26,
+            "ci_lower": -0.7646271508001287,
+            "ci_upper": -0.5245449164324499
+          },
+          {
+            "param": "sigma2",
+            "coef": 0.003005079633068807,
+            "std_err": 0.0002913246228146102,
+            "z_stat": 10.315227061947128,
+            "p_value": 6.013898469024859e-25,
+            "ci_lower": 0.002434093864542455,
+            "ci_upper": 0.003576065401595159
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": -0.0030904602542726274,
+        "residual_std": 0.05603310931559137,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 46.50191390036062,
+        "ljung_box_p": 0.0038509652888861616,
+        "jarque_bera_stat": 15.707983959383254,
+        "jarque_bera_p": 0.00038819918770699924,
+        "skew": -0.49592573760789993,
+        "kurtosis": 4.236732826690374,
+        "heteroskedasticity_stat": 0.7591510652604375,
+        "heteroskedasticity_p": 0.35878735020604535,
+        "is_white_noise": false
+      },
+      "forecast_evaluation": {
+        "mae": 1.1867893676438888,
+        "rmse": 1.491207205796138,
+        "mape": 6.375792707392132,
+        "r2": 0.8698006008027158
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:30",
+        "duration_seconds": 0.4421601000067312,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "Log-SARIMA(1,1,1)x(0,1,1)_12",
+        "model_family": "Log-SARIMA",
+        "order": [
+          1,
+          1,
+          1
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          1,
+          12
+        ],
+        "p": 1,
+        "d": 1,
+        "q": 1,
+        "P": 0,
+        "D": 1,
+        "Q": 1,
+        "s": 12,
+        "transformation": "Log Transformation ln(Y_t) + Inverse exp() | d=1, D=1, s=12",
+        "scale_for_ic": "log_d1_D1_s12",
+        "training_config": "Mô hình Log-SARIMA kết hợp AR(1), MA(1) ngắn hạn và SMA(1) mùa vụ trên chuỗi ln(Y_t)."
+      },
+      "statistical_results": {
+        "aic": -396.5667210327623,
+        "bic": -384.9161014898181,
+        "hqic": -391.83220498795134,
+        "log_likelihood": 202.28336051638115,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ar.L1",
+            "coef": -0.1838673804612573,
+            "std_err": 0.09792491445235568,
+            "z_stat": -1.8776363654697499,
+            "p_value": 0.060430927374802865,
+            "ci_lower": -0.3757966859770403,
+            "ci_upper": 0.00806192505452566
+          },
+          {
+            "param": "ma.L1",
+            "coef": -0.7326182021471955,
+            "std_err": 0.07363416175720364,
+            "z_stat": -9.949433587128782,
+            "p_value": 2.5362260116179897e-23,
+            "ci_lower": -0.8769385072231113,
+            "ci_upper": -0.5882978970712798
+          },
+          {
+            "param": "ma.S.L12",
+            "coef": -0.6231545941735844,
+            "std_err": 0.06332902380551539,
+            "z_stat": -9.839952627207769,
+            "p_value": 7.574649557274014e-23,
+            "ci_lower": -0.7472772000084743,
+            "ci_upper": -0.49903198833869455
+          },
+          {
+            "param": "sigma2",
+            "coef": 0.0029468318313534197,
+            "std_err": 0.0002827968925821551,
+            "z_stat": 10.420311922265334,
+            "p_value": 2.0029521379266755e-25,
+            "ci_lower": 0.0023925601069525533,
+            "ci_upper": 0.003501103555754286
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": -0.0022317628480383834,
+        "residual_std": 0.0556235447184869,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 40.928004054291115,
+        "ljung_box_p": 0.01696245626817415,
+        "jarque_bera_stat": 19.901199047837466,
+        "jarque_bera_p": 4.769902865430464e-05,
+        "skew": -0.42029299924283603,
+        "kurtosis": 4.574041621687254,
+        "heteroskedasticity_stat": 0.7084664214884692,
+        "heteroskedasticity_p": 0.2514701036356951,
+        "is_white_noise": false
+      },
+      "forecast_evaluation": {
+        "mae": 1.1794920861489668,
+        "rmse": 1.4917649454119974,
+        "mape": 6.403565548446477,
+        "r2": 0.8697031885279592
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:31",
+        "duration_seconds": 0.388746100012213,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "Log-SARIMA(2,1,3)x(0,1,1)_12",
+        "model_family": "Log-SARIMA",
+        "order": [
+          2,
+          1,
+          3
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          1,
+          12
+        ],
+        "p": 2,
+        "d": 1,
+        "q": 3,
+        "P": 0,
+        "D": 1,
+        "Q": 1,
+        "s": 12,
+        "transformation": "Log Transformation ln(Y_t) + Inverse exp() | d=1, D=1, s=12",
+        "scale_for_ic": "log_d1_D1_s12",
+        "training_config": "Cấu hình bậc cao tối ưu trên không gian logarit: đạt White Noise (Ljung-Box p=0.6296) và kỷ lục RMSE thấp nhất."
+      },
+      "statistical_results": {
+        "aic": -402.77651428145555,
+        "bic": -382.49163568179915,
+        "hqic": -394.5333947708489,
+        "log_likelihood": 208.38825714072777,
+        "converged": false,
+        "warnings": [
+          "Maximum Likelihood optimization failed to converge. Check mle_retvals"
+        ],
+        "coefficients": [
+          {
+            "param": "ar.L1",
+            "coef": -1.1602905421196277,
+            "std_err": 0.008598569319140185,
+            "z_stat": -134.93995327069726,
+            "p_value": 0.0,
+            "ci_lower": -1.1771434283037134,
+            "ci_upper": -1.143437655935542
+          },
+          {
+            "param": "ar.L2",
+            "coef": -0.9847686764392273,
+            "std_err": 0.012340117717113632,
+            "z_stat": -79.80221088762562,
+            "p_value": 0.0,
+            "ci_lower": -1.0089548627297547,
+            "ci_upper": -0.9605824901486999
+          },
+          {
+            "param": "ma.L1",
+            "coef": 0.4073709231358446,
+            "std_err": 34.03557488314799,
+            "z_stat": 0.01196897436092804,
+            "p_value": 0.9904503681568771,
+            "ci_lower": -66.30113004095027,
+            "ci_upper": 67.11587188722196
+          },
+          {
+            "param": "ma.L2",
+            "coef": 0.09187351157780947,
+            "std_err": 31.539848015756956,
+            "z_stat": 0.0029129345053251522,
+            "p_value": 0.9976758178184252,
+            "ci_lower": -61.72509267717291,
+            "ci_upper": 61.90883970032853
+          },
+          {
+            "param": "ma.L3",
+            "coef": -0.7708319758289559,
+            "std_err": 44.54189312181907,
+            "z_stat": -0.01730577489647291,
+            "p_value": 0.986192678592905,
+            "ci_lower": -88.07133829782668,
+            "ci_upper": 86.52967434616878
+          },
+          {
+            "param": "ma.S.L12",
+            "coef": -0.6006256005634601,
+            "std_err": 0.06425375283818884,
+            "z_stat": -9.347712375275952,
+            "p_value": 8.95638459396431e-21,
+            "ci_lower": -0.7265606419978485,
+            "ci_upper": -0.47469055912907177
+          },
+          {
+            "param": "sigma2",
+            "coef": 0.002491483254051104,
+            "std_err": 0.14397711607282662,
+            "z_stat": 0.01730471704121966,
+            "p_value": 0.9861935225129047,
+            "ci_lower": -0.279698478846632,
+            "ci_upper": 0.2846814453547343
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": -0.005861072955115194,
+        "residual_std": 0.06239108425487103,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 17.51514424820437,
+        "ljung_box_p": 0.825875997723164,
+        "jarque_bera_stat": 309.20384867739693,
+        "jarque_bera_p": 7.1984230766091725e-68,
+        "skew": -1.5391302776260647,
+        "kurtosis": 9.324312432380484,
+        "heteroskedasticity_stat": 0.8410144927752259,
+        "heteroskedasticity_p": 0.5638209953437682,
+        "is_white_noise": true
+      },
+      "forecast_evaluation": {
+        "mae": 1.1991080748131475,
+        "rmse": 1.498194151897239,
+        "mape": 6.530389405959516,
+        "r2": 0.8685776623141241
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:32",
+        "duration_seconds": 1.112426300009247,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "SARIMA(0,1,0)x(0,1,0)_12",
+        "model_family": "SARIMA",
+        "order": [
+          0,
+          1,
+          0
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          0,
+          12
+        ],
+        "p": 0,
+        "d": 1,
+        "q": 0,
+        "P": 0,
+        "D": 1,
+        "Q": 0,
+        "s": 12,
+        "transformation": "Original Scale | d=1, D=1, s=12",
+        "scale_for_ic": "original_d1_D1_s12",
+        "training_config": "Cấu hình trong không gian lưới SARIMA xác định từ ACF/PACF (d=1, D=1, s=12)."
+      },
+      "statistical_results": {
+        "aic": 333.47496830134924,
+        "bic": 336.4789146072947,
+        "hqic": 334.69542202598996,
+        "log_likelihood": -165.73748415067462,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "sigma2",
+            "coef": 0.5416096544764641,
+            "std_err": 0.05519496308368595,
+            "z_stat": 9.812664493593049,
+            "p_value": 9.931097611471974e-23,
+            "ci_lower": 0.4334295147044218,
+            "ci_upper": 0.6497897942485065
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.0170913015307605,
+        "residual_std": 0.7358669907968792,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 100.59395729059418,
+        "ljung_box_p": 2.3789522136777304e-11,
+        "jarque_bera_stat": 3.017256804547729,
+        "jarque_bera_p": 0.22121318547466234,
+        "skew": 0.183401712824415,
+        "kurtosis": 3.5900985813064796,
+        "heteroskedasticity_stat": 4.286185850541638,
+        "heteroskedasticity_p": 8.719305816550473e-07,
+        "is_white_noise": false
+      },
+      "forecast_evaluation": {
+        "mae": 2.111510864806011,
+        "rmse": 2.5902246313444226,
+        "mape": 12.207060009325293,
+        "r2": 0.6071671020462805
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:32",
+        "duration_seconds": 0.04743649999727495,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "SARIMA(0,1,0)x(0,1,1)_12",
+        "model_family": "SARIMA",
+        "order": [
+          0,
+          1,
+          0
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          1,
+          12
+        ],
+        "p": 0,
+        "d": 1,
+        "q": 0,
+        "P": 0,
+        "D": 1,
+        "Q": 1,
+        "s": 12,
+        "transformation": "Original Scale | d=1, D=1, s=12",
+        "scale_for_ic": "original_d1_D1_s12",
+        "training_config": "Cấu hình trong không gian lưới SARIMA xác định từ ACF/PACF (d=1, D=1, s=12)."
+      },
+      "statistical_results": {
+        "aic": 313.3742566903909,
+        "bic": 319.21421854204715,
+        "hqic": 315.7474753049209,
+        "log_likelihood": -154.68712834519545,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ma.S.L12",
+            "coef": -0.2818709872834052,
+            "std_err": 0.05583197024188694,
+            "z_stat": -5.048558846521531,
+            "p_value": 4.4515535591494687e-07,
+            "ci_lower": -0.3912996381434157,
+            "ci_upper": -0.17244233642339474
+          },
+          {
+            "param": "sigma2",
+            "coef": 0.559789170897646,
+            "std_err": 0.06687960008353949,
+            "z_stat": 8.370103442580575,
+            "p_value": 5.756767593161815e-17,
+            "ci_lower": 0.4287075634334666,
+            "ci_upper": 0.6908707783618254
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.019340582966897196,
+        "residual_std": 0.7247208051098379,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 96.37850374702826,
+        "ljung_box_p": 1.2367346918848748e-10,
+        "jarque_bera_stat": 0.534277799131394,
+        "jarque_bera_p": 0.7655667271940391,
+        "skew": 0.1070112737342547,
+        "kurtosis": 3.1991953740329144,
+        "heteroskedasticity_stat": 3.6196400972010587,
+        "heteroskedasticity_p": 2.6416239171915406e-05,
+        "is_white_noise": false
+      },
+      "forecast_evaluation": {
+        "mae": 1.5652177327391044,
+        "rmse": 2.0218678711204245,
+        "mape": 9.12393155018401,
+        "r2": 0.7606471874259723
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:32",
+        "duration_seconds": 0.09758659999351948,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "SARIMA(0,1,3)x(0,1,0)_12",
+        "model_family": "SARIMA",
+        "order": [
+          0,
+          1,
+          3
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          0,
+          12
+        ],
+        "p": 0,
+        "d": 1,
+        "q": 3,
+        "P": 0,
+        "D": 1,
+        "Q": 0,
+        "s": 12,
+        "transformation": "Original Scale | d=1, D=1, s=12",
+        "scale_for_ic": "original_d1_D1_s12",
+        "training_config": "Cấu hình trong không gian lưới SARIMA xác định từ ACF/PACF (d=1, D=1, s=12)."
+      },
+      "statistical_results": {
+        "aic": 248.47328247513178,
+        "bic": 260.4077089619651,
+        "hqic": 253.32251327626372,
+        "log_likelihood": -120.23664123756589,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ma.L1",
+            "coef": -0.8825130975614459,
+            "std_err": 0.08337784442057969,
+            "z_stat": -10.584503637558901,
+            "p_value": 3.5163949993581253e-26,
+            "ci_lower": -1.045930669734366,
+            "ci_upper": -0.7190955253885258
+          },
+          {
+            "param": "ma.L2",
+            "coef": 0.18037930820984077,
+            "std_err": 0.10631798919839527,
+            "z_stat": 1.6966019539105746,
+            "p_value": 0.08977194016963416,
+            "ci_lower": -0.028000121527732458,
+            "ci_upper": 0.388758737947414
+          },
+          {
+            "param": "ma.L3",
+            "coef": 0.0005567798039320991,
+            "std_err": 0.09413038588047927,
+            "z_stat": 0.005914984823700419,
+            "p_value": 0.9952805524517232,
+            "ci_lower": -0.1839353863726649,
+            "ci_upper": 0.1850489459805291
+          },
+          {
+            "param": "sigma2",
+            "coef": 0.3039550078472413,
+            "std_err": 0.028999819281192236,
+            "z_stat": 10.481272483114079,
+            "p_value": 1.0531704784958112e-25,
+            "ci_lower": 0.24711640649793426,
+            "ci_upper": 0.3607936091965483
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.05561554027496714,
+        "residual_std": 0.5446618811322104,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 27.377926180738246,
+        "ljung_box_p": 0.2871475394050907,
+        "jarque_bera_stat": 9.909748759108712,
+        "jarque_bera_p": 0.007048965718230826,
+        "skew": -0.12777691720230425,
+        "kurtosis": 4.23298501174122,
+        "heteroskedasticity_stat": 2.7967868702046697,
+        "heteroskedasticity_p": 0.00045289805711953916,
+        "is_white_noise": true
+      },
+      "forecast_evaluation": {
+        "mae": 2.0912422310183163,
+        "rmse": 2.5691934580021107,
+        "mape": 12.097068088157137,
+        "r2": 0.6135203706655907
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:32",
+        "duration_seconds": 0.08324360000551678,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "SARIMA(1,1,0)x(0,1,0)_12",
+        "model_family": "SARIMA",
+        "order": [
+          1,
+          1,
+          0
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          0,
+          12
+        ],
+        "p": 1,
+        "d": 1,
+        "q": 0,
+        "P": 0,
+        "D": 1,
+        "Q": 0,
+        "s": 12,
+        "transformation": "Original Scale | d=1, D=1, s=12",
+        "scale_for_ic": "original_d1_D1_s12",
+        "training_config": "Cấu hình trong không gian lưới SARIMA xác định từ ACF/PACF (d=1, D=1, s=12)."
+      },
+      "statistical_results": {
+        "aic": 278.01686747035944,
+        "bic": 284.02476008225034,
+        "hqic": 280.45777491964094,
+        "log_likelihood": -137.00843373517972,
+        "converged": false,
+        "warnings": [
+          "Maximum Likelihood optimization failed to converge. Check mle_retvals"
+        ],
+        "coefficients": [
+          {
+            "param": "ar.L1",
+            "coef": -0.5661541186394006,
+            "std_err": 0.05984991459100383,
+            "z_stat": -9.459564353739285,
+            "p_value": 3.0922883374959465e-21,
+            "ci_lower": -0.6834577957155663,
+            "ci_upper": -0.4488504415632348
+          },
+          {
+            "param": "sigma2",
+            "coef": 0.36830728069211405,
+            "std_err": 0.03476366798521806,
+            "z_stat": 10.594603562797886,
+            "p_value": 3.156756739358654e-26,
+            "ci_lower": 0.30017174347057857,
+            "ci_upper": 0.43644281791364953
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.025222700925495375,
+        "residual_std": 0.6065092862839799,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 60.31274197355386,
+        "ljung_box_p": 5.769471141328468e-05,
+        "jarque_bera_stat": 9.96366560321466,
+        "jarque_bera_p": 0.0068614753030855945,
+        "skew": -0.20906366989697994,
+        "kurtosis": 4.191367291909247,
+        "heteroskedasticity_stat": 3.2123882518508453,
+        "heteroskedasticity_p": 6.39712841936964e-05,
+        "is_white_noise": false
+      },
+      "forecast_evaluation": {
+        "mae": 1.8502365092721615,
+        "rmse": 2.3249833072464416,
+        "mape": 10.76678572057792,
+        "r2": 0.6835007602044186
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:32",
+        "duration_seconds": 0.06503389999852516,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "SARIMA(1,1,3)x(0,1,0)_12",
+        "model_family": "SARIMA",
+        "order": [
+          1,
+          1,
+          3
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          0,
+          12
+        ],
+        "p": 1,
+        "d": 1,
+        "q": 3,
+        "P": 0,
+        "D": 1,
+        "Q": 0,
+        "s": 12,
+        "transformation": "Original Scale | d=1, D=1, s=12",
+        "scale_for_ic": "original_d1_D1_s12",
+        "training_config": "Cấu hình trong không gian lưới SARIMA xác định từ ACF/PACF (d=1, D=1, s=12)."
+      },
+      "statistical_results": {
+        "aic": 249.42520926375323,
+        "bic": 264.3432423722949,
+        "hqic": 255.48674776516813,
+        "log_likelihood": -119.71260463187662,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ar.L1",
+            "coef": -0.6579647627370251,
+            "std_err": 0.6409750263375223,
+            "z_stat": -1.0265060816746334,
+            "p_value": 0.3046530984337986,
+            "ci_lower": -1.9142527293481815,
+            "ci_upper": 0.5983232038741313
+          },
+          {
+            "param": "ma.L1",
+            "coef": -0.20447861382703253,
+            "std_err": 0.63944415569031,
+            "z_stat": -0.31977556133308976,
+            "p_value": 0.7491384748737887,
+            "ci_lower": -1.457766129104663,
+            "ci_upper": 1.0488089014505981
+          },
+          {
+            "param": "ma.L2",
+            "coef": -0.4624951901886696,
+            "std_err": 0.5086157803529542,
+            "z_stat": -0.9093213542602253,
+            "p_value": 0.36318052182588234,
+            "ci_lower": -1.4593638016491945,
+            "ci_upper": 0.5343734212718554
+          },
+          {
+            "param": "ma.L3",
+            "coef": 0.17262408125753795,
+            "std_err": 0.08683151633146026,
+            "z_stat": 1.9880348582026761,
+            "p_value": 0.04680783489782185,
+            "ci_lower": 0.0024374365248743257,
+            "ci_upper": 0.34281072599020157
+          },
+          {
+            "param": "sigma2",
+            "coef": 0.301676155459051,
+            "std_err": 0.030835908331907812,
+            "z_stat": 9.783274493227369,
+            "p_value": 1.3284174925714503e-22,
+            "ci_lower": 0.24123888569793314,
+            "ci_upper": 0.3621134252201689
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.05515408073167943,
+        "residual_std": 0.5430147219138669,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 25.25654167609807,
+        "ljung_box_p": 0.3919288444281739,
+        "jarque_bera_stat": 6.294853040073529,
+        "jarque_bera_p": 0.04296254797923299,
+        "skew": -0.02768089690838348,
+        "kurtosis": 4.00205367031769,
+        "heteroskedasticity_stat": 2.8131686362930113,
+        "heteroskedasticity_p": 0.00042143429403320034,
+        "is_white_noise": true
+      },
+      "forecast_evaluation": {
+        "mae": 2.1551579332002757,
+        "rmse": 2.637467294453134,
+        "mape": 12.454029033543817,
+        "r2": 0.5927068004749199
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:32",
+        "duration_seconds": 0.08524750001379289,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "SARIMA(1,1,3)x(0,1,1)_12",
+        "model_family": "SARIMA",
+        "order": [
+          1,
+          1,
+          3
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          1,
+          12
+        ],
+        "p": 1,
+        "d": 1,
+        "q": 3,
+        "P": 0,
+        "D": 1,
+        "Q": 1,
+        "s": 12,
+        "transformation": "Original Scale | d=1, D=1, s=12",
+        "scale_for_ic": "original_d1_D1_s12",
+        "training_config": "Cấu hình trong không gian lưới SARIMA xác định từ ACF/PACF (d=1, D=1, s=12)."
+      },
+      "statistical_results": {
+        "aic": 230.78002541580508,
+        "bic": 248.16706421551055,
+        "hqic": 237.84555642489653,
+        "log_likelihood": -109.39001270790254,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ar.L1",
+            "coef": -0.642662939692565,
+            "std_err": 0.8749982357555733,
+            "z_stat": -0.7344734119807871,
+            "p_value": 0.4626602589148443,
+            "ci_lower": -2.357627968309576,
+            "ci_upper": 1.0723020889244461
+          },
+          {
+            "param": "ma.L1",
+            "coef": -0.25884118070880896,
+            "std_err": 0.8622535887373168,
+            "z_stat": -0.3001914797337703,
+            "p_value": 0.7640311037431884,
+            "ci_lower": -1.9488271601743614,
+            "ci_upper": 1.4311447987567436
+          },
+          {
+            "param": "ma.L2",
+            "coef": -0.4172932828350817,
+            "std_err": 0.7512361791249329,
+            "z_stat": -0.5554754875106788,
+            "p_value": 0.578569472020694,
+            "ci_lower": -1.889689137803431,
+            "ci_upper": 1.0551025721332676
+          },
+          {
+            "param": "ma.L3",
+            "coef": 0.18823172208324818,
+            "std_err": 0.14140794630564005,
+            "z_stat": 1.3311254918899884,
+            "p_value": 0.1831477223589265,
+            "ci_lower": -0.08892275980358011,
+            "ci_upper": 0.46538620397007646
+          },
+          {
+            "param": "ma.S.L12",
+            "coef": -0.30694255893100925,
+            "std_err": 0.07845735101127681,
+            "z_stat": -3.9122217991643877,
+            "p_value": 9.145086031682551e-05,
+            "ci_lower": -0.46071614123552895,
+            "ci_upper": -0.1531689766264895
+          },
+          {
+            "param": "sigma2",
+            "coef": 0.299360148499467,
+            "std_err": 0.035533130640588405,
+            "z_stat": 8.424817715259715,
+            "p_value": 3.613123015552274e-17,
+            "ci_lower": 0.22971649218595708,
+            "ci_upper": 0.36900380481297695
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.05070566613459429,
+        "residual_std": 0.5319429241451584,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 20.54494883462403,
+        "ljung_box_p": 0.6654022479451334,
+        "jarque_bera_stat": 1.2477699770114294,
+        "jarque_bera_p": 0.5358585840199924,
+        "skew": 0.03668459387394491,
+        "kurtosis": 3.4407495418160337,
+        "heteroskedasticity_stat": 3.1011444697228776,
+        "heteroskedasticity_p": 0.00023186186528475488,
+        "is_white_noise": true
+      },
+      "forecast_evaluation": {
+        "mae": 1.5417665489132126,
+        "rmse": 1.9986868390351167,
+        "mape": 8.978941728166854,
+        "r2": 0.7661041595749788
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:33",
+        "duration_seconds": 0.2800396000093315,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "SARIMA(2,1,0)x(0,1,0)_12",
+        "model_family": "SARIMA",
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          0,
+          12
+        ],
+        "p": 2,
+        "d": 1,
+        "q": 0,
+        "P": 0,
+        "D": 1,
+        "Q": 0,
+        "s": 12,
+        "transformation": "Original Scale | d=1, D=1, s=12",
+        "scale_for_ic": "original_d1_D1_s12",
+        "training_config": "Cấu hình trong không gian lưới SARIMA xác định từ ACF/PACF (d=1, D=1, s=12)."
+      },
+      "statistical_results": {
+        "aic": 250.40310986133122,
+        "bic": 259.3947466826236,
+        "hqic": 254.05639113153586,
+        "log_likelihood": -122.20155493066561,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ar.L1",
+            "coef": -0.8049051876663089,
+            "std_err": 0.0790581341619695,
+            "z_stat": -10.181181180133446,
+            "p_value": 2.4062265747735335e-24,
+            "ci_lower": -0.9598562833087048,
+            "ci_upper": -0.6499540920239131
+          },
+          {
+            "param": "ar.L2",
+            "coef": -0.4268189843805109,
+            "std_err": 0.07586023756315574,
+            "z_stat": -5.6263860764365825,
+            "p_value": 1.8402422461264547e-08,
+            "ci_lower": -0.5755023178629487,
+            "ci_upper": -0.27813565089807313
+          },
+          {
+            "param": "sigma2",
+            "coef": 0.3052842199791769,
+            "std_err": 0.033321564847032435,
+            "z_stat": 9.161761201210963,
+            "p_value": 5.105712092863843e-20,
+            "ci_lower": 0.2399751529704774,
+            "ci_upper": 0.37059328698787636
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.03858349102424282,
+        "residual_std": 0.5496496211607396,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 29.180606671131027,
+        "ljung_box_p": 0.21340774399707385,
+        "jarque_bera_stat": 3.457150344299039,
+        "jarque_bera_p": 0.17753718977574787,
+        "skew": -0.1804175634160527,
+        "kurtosis": 3.6503399621212775,
+        "heteroskedasticity_stat": 2.456484215205936,
+        "heteroskedasticity_p": 0.002074075553570155,
+        "is_white_noise": true
+      },
+      "forecast_evaluation": {
+        "mae": 2.2656005911238672,
+        "rmse": 2.754407862000695,
+        "mape": 13.070115086583106,
+        "r2": 0.5557888129916815
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:33",
+        "duration_seconds": 0.02452659999835305,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "SARIMA(2,1,0)x(0,1,1)_12",
+        "model_family": "SARIMA",
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          1,
+          12
+        ],
+        "p": 2,
+        "d": 1,
+        "q": 0,
+        "P": 0,
+        "D": 1,
+        "Q": 1,
+        "s": 12,
+        "transformation": "Original Scale | d=1, D=1, s=12",
+        "scale_for_ic": "original_d1_D1_s12",
+        "training_config": "Cấu hình trong không gian lưới SARIMA xác định từ ACF/PACF (d=1, D=1, s=12)."
+      },
+      "statistical_results": {
+        "aic": 230.05094398338372,
+        "bic": 241.73086768669623,
+        "hqic": 234.79738121244372,
+        "log_likelihood": -111.02547199169186,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ar.L1",
+            "coef": -0.8447834104033137,
+            "std_err": 0.08194772134133581,
+            "z_stat": -10.308809037954186,
+            "p_value": 6.42930968250388e-25,
+            "ci_lower": -1.0053979928474563,
+            "ci_upper": -0.6841688279591711
+          },
+          {
+            "param": "ar.L2",
+            "coef": -0.4493579452830928,
+            "std_err": 0.07716425201077115,
+            "z_stat": -5.823395336228597,
+            "p_value": 5.766393228002472e-09,
+            "ci_lower": -0.6005971001181767,
+            "ci_upper": -0.29811879044800893
+          },
+          {
+            "param": "ma.S.L12",
+            "coef": -0.3239502298703304,
+            "std_err": 0.07479276853652096,
+            "z_stat": -4.33130416494941,
+            "p_value": 1.4822874950241258e-05,
+            "ci_lower": -0.470541362505952,
+            "ci_upper": -0.17735909723470877
+          },
+          {
+            "param": "sigma2",
+            "coef": 0.2955894477054602,
+            "std_err": 0.03701557626376254,
+            "z_stat": 7.985542237656204,
+            "p_value": 1.3990594801731897e-15,
+            "ci_lower": 0.22304025136148992,
+            "ci_upper": 0.3681386440494305
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.0379523346219252,
+        "residual_std": 0.5355470297401805,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 19.066588171742406,
+        "ljung_box_p": 0.748429152786751,
+        "jarque_bera_stat": 0.10604768489299726,
+        "jarque_bera_p": 0.9483574010521472,
+        "skew": -0.059043034908641386,
+        "kurtosis": 3.05498463147087,
+        "heteroskedasticity_stat": 2.859422559604028,
+        "heteroskedasticity_p": 0.000526005660937726,
+        "is_white_noise": true
+      },
+      "forecast_evaluation": {
+        "mae": 1.5936871169767899,
+        "rmse": 2.0551076893968445,
+        "mape": 9.318903129412563,
+        "r2": 0.7527125014843484
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:33",
+        "duration_seconds": 0.12599180001416244,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "SARIMA(2,1,1)x(0,1,0)_12",
+        "model_family": "SARIMA",
+        "order": [
+          2,
+          1,
+          1
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          0,
+          12
+        ],
+        "p": 2,
+        "d": 1,
+        "q": 1,
+        "P": 0,
+        "D": 1,
+        "Q": 0,
+        "s": 12,
+        "transformation": "Original Scale | d=1, D=1, s=12",
+        "scale_for_ic": "original_d1_D1_s12",
+        "training_config": "Cấu hình trong không gian lưới SARIMA xác định từ ACF/PACF (d=1, D=1, s=12)."
+      },
+      "statistical_results": {
+        "aic": 249.82349152912988,
+        "bic": 261.81234062418633,
+        "hqic": 254.69453322273608,
+        "log_likelihood": -120.91174576456494,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ar.L1",
+            "coef": -0.3516490561983581,
+            "std_err": 0.1598607898216178,
+            "z_stat": -2.19972049800798,
+            "p_value": 0.027826731563633855,
+            "ci_lower": -0.6649704467888562,
+            "ci_upper": -0.038327665607859995
+          },
+          {
+            "param": "ar.L2",
+            "coef": -0.14087249911536845,
+            "std_err": 0.1482933742098366,
+            "z_stat": -0.9499581479347314,
+            "p_value": 0.34213351883214804,
+            "ci_lower": -0.4315221717125691,
+            "ci_upper": 0.1497771734818322
+          },
+          {
+            "param": "ma.L1",
+            "coef": -0.5328855804548673,
+            "std_err": 0.15854978818048157,
+            "z_stat": -3.3609983751493195,
+            "p_value": 0.0007766128241086085,
+            "ci_lower": -0.8436374550450656,
+            "ci_upper": -0.22213370586466913
+          },
+          {
+            "param": "sigma2",
+            "coef": 0.29985675631598624,
+            "std_err": 0.030711625786677407,
+            "z_stat": 9.763623664822818,
+            "p_value": 1.6128702141367063e-22,
+            "ci_lower": 0.2396630758674269,
+            "ci_upper": 0.36005043676454557
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.05373734035190972,
+        "residual_std": 0.5436654739318143,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 26.330334663819382,
+        "ljung_box_p": 0.336619274571222,
+        "jarque_bera_stat": 8.045454843157538,
+        "jarque_bera_p": 0.017904066349371278,
+        "skew": -0.12051789184154121,
+        "kurtosis": 4.108681435710677,
+        "heteroskedasticity_stat": 2.7152753879591223,
+        "heteroskedasticity_p": 0.0006492006417979744,
+        "is_white_noise": true
+      },
+      "forecast_evaluation": {
+        "mae": 2.141449378446504,
+        "rmse": 2.6221468888413275,
+        "mape": 12.37687348316178,
+        "r2": 0.5974247918685368
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:33",
+        "duration_seconds": 0.06335630000103265,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    },
+    {
+      "dataset_info": {
+        "dataset_name": "dataset1",
+        "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+        "n_obs": 204,
+        "date_range": "1991-07-01 to 2008-06-01",
+        "frequency": "MS",
+        "train_size": 163,
+        "test_size": 41
+      },
+      "model_config": {
+        "model_name": "SARIMA(2,1,3)x(0,1,0)_12",
+        "model_family": "SARIMA",
+        "order": [
+          2,
+          1,
+          3
+        ],
+        "seasonal_order": [
+          0,
+          1,
+          0,
+          12
+        ],
+        "p": 2,
+        "d": 1,
+        "q": 3,
+        "P": 0,
+        "D": 1,
+        "Q": 0,
+        "s": 12,
+        "transformation": "Original Scale | d=1, D=1, s=12",
+        "scale_for_ic": "original_d1_D1_s12",
+        "training_config": "Cấu hình trong không gian lưới SARIMA xác định từ ACF/PACF (d=1, D=1, s=12)."
+      },
+      "statistical_results": {
+        "aic": 246.42151288231577,
+        "bic": 264.32315261256576,
+        "hqic": 253.69535908401366,
+        "log_likelihood": -117.21075644115788,
+        "converged": true,
+        "warnings": [],
+        "coefficients": [
+          {
+            "param": "ar.L1",
+            "coef": -1.017958171719806,
+            "std_err": 0.18578142388493113,
+            "z_stat": -5.479332381208934,
+            "p_value": 4.269336831196158e-08,
+            "ci_lower": -1.3820830715308405,
+            "ci_upper": -0.6538332719087716
+          },
+          {
+            "param": "ar.L2",
+            "coef": -0.7086062440331216,
+            "std_err": 0.16944280552513036,
+            "z_stat": -4.181978938775462,
+            "p_value": 2.8898274482520805e-05,
+            "ci_lower": -1.0407080403018014,
+            "ci_upper": -0.3765044477644416
+          },
+          {
+            "param": "ma.L1",
+            "coef": 0.14898490016388719,
+            "std_err": 0.21016937737578195,
+            "z_stat": 0.7088801519238591,
+            "p_value": 0.4783988530070603,
+            "ci_lower": -0.2629395101458527,
+            "ci_upper": 0.560909310473627
+          },
+          {
+            "param": "ma.L2",
+            "coef": 0.009225165237664661,
+            "std_err": 0.18970999183610734,
+            "z_stat": 0.04862772460416522,
+            "p_value": 0.9612159750570214,
+            "ci_lower": -0.3625995862684934,
+            "ci_upper": 0.3810499167438227
+          },
+          {
+            "param": "ma.L3",
+            "coef": -0.34782400081806236,
+            "std_err": 0.17447614639616363,
+            "z_stat": -1.993533259430759,
+            "p_value": 0.046203085327606135,
+            "ci_lower": -0.689790963915881,
+            "ci_upper": -0.005857037720243707
+          },
+          {
+            "param": "sigma2",
+            "coef": 0.29128446814826053,
+            "std_err": 0.031528851718699055,
+            "z_stat": 9.238664025797878,
+            "p_value": 2.4959402184651912e-20,
+            "ci_lower": 0.2294890543057066,
+            "ci_upper": 0.35307988199081447
+          }
+        ]
+      },
+      "residual_diagnostics": {
+        "residual_mean": 0.0558796921884988,
+        "residual_std": 0.5336156083352265,
+        "ljung_box_lag": 24,
+        "ljung_box_q": 20.959009128539314,
+        "ljung_box_p": 0.6411422247194676,
+        "jarque_bera_stat": 5.483804780356621,
+        "jarque_bera_p": 0.06444762566826685,
+        "skew": -0.006207344190766231,
+        "kurtosis": 3.9366187273215547,
+        "heteroskedasticity_stat": 2.807445443209828,
+        "heteroskedasticity_p": 0.00043216400013408867,
+        "is_white_noise": true
+      },
+      "forecast_evaluation": {
+        "mae": 2.077345097541963,
+        "rmse": 2.5524005952719566,
+        "mape": 12.038521335382196,
+        "r2": 0.6185561058475104
+      },
+      "execution_info": {
+        "run_id": "dataset1_20261123_154923_d2775a",
+        "status": "SUCCESS",
+        "error_message": null,
+        "timestamp": "2026-11-23 15:49:33",
+        "duration_seconds": 0.1382957999885548,
+        "output_paths": {
+          "residuals": null,
+          "forecast": null
+        }
+      }
+    }
+  ]
+}

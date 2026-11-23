@@ -1,0 +1,105 @@
+{
+  "eda_profile": {
+    "n_obs": 144,
+    "start_date": "1949-01-01",
+    "end_date": "1960-12-01",
+    "frequency": "MS (Monthly Start)",
+    "dtype": "int64",
+    "missing_count": 0,
+    "duplicate_dates": 0,
+    "mean": 280.3,
+    "std": 119.97,
+    "cv_pct": 42.8,
+    "skewness": 0.583,
+    "min": 104.0,
+    "min_date": "11/1949",
+    "q25": 180.0,
+    "median": 265.5,
+    "q75": 360.5,
+    "max": 622.0,
+    "max_date": "07/1960",
+    "growth_ratio": 3.86,
+    "first_year": "1949",
+    "last_year": "1960",
+    "first_year_amp": 44.0,
+    "last_year_amp": 232.0,
+    "recommended_split": {
+      "ratio": "80% Train / 20% Test (shuffle=False)",
+      "train_n": 115,
+      "train_range": "01/1949 → 07/1958",
+      "test_n": 29,
+      "test_range": "08/1958 → 12/1960",
+      "note": "Lab 01 tập trung phân tích cấu trúc, phân rã và làm sạch; bước chia Train/Test tuần tự được áp dụng ở Lab 02 để chống Data Leakage."
+    }
+  },
+  "acf_pacf": {
+    "nlags": 40,
+    "conf_bound_95": 0.1633,
+    "acf_lag1": 0.948,
+    "acf_lag12": 0.7604,
+    "acf_lag24": 0.5322,
+    "acf_lag36": 0.337,
+    "significant_acf_count": 40,
+    "significant_pacf_count": 6,
+    "significant_pacf_lags": [
+      1,
+      2,
+      9,
+      10,
+      11,
+      13
+    ],
+    "top_pacf_lags": [
+      {
+        "lag": 1,
+        "pacf": 0.948
+      },
+      {
+        "lag": 13,
+        "pacf": -0.5397
+      },
+      {
+        "lag": 9,
+        "pacf": 0.2325
+      },
+      {
+        "lag": 2,
+        "pacf": -0.2294
+      },
+      {
+        "lag": 11,
+        "pacf": 0.1713
+      }
+    ],
+    "has_strong_autocorrelation": true,
+    "has_seasonal_peaks_12": true
+  },
+  "white_noise": {
+    "n_points": 1000,
+    "mean": -0.0289,
+    "std": 0.9892,
+    "conf_bound_95": 0.062,
+    "outside_lags": [
+      1
+    ],
+    "inside_95_pct": 97.5,
+    "ljung_box_wn_p10": 0.3282,
+    "ljung_box_wn_p20": 0.1443,
+    "ljung_box_ap_p20": 5.300472631050203e-292,
+    "is_white_noise_confirmed": true,
+    "comparison_5_lines": [
+      "1. Tính ngẫu nhiên & cấu trúc: White Noise dao động ngẫu nhiên quanh trung bình 0 (mean=-0.029, std=0.989), còn AirPassengers có xu hướng tăng trưởng dài hạn và mùa vụ rõ rệt.",
+      "2. Ngưỡng tin cậy 95%: White Noise có 97.5% số lag nằm trong dải tin cậy ±0.0620 (1/40 lag vượt nhẹ do ngẫu nhiên), trong khi AirPassengers vượt xa ngưỡng ở hầu hết các lag đầu.",
+      "3. Tốc độ suy giảm ACF: ACF của White Noise xấp xỉ 0 ngay từ lag 1 (ACF(1)=0.0871), còn AirPassengers suy giảm rất chậm (ACF(1)=0.9480) chứng tỏ chuỗi không dừng.",
+      "4. Kiểm định Ljung-Box (lag 20): White Noise đạt p-value=0.1443 (> 0.05, không bác bỏ H0 — không có tự tương quan), còn AirPassengers có p-value=5.30e-292 (<< 0.05, tự tương quan cực mạnh).",
+      "5. Khả năng dự báo: White Noise không chứa quy luật quá khứ để dự báo, ngược lại AirPassengers có cấu trúc tự tương quan và chu kỳ 12 tháng rất giàu thông tin cho mô hình SARIMA/ETS."
+    ]
+  },
+  "generated_figures": [
+    "01_full_series_overview.png",
+    "02_acf_pacf_airpassengers.png",
+    "03_white_noise_series.png",
+    "04_white_noise_vs_airpassengers_acf.png"
+  ],
+  "duration_sec": 3.4427
+}

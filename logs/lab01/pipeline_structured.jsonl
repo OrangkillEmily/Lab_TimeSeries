@@ -1,0 +1,14 @@
+{"timestamp": "2026-11-23 15:41:19", "run_id": "20261123_154119_4f8c41", "stage": "PIPELINE", "status": "START", "message": "Khởi chạy toàn trình Pipeline Lab 01 (AirPassengers.csv)."}
+{"timestamp": "2026-11-23 15:41:19", "run_id": "20261123_154119_4f8c41", "stage": "DATA_LOADING", "status": "START", "message": "Bắt đầu nạp và kiểm toán dữ liệu AirPassengers.csv."}
+{"timestamp": "2026-11-23 15:41:19", "run_id": "20261123_154119_4f8c41", "stage": "DATA_LOADING", "status": "SUCCESS", "message": "Nạp thành công 144 quan sát (1949-01-01 -> 1960-12-01), missing=0."}
+{"timestamp": "2026-11-23 15:41:19", "run_id": "20261123_154119_4f8c41", "stage": "EDA_ACF_WHITENOISE", "status": "START", "message": "Bắt đầu Bài 1 (Tổng quan + ACF/PACF 40 lags) & Bài 2 (White Noise 1000 điểm)."}
+{"timestamp": "2026-11-23 15:41:23", "run_id": "20261123_154119_4f8c41", "stage": "EDA_ACF_WHITENOISE", "status": "SUCCESS", "message": "Hoàn tất 4 hình EDA | ACF1=0.948, ACF12=0.7604, LB_WN_p20=0.1443."}
+{"timestamp": "2026-11-23 15:41:23", "run_id": "20261123_154119_4f8c41", "stage": "DECOMPOSITION", "status": "START", "message": "Bắt đầu Bài 3: Phân rã Classical Multiplicative & STL Loess."}
+{"timestamp": "2026-11-23 15:41:25", "run_id": "20261123_154119_4f8c41", "stage": "DECOMPOSITION", "status": "SUCCESS", "message": "Hoàn tất 3 hình phân rã | F_T=0.9957, F_S=0.972, LB_p20=0.2567."}
+{"timestamp": "2026-11-23 15:41:25", "run_id": "20261123_154119_4f8c41", "stage": "DATA_QUALITY", "status": "START", "message": "Bắt đầu Bài 4: Giả lập 11 NaN + 3 Outlier, Imputation & Outlier Cleaning."}
+{"timestamp": "2026-11-23 15:41:29", "run_id": "20261123_154119_4f8c41", "stage": "DATA_QUALITY", "status": "SUCCESS", "message": "Hoàn tất 5 hình Bài 4 | STL Outlier F1=1.0 | Clean RMSE=24.5704."}
+{"timestamp": "2026-11-23 15:41:29", "run_id": "20261123_154119_4f8c41", "stage": "VISUALIZATION", "status": "START", "message": "Bắt đầu Bài 5: Rolling Statistics, Seasonal Trends & Heatmaps."}
+{"timestamp": "2026-11-23 15:41:32", "run_id": "20261123_154119_4f8c41", "stage": "VISUALIZATION", "status": "SUCCESS", "message": "Hoàn tất trực quan hóa (15 biểu đồ) | Corr(Mean,Std)=0.9591 | CAGR=12.79%/năm."}
+{"timestamp": "2026-11-23 15:41:32", "run_id": "20261123_154119_4f8c41", "stage": "REPORTING", "status": "START", "message": "Bắt đầu kết xuất bộ 3 báo cáo tự động Lab 01 (HTML, PDF, Markdown)."}
+{"timestamp": "2026-11-23 15:41:36", "run_id": "20261123_154119_4f8c41", "stage": "REPORTING", "status": "SUCCESS", "message": "Hoàn tất xuất báo cáo Lab 01 trong 4.20s | HTML=3,982,187B | PDF=3,016,905B | MD=4,684B."}
+{"timestamp": "2026-11-23 15:41:36", "run_id": "20261123_154119_4f8c41", "stage": "PIPELINE", "status": "COMPLETED", "message": "Hoàn tất toàn bộ 6 giai đoạn Lab 01 trong 17.02s."}
