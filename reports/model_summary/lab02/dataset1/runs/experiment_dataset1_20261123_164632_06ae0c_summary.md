@@ -1,8 +1,8 @@
 # BÁO CÁO TỔNG HỢP MÔ HÌNH (MODEL SUMMARY) — MONTHLY RETAIL SALES (US, 07/1991 - 06/2008)
 
 ## 1. Thông tin Phiên Thực nghiệm & Bộ dữ liệu (Provenance & Dataset Info)
-- **Run ID**: `dataset1_20261123_154923_d2775a`
-- **Thời điểm xuất báo cáo**: `2026-11-23 15:49:33`
+- **Run ID**: `dataset1_20261123_164632_06ae0c`
+- **Thời điểm xuất báo cáo**: `2026-11-23 16:46:43`
 - **Dataset Key**: `dataset1`
 - **Tên bộ dữ liệu**: Monthly Retail Sales (US, 07/1991 - 06/2008)
 - **Tổng số quan sát**: 204 tháng (1991-07-01 to 2008-06-01)
@@ -45,7 +45,7 @@
 | ARIMA(1,1,1)                 | ARIMA      | SUCCESS  | original_d1        |  582.47 |  591.73 |  3.67 |   4.62 |      18.04 | -0.252  |        0      | Fail (Không đạt) | True        |
 | ARIMA(2,1,1)                 | ARIMA      | SUCCESS  | original_d1        |  584.46 |  596.81 |  3.67 |   4.63 |      18.06 | -0.2543 |        0      | Fail (Không đạt) | True        |
 
-### Diễn giải Đa Tiêu chí Tự động (Run ID: `dataset1_20261123_154923_d2775a` — Monthly Retail Sales (US, 07/1991 - 06/2008))
+### Diễn giải Đa Tiêu chí Tự động (Run ID: `dataset1_20261123_164632_06ae0c` — Monthly Retail Sales (US, 07/1991 - 06/2008))
 
 #### A. Mô hình Tốt nhất theo Từng Tiêu chí Độc lập (Criterion-Specific Leaders)
 - **Tiêu chí 1 — Sai số RMSE trên tập Test thấp nhất (Thang đo gốc)**: **Log-SARIMA(1,1,1)x(0,1,1)_12** (`RMSE = 1.49`, `R² = 0.8697`).
@@ -73,7 +73,7 @@
 ```text
 AR Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -85,7 +85,7 @@ Model: AR(1) [ARIMA(1,1,0)]
 ==============================================================================
 Log Likelihood:       -296.965   AIC:        597.930
 BIC:                   604.105   HQIC:       600.437
-Converged:                True   Run Time:   0.0289s
+Converged:                True   Run Time:   0.0279s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -107,7 +107,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 AR Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -119,7 +119,7 @@ Model: AR(2) [ARIMA(2,1,0)]
 ==============================================================================
 Log Likelihood:       -293.789   AIC:        593.579
 BIC:                   602.842   HQIC:       597.340
-Converged:                True   Run Time:   0.0396s
+Converged:                True   Run Time:   0.0361s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -142,7 +142,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 MA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -154,7 +154,7 @@ Model: MA(1) [ARIMA(0,1,1)]
 ==============================================================================
 Log Likelihood:       -291.958   AIC:        587.917
 BIC:                   594.092   HQIC:       590.424
-Converged:                True   Run Time:   0.0356s
+Converged:                True   Run Time:   0.0310s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -176,7 +176,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 MA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -188,7 +188,7 @@ Model: MA(3) [ARIMA(0,1,3)]
 ==============================================================================
 Log Likelihood:       -288.304   AIC:        584.608
 BIC:                   596.959   HQIC:       589.623
-Converged:                True   Run Time:   0.0546s
+Converged:                True   Run Time:   0.0506s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -212,7 +212,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 ARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -224,7 +224,7 @@ Model: ARIMA(1,1,1)
 ==============================================================================
 Log Likelihood:       -288.234   AIC:        582.467
 BIC:                   591.730   HQIC:       586.228
-Converged:                True   Run Time:   0.0444s
+Converged:                True   Run Time:   0.0465s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -247,7 +247,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 ARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -259,7 +259,7 @@ Model: ARIMA(2,1,1)
 ==============================================================================
 Log Likelihood:       -288.230   AIC:        584.460
 BIC:                   596.810   HQIC:       589.475
-Converged:                True   Run Time:   0.0496s
+Converged:                True   Run Time:   0.0472s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -283,7 +283,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -296,7 +296,7 @@ Model: SARIMA(0,1,1)x(0,1,0)_12
 ==============================================================================
 Log Likelihood:       -123.798   AIC:        251.597
 BIC:                   257.591   HQIC:       254.032
-Converged:                True   Run Time:   0.0377s
+Converged:                True   Run Time:   0.0460s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -318,7 +318,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -331,7 +331,7 @@ Model: SARIMA(1,1,1)x(0,1,0)_12
 ==============================================================================
 Log Likelihood:       -121.458   AIC:        248.915
 BIC:                   257.907   HQIC:       252.569
-Converged:                True   Run Time:   0.0441s
+Converged:                True   Run Time:   0.0553s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -354,7 +354,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -367,7 +367,7 @@ Model: SARIMA(0,1,1)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:       -113.926   AIC:        233.852
 BIC:                   242.590   HQIC:       237.403
-Converged:                True   Run Time:   0.0920s
+Converged:                True   Run Time:   0.1067s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -390,7 +390,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -403,7 +403,7 @@ Model: SARIMA(1,1,0)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:       -126.193   AIC:        258.386
 BIC:                   267.146   HQIC:       261.946
-Converged:                True   Run Time:   0.0851s
+Converged:                True   Run Time:   0.0841s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -426,7 +426,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -439,7 +439,7 @@ Model: SARIMA(1,1,1)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:       -110.727   AIC:        229.454
 BIC:                   241.105   HQIC:       234.189
-Converged:                True   Run Time:   0.1387s
+Converged:                True   Run Time:   0.1504s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -463,7 +463,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -476,7 +476,7 @@ Model: SARIMA(0,1,3)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:       -109.670   AIC:        229.340
 BIC:                   243.830   HQIC:       235.228
-Converged:                True   Run Time:   0.1934s
+Converged:                True   Run Time:   0.2018s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -501,7 +501,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -514,7 +514,7 @@ Model: SARIMA(2,1,1)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:       -109.730   AIC:        229.460
 BIC:                   244.023   HQIC:       235.378
-Converged:                True   Run Time:   0.2557s
+Converged:                True   Run Time:   0.2581s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -539,7 +539,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -552,7 +552,7 @@ Model: SARIMA(2,1,3)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:       -104.535   AIC:        223.070
 BIC:                   243.355   HQIC:       231.313
-Converged:                True   Run Time:   0.6731s
+Converged:                True   Run Time:   0.6903s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -579,7 +579,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 Log-SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -592,7 +592,7 @@ Model: Log-SARIMA(0,1,1)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:        200.769   AIC:       -395.537
 BIC:                  -386.800   HQIC:      -391.987
-Converged:                True   Run Time:   0.4422s
+Converged:                True   Run Time:   0.3671s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -615,7 +615,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 Log-SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -628,7 +628,7 @@ Model: Log-SARIMA(1,1,1)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:        202.283   AIC:       -396.567
 BIC:                  -384.916   HQIC:      -391.832
-Converged:                True   Run Time:   0.3887s
+Converged:                True   Run Time:   0.4176s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -652,7 +652,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 Log-SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -665,7 +665,7 @@ Model: Log-SARIMA(2,1,3)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:        208.388   AIC:       -402.777
 BIC:                  -382.492   HQIC:      -394.533
-Converged:               False   Run Time:   1.1124s
+Converged:               False   Run Time:   1.0459s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -695,7 +695,7 @@ Warnings:
 ```text
 SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -708,7 +708,7 @@ Model: SARIMA(0,1,0)x(0,1,0)_12
 ==============================================================================
 Log Likelihood:       -165.737   AIC:        333.475
 BIC:                   336.479   HQIC:       334.695
-Converged:                True   Run Time:   0.0474s
+Converged:                True   Run Time:   0.0257s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -729,7 +729,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -742,7 +742,7 @@ Model: SARIMA(0,1,0)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:       -154.687   AIC:        313.374
 BIC:                   319.214   HQIC:       315.747
-Converged:                True   Run Time:   0.0976s
+Converged:                True   Run Time:   0.1255s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -764,7 +764,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -777,7 +777,7 @@ Model: SARIMA(0,1,3)x(0,1,0)_12
 ==============================================================================
 Log Likelihood:       -120.237   AIC:        248.473
 BIC:                   260.408   HQIC:       253.323
-Converged:                True   Run Time:   0.0832s
+Converged:                True   Run Time:   0.0987s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -801,7 +801,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -814,7 +814,7 @@ Model: SARIMA(1,1,0)x(0,1,0)_12
 ==============================================================================
 Log Likelihood:       -137.008   AIC:        278.017
 BIC:                   284.025   HQIC:       280.458
-Converged:               False   Run Time:   0.0650s
+Converged:               False   Run Time:   0.0301s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -839,7 +839,7 @@ Warnings:
 ```text
 SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -852,7 +852,7 @@ Model: SARIMA(1,1,3)x(0,1,0)_12
 ==============================================================================
 Log Likelihood:       -119.713   AIC:        249.425
 BIC:                   264.343   HQIC:       255.487
-Converged:                True   Run Time:   0.0852s
+Converged:                True   Run Time:   0.0839s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -877,7 +877,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -890,7 +890,7 @@ Model: SARIMA(1,1,3)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:       -109.390   AIC:        230.780
 BIC:                   248.167   HQIC:       237.846
-Converged:                True   Run Time:   0.2800s
+Converged:                True   Run Time:   0.2990s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -916,7 +916,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -929,7 +929,7 @@ Model: SARIMA(2,1,0)x(0,1,0)_12
 ==============================================================================
 Log Likelihood:       -122.202   AIC:        250.403
 BIC:                   259.395   HQIC:       254.056
-Converged:                True   Run Time:   0.0245s
+Converged:                True   Run Time:   0.0206s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -952,7 +952,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -965,7 +965,7 @@ Model: SARIMA(2,1,0)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:       -111.025   AIC:        230.051
 BIC:                   241.731   HQIC:       234.797
-Converged:                True   Run Time:   0.1260s
+Converged:                True   Run Time:   0.1237s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -989,7 +989,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -1002,7 +1002,7 @@ Model: SARIMA(2,1,1)x(0,1,0)_12
 ==============================================================================
 Log Likelihood:       -120.912   AIC:        249.823
 BIC:                   261.812   HQIC:       254.695
-Converged:                True   Run Time:   0.0634s
+Converged:                True   Run Time:   0.0667s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1026,7 +1026,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=41):
 ```text
 SARIMA Model Summary - Monthly Retail Sales (US, 07/1991 - 06/2008)
 ==============================================================================
-Run ID: dataset1_20261123_154923_d2775a | Status: SUCCESS
+Run ID: dataset1_20261123_164632_06ae0c | Status: SUCCESS
 Data: Monthly Retail Sales (US, 07/1991 - 06/2008)
 Date range: 1991-07-01 to 2008-06-01 (Freq: MS)
 Number of observations: 204 (Train: 163, Test: 41)
@@ -1039,7 +1039,7 @@ Model: SARIMA(2,1,3)x(0,1,0)_12
 ==============================================================================
 Log Likelihood:       -117.211   AIC:        246.422
 BIC:                   264.323   HQIC:       253.695
-Converged:                True   Run Time:   0.1383s
+Converged:                True   Run Time:   0.1384s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------

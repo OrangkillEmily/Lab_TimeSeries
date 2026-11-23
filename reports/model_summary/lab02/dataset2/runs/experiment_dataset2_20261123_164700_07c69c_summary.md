@@ -1,8 +1,8 @@
 # BÁO CÁO TỔNG HỢP MÔ HÌNH (MODEL SUMMARY) — AIRPASSENGERS (MONTHLY AIRLINE PASSENGERS, 01/1949 - 12/1960)
 
 ## 1. Thông tin Phiên Thực nghiệm & Bộ dữ liệu (Provenance & Dataset Info)
-- **Run ID**: `dataset2_20261123_154951_786eea`
-- **Thời điểm xuất báo cáo**: `2026-11-23 15:50:07`
+- **Run ID**: `dataset2_20261123_164700_07c69c`
+- **Thời điểm xuất báo cáo**: `2026-11-23 16:47:16`
 - **Dataset Key**: `dataset2`
 - **Tên bộ dữ liệu**: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 - **Tổng số quan sát**: 144 tháng (1949-01-01 to 1960-12-01)
@@ -72,7 +72,7 @@
 | MA(1) [ARIMA(0,1,1)]         | MA         | SUCCESS  | original_d1        | 1063.65 | 1069.12 | 88.39 | 101.07 |      22.17 | -0.6734 |        0      | Fail (Không đạt) | True        |
 | AR(1) [ARIMA(1,1,0)]         | AR         | SUCCESS  | original_d1        | 1068.54 | 1074.01 | 94    | 107.22 |      23.69 | -0.8832 |        0      | Fail (Không đạt) | True        |
 
-### Diễn giải Đa Tiêu chí Tự động (Run ID: `dataset2_20261123_154951_786eea` — AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960))
+### Diễn giải Đa Tiêu chí Tự động (Run ID: `dataset2_20261123_164700_07c69c` — AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960))
 
 #### A. Mô hình Tốt nhất theo Từng Tiêu chí Độc lập (Criterion-Specific Leaders)
 - **Tiêu chí 1 — Sai số RMSE trên tập Test thấp nhất (Thang đo gốc)**: **Log-SARIMA(0,1,0)x(1,1,1)_12** (`RMSE = 14.66`, `R² = 0.9648`).
@@ -100,7 +100,7 @@
 ```text
 AR Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -112,7 +112,7 @@ Model: AR(1) [ARIMA(1,1,0)]
 ==============================================================================
 Log Likelihood:       -532.268   AIC:       1068.536
 BIC:                  1074.008   HQIC:      1070.757
-Converged:                True   Run Time:   0.0275s
+Converged:                True   Run Time:   0.0235s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -134,7 +134,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 AR Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -146,7 +146,7 @@ Model: AR(2) [ARIMA(2,1,0)]
 ==============================================================================
 Log Likelihood:       -529.821   AIC:       1065.642
 BIC:                  1073.851   HQIC:      1068.974
-Converged:                True   Run Time:   0.0463s
+Converged:                True   Run Time:   0.0591s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -169,7 +169,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 AR Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -181,7 +181,7 @@ Model: AR(4) [ARIMA(4,1,0)]
 ==============================================================================
 Log Likelihood:       -524.833   AIC:       1059.667
 BIC:                  1073.348   HQIC:      1065.219
-Converged:                True   Run Time:   0.0721s
+Converged:                True   Run Time:   0.0614s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -206,7 +206,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 MA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -218,7 +218,7 @@ Model: MA(1) [ARIMA(0,1,1)]
 ==============================================================================
 Log Likelihood:       -529.823   AIC:       1063.646
 BIC:                  1069.118   HQIC:      1065.867
-Converged:                True   Run Time:   0.0360s
+Converged:                True   Run Time:   0.0345s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -240,7 +240,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 ARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -252,7 +252,7 @@ Model: ARIMA(1,1,1)
 ==============================================================================
 Log Likelihood:       -526.123   AIC:       1058.246
 BIC:                  1066.454   HQIC:      1061.577
-Converged:                True   Run Time:   0.0574s
+Converged:                True   Run Time:   0.0594s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -275,7 +275,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 ARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -287,7 +287,7 @@ Model: ARIMA(2,1,1)
 ==============================================================================
 Log Likelihood:       -525.324   AIC:       1058.648
 BIC:                  1069.592   HQIC:      1063.089
-Converged:                True   Run Time:   0.0849s
+Converged:                True   Run Time:   0.0826s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -311,7 +311,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -324,7 +324,7 @@ Model: SARIMA(1,1,1)x(0,1,0)_12
 ==============================================================================
 Log Likelihood:       -368.468   AIC:        742.936
 BIC:                   750.752   HQIC:       746.099
-Converged:                True   Run Time:   0.0515s
+Converged:                True   Run Time:   0.0552s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -347,7 +347,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -360,7 +360,7 @@ Model: SARIMA(0,1,3)x(0,1,0)_12
 ==============================================================================
 Log Likelihood:       -359.454   AIC:        726.908
 BIC:                   737.248   HQIC:       731.090
-Converged:                True   Run Time:   0.0561s
+Converged:                True   Run Time:   0.0619s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -384,7 +384,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -397,7 +397,7 @@ Model: SARIMA(0,1,1)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:       -326.671   AIC:        659.342
 BIC:                   666.774   HQIC:       662.336
-Converged:                True   Run Time:   0.0902s
+Converged:                True   Run Time:   0.0952s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -420,7 +420,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -433,7 +433,7 @@ Model: SARIMA(1,1,0)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:       -330.374   AIC:        666.748
 BIC:                   674.214   HQIC:       669.758
-Converged:                True   Run Time:   0.0929s
+Converged:                True   Run Time:   0.0895s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -456,7 +456,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -469,7 +469,7 @@ Model: SARIMA(1,1,1)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:       -325.666   AIC:        659.333
 BIC:                   669.242   HQIC:       663.325
-Converged:                True   Run Time:   0.1356s
+Converged:                True   Run Time:   0.1490s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -493,7 +493,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -506,7 +506,7 @@ Model: SARIMA(1,1,3)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:       -313.810   AIC:        639.621
 BIC:                   654.347   HQIC:       645.547
-Converged:                True   Run Time:   0.3404s
+Converged:                True   Run Time:   0.3485s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -532,7 +532,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -545,7 +545,7 @@ Model: Log-SARIMA(0,1,1)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:        164.875   AIC:       -323.749
 BIC:                  -316.317   HQIC:      -320.755
-Converged:                True   Run Time:   0.3151s
+Converged:                True   Run Time:   0.2998s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -568,7 +568,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -581,7 +581,7 @@ Model: Log-SARIMA(1,1,0)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:        166.733   AIC:       -327.466
 BIC:                  -320.000   HQIC:      -324.457
-Converged:                True   Run Time:   0.1927s
+Converged:                True   Run Time:   0.1892s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -604,7 +604,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -617,7 +617,7 @@ Model: Log-SARIMA(1,1,3)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:        167.450   AIC:       -322.901
 BIC:                  -308.174   HQIC:      -316.974
-Converged:               False   Run Time:   0.6836s
+Converged:               False   Run Time:   0.6822s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -646,7 +646,7 @@ Warnings:
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -659,7 +659,7 @@ Model: SARIMA(0,1,0)x(0,1,0)_12
 ==============================================================================
 Log Likelihood:       -374.577   AIC:        751.155
 BIC:                   753.770   HQIC:       752.213
-Converged:                True   Run Time:   0.0206s
+Converged:                True   Run Time:   0.0186s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -680,7 +680,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -693,7 +693,7 @@ Model: SARIMA(0,1,0)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:       -332.020   AIC:        668.040
 BIC:                   673.017   HQIC:       670.046
-Converged:                True   Run Time:   0.0697s
+Converged:                True   Run Time:   0.0639s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -715,7 +715,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -728,7 +728,7 @@ Model: SARIMA(0,1,0)x(1,1,0)_12
 ==============================================================================
 Log Likelihood:       -335.358   AIC:        674.716
 BIC:                   679.716   HQIC:       676.732
-Converged:                True   Run Time:   0.0239s
+Converged:                True   Run Time:   0.0268s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -750,7 +750,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -763,7 +763,7 @@ Model: SARIMA(0,1,0)x(1,1,1)_12
 ==============================================================================
 Log Likelihood:       -332.020   AIC:        670.040
 BIC:                   677.506   HQIC:       673.049
-Converged:                True   Run Time:   0.1287s
+Converged:                True   Run Time:   0.1617s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -786,7 +786,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -799,7 +799,7 @@ Model: SARIMA(0,1,1)x(0,1,0)_12
 ==============================================================================
 Log Likelihood:       -369.459   AIC:        742.918
 BIC:                   748.128   HQIC:       745.026
-Converged:                True   Run Time:   0.0406s
+Converged:                True   Run Time:   0.0318s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -821,7 +821,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -834,7 +834,7 @@ Model: SARIMA(0,1,1)x(1,1,0)_12
 ==============================================================================
 Log Likelihood:       -333.883   AIC:        673.765
 BIC:                   681.265   HQIC:       676.789
-Converged:                True   Run Time:   0.0602s
+Converged:                True   Run Time:   0.0524s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -857,7 +857,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -870,7 +870,7 @@ Model: SARIMA(0,1,1)x(1,1,1)_12
 ==============================================================================
 Log Likelihood:       -325.193   AIC:        658.386
 BIC:                   668.296   HQIC:       662.379
-Converged:                True   Run Time:   0.1877s
+Converged:                True   Run Time:   0.1949s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -894,7 +894,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -907,7 +907,7 @@ Model: SARIMA(0,1,3)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:       -315.540   AIC:        641.080
 BIC:                   653.352   HQIC:       646.019
-Converged:                True   Run Time:   0.1492s
+Converged:                True   Run Time:   0.1497s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -932,7 +932,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -945,7 +945,7 @@ Model: SARIMA(0,1,3)x(1,1,0)_12
 ==============================================================================
 Log Likelihood:       -330.514   AIC:        671.027
 BIC:                   683.526   HQIC:       676.068
-Converged:                True   Run Time:   0.1105s
+Converged:                True   Run Time:   0.1119s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -970,7 +970,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -983,7 +983,7 @@ Model: SARIMA(0,1,3)x(1,1,1)_12
 ==============================================================================
 Log Likelihood:       -314.111   AIC:        640.222
 BIC:                   654.948   HQIC:       646.149
-Converged:                True   Run Time:   0.2819s
+Converged:                True   Run Time:   0.3084s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1009,7 +1009,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1022,7 +1022,7 @@ Model: SARIMA(1,1,0)x(0,1,0)_12
 ==============================================================================
 Log Likelihood:       -372.414   AIC:        748.828
 BIC:                   754.058   HQIC:       750.946
-Converged:                True   Run Time:   0.0149s
+Converged:                True   Run Time:   0.0156s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1044,7 +1044,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1057,7 +1057,7 @@ Model: SARIMA(1,1,0)x(1,1,0)_12
 ==============================================================================
 Log Likelihood:       -330.255   AIC:        666.510
 BIC:                   673.976   HQIC:       669.519
-Converged:                True   Run Time:   0.0589s
+Converged:                True   Run Time:   0.0628s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1080,7 +1080,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1093,7 +1093,7 @@ Model: SARIMA(1,1,0)x(1,1,1)_12
 ==============================================================================
 Log Likelihood:       -328.967   AIC:        665.934
 BIC:                   675.889   HQIC:       669.947
-Converged:                True   Run Time:   0.1482s
+Converged:                True   Run Time:   0.1471s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1117,7 +1117,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1130,7 +1130,7 @@ Model: SARIMA(1,1,1)x(1,1,0)_12
 ==============================================================================
 Log Likelihood:       -329.452   AIC:        666.904
 BIC:                   676.858   HQIC:       670.916
-Converged:                True   Run Time:   0.0982s
+Converged:                True   Run Time:   0.0954s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1154,7 +1154,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1192,7 +1192,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1205,7 +1205,7 @@ Model: SARIMA(1,1,3)x(0,1,0)_12
 ==============================================================================
 Log Likelihood:       -359.064   AIC:        728.127
 BIC:                   741.052   HQIC:       733.355
-Converged:                True   Run Time:   0.0863s
+Converged:                True   Run Time:   0.0945s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1230,7 +1230,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1243,7 +1243,7 @@ Model: SARIMA(1,1,3)x(1,1,0)_12
 ==============================================================================
 Log Likelihood:       -325.796   AIC:        663.591
 BIC:                   678.523   HQIC:       669.610
-Converged:                True   Run Time:   0.2537s
+Converged:                True   Run Time:   0.2512s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1269,7 +1269,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1282,7 +1282,7 @@ Model: SARIMA(1,1,3)x(1,1,1)_12
 ==============================================================================
 Log Likelihood:       -313.810   AIC:        641.620
 BIC:                   658.801   HQIC:       648.534
-Converged:                True   Run Time:   0.5691s
+Converged:                True   Run Time:   0.5467s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1309,7 +1309,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1322,7 +1322,7 @@ Model: Log-SARIMA(0,1,0)x(0,1,0)_12
 ==============================================================================
 Log Likelihood:        167.080   AIC:       -332.160
 BIC:                  -329.545   HQIC:      -331.101
-Converged:                True   Run Time:   0.0302s
+Converged:                True   Run Time:   0.0244s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1343,7 +1343,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1356,7 +1356,7 @@ Model: Log-SARIMA(0,1,0)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:        161.284   AIC:       -318.569
 BIC:                  -313.592   HQIC:      -316.563
-Converged:                True   Run Time:   0.0903s
+Converged:                True   Run Time:   0.0895s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1378,7 +1378,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1391,7 +1391,7 @@ Model: Log-SARIMA(0,1,0)x(1,1,0)_12
 ==============================================================================
 Log Likelihood:        158.252   AIC:       -312.505
 BIC:                  -307.505   HQIC:      -310.489
-Converged:                True   Run Time:   0.0803s
+Converged:                True   Run Time:   0.1016s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1413,7 +1413,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1426,7 +1426,7 @@ Model: Log-SARIMA(0,1,0)x(1,1,1)_12
 ==============================================================================
 Log Likelihood:        158.296   AIC:       -310.593
 BIC:                  -303.127   HQIC:      -307.584
-Converged:                True   Run Time:   0.1608s
+Converged:                True   Run Time:   0.1707s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1449,7 +1449,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1462,7 +1462,7 @@ Model: Log-SARIMA(0,1,1)x(0,1,0)_12
 ==============================================================================
 Log Likelihood:        170.744   AIC:       -337.488
 BIC:                  -332.277   HQIC:      -335.379
-Converged:                True   Run Time:   0.0543s
+Converged:                True   Run Time:   0.0483s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1484,7 +1484,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1497,7 +1497,7 @@ Model: Log-SARIMA(0,1,1)x(1,1,0)_12
 ==============================================================================
 Log Likelihood:        165.656   AIC:       -325.312
 BIC:                  -317.813   HQIC:      -322.288
-Converged:                True   Run Time:   0.1414s
+Converged:                True   Run Time:   0.1441s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1520,7 +1520,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1533,7 +1533,7 @@ Model: Log-SARIMA(0,1,1)x(1,1,1)_12
 ==============================================================================
 Log Likelihood:        162.500   AIC:       -317.000
 BIC:                  -307.090   HQIC:      -313.007
-Converged:                True   Run Time:   0.3217s
+Converged:                True   Run Time:   0.3332s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1557,7 +1557,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1570,7 +1570,7 @@ Model: Log-SARIMA(0,1,3)x(0,1,0)_12
 ==============================================================================
 Log Likelihood:        168.609   AIC:       -329.218
 BIC:                  -318.878   HQIC:      -325.036
-Converged:                True   Run Time:   0.1278s
+Converged:                True   Run Time:   0.1313s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1594,7 +1594,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1607,7 +1607,7 @@ Model: Log-SARIMA(0,1,3)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:        167.027   AIC:       -324.054
 BIC:                  -311.782   HQIC:      -319.115
-Converged:                True   Run Time:   0.5524s
+Converged:                True   Run Time:   0.5546s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1632,7 +1632,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1645,7 +1645,7 @@ Model: Log-SARIMA(0,1,3)x(1,1,0)_12
 ==============================================================================
 Log Likelihood:        167.632   AIC:       -325.263
 BIC:                  -312.764   HQIC:      -320.223
-Converged:                True   Run Time:   0.1939s
+Converged:                True   Run Time:   0.2015s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1670,7 +1670,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1683,7 +1683,7 @@ Model: Log-SARIMA(0,1,3)x(1,1,1)_12
 ==============================================================================
 Log Likelihood:        163.849   AIC:       -315.697
 BIC:                  -300.971   HQIC:      -309.771
-Converged:               False   Run Time:   0.6969s
+Converged:               False   Run Time:   0.6282s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1712,7 +1712,7 @@ Warnings:
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1750,7 +1750,7 @@ Warnings:
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1763,7 +1763,7 @@ Model: Log-SARIMA(1,1,0)x(1,1,0)_12
 ==============================================================================
 Log Likelihood:        163.825   AIC:       -321.650
 BIC:                  -314.184   HQIC:      -318.641
-Converged:                True   Run Time:   0.1615s
+Converged:                True   Run Time:   0.1531s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1786,7 +1786,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1799,7 +1799,7 @@ Model: Log-SARIMA(1,1,0)x(1,1,1)_12
 ==============================================================================
 Log Likelihood:        164.032   AIC:       -320.064
 BIC:                  -310.109   HQIC:      -316.051
-Converged:                True   Run Time:   0.2593s
+Converged:                True   Run Time:   0.2687s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1823,7 +1823,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1836,7 +1836,7 @@ Model: Log-SARIMA(1,1,1)x(0,1,0)_12
 ==============================================================================
 Log Likelihood:        170.455   AIC:       -334.910
 BIC:                  -327.094   HQIC:      -331.747
-Converged:                True   Run Time:   0.0374s
+Converged:                True   Run Time:   0.0375s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1859,7 +1859,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1872,7 +1872,7 @@ Model: Log-SARIMA(1,1,1)x(0,1,1)_12
 ==============================================================================
 Log Likelihood:        165.086   AIC:       -322.172
 BIC:                  -312.263   HQIC:      -318.180
-Converged:                True   Run Time:   0.3377s
+Converged:                True   Run Time:   0.3583s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1896,7 +1896,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1909,7 +1909,7 @@ Model: Log-SARIMA(1,1,1)x(1,1,0)_12
 ==============================================================================
 Log Likelihood:        163.827   AIC:       -319.654
 BIC:                  -309.700   HQIC:      -315.642
-Converged:                True   Run Time:   0.2913s
+Converged:                True   Run Time:   0.3027s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1933,7 +1933,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1946,7 +1946,7 @@ Model: Log-SARIMA(1,1,1)x(1,1,1)_12
 ==============================================================================
 Log Likelihood:        162.544   AIC:       -315.088
 BIC:                  -302.702   HQIC:      -310.098
-Converged:                True   Run Time:   0.5398s
+Converged:                True   Run Time:   0.4825s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -1971,7 +1971,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -1984,7 +1984,7 @@ Model: Log-SARIMA(1,1,3)x(0,1,0)_12
 ==============================================================================
 Log Likelihood:        168.808   AIC:       -327.615
 BIC:                  -314.691   HQIC:      -322.388
-Converged:                True   Run Time:   0.1792s
+Converged:                True   Run Time:   0.2080s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -2009,7 +2009,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -2022,7 +2022,7 @@ Model: Log-SARIMA(1,1,3)x(1,1,0)_12
 ==============================================================================
 Log Likelihood:        165.852   AIC:       -319.704
 BIC:                  -304.773   HQIC:      -313.686
-Converged:                True   Run Time:   0.4127s
+Converged:                True   Run Time:   0.4092s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------
@@ -2048,7 +2048,7 @@ OUT-OF-SAMPLE TEST METRICS (Original Scale, n_test=29):
 ```text
 Log-SARIMA Model Summary - AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 ==============================================================================
-Run ID: dataset2_20261123_154951_786eea | Status: SUCCESS
+Run ID: dataset2_20261123_164700_07c69c | Status: SUCCESS
 Data: AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)
 Date range: 1949-01-01 to 1960-12-01 (Freq: MS)
 Number of observations: 144 (Train: 115, Test: 29)
@@ -2061,7 +2061,7 @@ Model: Log-SARIMA(1,1,3)x(1,1,1)_12
 ==============================================================================
 Log Likelihood:        163.876   AIC:       -313.751
 BIC:                  -296.571   HQIC:      -306.837
-Converged:                True   Run Time:   0.5898s
+Converged:                True   Run Time:   0.6049s
 ------------------------------------------------------------------------------
 param                  coef    std err         z     P>|z|     [0.025     0.975]
 ------------------------------------------------------------------------------

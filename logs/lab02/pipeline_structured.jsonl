@@ -1,0 +1,4 @@
+{"timestamp": "2026-11-23 16:46:31", "run_id": "20261123_164631_827e95", "stage": "PIPELINE", "status": "START", "message": "Khởi chạy Pipeline Lab 02 | datasets=['dataset1', 'dataset2'] | mode=full."}
+{"timestamp": "2026-11-23 16:47:00", "run_id": "20261123_164631_827e95", "stage": "DATASET1", "status": "SUCCESS", "message": "Hoàn tất dataset1 (12 biểu đồ, exp_run_id=dataset1_20261123_164632_06ae0c)."}
+{"timestamp": "2026-11-23 16:47:47", "run_id": "20261123_164631_827e95", "stage": "DATASET2", "status": "SUCCESS", "message": "Hoàn tất dataset2 (15 biểu đồ, exp_run_id=dataset2_20261123_164700_07c69c)."}
+{"timestamp": "2026-11-23 16:47:55", "run_id": "20261123_164631_827e95", "stage": "PIPELINE", "status": "COMPLETED", "message": "Hoàn tất toàn trình Lab 02 trong 83.52s."}

@@ -1,0 +1,567 @@
+{
+  "run_id": "dataset1_20261123_164632_06ae0c",
+  "dataset_key": "dataset1",
+  "dataset_title": "Monthly Retail Sales (US, 07/1991 - 06/2008)",
+  "raw_file": "Monthly Retail Sales.csv",
+  "date_col": "date",
+  "value_col": "value",
+  "seasonal_period": 12,
+  "eda": {
+    "n_obs": 204,
+    "missing": 0,
+    "duplicates": 0,
+    "dtype": "float64",
+    "start_date": "1991-07-01",
+    "end_date": "2008-06-01",
+    "mean": 10.6944,
+    "std": 5.957,
+    "cv_pct": 55.7,
+    "skew": 0.844,
+    "min": 2.8145,
+    "min_date": "02/1992",
+    "q25": 5.8441,
+    "median": 9.3193,
+    "q75": 14.29,
+    "max": 29.6654,
+    "max_date": "01/2008",
+    "growth_ratio": 5.51,
+    "train_size": 163,
+    "train_start": "1991-07-01",
+    "train_end": "2005-01-01",
+    "train_mean": 8.48,
+    "train_std": 3.94,
+    "test_size": 41,
+    "test_start": "2005-02-01",
+    "test_end": "2008-06-01",
+    "test_mean": 19.51,
+    "test_std": 4.18
+  },
+  "adf": {
+    "raw": {
+      "title": "Monthly Retail Sales (US, 07/1991 - 06/2008) - Train Raw",
+      "n_input": 163,
+      "lags_used": 14,
+      "obs_used": 148,
+      "adf_statistic": 2.2308930667836546,
+      "p_value": 0.9989069766966421,
+      "critical_values": {
+        "1%": -3.4753253063120644,
+        "5%": -2.881274703275226,
+        "10%": -2.5772928360116873
+      },
+      "is_stationary": false,
+      "conclusion": "NON-STATIONARY (Chưa bác bỏ H0: Chuỗi KHÔNG DỪNG ở mức ý nghĩa 5%)"
+    },
+    "diff_1": {
+      "title": "Monthly Retail Sales (US, 07/1991 - 06/2008) - Train Diff(d=1)",
+      "n_input": 162,
+      "lags_used": 13,
+      "obs_used": 148,
+      "adf_statistic": -1.7060735667963116,
+      "p_value": 0.4279859407287596,
+      "critical_values": {
+        "1%": -3.4753253063120644,
+        "5%": -2.881274703275226,
+        "10%": -2.5772928360116873
+      },
+      "is_stationary": false,
+      "conclusion": "NON-STATIONARY (Chưa bác bỏ H0: Chuỗi KHÔNG DỪNG ở mức ý nghĩa 5%)"
+    },
+    "diff_1_12": {
+      "title": "Monthly Retail Sales (US, 07/1991 - 06/2008) - Train Diff(d=1, D=1, s=12)",
+      "n_input": 150,
+      "lags_used": 4,
+      "obs_used": 145,
+      "adf_statistic": -8.787864497883598,
+      "p_value": 2.282582829548928e-14,
+      "critical_values": {
+        "1%": -3.476273058920005,
+        "5%": -2.881687616548444,
+        "10%": -2.5775132580261593
+      },
+      "is_stationary": true,
+      "conclusion": "STATIONARY (Bác bỏ H0: Chuỗi ĐÃ DỪNG ở mức ý nghĩa 5%)"
+    }
+  },
+  "acf_pacf": {
+    "diff_1": {
+      "n": 162,
+      "bound": 0.154,
+      "acf_sig": [
+        1,
+        11,
+        12,
+        13,
+        23,
+        24,
+        25,
+        35,
+        36
+      ],
+      "pacf_sig": [
+        1,
+        2,
+        10,
+        11,
+        12,
+        13,
+        15
+      ],
+      "table": [
+        {
+          "lag": 1,
+          "acf": -0.32,
+          "pacf": -0.32,
+          "acf_sig": true,
+          "pacf_sig": true
+        },
+        {
+          "lag": 2,
+          "acf": -0.08,
+          "pacf": -0.2,
+          "acf_sig": false,
+          "pacf_sig": true
+        },
+        {
+          "lag": 3,
+          "acf": -0.01,
+          "pacf": -0.13,
+          "acf_sig": false,
+          "pacf_sig": false
+        },
+        {
+          "lag": 4,
+          "acf": -0.05,
+          "pacf": -0.14,
+          "acf_sig": false,
+          "pacf_sig": false
+        },
+        {
+          "lag": 5,
+          "acf": -0.05,
+          "pacf": -0.15,
+          "acf_sig": false,
+          "pacf_sig": false
+        },
+        {
+          "lag": 6,
+          "acf": 0.1,
+          "pacf": -0.0,
+          "acf_sig": false,
+          "pacf_sig": false
+        },
+        {
+          "lag": 12,
+          "acf": 0.84,
+          "pacf": 0.68,
+          "acf_sig": true,
+          "pacf_sig": true
+        },
+        {
+          "lag": 24,
+          "acf": 0.68,
+          "pacf": -0.02,
+          "acf_sig": true,
+          "pacf_sig": false
+        },
+        {
+          "lag": 36,
+          "acf": 0.55,
+          "pacf": -0.03,
+          "acf_sig": true,
+          "pacf_sig": false
+        }
+      ]
+    },
+    "diff_1_12": {
+      "n": 150,
+      "bound": 0.16,
+      "acf_sig": [
+        1,
+        3,
+        4,
+        7,
+        23,
+        24,
+        26,
+        27
+      ],
+      "pacf_sig": [
+        1,
+        2,
+        4,
+        5,
+        25,
+        36
+      ],
+      "table": [
+        {
+          "lag": 1,
+          "acf": -0.57,
+          "pacf": -0.57,
+          "acf_sig": true,
+          "pacf_sig": true
+        },
+        {
+          "lag": 2,
+          "acf": 0.04,
+          "pacf": -0.42,
+          "acf_sig": false,
+          "pacf_sig": true
+        },
+        {
+          "lag": 3,
+          "acf": 0.18,
+          "pacf": -0.06,
+          "acf_sig": true,
+          "pacf_sig": false
+        },
+        {
+          "lag": 4,
+          "acf": -0.23,
+          "pacf": -0.17,
+          "acf_sig": true,
+          "pacf_sig": true
+        },
+        {
+          "lag": 5,
+          "acf": 0.09,
+          "pacf": -0.16,
+          "acf_sig": false,
+          "pacf_sig": true
+        },
+        {
+          "lag": 6,
+          "acf": 0.08,
+          "pacf": 0.01,
+          "acf_sig": false,
+          "pacf_sig": false
+        },
+        {
+          "lag": 12,
+          "acf": -0.11,
+          "pacf": -0.05,
+          "acf_sig": false,
+          "pacf_sig": false
+        },
+        {
+          "lag": 24,
+          "acf": -0.21,
+          "pacf": 0.01,
+          "acf_sig": true,
+          "pacf_sig": false
+        },
+        {
+          "lag": 36,
+          "acf": -0.1,
+          "pacf": -0.19,
+          "acf_sig": false,
+          "pacf_sig": true
+        }
+      ]
+    }
+  },
+  "arima": {
+    "ARIMA(1,1,1)": {
+      "aic": 582.47,
+      "bic": 591.73,
+      "converged": true,
+      "metrics": {
+        "MAE": 3.67,
+        "RMSE": 4.62,
+        "MAPE (%)": 18.04,
+        "R2": -0.25,
+        "MAPE": 18.04
+      },
+      "diagnostics": {
+        "mean": 0.2983,
+        "std": 1.4045,
+        "ljung_box_q": 239.86,
+        "ljung_box_p": 0.0,
+        "jarque_bera_p": 0.0,
+        "heteroskedasticity_p": 0.0,
+        "is_white_noise": false
+      },
+      "top_errors": [
+        {
+          "date": "2008-01-01",
+          "actual": 29.67,
+          "forecast": 17.54,
+          "error": 12.13,
+          "abs_error": 12.13,
+          "pct_error": 40.88
+        },
+        {
+          "date": "2007-01-01",
+          "actual": 28.04,
+          "forecast": 17.54,
+          "error": 10.5,
+          "abs_error": 10.5,
+          "pct_error": 37.45
+        },
+        {
+          "date": "2007-12-01",
+          "actual": 25.81,
+          "forecast": 17.54,
+          "error": 8.27,
+          "abs_error": 8.27,
+          "pct_error": 32.04
+        }
+      ]
+    },
+    "ARIMA(2,1,1)": {
+      "aic": 584.46,
+      "bic": 596.81,
+      "converged": true,
+      "metrics": {
+        "MAE": 3.67,
+        "RMSE": 4.63,
+        "MAPE (%)": 18.06,
+        "R2": -0.25,
+        "MAPE": 18.06
+      },
+      "diagnostics": {
+        "mean": 0.298,
+        "std": 1.4045,
+        "ljung_box_q": 239.98,
+        "ljung_box_p": 0.0,
+        "jarque_bera_p": 0.0,
+        "heteroskedasticity_p": 0.0,
+        "is_white_noise": false
+      },
+      "top_errors": [
+        {
+          "date": "2008-01-01",
+          "actual": 29.67,
+          "forecast": 17.53,
+          "error": 12.13,
+          "abs_error": 12.13,
+          "pct_error": 40.9
+        },
+        {
+          "date": "2007-01-01",
+          "actual": 28.04,
+          "forecast": 17.53,
+          "error": 10.51,
+          "abs_error": 10.51,
+          "pct_error": 37.47
+        },
+        {
+          "date": "2007-12-01",
+          "actual": 25.81,
+          "forecast": 17.53,
+          "error": 8.27,
+          "abs_error": 8.27,
+          "pct_error": 32.06
+        }
+      ]
+    }
+  },
+  "sarima": {
+    "grid_total": 18,
+    "top_models": [
+      {
+        "model_name": "SARIMA(0,1,1)x(0,1,1)_12",
+        "p": 0,
+        "q": 1,
+        "P": 0,
+        "Q": 1,
+        "AIC": 233.85,
+        "BIC": 242.59,
+        "MAE": 1.45,
+        "RMSE": 1.84,
+        "MAPE (%)": 8.21,
+        "R2": 0.8012,
+        "lb_p": 0.1053,
+        "is_white_noise": true
+      },
+      {
+        "model_name": "SARIMA(2,1,3)x(0,1,1)_12",
+        "p": 2,
+        "q": 3,
+        "P": 0,
+        "Q": 1,
+        "AIC": 223.07,
+        "BIC": 243.35,
+        "MAE": 1.48,
+        "RMSE": 1.87,
+        "MAPE (%)": 8.38,
+        "R2": 0.7956,
+        "lb_p": 0.9712,
+        "is_white_noise": true
+      },
+      {
+        "model_name": "SARIMA(1,1,1)x(0,1,1)_12",
+        "p": 1,
+        "q": 1,
+        "P": 0,
+        "Q": 1,
+        "AIC": 229.45,
+        "BIC": 241.1,
+        "MAE": 1.47,
+        "RMSE": 1.91,
+        "MAPE (%)": 8.48,
+        "R2": 0.7862,
+        "lb_p": 0.4558,
+        "is_white_noise": true
+      },
+      {
+        "model_name": "SARIMA(1,1,0)x(0,1,1)_12",
+        "p": 1,
+        "q": 0,
+        "P": 0,
+        "Q": 1,
+        "AIC": 258.39,
+        "BIC": 267.15,
+        "MAE": 1.47,
+        "RMSE": 1.91,
+        "MAPE (%)": 8.48,
+        "R2": 0.7866,
+        "lb_p": 0.0,
+        "is_white_noise": false
+      },
+      {
+        "model_name": "SARIMA(0,1,3)x(0,1,1)_12",
+        "p": 0,
+        "q": 3,
+        "P": 0,
+        "Q": 1,
+        "AIC": 229.34,
+        "BIC": 243.83,
+        "MAE": 1.5,
+        "RMSE": 1.95,
+        "MAPE (%)": 8.72,
+        "R2": 0.7767,
+        "lb_p": 0.6242,
+        "is_white_noise": true
+      },
+      {
+        "model_name": "SARIMA(1,1,3)x(0,1,1)_12",
+        "p": 1,
+        "q": 3,
+        "P": 0,
+        "Q": 1,
+        "AIC": 230.78,
+        "BIC": 248.17,
+        "MAE": 1.54,
+        "RMSE": 2.0,
+        "MAPE (%)": 8.98,
+        "R2": 0.7661,
+        "lb_p": 0.6654,
+        "is_white_noise": true
+      }
+    ],
+    "param_elimination": {
+      "q": [
+        {
+          "q": 0,
+          "AIC": 277.28,
+          "RMSE": 2.28,
+          "MAPE (%)": 10.5,
+          "R2": 0.69
+        },
+        {
+          "q": 1,
+          "AIC": 240.52,
+          "RMSE": 2.2,
+          "MAPE (%)": 10.1,
+          "R2": 0.71
+        },
+        {
+          "q": 3,
+          "AIC": 237.92,
+          "RMSE": 2.26,
+          "MAPE (%)": 10.44,
+          "R2": 0.69
+        }
+      ],
+      "p": [
+        {
+          "p": 0,
+          "AIC": 268.35,
+          "RMSE": 2.22,
+          "MAPE (%)": 10.2,
+          "R2": 0.71
+        },
+        {
+          "p": 1,
+          "AIC": 249.16,
+          "RMSE": 2.21,
+          "MAPE (%)": 10.15,
+          "R2": 0.71
+        },
+        {
+          "p": 2,
+          "AIC": 238.2,
+          "RMSE": 2.31,
+          "MAPE (%)": 10.69,
+          "R2": 0.68
+        }
+      ],
+      "Q": [
+        {
+          "Q": 0,
+          "AIC": 261.84,
+          "RMSE": 2.54,
+          "MAPE (%)": 11.96,
+          "R2": 0.62
+        },
+        {
+          "Q": 1,
+          "AIC": 241.97,
+          "RMSE": 1.95,
+          "MAPE (%)": 8.74,
+          "R2": 0.78
+        }
+      ]
+    },
+    "best_model": {
+      "name": "SARIMA(0,1,1)x(0,1,1)_12",
+      "aic": 233.85,
+      "bic": 242.59,
+      "metrics": {
+        "MAE": 1.45,
+        "RMSE": 1.84,
+        "MAPE (%)": 8.21,
+        "R2": 0.8012,
+        "MAPE": 8.21
+      },
+      "diagnostics": {
+        "mean": 0.062,
+        "std": 0.5399,
+        "ljung_box_q": 32.94,
+        "ljung_box_p": 0.1053,
+        "jarque_bera_p": 0.4558,
+        "heteroskedasticity_p": 0.0,
+        "is_white_noise": true
+      },
+      "top_errors": [
+        {
+          "date": "2006-02-01",
+          "actual": 12.54,
+          "forecast": 16.32,
+          "error": -3.78,
+          "abs_error": 3.78,
+          "pct_error": 30.17
+        },
+        {
+          "date": "2006-09-01",
+          "actual": 16.62,
+          "forecast": 20.29,
+          "error": -3.67,
+          "abs_error": 3.67,
+          "pct_error": 22.05
+        },
+        {
+          "date": "2008-03-01",
+          "actual": 18.26,
+          "forecast": 21.6,
+          "error": -3.33,
+          "abs_error": 3.33,
+          "pct_error": 18.24
+        }
+      ]
+    }
+  },
+  "log_sarima": null
+}
