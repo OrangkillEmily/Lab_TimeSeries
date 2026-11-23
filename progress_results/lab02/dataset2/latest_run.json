@@ -1,0 +1,787 @@
+{
+  "run_id": "dataset2_20261123_154951_786eea",
+  "dataset_key": "dataset2",
+  "dataset_title": "AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)",
+  "raw_file": "AirPassengers.csv",
+  "date_col": "Month",
+  "value_col": "Passengers",
+  "seasonal_period": 12,
+  "eda": {
+    "n_obs": 144,
+    "missing": 0,
+    "duplicates": 0,
+    "dtype": "int64",
+    "start_date": "1949-01-01",
+    "end_date": "1960-12-01",
+    "mean": 280.2986,
+    "std": 119.9663,
+    "cv_pct": 42.8,
+    "skew": 0.583,
+    "min": 104.0,
+    "min_date": "11/1949",
+    "q25": 180.0,
+    "median": 265.5,
+    "q75": 360.5,
+    "max": 622.0,
+    "max_date": "07/1960",
+    "growth_ratio": 3.86,
+    "train_size": 115,
+    "train_start": "1949-01-01",
+    "train_end": "1958-07-01",
+    "train_mean": 239.95,
+    "train_std": 91.35,
+    "test_size": 29,
+    "test_start": "1958-08-01",
+    "test_end": "1960-12-01",
+    "test_mean": 440.31,
+    "test_std": 79.51
+  },
+  "adf": {
+    "raw": {
+      "title": "AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960) - Train Raw",
+      "n_input": 115,
+      "lags_used": 13,
+      "obs_used": 101,
+      "adf_statistic": -0.3568892196404545,
+      "p_value": 0.9170517285875921,
+      "critical_values": {
+        "1%": -3.4968181663902103,
+        "5%": -2.8906107514600103,
+        "10%": -2.5822770483285953
+      },
+      "is_stationary": false,
+      "conclusion": "NON-STATIONARY (Chưa bác bỏ H0: Chuỗi KHÔNG DỪNG ở mức ý nghĩa 5%)"
+    },
+    "diff_1": {
+      "title": "AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960) - Train Diff(d=1)",
+      "n_input": 114,
+      "lags_used": 13,
+      "obs_used": 100,
+      "adf_statistic": -2.5396347808080955,
+      "p_value": 0.10612609999673422,
+      "critical_values": {
+        "1%": -3.497501033,
+        "5%": -2.89090644,
+        "10%": -2.5824349
+      },
+      "is_stationary": false,
+      "conclusion": "NON-STATIONARY (Chưa bác bỏ H0: Chuỗi KHÔNG DỪNG ở mức ý nghĩa 5%)"
+    },
+    "diff_1_12": {
+      "title": "AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960) - Train Diff(d=1, D=1, s=12)",
+      "n_input": 102,
+      "lags_used": 0,
+      "obs_used": 101,
+      "adf_statistic": -12.176268238314325,
+      "p_value": 1.3839808857959483e-22,
+      "critical_values": {
+        "1%": -3.4968181663902103,
+        "5%": -2.8906107514600103,
+        "10%": -2.5822770483285953
+      },
+      "is_stationary": true,
+      "conclusion": "STATIONARY (Bác bỏ H0: Chuỗi ĐÃ DỪNG ở mức ý nghĩa 5%)"
+    }
+  },
+  "acf_pacf": {
+    "diff_1": {
+      "n": 114,
+      "bound": 0.184,
+      "acf_sig": [
+        1,
+        4,
+        8,
+        9,
+        11,
+        12,
+        13,
+        16,
+        20,
+        23,
+        24,
+        32,
+        36
+      ],
+      "pacf_sig": [
+        1,
+        2,
+        4,
+        7,
+        8,
+        10,
+        11,
+        12
+      ],
+      "table": [
+        {
+          "lag": 1,
+          "acf": 0.27,
+          "pacf": 0.27,
+          "acf_sig": true,
+          "pacf_sig": true
+        },
+        {
+          "lag": 2,
+          "acf": -0.13,
+          "pacf": -0.22,
+          "acf_sig": false,
+          "pacf_sig": true
+        },
+        {
+          "lag": 3,
+          "acf": -0.12,
+          "pacf": -0.02,
+          "acf_sig": false,
+          "pacf_sig": false
+        },
+        {
+          "lag": 4,
+          "acf": -0.28,
+          "pacf": -0.29,
+          "acf_sig": true,
+          "pacf_sig": true
+        },
+        {
+          "lag": 5,
+          "acf": -0.1,
+          "pacf": 0.06,
+          "acf_sig": false,
+          "pacf_sig": false
+        },
+        {
+          "lag": 6,
+          "acf": 0.02,
+          "pacf": -0.09,
+          "acf_sig": false,
+          "pacf_sig": false
+        },
+        {
+          "lag": 12,
+          "acf": 0.8,
+          "pacf": 0.59,
+          "acf_sig": true,
+          "pacf_sig": true
+        },
+        {
+          "lag": 24,
+          "acf": 0.64,
+          "pacf": -0.09,
+          "acf_sig": true,
+          "pacf_sig": false
+        },
+        {
+          "lag": 36,
+          "acf": 0.53,
+          "pacf": 0.05,
+          "acf_sig": true,
+          "pacf_sig": false
+        }
+      ]
+    },
+    "diff_1_12": {
+      "n": 102,
+      "bound": 0.194,
+      "acf_sig": [
+        1,
+        3,
+        23
+      ],
+      "pacf_sig": [
+        1,
+        20,
+        23
+      ],
+      "table": [
+        {
+          "lag": 1,
+          "acf": -0.2,
+          "pacf": -0.2,
+          "acf_sig": true,
+          "pacf_sig": true
+        },
+        {
+          "lag": 2,
+          "acf": 0.12,
+          "pacf": 0.09,
+          "acf_sig": false,
+          "pacf_sig": false
+        },
+        {
+          "lag": 3,
+          "acf": -0.21,
+          "pacf": -0.17,
+          "acf_sig": true,
+          "pacf_sig": false
+        },
+        {
+          "lag": 4,
+          "acf": -0.03,
+          "pacf": -0.12,
+          "acf_sig": false,
+          "pacf_sig": false
+        },
+        {
+          "lag": 5,
+          "acf": 0.04,
+          "pacf": 0.06,
+          "acf_sig": false,
+          "pacf_sig": false
+        },
+        {
+          "lag": 6,
+          "acf": -0.01,
+          "pacf": -0.01,
+          "acf_sig": false,
+          "pacf_sig": false
+        },
+        {
+          "lag": 12,
+          "acf": -0.17,
+          "pacf": -0.13,
+          "acf_sig": false,
+          "pacf_sig": false
+        },
+        {
+          "lag": 24,
+          "acf": 0.0,
+          "pacf": 0.02,
+          "acf_sig": false,
+          "pacf_sig": false
+        },
+        {
+          "lag": 36,
+          "acf": 0.1,
+          "pacf": -0.03,
+          "acf_sig": false,
+          "pacf_sig": false
+        }
+      ]
+    }
+  },
+  "arima": {
+    "ARIMA(1,1,1)": {
+      "aic": 1058.25,
+      "bic": 1066.45,
+      "converged": true,
+      "metrics": {
+        "MAE": 85.25,
+        "RMSE": 97.5,
+        "MAPE (%)": 21.29,
+        "R2": -0.56,
+        "MAPE": 21.29
+      },
+      "diagnostics": {
+        "mean": 2.6881,
+        "std": 24.3208,
+        "ljung_box_q": 162.71,
+        "ljung_box_p": 0.0,
+        "jarque_bera_p": 0.3138,
+        "heteroskedasticity_p": 0.0,
+        "is_white_noise": false
+      },
+      "top_errors": [
+        {
+          "date": "1958-11-01",
+          "actual": 310.0,
+          "forecast": 498.18,
+          "error": -188.18,
+          "abs_error": 188.18,
+          "pct_error": 60.7
+        },
+        {
+          "date": "1958-12-01",
+          "actual": 337.0,
+          "forecast": 498.98,
+          "error": -161.98,
+          "abs_error": 161.98,
+          "pct_error": 48.06
+        },
+        {
+          "date": "1959-02-01",
+          "actual": 342.0,
+          "forecast": 498.78,
+          "error": -156.78,
+          "abs_error": 156.78,
+          "pct_error": 45.84
+        }
+      ]
+    },
+    "ARIMA(2,1,1)": {
+      "aic": 1058.65,
+      "bic": 1069.59,
+      "converged": true,
+      "metrics": {
+        "MAE": 60.53,
+        "RMSE": 82.62,
+        "MAPE (%)": 12.9,
+        "R2": -0.12,
+        "MAPE": 12.9
+      },
+      "diagnostics": {
+        "mean": 5.5685,
+        "std": 23.6641,
+        "ljung_box_q": 186.9,
+        "ljung_box_p": 0.0,
+        "jarque_bera_p": 0.0233,
+        "heteroskedasticity_p": 0.0,
+        "is_white_noise": false
+      },
+      "top_errors": [
+        {
+          "date": "1960-07-01",
+          "actual": 622.0,
+          "forecast": 408.26,
+          "error": 213.74,
+          "abs_error": 213.74,
+          "pct_error": 34.36
+        },
+        {
+          "date": "1960-08-01",
+          "actual": 606.0,
+          "forecast": 408.25,
+          "error": 197.75,
+          "abs_error": 197.75,
+          "pct_error": 32.63
+        },
+        {
+          "date": "1959-08-01",
+          "actual": 559.0,
+          "forecast": 408.5,
+          "error": 150.5,
+          "abs_error": 150.5,
+          "pct_error": 26.92
+        }
+      ]
+    }
+  },
+  "sarima": {
+    "grid_total": 24,
+    "top_models": [
+      {
+        "model_name": "SARIMA(1,1,3)x(0,1,1)_12",
+        "p": 1,
+        "q": 3,
+        "P": 0,
+        "Q": 1,
+        "AIC": 639.62,
+        "BIC": 654.35,
+        "MAE": 19.43,
+        "RMSE": 24.85,
+        "MAPE (%)": 4.31,
+        "R2": 0.8988,
+        "lb_p": 0.4105,
+        "is_white_noise": true
+      },
+      {
+        "model_name": "SARIMA(1,1,3)x(1,1,1)_12",
+        "p": 1,
+        "q": 3,
+        "P": 1,
+        "Q": 1,
+        "AIC": 641.62,
+        "BIC": 658.8,
+        "MAE": 19.43,
+        "RMSE": 24.85,
+        "MAPE (%)": 4.31,
+        "R2": 0.8988,
+        "lb_p": 0.4107,
+        "is_white_noise": true
+      },
+      {
+        "model_name": "SARIMA(1,1,3)x(1,1,0)_12",
+        "p": 1,
+        "q": 3,
+        "P": 1,
+        "Q": 0,
+        "AIC": 663.59,
+        "BIC": 678.52,
+        "MAE": 19.52,
+        "RMSE": 25.09,
+        "MAPE (%)": 4.32,
+        "R2": 0.8969,
+        "lb_p": 0.4773,
+        "is_white_noise": true
+      },
+      {
+        "model_name": "SARIMA(0,1,0)x(0,1,1)_12",
+        "p": 0,
+        "q": 0,
+        "P": 0,
+        "Q": 1,
+        "AIC": 668.04,
+        "BIC": 673.02,
+        "MAE": 20.53,
+        "RMSE": 26.62,
+        "MAPE (%)": 4.45,
+        "R2": 0.8839,
+        "lb_p": 0.025,
+        "is_white_noise": false
+      },
+      {
+        "model_name": "SARIMA(0,1,0)x(1,1,1)_12",
+        "p": 0,
+        "q": 0,
+        "P": 1,
+        "Q": 1,
+        "AIC": 670.04,
+        "BIC": 677.51,
+        "MAE": 20.53,
+        "RMSE": 26.62,
+        "MAPE (%)": 4.45,
+        "R2": 0.8839,
+        "lb_p": 0.025,
+        "is_white_noise": false
+      },
+      {
+        "model_name": "SARIMA(0,1,0)x(1,1,0)_12",
+        "p": 0,
+        "q": 0,
+        "P": 1,
+        "Q": 0,
+        "AIC": 674.72,
+        "BIC": 679.72,
+        "MAE": 20.67,
+        "RMSE": 26.83,
+        "MAPE (%)": 4.48,
+        "R2": 0.882,
+        "lb_p": 0.0286,
+        "is_white_noise": false
+      }
+    ],
+    "param_elimination": {
+      "q": [
+        {
+          "q": 0,
+          "AIC": 689.0,
+          "RMSE": 30.56,
+          "MAPE (%)": 5.21,
+          "R2": 0.85
+        },
+        {
+          "q": 1,
+          "AIC": 682.65,
+          "RMSE": 32.29,
+          "MAPE (%)": 5.53,
+          "R2": 0.83
+        },
+        {
+          "q": 3,
+          "AIC": 669.02,
+          "RMSE": 32.98,
+          "MAPE (%)": 5.79,
+          "R2": 0.82
+        }
+      ],
+      "p": [
+        {
+          "p": 0,
+          "AIC": 681.47,
+          "RMSE": 33.25,
+          "MAPE (%)": 5.75,
+          "R2": 0.82
+        },
+        {
+          "p": 1,
+          "AIC": 678.98,
+          "RMSE": 30.64,
+          "MAPE (%)": 5.26,
+          "R2": 0.84
+        }
+      ],
+      "Q": [
+        {
+          "Q": 0,
+          "AIC": 704.78,
+          "RMSE": 32.57,
+          "MAPE (%)": 5.62,
+          "R2": 0.82
+        },
+        {
+          "Q": 1,
+          "AIC": 655.66,
+          "RMSE": 31.31,
+          "MAPE (%)": 5.39,
+          "R2": 0.84
+        }
+      ],
+      "P": [
+        {
+          "P": 0,
+          "AIC": 697.92,
+          "RMSE": 32.67,
+          "MAPE (%)": 5.64,
+          "R2": 0.82
+        },
+        {
+          "P": 1,
+          "AIC": 662.53,
+          "RMSE": 31.21,
+          "MAPE (%)": 5.37,
+          "R2": 0.84
+        }
+      ]
+    },
+    "best_model": {
+      "name": "SARIMA(1,1,3)x(0,1,1)_12",
+      "aic": 639.62,
+      "bic": 654.35,
+      "metrics": {
+        "MAE": 19.43,
+        "RMSE": 24.85,
+        "MAPE (%)": 4.31,
+        "R2": 0.8988,
+        "MAPE": 4.31
+      },
+      "diagnostics": {
+        "mean": 1.3471,
+        "std": 9.7504,
+        "ljung_box_q": 24.91,
+        "ljung_box_p": 0.4105,
+        "jarque_bera_p": 0.0113,
+        "heteroskedasticity_p": 0.4447,
+        "is_white_noise": true
+      },
+      "top_errors": [
+        {
+          "date": "1960-07-01",
+          "actual": 622.0,
+          "forecast": 556.45,
+          "error": 65.55,
+          "abs_error": 65.55,
+          "pct_error": 10.54
+        },
+        {
+          "date": "1960-08-01",
+          "actual": 606.0,
+          "forecast": 559.02,
+          "error": 46.98,
+          "abs_error": 46.98,
+          "pct_error": 7.75
+        },
+        {
+          "date": "1960-04-01",
+          "actual": 461.0,
+          "forecast": 417.7,
+          "error": 43.3,
+          "abs_error": 43.3,
+          "pct_error": 9.39
+        }
+      ]
+    }
+  },
+  "log_sarima": {
+    "grid_total": 24,
+    "top_models": [
+      {
+        "model_name": "Log-SARIMA(0,1,0)x(1,1,1)_12",
+        "p": 0,
+        "q": 0,
+        "P": 1,
+        "Q": 1,
+        "AIC": -310.59,
+        "BIC": -303.13,
+        "MAE": 12.06,
+        "RMSE": 14.66,
+        "MAPE (%)": 2.8,
+        "R2": 0.9648,
+        "lb_p": 0.0353,
+        "is_white_noise": false
+      },
+      {
+        "model_name": "Log-SARIMA(1,1,3)x(0,1,1)_12",
+        "p": 1,
+        "q": 3,
+        "P": 0,
+        "Q": 1,
+        "AIC": -322.9,
+        "BIC": -308.17,
+        "MAE": 12.02,
+        "RMSE": 14.67,
+        "MAPE (%)": 2.79,
+        "R2": 0.9648,
+        "lb_p": 0.9952,
+        "is_white_noise": true
+      },
+      {
+        "model_name": "Log-SARIMA(1,1,1)x(0,1,1)_12",
+        "p": 1,
+        "q": 1,
+        "P": 0,
+        "Q": 1,
+        "AIC": -322.17,
+        "BIC": -312.26,
+        "MAE": 12.27,
+        "RMSE": 15.02,
+        "MAPE (%)": 2.8,
+        "R2": 0.963,
+        "lb_p": 0.9959,
+        "is_white_noise": true
+      },
+      {
+        "model_name": "Log-SARIMA(1,1,0)x(0,1,1)_12",
+        "p": 1,
+        "q": 0,
+        "P": 0,
+        "Q": 1,
+        "AIC": -327.47,
+        "BIC": -320.0,
+        "MAE": 12.35,
+        "RMSE": 15.12,
+        "MAPE (%)": 2.81,
+        "R2": 0.9626,
+        "lb_p": 0.997,
+        "is_white_noise": true
+      },
+      {
+        "model_name": "Log-SARIMA(0,1,0)x(0,1,1)_12",
+        "p": 0,
+        "q": 0,
+        "P": 0,
+        "Q": 1,
+        "AIC": -318.57,
+        "BIC": -313.59,
+        "MAE": 12.67,
+        "RMSE": 15.45,
+        "MAPE (%)": 3.0,
+        "R2": 0.9609,
+        "lb_p": 0.1826,
+        "is_white_noise": true
+      },
+      {
+        "model_name": "Log-SARIMA(0,1,1)x(0,1,1)_12",
+        "p": 0,
+        "q": 1,
+        "P": 0,
+        "Q": 1,
+        "AIC": -323.75,
+        "BIC": -316.32,
+        "MAE": 12.95,
+        "RMSE": 16.16,
+        "MAPE (%)": 2.89,
+        "R2": 0.9572,
+        "lb_p": 0.7605,
+        "is_white_noise": true
+      }
+    ],
+    "param_elimination": {
+      "q": [
+        {
+          "q": 0,
+          "AIC": -323.03,
+          "RMSE": 24.14,
+          "MAPE (%)": 4.45,
+          "R2": 0.89
+        },
+        {
+          "q": 1,
+          "AIC": -324.42,
+          "RMSE": 27.1,
+          "MAPE (%)": 4.91,
+          "R2": 0.86
+        },
+        {
+          "q": 3,
+          "AIC": -322.27,
+          "RMSE": 27.6,
+          "MAPE (%)": 5.02,
+          "R2": 0.86
+        }
+      ],
+      "p": [
+        {
+          "p": 0,
+          "AIC": -322.63,
+          "RMSE": 26.01,
+          "MAPE (%)": 4.74,
+          "R2": 0.87
+        },
+        {
+          "p": 1,
+          "AIC": -323.85,
+          "RMSE": 26.54,
+          "MAPE (%)": 4.84,
+          "R2": 0.87
+        }
+      ],
+      "Q": [
+        {
+          "Q": 0,
+          "AIC": -327.23,
+          "RMSE": 34.15,
+          "MAPE (%)": 6.22,
+          "R2": 0.8
+        },
+        {
+          "Q": 1,
+          "AIC": -319.26,
+          "RMSE": 18.4,
+          "MAPE (%)": 3.36,
+          "R2": 0.94
+        }
+      ],
+      "P": [
+        {
+          "P": 0,
+          "AIC": -328.46,
+          "RMSE": 28.44,
+          "MAPE (%)": 5.29,
+          "R2": 0.84
+        },
+        {
+          "P": 1,
+          "AIC": -318.02,
+          "RMSE": 24.12,
+          "MAPE (%)": 4.3,
+          "R2": 0.9
+        }
+      ]
+    },
+    "best_model": {
+      "name": "Log-SARIMA(1,1,0)x(0,1,1)_12",
+      "aic": -327.47,
+      "bic": -320.0,
+      "metrics": {
+        "MAE": 12.35,
+        "RMSE": 15.12,
+        "MAPE (%)": 2.81,
+        "R2": 0.9626,
+        "MAPE": 2.81
+      },
+      "diagnostics": {
+        "mean": -0.0055,
+        "std": 0.0737,
+        "ljung_box_q": 9.24,
+        "ljung_box_p": 0.997,
+        "jarque_bera_p": 0.0,
+        "heteroskedasticity_p": 0.0001,
+        "is_white_noise": true
+      },
+      "top_errors": [
+        {
+          "date": "1960-03-01",
+          "actual": 419.0,
+          "forecast": 450.26,
+          "error": -31.26,
+          "abs_error": 31.26,
+          "pct_error": 7.46
+        },
+        {
+          "date": "1960-07-01",
+          "actual": 622.0,
+          "forecast": 594.8,
+          "error": 27.2,
+          "abs_error": 27.2,
+          "pct_error": 4.37
+        },
+        {
+          "date": "1958-12-01",
+          "actual": 337.0,
+          "forecast": 363.36,
+          "error": -26.36,
+          "abs_error": 26.36,
+          "pct_error": 7.82
+        }
+      ]
+    }
+  }
+}

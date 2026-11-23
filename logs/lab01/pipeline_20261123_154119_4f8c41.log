@@ -1,0 +1,14 @@
+[2026-11-23 15:41:19] [PIPELINE] [START] Khởi chạy toàn trình Pipeline Lab 01 (AirPassengers.csv).
+[2026-11-23 15:41:19] [DATA_LOADING] [START] Bắt đầu nạp và kiểm toán dữ liệu AirPassengers.csv.
+[2026-11-23 15:41:19] [DATA_LOADING] [SUCCESS] Nạp thành công 144 quan sát (1949-01-01 -> 1960-12-01), missing=0.
+[2026-11-23 15:41:19] [EDA_ACF_WHITENOISE] [START] Bắt đầu Bài 1 (Tổng quan + ACF/PACF 40 lags) & Bài 2 (White Noise 1000 điểm).
+[2026-11-23 15:41:23] [EDA_ACF_WHITENOISE] [SUCCESS] Hoàn tất 4 hình EDA | ACF1=0.948, ACF12=0.7604, LB_WN_p20=0.1443.
+[2026-11-23 15:41:23] [DECOMPOSITION] [START] Bắt đầu Bài 3: Phân rã Classical Multiplicative & STL Loess.
+[2026-11-23 15:41:25] [DECOMPOSITION] [SUCCESS] Hoàn tất 3 hình phân rã | F_T=0.9957, F_S=0.972, LB_p20=0.2567.
+[2026-11-23 15:41:25] [DATA_QUALITY] [START] Bắt đầu Bài 4: Giả lập 11 NaN + 3 Outlier, Imputation & Outlier Cleaning.
+[2026-11-23 15:41:29] [DATA_QUALITY] [SUCCESS] Hoàn tất 5 hình Bài 4 | STL Outlier F1=1.0 | Clean RMSE=24.5704.
+[2026-11-23 15:41:29] [VISUALIZATION] [START] Bắt đầu Bài 5: Rolling Statistics, Seasonal Trends & Heatmaps.
+[2026-11-23 15:41:32] [VISUALIZATION] [SUCCESS] Hoàn tất trực quan hóa (15 biểu đồ) | Corr(Mean,Std)=0.9591 | CAGR=12.79%/năm.
+[2026-11-23 15:41:32] [REPORTING] [START] Bắt đầu kết xuất bộ 3 báo cáo tự động Lab 01 (HTML, PDF, Markdown).
+[2026-11-23 15:41:36] [REPORTING] [SUCCESS] Hoàn tất xuất báo cáo Lab 01 trong 4.20s | HTML=3,982,187B | PDF=3,016,905B | MD=4,684B.
+[2026-11-23 15:41:36] [PIPELINE] [COMPLETED] Hoàn tất toàn bộ 6 giai đoạn Lab 01 trong 17.02s.

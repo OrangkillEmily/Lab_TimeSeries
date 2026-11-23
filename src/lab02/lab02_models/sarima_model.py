@@ -8,10 +8,10 @@ try:
     from statsmodels.stats.diagnostic import acorr_ljungbox
     from statsmodels.stats.stattools import jarque_bera
 except ImportError:
-    from src.lab02.lab02_utils.scipy_tsa_compat import acorr_ljungbox, jarque_bera
+    from src.lab02.scipy_tsa_compat import acorr_ljungbox, jarque_bera
 
-from src.lab02.lab02_utils.logging_config import get_lab02_logger, log_model_evaluation
-from src.lab02.lab02_utils.modeling import (
+from src.lab02.logging_config import get_lab02_logger, log_model_evaluation
+from src.lab02.modeling import (
     fit_sarima,
     residual_diagnostics,
     forecast_test,
