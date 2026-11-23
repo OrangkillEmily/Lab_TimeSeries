@@ -48,7 +48,7 @@ def bundle_standalone_docs() -> None:
         if not src_dir.exists():
             continue
         dst_dir.mkdir(parents=True, exist_ok=True)
-        for png in sorted(src_dir.glob("*.png")):
+        for png in sorted(src_dir.rglob("*.png")):
             shutil.copy2(png, dst_dir / png.name)
             count += 1
     print(f"[BUNDLE-DOCS] Đã đồng bộ {count} biểu đồ Lab 02 vào {docs_img_root.relative_to(ROOT_DIR)}.")

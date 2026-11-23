@@ -1,0 +1,4 @@
+[2026-11-23 16:46:31] [PIPELINE] [START] Khởi chạy Pipeline Lab 02 | datasets=['dataset1', 'dataset2'] | mode=full.
+[2026-11-23 16:47:00] [DATASET1] [SUCCESS] Hoàn tất dataset1 (12 biểu đồ, exp_run_id=dataset1_20261123_164632_06ae0c).
+[2026-11-23 16:47:47] [DATASET2] [SUCCESS] Hoàn tất dataset2 (15 biểu đồ, exp_run_id=dataset2_20261123_164700_07c69c).
+[2026-11-23 16:47:55] [PIPELINE] [COMPLETED] Hoàn tất toàn trình Lab 02 trong 83.52s.

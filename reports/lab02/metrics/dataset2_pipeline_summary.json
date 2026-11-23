@@ -1,0 +1,250 @@
+{
+  "dataset_meta": {
+    "file_path": "D:\\Lab_TimeSeries\\data\\raw\\AirPassengers.csv",
+    "n_obs": 144,
+    "start_date": "1949-01-01",
+    "end_date": "1960-12-01",
+    "frequency": "MS",
+    "columns": [
+      "Month",
+      "Passengers"
+    ],
+    "value_columns": [
+      "Passengers"
+    ],
+    "missing_values": 0,
+    "duplicate_timestamps": 0,
+    "is_monotonic": true,
+    "dataset_key": "dataset2",
+    "dataset_title": "AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)",
+    "value_col": "Passengers",
+    "seasonal_period": 12,
+    "mean": 280.2986,
+    "std": 119.9663,
+    "min": 104.0,
+    "max": 622.0
+  },
+  "split_meta": {
+    "n_obs": 144,
+    "train_size": 115,
+    "test_size": 29,
+    "train_start": "1949-01-01",
+    "train_end": "1958-07-01",
+    "test_start": "1958-08-01",
+    "test_end": "1960-12-01",
+    "split_ratio": "80/20 (shuffle=False)",
+    "frequency": "MS"
+  },
+  "adf_tests": {
+    "raw": {
+      "title": "dataset2 Train Raw",
+      "n_input": 115,
+      "lags_used": 13,
+      "obs_used": 101,
+      "adf_statistic": -0.3568892196404545,
+      "p_value": 0.9170517285875921,
+      "critical_values": {
+        "1%": -3.4968181663902103,
+        "5%": -2.8906107514600103,
+        "10%": -2.5822770483285953
+      },
+      "is_stationary": false,
+      "conclusion": "NON-STATIONARY (Chưa bác bỏ H0: Chuỗi KHÔNG DỪNG ở mức ý nghĩa 5%)"
+    },
+    "diff_1": {
+      "title": "dataset2 Train Diff(d=1)",
+      "n_input": 114,
+      "lags_used": 13,
+      "obs_used": 100,
+      "adf_statistic": -2.5396347808080955,
+      "p_value": 0.10612609999673422,
+      "critical_values": {
+        "1%": -3.497501033,
+        "5%": -2.89090644,
+        "10%": -2.5824349
+      },
+      "is_stationary": false,
+      "conclusion": "NON-STATIONARY (Chưa bác bỏ H0: Chuỗi KHÔNG DỪNG ở mức ý nghĩa 5%)"
+    },
+    "diff_1_seasonal_12": {
+      "title": "dataset2 Train Diff(d=1, D=1, s=12)",
+      "n_input": 102,
+      "lags_used": 0,
+      "obs_used": 101,
+      "adf_statistic": -12.176268238314325,
+      "p_value": 1.3839808857959483e-22,
+      "critical_values": {
+        "1%": -3.4968181663902103,
+        "5%": -2.8906107514600103,
+        "10%": -2.5822770483285953
+      },
+      "is_stationary": true,
+      "conclusion": "STATIONARY (Bác bỏ H0: Chuỗi ĐÃ DỪNG ở mức ý nghĩa 5%)"
+    }
+  },
+  "experiment_run_id": "dataset2_20261123_164700_07c69c",
+  "experiment_log_path": "D:\\Lab_TimeSeries\\logs\\lab02\\experiments\\dataset2\\experiment_dataset2_20261123_164700_07c69c.log",
+  "summary_paths": {
+    "csv": "D:\\Lab_TimeSeries\\reports\\model_summary\\lab02\\dataset2\\dataset2_model_summary.csv",
+    "json": "D:\\Lab_TimeSeries\\reports\\model_summary\\lab02\\dataset2\\dataset2_model_summary.json",
+    "md": "D:\\Lab_TimeSeries\\reports\\model_summary\\lab02\\dataset2\\dataset2_model_summary.md",
+    "run_csv": "D:\\Lab_TimeSeries\\reports\\model_summary\\lab02\\dataset2\\runs\\experiment_dataset2_20261123_164700_07c69c_summary.csv",
+    "run_json": "D:\\Lab_TimeSeries\\reports\\model_summary\\lab02\\dataset2\\runs\\experiment_dataset2_20261123_164700_07c69c_summary.json",
+    "run_md": "D:\\Lab_TimeSeries\\reports\\model_summary\\lab02\\dataset2\\runs\\experiment_dataset2_20261123_164700_07c69c_summary.md"
+  },
+  "interpretation": {
+    "run_id": "dataset2_20261123_164700_07c69c",
+    "best_rmse_model": "Log-SARIMA(0,1,0)x(1,1,1)_12",
+    "best_mae_model": "Log-SARIMA(1,1,3)x(0,1,1)_12",
+    "best_by_criterion": {
+      "lowest_test_rmse": {
+        "model": "Log-SARIMA(0,1,0)x(1,1,1)_12",
+        "value": 14.66
+      },
+      "lowest_test_mae": {
+        "model": "Log-SARIMA(1,1,3)x(0,1,1)_12",
+        "value": 12.02
+      },
+      "lowest_test_mape": {
+        "model": "Log-SARIMA(1,1,3)x(0,1,1)_12",
+        "value": 2.79
+      },
+      "highest_test_r2": {
+        "model": "Log-SARIMA(0,1,0)x(1,1,1)_12",
+        "value": 0.9648
+      },
+      "lowest_test_rmse_with_white_noise_adequacy": "Log-SARIMA(1,1,1)x(0,1,1)_12",
+      "best_information_criteria_by_scale_group": {
+        "log_d1_D1_s12": {
+          "lowest_aic_model": "Log-SARIMA(1,1,0)x(0,1,0)_12",
+          "aic": -341.24,
+          "lowest_bic_model": "Log-SARIMA(1,1,0)x(0,1,0)_12",
+          "bic": -336.01,
+          "test_rmse_of_lowest_aic": 40.68
+        },
+        "original_d1": {
+          "lowest_aic_model": "ARIMA(1,1,1)",
+          "aic": 1058.25,
+          "lowest_bic_model": "ARIMA(1,1,1)",
+          "bic": 1066.45,
+          "test_rmse_of_lowest_aic": 97.5
+        },
+        "original_d1_D1_s12": {
+          "lowest_aic_model": "SARIMA(1,1,3)x(0,1,1)_12",
+          "aic": 639.62,
+          "lowest_bic_model": "SARIMA(0,1,3)x(0,1,1)_12",
+          "bic": 653.35,
+          "test_rmse_of_lowest_aic": 24.85
+        }
+      }
+    },
+    "best_aic_by_scale_group": {
+      "log_d1_D1_s12": {
+        "lowest_aic_model": "Log-SARIMA(1,1,0)x(0,1,0)_12",
+        "aic": -341.24,
+        "lowest_bic_model": "Log-SARIMA(1,1,0)x(0,1,0)_12",
+        "bic": -336.01,
+        "test_rmse_of_lowest_aic": 40.68
+      },
+      "original_d1": {
+        "lowest_aic_model": "ARIMA(1,1,1)",
+        "aic": 1058.25,
+        "lowest_bic_model": "ARIMA(1,1,1)",
+        "bic": 1066.45,
+        "test_rmse_of_lowest_aic": 97.5
+      },
+      "original_d1_D1_s12": {
+        "lowest_aic_model": "SARIMA(1,1,3)x(0,1,1)_12",
+        "aic": 639.62,
+        "lowest_bic_model": "SARIMA(0,1,3)x(0,1,1)_12",
+        "bic": 653.35,
+        "test_rmse_of_lowest_aic": 24.85
+      }
+    },
+    "passed_ljung_box_models": [
+      "Log-SARIMA(1,1,3)x(0,1,1)_12",
+      "Log-SARIMA(1,1,1)x(0,1,1)_12",
+      "Log-SARIMA(1,1,0)x(0,1,1)_12",
+      "Log-SARIMA(0,1,0)x(0,1,1)_12",
+      "Log-SARIMA(0,1,1)x(0,1,1)_12",
+      "Log-SARIMA(0,1,3)x(0,1,1)_12",
+      "Log-SARIMA(1,1,0)x(1,1,1)_12",
+      "Log-SARIMA(1,1,1)x(1,1,1)_12",
+      "Log-SARIMA(1,1,3)x(1,1,1)_12",
+      "Log-SARIMA(0,1,1)x(1,1,1)_12",
+      "Log-SARIMA(0,1,3)x(1,1,1)_12",
+      "SARIMA(1,1,3)x(0,1,1)_12",
+      "SARIMA(1,1,3)x(1,1,1)_12",
+      "SARIMA(1,1,3)x(1,1,0)_12",
+      "Log-SARIMA(1,1,0)x(1,1,0)_12",
+      "Log-SARIMA(1,1,1)x(1,1,0)_12",
+      "Log-SARIMA(0,1,3)x(1,1,0)_12",
+      "Log-SARIMA(1,1,3)x(1,1,0)_12",
+      "SARIMA(1,1,1)x(1,1,0)_12",
+      "Log-SARIMA(0,1,1)x(1,1,0)_12",
+      "SARIMA(1,1,1)x(0,1,1)_12",
+      "SARIMA(1,1,0)x(1,1,0)_12",
+      "SARIMA(0,1,1)x(1,1,0)_12",
+      "SARIMA(1,1,0)x(0,1,1)_12",
+      "SARIMA(1,1,1)x(1,1,1)_12",
+      "SARIMA(1,1,1)x(0,1,0)_12",
+      "SARIMA(1,1,0)x(0,1,0)_12",
+      "SARIMA(0,1,1)x(0,1,0)_12",
+      "SARIMA(1,1,3)x(0,1,0)_12",
+      "SARIMA(1,1,0)x(1,1,1)_12",
+      "SARIMA(0,1,3)x(1,1,0)_12",
+      "SARIMA(0,1,3)x(0,1,1)_12",
+      "SARIMA(0,1,1)x(1,1,1)_12",
+      "SARIMA(0,1,3)x(0,1,0)_12",
+      "SARIMA(0,1,3)x(1,1,1)_12",
+      "Log-SARIMA(0,1,3)x(0,1,0)_12",
+      "Log-SARIMA(1,1,3)x(0,1,0)_12"
+    ],
+    "failed_ljung_box_models": [
+      "Log-SARIMA(0,1,0)x(1,1,1)_12",
+      "Log-SARIMA(0,1,0)x(1,1,0)_12",
+      "SARIMA(0,1,0)x(0,1,1)_12",
+      "SARIMA(0,1,0)x(1,1,1)_12",
+      "SARIMA(0,1,0)x(1,1,0)_12",
+      "SARIMA(0,1,1)x(0,1,1)_12",
+      "SARIMA(0,1,0)x(0,1,0)_12",
+      "Log-SARIMA(0,1,0)x(0,1,0)_12",
+      "Log-SARIMA(1,1,0)x(0,1,0)_12",
+      "Log-SARIMA(1,1,1)x(0,1,0)_12",
+      "Log-SARIMA(0,1,1)x(0,1,0)_12",
+      "AR(4) [ARIMA(4,1,0)]",
+      "ARIMA(2,1,1)",
+      "AR(2) [ARIMA(2,1,0)]",
+      "ARIMA(1,1,1)",
+      "MA(1) [ARIMA(0,1,1)]",
+      "AR(1) [ARIMA(1,1,0)]"
+    ],
+    "non_converged_models": [
+      "Log-SARIMA(1,1,3)x(0,1,1)_12",
+      "Log-SARIMA(0,1,3)x(1,1,1)_12",
+      "Log-SARIMA(1,1,0)x(0,1,0)_12"
+    ],
+    "failed_runs": [],
+    "recommended_model": "Log-SARIMA(1,1,1)x(0,1,1)_12",
+    "summary_markdown": "### Diễn giải Đa Tiêu chí Tự động (Run ID: `dataset2_20261123_164700_07c69c` — AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960))\n\n#### A. Mô hình Tốt nhất theo Từng Tiêu chí Độc lập (Criterion-Specific Leaders)\n- **Tiêu chí 1 — Sai số RMSE trên tập Test thấp nhất (Thang đo gốc)**: **Log-SARIMA(0,1,0)x(1,1,1)_12** (`RMSE = 14.66`, `R² = 0.9648`).\n- **Tiêu chí 2 — Sai số tuyệt đối MAE trên tập Test thấp nhất**: **Log-SARIMA(1,1,3)x(0,1,1)_12** (`MAE = 12.02`).\n- **Tiêu chí 3 — Sai số phần trăm MAPE (%) trên tập Test thấp nhất**: **Log-SARIMA(1,1,3)x(0,1,1)_12** (`MAPE = 2.79%`).\n- **Tiêu chí 4 — Mô hình thỏa mãn đồng thời Chuẩn Nhiễu trắng (Ljung-Box $p \\ge 0.05$), Hội tụ và có RMSE thấp nhất**: **Log-SARIMA(1,1,1)x(0,1,1)_12**.\n- **Tiêu chí 5 — Tiêu chuẩn Thông tin (AIC / BIC) trên Tập Train theo từng nhóm thang đo hợp lệ (`Scale_Group`)**:\n  - Nhóm `log_d1_D1_s12`: AIC thấp nhất là **Log-SARIMA(1,1,0)x(0,1,0)_12** (`AIC = -341.24`, `Test RMSE = 40.68`); BIC thấp nhất là **Log-SARIMA(1,1,0)x(0,1,0)_12** (`BIC = -336.01`).\n  - Nhóm `original_d1`: AIC thấp nhất là **ARIMA(1,1,1)** (`AIC = 1058.25`, `Test RMSE = 97.50`); BIC thấp nhất là **ARIMA(1,1,1)** (`BIC = 1066.45`).\n  - Nhóm `original_d1_D1_s12`: AIC thấp nhất là **SARIMA(1,1,3)x(0,1,1)_12** (`AIC = 639.62`, `Test RMSE = 24.85`); BIC thấp nhất là **SARIMA(0,1,3)x(0,1,1)_12** (`BIC = 653.35`).\n\n#### B. Kiểm định Phần dư & Trạng thái Hội tụ\n- **Các mô hình vượt qua kiểm định Ljung-Box ($p \\ge 0.05$, phần dư đạt chuẩn White Noise)**: `Log-SARIMA(1,1,3)x(0,1,1)_12`, `Log-SARIMA(1,1,1)x(0,1,1)_12`, `Log-SARIMA(1,1,0)x(0,1,1)_12`, `Log-SARIMA(0,1,0)x(0,1,1)_12`, `Log-SARIMA(0,1,1)x(0,1,1)_12`, `Log-SARIMA(0,1,3)x(0,1,1)_12`, `Log-SARIMA(1,1,0)x(1,1,1)_12`, `Log-SARIMA(1,1,1)x(1,1,1)_12`, `Log-SARIMA(1,1,3)x(1,1,1)_12`, `Log-SARIMA(0,1,1)x(1,1,1)_12`, `Log-SARIMA(0,1,3)x(1,1,1)_12`, `SARIMA(1,1,3)x(0,1,1)_12`, `SARIMA(1,1,3)x(1,1,1)_12`, `SARIMA(1,1,3)x(1,1,0)_12`, `Log-SARIMA(1,1,0)x(1,1,0)_12`, `Log-SARIMA(1,1,1)x(1,1,0)_12`, `Log-SARIMA(0,1,3)x(1,1,0)_12`, `Log-SARIMA(1,1,3)x(1,1,0)_12`, `SARIMA(1,1,1)x(1,1,0)_12`, `Log-SARIMA(0,1,1)x(1,1,0)_12`, `SARIMA(1,1,1)x(0,1,1)_12`, `SARIMA(1,1,0)x(1,1,0)_12`, `SARIMA(0,1,1)x(1,1,0)_12`, `SARIMA(1,1,0)x(0,1,1)_12`, `SARIMA(1,1,1)x(1,1,1)_12`, `SARIMA(1,1,1)x(0,1,0)_12`, `SARIMA(1,1,0)x(0,1,0)_12`, `SARIMA(0,1,1)x(0,1,0)_12`, `SARIMA(1,1,3)x(0,1,0)_12`, `SARIMA(1,1,0)x(1,1,1)_12`, `SARIMA(0,1,3)x(1,1,0)_12`, `SARIMA(0,1,3)x(0,1,1)_12`, `SARIMA(0,1,1)x(1,1,1)_12`, `SARIMA(0,1,3)x(0,1,0)_12`, `SARIMA(0,1,3)x(1,1,1)_12`, `Log-SARIMA(0,1,3)x(0,1,0)_12`, `Log-SARIMA(1,1,3)x(0,1,0)_12`.\n- **Các mô hình vi phạm kiểm định Ljung-Box ($p < 0.05$, phần dư còn tự tương quan)**: `Log-SARIMA(0,1,0)x(1,1,1)_12`, `Log-SARIMA(0,1,0)x(1,1,0)_12`, `SARIMA(0,1,0)x(0,1,1)_12`, `SARIMA(0,1,0)x(1,1,1)_12`, `SARIMA(0,1,0)x(1,1,0)_12`, `SARIMA(0,1,1)x(0,1,1)_12`, `SARIMA(0,1,0)x(0,1,0)_12`, `Log-SARIMA(0,1,0)x(0,1,0)_12`, `Log-SARIMA(1,1,0)x(0,1,0)_12`, `Log-SARIMA(1,1,1)x(0,1,0)_12`, `Log-SARIMA(0,1,1)x(0,1,0)_12`, `AR(4) [ARIMA(4,1,0)]`, `ARIMA(2,1,1)`, `AR(2) [ARIMA(2,1,0)]`, `ARIMA(1,1,1)`, `MA(1) [ARIMA(0,1,1)]`, `AR(1) [ARIMA(1,1,0)]`.\n- **Các mô hình có cảnh báo không hội tụ (`Converged = False`)**: `Log-SARIMA(1,1,3)x(0,1,1)_12`, `Log-SARIMA(0,1,3)x(1,1,1)_12`, `Log-SARIMA(1,1,0)x(0,1,0)_12`.\n- **Các mô hình gặp lỗi thực thi (`Status = FAILED`)**: Không có (0 lỗi).\n\n#### C. Lưu ý Phương pháp luận (Tại sao không khẳng định một mô hình tốt nhất tuyệt đối duy nhất?)\n1. **Không so sánh chéo AIC/BIC giữa các nhóm khác bậc sai phân hoặc khác phép biến đổi**: Giá trị Log-Likelihood của nhóm `log_d1_D1_s12` được tính trên biến $\\ln(Y_t)$ nên có AIC âm, không thể đem so sánh trực tiếp với AIC dương của nhóm `original_d1_D1_s12` hoặc `original_d1`.\n2. **Sự đánh đổi giữa Statistical Fit (AIC/BIC), Residual Adequacy (Ljung-Box) và Out-of-Sample Error (RMSE/MAE)**: Một mô hình có thể đạt RMSE thấp nhất trên tập Test nhờ biến đổi Logarit nhưng phần dư trên không gian Log vẫn còn tự tương quan nhẹ (như trên Dataset 1), hoặc một mô hình bậc cao có AIC thấp nhất nhưng tốn nhiều tham số hơn cấu hình tối giản (như `SARIMA(2,1,3)` so với `SARIMA(0,1,1)`). Do đó, việc lựa chọn mô hình cuối cùng phụ thuộc vào mục tiêu ưu tiên độ chính xác dự báo ngoài mẫu hay tính chặt chẽ của giả định nhiễu trắng."
+  },
+  "figures": [
+    "01_original_series.png",
+    "02_train_test_split.png",
+    "03_differencing.png",
+    "04_acf_pacf_d1.png",
+    "05_acf_pacf_d1_D1.png",
+    "05a_arima1_residuals.png",
+    "05a_arima2_residuals.png",
+    "05b_arima1_forecast.png",
+    "05b_arima2_forecast.png",
+    "06_best_sarima_residuals.png",
+    "07_best_sarima_forecast.png",
+    "08_arima_vs_sarima.png",
+    "09_log_transformation.png",
+    "10_arima_vs_log_sarima_battle.png",
+    "11_log_diagnostics_2x2.png"
+  ],
+  "figures_count": 15,
+  "duration_sec": 46.5803
+}

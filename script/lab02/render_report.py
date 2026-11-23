@@ -22,6 +22,8 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from src.lab02.utils import get_path, load_config
+
 
 def load_b64(path: Path) -> str:
     if not path.exists():
@@ -139,8 +141,9 @@ tr.row-featured { background: #eaf7f0; font-weight: 600; }
 def _build_html_and_md(ctx: Dict[str, Any]) -> tuple[str, str]:
     ds_key = ctx["dataset_key"]
     is_ds1 = ds_key == "dataset1"
-    fig_dir = PROJECT_ROOT / "reports" / "figures" / "lab02" / ds_key / "report"
-    fig_rel = f"../figures/lab02/{ds_key}/report"
+    cfg = load_config()
+    fig_dir = get_path("figures_dir", cfg) / ds_key / "report"
+    fig_rel = f"figures/{ds_key}/report"
 
     eda = ctx["eda"]
     adf_raw, adf_d1, adf_d1D1 = ctx["adf"]["raw"], ctx["adf"]["diff_1"], ctx["adf"]["diff_1_12"]

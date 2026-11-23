@@ -9,7 +9,7 @@ PURPOSE:
     2. Trích xuất số liệu thực tế (EDA, Train/Test, ADF, ACF/PACF, ARIMA,
        SARIMA, Log-SARIMA) vào progress_results/lab02/<dataset>/latest_run.json.
     3. Vẽ và lưu bộ ảnh trọng tâm giữ nguyên 100% nét gốc vào
-       reports/figures/lab02/<dataset>/report/ để render_report.py xuất HTML/PDF/MD.
+       reports/lab02/figures/<dataset>/report/ để render_report.py xuất HTML/PDF/MD.
 
 SUPPORTED CLI COMMANDS:
     python script/lab02/run_lab02_experiments.py --dataset dataset1
@@ -20,6 +20,7 @@ SUPPORTED CLI COMMANDS:
 import argparse
 import itertools
 import json
+import pickle
 import sys
 import time
 import warnings
@@ -48,6 +49,7 @@ for p in [str(PROJECT_ROOT), str(current_path)]:
         sys.path.insert(0, p)
 
 from src.lab02.data_loader import load_dataset, split_dataset
+from src.lab02.utils import get_path, load_config, save_json
 from src.lab02.logging_config import setup_experiment_logger
 from src.lab02.stats import perform_adf_test, significant_lags, plot_acf_pacf
 from src.lab02.acf_pacf_analysis import analyze_acf_pacf
@@ -142,7 +144,7 @@ def export_progress_and_report_figures(
 ) -> Path:
     """
     Trích xuất số liệu thực tế ra progress_results/lab02/<dataset>/latest_run.json
-    và xuất bộ ảnh trọng tâm giữ nguyên 100% nét vẽ gốc vào reports/figures/lab02/<dataset>/report/.
+    và xuất bộ ảnh trọng tâm giữ nguyên 100% nét vẽ gốc vào reports/lab02/figures/<dataset>/report/.
     """
     warnings.filterwarnings("ignore")
     val_col = spec["value_col"]
@@ -150,10 +152,13 @@ def export_progress_and_report_figures(
     is_ds1 = dataset_key == "dataset1"
     ylabel = "Doanh số bán lẻ" if is_ds1 else "Số hành khách (nghìn người)"
 
-    fig_dir = PROJECT_ROOT / "reports" / "figures" / "lab02" / dataset_key / "report"
+    cfg = load_config()
+    fig_dir = get_path("figures_dir", cfg) / dataset_key / "report"
     fig_dir.mkdir(parents=True, exist_ok=True)
-    prog_dir = PROJECT_ROOT / "progress_results" / "lab02" / dataset_key
+    prog_dir = get_path("progress_dir", cfg) / dataset_key
     prog_dir.mkdir(parents=True, exist_ok=True)
+    metrics_dir = get_path("metrics_dir", cfg)
+    metrics_dir.mkdir(parents=True, exist_ok=True)
 
     ser = df[val_col]
     diff_1 = train.diff(1)
@@ -555,11 +560,42 @@ def export_progress_and_report_figures(
         "log_sarima": log_pack,
     }
 
+    models_dir = get_path("models_dir", cfg) / dataset_key
+    models_dir.mkdir(parents=True, exist_ok=True)
+    best_model_obj = bs_res if is_ds1 else bl_res
+    best_model_info = payload["sarima"]["best_model"] if is_ds1 else payload["log_sarima"]["best_model"]
+    best_pkl_path = models_dir / "best_model.pkl"
+    try:
+        if hasattr(best_model_obj, "save"):
+            best_model_obj.save(str(best_pkl_path))
+        else:
+            with open(best_pkl_path, "wb") as f_pkl:
+                pickle.dump(best_model_obj, f_pkl)
+    except Exception:
+        with open(best_pkl_path, "wb") as f_pkl:
+            pickle.dump(best_model_obj, f_pkl)
+
+    best_meta = {
+        "run_id": run_id,
+        "dataset_key": dataset_key,
+        "model_name": best_model_info["name"],
+        "use_log_transform": not is_ds1,
+        "aic": best_model_info["aic"],
+        "bic": best_model_info["bic"],
+        "metrics": best_model_info["metrics"],
+        "diagnostics": best_model_info["diagnostics"],
+        "model_file": str(best_pkl_path.relative_to(PROJECT_ROOT)),
+    }
+    save_json(best_meta, models_dir / "best_model_metadata.json")
+
     run_json = prog_dir / f"run_summary_{run_id}.json"
     latest_json = prog_dir / "latest_run.json"
-    for p in (run_json, latest_json):
-        p.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    metrics_json = metrics_dir / f"{dataset_key}_metrics_summary.json"
+    for out_p in (run_json, latest_json, metrics_json):
+        save_json(payload, out_p)
+    print(f"  • Best Model PKL : {best_pkl_path}")
     print(f"  • Progress JSON  : {latest_json}")
+    print(f"  • Metrics JSON   : {metrics_json}")
     print(f"  • Report Figures : {fig_dir}")
     return latest_json
 

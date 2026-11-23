@@ -1,0 +1,25 @@
+{
+  "run_id": "dataset1_20261123_164632_06ae0c",
+  "dataset_key": "dataset1",
+  "model_name": "SARIMA(0,1,1)x(0,1,1)_12",
+  "use_log_transform": false,
+  "aic": 233.85,
+  "bic": 242.59,
+  "metrics": {
+    "MAE": 1.45,
+    "RMSE": 1.84,
+    "MAPE (%)": 8.21,
+    "R2": 0.8012,
+    "MAPE": 8.21
+  },
+  "diagnostics": {
+    "mean": 0.062,
+    "std": 0.5399,
+    "ljung_box_q": 32.94,
+    "ljung_box_p": 0.1053,
+    "jarque_bera_p": 0.4558,
+    "heteroskedasticity_p": 0.0,
+    "is_white_noise": true
+  },
+  "model_file": "models\\lab02\\dataset1\\best_model.pkl"
+}

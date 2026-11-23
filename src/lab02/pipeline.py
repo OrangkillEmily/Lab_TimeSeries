@@ -120,7 +120,7 @@ def run_full_pipeline(
         )
 
         fig_dir = get_path("figures_dir", cfg) / ds_key
-        figs = sorted(p.name for p in fig_dir.glob("*.png")) if fig_dir.exists() else []
+        figs = sorted(p.name for p in fig_dir.rglob("*.png")) if fig_dir.exists() else []
 
         ds_payload: Dict[str, Any] = {
             "dataset_meta": data_meta,

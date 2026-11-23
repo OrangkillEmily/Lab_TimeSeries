@@ -1,6 +1,6 @@
 {
-  "run_id": "dataset2_20261123_154951_786eea",
-  "generated_at": "2026-11-23 15:50:07",
+  "run_id": "dataset2_20261123_164700_07c69c",
+  "generated_at": "2026-11-23 16:47:16",
   "dataset_info": {
     "dataset_name": "dataset2",
     "dataset_title": "AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960)",
@@ -14,7 +14,7 @@
   "succeeded_count": 54,
   "failed_count": 0,
   "automatic_interpretation": {
-    "run_id": "dataset2_20261123_154951_786eea",
+    "run_id": "dataset2_20261123_164700_07c69c",
     "best_rmse_model": "Log-SARIMA(0,1,0)x(1,1,1)_12",
     "best_mae_model": "Log-SARIMA(1,1,3)x(0,1,1)_12",
     "best_by_criterion": {
@@ -147,11 +147,11 @@
     ],
     "failed_runs": [],
     "recommended_model": "Log-SARIMA(1,1,1)x(0,1,1)_12",
-    "summary_markdown": "### Diễn giải Đa Tiêu chí Tự động (Run ID: `dataset2_20261123_154951_786eea` — AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960))\n\n#### A. Mô hình Tốt nhất theo Từng Tiêu chí Độc lập (Criterion-Specific Leaders)\n- **Tiêu chí 1 — Sai số RMSE trên tập Test thấp nhất (Thang đo gốc)**: **Log-SARIMA(0,1,0)x(1,1,1)_12** (`RMSE = 14.66`, `R² = 0.9648`).\n- **Tiêu chí 2 — Sai số tuyệt đối MAE trên tập Test thấp nhất**: **Log-SARIMA(1,1,3)x(0,1,1)_12** (`MAE = 12.02`).\n- **Tiêu chí 3 — Sai số phần trăm MAPE (%) trên tập Test thấp nhất**: **Log-SARIMA(1,1,3)x(0,1,1)_12** (`MAPE = 2.79%`).\n- **Tiêu chí 4 — Mô hình thỏa mãn đồng thời Chuẩn Nhiễu trắng (Ljung-Box $p \\ge 0.05$), Hội tụ và có RMSE thấp nhất**: **Log-SARIMA(1,1,1)x(0,1,1)_12**.\n- **Tiêu chí 5 — Tiêu chuẩn Thông tin (AIC / BIC) trên Tập Train theo từng nhóm thang đo hợp lệ (`Scale_Group`)**:\n  - Nhóm `log_d1_D1_s12`: AIC thấp nhất là **Log-SARIMA(1,1,0)x(0,1,0)_12** (`AIC = -341.24`, `Test RMSE = 40.68`); BIC thấp nhất là **Log-SARIMA(1,1,0)x(0,1,0)_12** (`BIC = -336.01`).\n  - Nhóm `original_d1`: AIC thấp nhất là **ARIMA(1,1,1)** (`AIC = 1058.25`, `Test RMSE = 97.50`); BIC thấp nhất là **ARIMA(1,1,1)** (`BIC = 1066.45`).\n  - Nhóm `original_d1_D1_s12`: AIC thấp nhất là **SARIMA(1,1,3)x(0,1,1)_12** (`AIC = 639.62`, `Test RMSE = 24.85`); BIC thấp nhất là **SARIMA(0,1,3)x(0,1,1)_12** (`BIC = 653.35`).\n\n#### B. Kiểm định Phần dư & Trạng thái Hội tụ\n- **Các mô hình vượt qua kiểm định Ljung-Box ($p \\ge 0.05$, phần dư đạt chuẩn White Noise)**: `Log-SARIMA(1,1,3)x(0,1,1)_12`, `Log-SARIMA(1,1,1)x(0,1,1)_12`, `Log-SARIMA(1,1,0)x(0,1,1)_12`, `Log-SARIMA(0,1,0)x(0,1,1)_12`, `Log-SARIMA(0,1,1)x(0,1,1)_12`, `Log-SARIMA(0,1,3)x(0,1,1)_12`, `Log-SARIMA(1,1,0)x(1,1,1)_12`, `Log-SARIMA(1,1,1)x(1,1,1)_12`, `Log-SARIMA(1,1,3)x(1,1,1)_12`, `Log-SARIMA(0,1,1)x(1,1,1)_12`, `Log-SARIMA(0,1,3)x(1,1,1)_12`, `SARIMA(1,1,3)x(0,1,1)_12`, `SARIMA(1,1,3)x(1,1,1)_12`, `SARIMA(1,1,3)x(1,1,0)_12`, `Log-SARIMA(1,1,0)x(1,1,0)_12`, `Log-SARIMA(1,1,1)x(1,1,0)_12`, `Log-SARIMA(0,1,3)x(1,1,0)_12`, `Log-SARIMA(1,1,3)x(1,1,0)_12`, `SARIMA(1,1,1)x(1,1,0)_12`, `Log-SARIMA(0,1,1)x(1,1,0)_12`, `SARIMA(1,1,1)x(0,1,1)_12`, `SARIMA(1,1,0)x(1,1,0)_12`, `SARIMA(0,1,1)x(1,1,0)_12`, `SARIMA(1,1,0)x(0,1,1)_12`, `SARIMA(1,1,1)x(1,1,1)_12`, `SARIMA(1,1,1)x(0,1,0)_12`, `SARIMA(1,1,0)x(0,1,0)_12`, `SARIMA(0,1,1)x(0,1,0)_12`, `SARIMA(1,1,3)x(0,1,0)_12`, `SARIMA(1,1,0)x(1,1,1)_12`, `SARIMA(0,1,3)x(1,1,0)_12`, `SARIMA(0,1,3)x(0,1,1)_12`, `SARIMA(0,1,1)x(1,1,1)_12`, `SARIMA(0,1,3)x(0,1,0)_12`, `SARIMA(0,1,3)x(1,1,1)_12`, `Log-SARIMA(0,1,3)x(0,1,0)_12`, `Log-SARIMA(1,1,3)x(0,1,0)_12`.\n- **Các mô hình vi phạm kiểm định Ljung-Box ($p < 0.05$, phần dư còn tự tương quan)**: `Log-SARIMA(0,1,0)x(1,1,1)_12`, `Log-SARIMA(0,1,0)x(1,1,0)_12`, `SARIMA(0,1,0)x(0,1,1)_12`, `SARIMA(0,1,0)x(1,1,1)_12`, `SARIMA(0,1,0)x(1,1,0)_12`, `SARIMA(0,1,1)x(0,1,1)_12`, `SARIMA(0,1,0)x(0,1,0)_12`, `Log-SARIMA(0,1,0)x(0,1,0)_12`, `Log-SARIMA(1,1,0)x(0,1,0)_12`, `Log-SARIMA(1,1,1)x(0,1,0)_12`, `Log-SARIMA(0,1,1)x(0,1,0)_12`, `AR(4) [ARIMA(4,1,0)]`, `ARIMA(2,1,1)`, `AR(2) [ARIMA(2,1,0)]`, `ARIMA(1,1,1)`, `MA(1) [ARIMA(0,1,1)]`, `AR(1) [ARIMA(1,1,0)]`.\n- **Các mô hình có cảnh báo không hội tụ (`Converged = False`)**: `Log-SARIMA(1,1,3)x(0,1,1)_12`, `Log-SARIMA(0,1,3)x(1,1,1)_12`, `Log-SARIMA(1,1,0)x(0,1,0)_12`.\n- **Các mô hình gặp lỗi thực thi (`Status = FAILED`)**: Không có (0 lỗi).\n\n#### C. Lưu ý Phương pháp luận (Tại sao không khẳng định một mô hình tốt nhất tuyệt đối duy nhất?)\n1. **Không so sánh chéo AIC/BIC giữa các nhóm khác bậc sai phân hoặc khác phép biến đổi**: Giá trị Log-Likelihood của nhóm `log_d1_D1_s12` được tính trên biến $\\ln(Y_t)$ nên có AIC âm, không thể đem so sánh trực tiếp với AIC dương của nhóm `original_d1_D1_s12` hoặc `original_d1`.\n2. **Sự đánh đổi giữa Statistical Fit (AIC/BIC), Residual Adequacy (Ljung-Box) và Out-of-Sample Error (RMSE/MAE)**: Một mô hình có thể đạt RMSE thấp nhất trên tập Test nhờ biến đổi Logarit nhưng phần dư trên không gian Log vẫn còn tự tương quan nhẹ (như trên Dataset 1), hoặc một mô hình bậc cao có AIC thấp nhất nhưng tốn nhiều tham số hơn cấu hình tối giản (như `SARIMA(2,1,3)` so với `SARIMA(0,1,1)`). Do đó, việc lựa chọn mô hình cuối cùng phụ thuộc vào mục tiêu ưu tiên độ chính xác dự báo ngoài mẫu hay tính chặt chẽ của giả định nhiễu trắng."
+    "summary_markdown": "### Diễn giải Đa Tiêu chí Tự động (Run ID: `dataset2_20261123_164700_07c69c` — AirPassengers (Monthly Airline Passengers, 01/1949 - 12/1960))\n\n#### A. Mô hình Tốt nhất theo Từng Tiêu chí Độc lập (Criterion-Specific Leaders)\n- **Tiêu chí 1 — Sai số RMSE trên tập Test thấp nhất (Thang đo gốc)**: **Log-SARIMA(0,1,0)x(1,1,1)_12** (`RMSE = 14.66`, `R² = 0.9648`).\n- **Tiêu chí 2 — Sai số tuyệt đối MAE trên tập Test thấp nhất**: **Log-SARIMA(1,1,3)x(0,1,1)_12** (`MAE = 12.02`).\n- **Tiêu chí 3 — Sai số phần trăm MAPE (%) trên tập Test thấp nhất**: **Log-SARIMA(1,1,3)x(0,1,1)_12** (`MAPE = 2.79%`).\n- **Tiêu chí 4 — Mô hình thỏa mãn đồng thời Chuẩn Nhiễu trắng (Ljung-Box $p \\ge 0.05$), Hội tụ và có RMSE thấp nhất**: **Log-SARIMA(1,1,1)x(0,1,1)_12**.\n- **Tiêu chí 5 — Tiêu chuẩn Thông tin (AIC / BIC) trên Tập Train theo từng nhóm thang đo hợp lệ (`Scale_Group`)**:\n  - Nhóm `log_d1_D1_s12`: AIC thấp nhất là **Log-SARIMA(1,1,0)x(0,1,0)_12** (`AIC = -341.24`, `Test RMSE = 40.68`); BIC thấp nhất là **Log-SARIMA(1,1,0)x(0,1,0)_12** (`BIC = -336.01`).\n  - Nhóm `original_d1`: AIC thấp nhất là **ARIMA(1,1,1)** (`AIC = 1058.25`, `Test RMSE = 97.50`); BIC thấp nhất là **ARIMA(1,1,1)** (`BIC = 1066.45`).\n  - Nhóm `original_d1_D1_s12`: AIC thấp nhất là **SARIMA(1,1,3)x(0,1,1)_12** (`AIC = 639.62`, `Test RMSE = 24.85`); BIC thấp nhất là **SARIMA(0,1,3)x(0,1,1)_12** (`BIC = 653.35`).\n\n#### B. Kiểm định Phần dư & Trạng thái Hội tụ\n- **Các mô hình vượt qua kiểm định Ljung-Box ($p \\ge 0.05$, phần dư đạt chuẩn White Noise)**: `Log-SARIMA(1,1,3)x(0,1,1)_12`, `Log-SARIMA(1,1,1)x(0,1,1)_12`, `Log-SARIMA(1,1,0)x(0,1,1)_12`, `Log-SARIMA(0,1,0)x(0,1,1)_12`, `Log-SARIMA(0,1,1)x(0,1,1)_12`, `Log-SARIMA(0,1,3)x(0,1,1)_12`, `Log-SARIMA(1,1,0)x(1,1,1)_12`, `Log-SARIMA(1,1,1)x(1,1,1)_12`, `Log-SARIMA(1,1,3)x(1,1,1)_12`, `Log-SARIMA(0,1,1)x(1,1,1)_12`, `Log-SARIMA(0,1,3)x(1,1,1)_12`, `SARIMA(1,1,3)x(0,1,1)_12`, `SARIMA(1,1,3)x(1,1,1)_12`, `SARIMA(1,1,3)x(1,1,0)_12`, `Log-SARIMA(1,1,0)x(1,1,0)_12`, `Log-SARIMA(1,1,1)x(1,1,0)_12`, `Log-SARIMA(0,1,3)x(1,1,0)_12`, `Log-SARIMA(1,1,3)x(1,1,0)_12`, `SARIMA(1,1,1)x(1,1,0)_12`, `Log-SARIMA(0,1,1)x(1,1,0)_12`, `SARIMA(1,1,1)x(0,1,1)_12`, `SARIMA(1,1,0)x(1,1,0)_12`, `SARIMA(0,1,1)x(1,1,0)_12`, `SARIMA(1,1,0)x(0,1,1)_12`, `SARIMA(1,1,1)x(1,1,1)_12`, `SARIMA(1,1,1)x(0,1,0)_12`, `SARIMA(1,1,0)x(0,1,0)_12`, `SARIMA(0,1,1)x(0,1,0)_12`, `SARIMA(1,1,3)x(0,1,0)_12`, `SARIMA(1,1,0)x(1,1,1)_12`, `SARIMA(0,1,3)x(1,1,0)_12`, `SARIMA(0,1,3)x(0,1,1)_12`, `SARIMA(0,1,1)x(1,1,1)_12`, `SARIMA(0,1,3)x(0,1,0)_12`, `SARIMA(0,1,3)x(1,1,1)_12`, `Log-SARIMA(0,1,3)x(0,1,0)_12`, `Log-SARIMA(1,1,3)x(0,1,0)_12`.\n- **Các mô hình vi phạm kiểm định Ljung-Box ($p < 0.05$, phần dư còn tự tương quan)**: `Log-SARIMA(0,1,0)x(1,1,1)_12`, `Log-SARIMA(0,1,0)x(1,1,0)_12`, `SARIMA(0,1,0)x(0,1,1)_12`, `SARIMA(0,1,0)x(1,1,1)_12`, `SARIMA(0,1,0)x(1,1,0)_12`, `SARIMA(0,1,1)x(0,1,1)_12`, `SARIMA(0,1,0)x(0,1,0)_12`, `Log-SARIMA(0,1,0)x(0,1,0)_12`, `Log-SARIMA(1,1,0)x(0,1,0)_12`, `Log-SARIMA(1,1,1)x(0,1,0)_12`, `Log-SARIMA(0,1,1)x(0,1,0)_12`, `AR(4) [ARIMA(4,1,0)]`, `ARIMA(2,1,1)`, `AR(2) [ARIMA(2,1,0)]`, `ARIMA(1,1,1)`, `MA(1) [ARIMA(0,1,1)]`, `AR(1) [ARIMA(1,1,0)]`.\n- **Các mô hình có cảnh báo không hội tụ (`Converged = False`)**: `Log-SARIMA(1,1,3)x(0,1,1)_12`, `Log-SARIMA(0,1,3)x(1,1,1)_12`, `Log-SARIMA(1,1,0)x(0,1,0)_12`.\n- **Các mô hình gặp lỗi thực thi (`Status = FAILED`)**: Không có (0 lỗi).\n\n#### C. Lưu ý Phương pháp luận (Tại sao không khẳng định một mô hình tốt nhất tuyệt đối duy nhất?)\n1. **Không so sánh chéo AIC/BIC giữa các nhóm khác bậc sai phân hoặc khác phép biến đổi**: Giá trị Log-Likelihood của nhóm `log_d1_D1_s12` được tính trên biến $\\ln(Y_t)$ nên có AIC âm, không thể đem so sánh trực tiếp với AIC dương của nhóm `original_d1_D1_s12` hoặc `original_d1`.\n2. **Sự đánh đổi giữa Statistical Fit (AIC/BIC), Residual Adequacy (Ljung-Box) và Out-of-Sample Error (RMSE/MAE)**: Một mô hình có thể đạt RMSE thấp nhất trên tập Test nhờ biến đổi Logarit nhưng phần dư trên không gian Log vẫn còn tự tương quan nhẹ (như trên Dataset 1), hoặc một mô hình bậc cao có AIC thấp nhất nhưng tốn nhiều tham số hơn cấu hình tối giản (như `SARIMA(2,1,3)` so với `SARIMA(0,1,1)`). Do đó, việc lựa chọn mô hình cuối cùng phụ thuộc vào mục tiêu ưu tiên độ chính xác dự báo ngoài mẫu hay tính chặt chẽ của giả định nhiễu trắng."
   },
   "comparison_table": [
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(0,1,0)x(1,1,1)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -174,10 +174,10 @@
       "Het p": 0.0,
       "White Noise": "Fail (Không đạt)",
       "Converged": true,
-      "Duration (s)": 0.1608
+      "Duration (s)": 0.1707
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(1,1,3)x(0,1,1)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -200,10 +200,10 @@
       "Het p": 0.0025,
       "White Noise": "Pass (Đạt)",
       "Converged": false,
-      "Duration (s)": 0.6836
+      "Duration (s)": 0.6822
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(1,1,1)x(0,1,1)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -226,10 +226,10 @@
       "Het p": 0.0001,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.3377
+      "Duration (s)": 0.3583
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(1,1,0)x(0,1,1)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -252,10 +252,10 @@
       "Het p": 0.0001,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.1927
+      "Duration (s)": 0.1892
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(0,1,0)x(0,1,1)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -278,10 +278,10 @@
       "Het p": 0.0,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.0903
+      "Duration (s)": 0.0895
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(0,1,1)x(0,1,1)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -304,10 +304,10 @@
       "Het p": 0.0004,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.3151
+      "Duration (s)": 0.2998
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(0,1,3)x(0,1,1)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -330,10 +330,10 @@
       "Het p": 0.0032,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.5524
+      "Duration (s)": 0.5546
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(1,1,0)x(1,1,1)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -356,10 +356,10 @@
       "Het p": 0.0001,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.2593
+      "Duration (s)": 0.2687
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(1,1,1)x(1,1,1)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -382,10 +382,10 @@
       "Het p": 0.0005,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.5398
+      "Duration (s)": 0.4825
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(1,1,3)x(1,1,1)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -408,10 +408,10 @@
       "Het p": 0.0018,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.5898
+      "Duration (s)": 0.6049
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(0,1,0)x(1,1,0)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -434,10 +434,10 @@
       "Het p": 0.0,
       "White Noise": "Fail (Không đạt)",
       "Converged": true,
-      "Duration (s)": 0.0803
+      "Duration (s)": 0.1016
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(0,1,1)x(1,1,1)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -460,10 +460,10 @@
       "Het p": 0.0003,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.3217
+      "Duration (s)": 0.3332
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(0,1,3)x(1,1,1)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -486,10 +486,10 @@
       "Het p": 0.002,
       "White Noise": "Pass (Đạt)",
       "Converged": false,
-      "Duration (s)": 0.6969
+      "Duration (s)": 0.6282
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(1,1,3)x(0,1,1)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -512,10 +512,10 @@
       "Het p": 0.4447,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.3404
+      "Duration (s)": 0.3485
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(1,1,3)x(1,1,1)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -538,10 +538,10 @@
       "Het p": 0.445,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.5691
+      "Duration (s)": 0.5467
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(1,1,3)x(1,1,0)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -564,10 +564,10 @@
       "Het p": 0.2874,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.2537
+      "Duration (s)": 0.2512
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(1,1,0)x(1,1,0)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -590,10 +590,10 @@
       "Het p": 0.0001,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.1615
+      "Duration (s)": 0.1531
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(1,1,1)x(1,1,0)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -616,10 +616,10 @@
       "Het p": 0.0001,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.2913
+      "Duration (s)": 0.3027
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(0,1,0)x(0,1,1)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -642,10 +642,10 @@
       "Het p": 0.24,
       "White Noise": "Fail (Không đạt)",
       "Converged": true,
-      "Duration (s)": 0.0697
+      "Duration (s)": 0.0639
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(0,1,0)x(1,1,1)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -668,10 +668,10 @@
       "Het p": 0.2401,
       "White Noise": "Fail (Không đạt)",
       "Converged": true,
-      "Duration (s)": 0.1287
+      "Duration (s)": 0.1617
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(0,1,0)x(1,1,0)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -694,10 +694,10 @@
       "Het p": 0.2572,
       "White Noise": "Fail (Không đạt)",
       "Converged": true,
-      "Duration (s)": 0.0239
+      "Duration (s)": 0.0268
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(0,1,3)x(1,1,0)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -720,10 +720,10 @@
       "Het p": 0.0004,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.1939
+      "Duration (s)": 0.2015
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(1,1,3)x(1,1,0)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -746,10 +746,10 @@
       "Het p": 0.0005,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.4127
+      "Duration (s)": 0.4092
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(1,1,1)x(1,1,0)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -772,10 +772,10 @@
       "Het p": 0.5639,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.0982
+      "Duration (s)": 0.0954
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(0,1,1)x(1,1,0)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -798,10 +798,10 @@
       "Het p": 0.0005,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.1414
+      "Duration (s)": 0.1441
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(1,1,1)x(0,1,1)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -824,10 +824,10 @@
       "Het p": 0.4643,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.1356
+      "Duration (s)": 0.149
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(1,1,0)x(1,1,0)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -850,10 +850,10 @@
       "Het p": 0.4371,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.0589
+      "Duration (s)": 0.0628
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(0,1,1)x(0,1,1)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -876,10 +876,10 @@
       "Het p": 0.4478,
       "White Noise": "Fail (Không đạt)",
       "Converged": true,
-      "Duration (s)": 0.0902
+      "Duration (s)": 0.0952
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(0,1,1)x(1,1,0)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -902,10 +902,10 @@
       "Het p": 0.4181,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.0602
+      "Duration (s)": 0.0524
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(1,1,0)x(0,1,1)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -928,10 +928,10 @@
       "Het p": 0.3771,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.0929
+      "Duration (s)": 0.0895
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(1,1,1)x(1,1,1)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -957,7 +957,7 @@
       "Duration (s)": 0.354
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(0,1,0)x(0,1,0)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -980,10 +980,10 @@
       "Het p": 0.5236,
       "White Noise": "Fail (Không đạt)",
       "Converged": true,
-      "Duration (s)": 0.0206
+      "Duration (s)": 0.0186
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(1,1,1)x(0,1,0)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -1006,10 +1006,10 @@
       "Het p": 0.9677,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.0515
+      "Duration (s)": 0.0552
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(1,1,0)x(0,1,0)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -1032,10 +1032,10 @@
       "Het p": 0.9381,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.0149
+      "Duration (s)": 0.0156
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(0,1,1)x(0,1,0)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -1058,10 +1058,10 @@
       "Het p": 0.8389,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.0406
+      "Duration (s)": 0.0318
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(1,1,3)x(0,1,0)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -1084,10 +1084,10 @@
       "Het p": 0.9384,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.0863
+      "Duration (s)": 0.0945
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(1,1,0)x(1,1,1)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -1110,10 +1110,10 @@
       "Het p": 0.6207,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.1482
+      "Duration (s)": 0.1471
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(0,1,3)x(1,1,0)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -1136,10 +1136,10 @@
       "Het p": 0.5122,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.1105
+      "Duration (s)": 0.1119
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(0,1,3)x(0,1,1)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -1162,10 +1162,10 @@
       "Het p": 0.7332,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.1492
+      "Duration (s)": 0.1497
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(0,1,0)x(0,1,0)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -1188,10 +1188,10 @@
       "Het p": 0.0,
       "White Noise": "Fail (Không đạt)",
       "Converged": true,
-      "Duration (s)": 0.0302
+      "Duration (s)": 0.0244
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(0,1,1)x(1,1,1)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -1214,10 +1214,10 @@
       "Het p": 0.7307,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.1877
+      "Duration (s)": 0.1949
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(0,1,3)x(0,1,0)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -1240,10 +1240,10 @@
       "Het p": 0.812,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.0561
+      "Duration (s)": 0.0619
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "SARIMA(0,1,3)x(1,1,1)_12",
       "Family": "SARIMA",
       "Status": "SUCCESS",
@@ -1266,10 +1266,10 @@
       "Het p": 0.9291,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.2819
+      "Duration (s)": 0.3084
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(1,1,0)x(0,1,0)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -1295,7 +1295,7 @@
       "Duration (s)": 0.0371
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(1,1,1)x(0,1,0)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -1318,10 +1318,10 @@
       "Het p": 0.0,
       "White Noise": "Fail (Không đạt)",
       "Converged": true,
-      "Duration (s)": 0.0374
+      "Duration (s)": 0.0375
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(0,1,3)x(0,1,0)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -1344,10 +1344,10 @@
       "Het p": 0.0,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.1278
+      "Duration (s)": 0.1313
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(0,1,1)x(0,1,0)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -1370,10 +1370,10 @@
       "Het p": 0.0,
       "White Noise": "Fail (Không đạt)",
       "Converged": true,
-      "Duration (s)": 0.0543
+      "Duration (s)": 0.0483
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "Log-SARIMA(1,1,3)x(0,1,0)_12",
       "Family": "Log-SARIMA",
       "Status": "SUCCESS",
@@ -1396,10 +1396,10 @@
       "Het p": 0.0,
       "White Noise": "Pass (Đạt)",
       "Converged": true,
-      "Duration (s)": 0.1792
+      "Duration (s)": 0.208
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "AR(4) [ARIMA(4,1,0)]",
       "Family": "AR",
       "Status": "SUCCESS",
@@ -1422,10 +1422,10 @@
       "Het p": 0.0,
       "White Noise": "Fail (Không đạt)",
       "Converged": true,
-      "Duration (s)": 0.0721
+      "Duration (s)": 0.0614
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "ARIMA(2,1,1)",
       "Family": "ARIMA",
       "Status": "SUCCESS",
@@ -1448,10 +1448,10 @@
       "Het p": 0.0,
       "White Noise": "Fail (Không đạt)",
       "Converged": true,
-      "Duration (s)": 0.0849
+      "Duration (s)": 0.0826
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "AR(2) [ARIMA(2,1,0)]",
       "Family": "AR",
       "Status": "SUCCESS",
@@ -1474,10 +1474,10 @@
       "Het p": 0.0,
       "White Noise": "Fail (Không đạt)",
       "Converged": true,
-      "Duration (s)": 0.0463
+      "Duration (s)": 0.0591
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "ARIMA(1,1,1)",
       "Family": "ARIMA",
       "Status": "SUCCESS",
@@ -1500,10 +1500,10 @@
       "Het p": 0.0,
       "White Noise": "Fail (Không đạt)",
       "Converged": true,
-      "Duration (s)": 0.0574
+      "Duration (s)": 0.0594
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "MA(1) [ARIMA(0,1,1)]",
       "Family": "MA",
       "Status": "SUCCESS",
@@ -1526,10 +1526,10 @@
       "Het p": 0.0,
       "White Noise": "Fail (Không đạt)",
       "Converged": true,
-      "Duration (s)": 0.036
+      "Duration (s)": 0.0345
     },
     {
-      "Run_ID": "dataset2_20261123_154951_786eea",
+      "Run_ID": "dataset2_20261123_164700_07c69c",
       "Model": "AR(1) [ARIMA(1,1,0)]",
       "Family": "AR",
       "Status": "SUCCESS",
@@ -1552,7 +1552,7 @@
       "Het p": 0.0,
       "White Noise": "Fail (Không đạt)",
       "Converged": true,
-      "Duration (s)": 0.0275
+      "Duration (s)": 0.0235
     }
   ],
   "models": [
@@ -1640,11 +1640,11 @@
         "r2": -0.8832190030625762
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:52",
-        "duration_seconds": 0.027480299992021173,
+        "timestamp": "2026-11-23 16:47:01",
+        "duration_seconds": 0.023474999994505197,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -1744,11 +1744,11 @@
         "r2": -0.2776053605091038
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:53",
-        "duration_seconds": 0.04627739998977631,
+        "timestamp": "2026-11-23 16:47:02",
+        "duration_seconds": 0.05912379999062978,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -1866,11 +1866,11 @@
         "r2": -0.0015652334464006934
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:53",
-        "duration_seconds": 0.07205749998684041,
+        "timestamp": "2026-11-23 16:47:03",
+        "duration_seconds": 0.06138240001746453,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -1961,11 +1961,11 @@
         "r2": -0.6733833466417589
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:54",
-        "duration_seconds": 0.036033199983648956,
+        "timestamp": "2026-11-23 16:47:03",
+        "duration_seconds": 0.03446799999801442,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -2065,11 +2065,11 @@
         "r2": -0.557243276057938
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:55",
-        "duration_seconds": 0.057440899981884286,
+        "timestamp": "2026-11-23 16:47:04",
+        "duration_seconds": 0.059390900016296655,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -2178,11 +2178,11 @@
         "r2": -0.11823358661622785
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:55",
-        "duration_seconds": 0.08493800001451746,
+        "timestamp": "2026-11-23 16:47:05",
+        "duration_seconds": 0.0826048000017181,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -2282,11 +2282,11 @@
         "r2": 0.8099265687887274
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:56",
-        "duration_seconds": 0.05150750000029802,
+        "timestamp": "2026-11-23 16:47:05",
+        "duration_seconds": 0.05523840000387281,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -2395,11 +2395,11 @@
         "r2": 0.738086973620081
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:56",
-        "duration_seconds": 0.05607570000574924,
+        "timestamp": "2026-11-23 16:47:05",
+        "duration_seconds": 0.06185550001100637,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -2499,11 +2499,11 @@
         "r2": 0.846811217468728
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:56",
-        "duration_seconds": 0.09015720000024885,
+        "timestamp": "2026-11-23 16:47:05",
+        "duration_seconds": 0.09523070001159795,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -2603,11 +2603,11 @@
         "r2": 0.8449153760557662
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:56",
-        "duration_seconds": 0.09285929999896325,
+        "timestamp": "2026-11-23 16:47:05",
+        "duration_seconds": 0.08950229999027215,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -2716,11 +2716,11 @@
         "r2": 0.8533225504472046
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:56",
-        "duration_seconds": 0.13555449998239055,
+        "timestamp": "2026-11-23 16:47:06",
+        "duration_seconds": 0.1490297999989707,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -2847,11 +2847,11 @@
         "r2": 0.8988012731723303
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:57",
-        "duration_seconds": 0.3403781000233721,
+        "timestamp": "2026-11-23 16:47:06",
+        "duration_seconds": 0.348517600010382,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -2951,11 +2951,11 @@
         "r2": 0.9572449246778536
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:57",
-        "duration_seconds": 0.31510740000521764,
+        "timestamp": "2026-11-23 16:47:06",
+        "duration_seconds": 0.2997972999874037,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -3055,11 +3055,11 @@
         "r2": 0.9625592319988736
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:57",
-        "duration_seconds": 0.1927467999921646,
+        "timestamp": "2026-11-23 16:47:06",
+        "duration_seconds": 0.18920240001170896,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -3188,11 +3188,11 @@
         "r2": 0.9647515952257799
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:58",
-        "duration_seconds": 0.6836267000180669,
+        "timestamp": "2026-11-23 16:47:07",
+        "duration_seconds": 0.6821684999740683,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -3274,11 +3274,11 @@
         "r2": 0.832390186284418
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:58",
-        "duration_seconds": 0.020585999998729676,
+        "timestamp": "2026-11-23 16:47:07",
+        "duration_seconds": 0.0186340999789536,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -3369,11 +3369,11 @@
         "r2": 0.8839168520888523
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:58",
-        "duration_seconds": 0.06969920001574792,
+        "timestamp": "2026-11-23 16:47:07",
+        "duration_seconds": 0.06390310000278987,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -3464,11 +3464,11 @@
         "r2": 0.8820367347576601
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:58",
-        "duration_seconds": 0.023913900018669665,
+        "timestamp": "2026-11-23 16:47:07",
+        "duration_seconds": 0.026820800005225465,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -3568,11 +3568,11 @@
         "r2": 0.8839194676778992
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:58",
-        "duration_seconds": 0.12870500001008622,
+        "timestamp": "2026-11-23 16:47:08",
+        "duration_seconds": 0.1616700999729801,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -3663,11 +3663,11 @@
         "r2": 0.7907191206143099
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:58",
-        "duration_seconds": 0.040568700002040714,
+        "timestamp": "2026-11-23 16:47:08",
+        "duration_seconds": 0.03176300000632182,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -3767,11 +3767,11 @@
         "r2": 0.8461596208530008
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:58",
-        "duration_seconds": 0.06021049999981187,
+        "timestamp": "2026-11-23 16:47:08",
+        "duration_seconds": 0.05243389998213388,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -3880,11 +3880,11 @@
         "r2": 0.7762673849264272
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:58",
-        "duration_seconds": 0.18771530000958592,
+        "timestamp": "2026-11-23 16:47:08",
+        "duration_seconds": 0.19494879999547265,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -4002,11 +4002,11 @@
         "r2": 0.7830422979575447
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:59",
-        "duration_seconds": 0.14917799999238923,
+        "timestamp": "2026-11-23 16:47:08",
+        "duration_seconds": 0.1497013999905903,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -4124,11 +4124,11 @@
         "r2": 0.783846297167738
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:59",
-        "duration_seconds": 0.11050130001967773,
+        "timestamp": "2026-11-23 16:47:08",
+        "duration_seconds": 0.11190739998710342,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -4255,11 +4255,11 @@
         "r2": 0.734290805789324
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:59",
-        "duration_seconds": 0.2818867999885697,
+        "timestamp": "2026-11-23 16:47:09",
+        "duration_seconds": 0.3083762000023853,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -4350,11 +4350,11 @@
         "r2": 0.7981460660448488
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:59",
-        "duration_seconds": 0.014889700018102303,
+        "timestamp": "2026-11-23 16:47:09",
+        "duration_seconds": 0.015591100003803149,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -4454,11 +4454,11 @@
         "r2": 0.848353013615445
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:59",
-        "duration_seconds": 0.058871000015642494,
+        "timestamp": "2026-11-23 16:47:09",
+        "duration_seconds": 0.06282429999555461,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -4567,11 +4567,11 @@
         "r2": 0.7864866424776181
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:49:59",
-        "duration_seconds": 0.14815280001494102,
+        "timestamp": "2026-11-23 16:47:09",
+        "duration_seconds": 0.14705850000609644,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -4680,11 +4680,11 @@
         "r2": 0.8658997421388317
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:00",
-        "duration_seconds": 0.09823589998995885,
+        "timestamp": "2026-11-23 16:47:09",
+        "duration_seconds": 0.09537759999511763,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -4802,11 +4802,11 @@
         "r2": 0.8344771962717321
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:00",
-        "duration_seconds": 0.3539821000013035,
+        "timestamp": "2026-11-23 16:47:09",
+        "duration_seconds": 0.35401539999293163,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -4924,11 +4924,11 @@
         "r2": 0.7870972693805512
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:00",
-        "duration_seconds": 0.08631450001848862,
+        "timestamp": "2026-11-23 16:47:09",
+        "duration_seconds": 0.09448990001692437,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -5055,11 +5055,11 @@
         "r2": 0.8968952595995614
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:00",
-        "duration_seconds": 0.25374299997929484,
+        "timestamp": "2026-11-23 16:47:10",
+        "duration_seconds": 0.25117319999844767,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -5195,11 +5195,11 @@
         "r2": 0.8988087631502156
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:01",
-        "duration_seconds": 0.5690690999908838,
+        "timestamp": "2026-11-23 16:47:10",
+        "duration_seconds": 0.5466627999849152,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -5281,11 +5281,11 @@
         "r2": 0.7821797579455639
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:01",
-        "duration_seconds": 0.030228399991756305,
+        "timestamp": "2026-11-23 16:47:10",
+        "duration_seconds": 0.024393500003498048,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -5376,11 +5376,11 @@
         "r2": 0.9609150125684466
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:01",
-        "duration_seconds": 0.09028350000153296,
+        "timestamp": "2026-11-23 16:47:10",
+        "duration_seconds": 0.08953630001633428,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -5471,11 +5471,11 @@
         "r2": 0.9137940026126945
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:01",
-        "duration_seconds": 0.08028399999602698,
+        "timestamp": "2026-11-23 16:47:11",
+        "duration_seconds": 0.10155649998341687,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -5575,11 +5575,11 @@
         "r2": 0.9648176822211314
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:01",
-        "duration_seconds": 0.16080030001467094,
+        "timestamp": "2026-11-23 16:47:11",
+        "duration_seconds": 0.17067560000577942,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -5670,11 +5670,11 @@
         "r2": 0.6866207857624997
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:01",
-        "duration_seconds": 0.05431420000968501,
+        "timestamp": "2026-11-23 16:47:11",
+        "duration_seconds": 0.048311199992895126,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -5774,11 +5774,11 @@
         "r2": 0.8610078734706611
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:02",
-        "duration_seconds": 0.1414232999959495,
+        "timestamp": "2026-11-23 16:47:11",
+        "duration_seconds": 0.14405210001859814,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -5887,11 +5887,11 @@
         "r2": 0.9137543637551611
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:02",
-        "duration_seconds": 0.3217053000116721,
+        "timestamp": "2026-11-23 16:47:11",
+        "duration_seconds": 0.33317719999467954,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -6000,11 +6000,11 @@
         "r2": 0.7007457647221286
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:02",
-        "duration_seconds": 0.1277838999812957,
+        "timestamp": "2026-11-23 16:47:12",
+        "duration_seconds": 0.13134359999094158,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -6122,11 +6122,11 @@
         "r2": 0.9566854396964388
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:03",
-        "duration_seconds": 0.5524385999888182,
+        "timestamp": "2026-11-23 16:47:12",
+        "duration_seconds": 0.554584600002272,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -6244,11 +6244,11 @@
         "r2": 0.8715859485107318
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:03",
-        "duration_seconds": 0.19385260000126436,
+        "timestamp": "2026-11-23 16:47:12",
+        "duration_seconds": 0.20149209999362938,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -6377,11 +6377,11 @@
         "r2": 0.9082416880437545
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:04",
-        "duration_seconds": 0.696863300021505,
+        "timestamp": "2026-11-23 16:47:13",
+        "duration_seconds": 0.6282041999802459,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -6474,11 +6474,11 @@
         "r2": 0.7289623942568095
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:04",
-        "duration_seconds": 0.03711910001584329,
+        "timestamp": "2026-11-23 16:47:13",
+        "duration_seconds": 0.037097199994605035,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -6578,11 +6578,11 @@
         "r2": 0.8870999315151784
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:04",
-        "duration_seconds": 0.16145469999173656,
+        "timestamp": "2026-11-23 16:47:13",
+        "duration_seconds": 0.15305499997339211,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -6691,11 +6691,11 @@
         "r2": 0.9241568419613596
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:04",
-        "duration_seconds": 0.2593306000053417,
+        "timestamp": "2026-11-23 16:47:14",
+        "duration_seconds": 0.2686692000133917,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -6795,11 +6795,11 @@
         "r2": 0.7286626642760954
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:04",
-        "duration_seconds": 0.037359600013587624,
+        "timestamp": "2026-11-23 16:47:14",
+        "duration_seconds": 0.037531100009800866,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -6908,11 +6908,11 @@
         "r2": 0.9630260177980031
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:05",
-        "duration_seconds": 0.33773510000901297,
+        "timestamp": "2026-11-23 16:47:14",
+        "duration_seconds": 0.3582608999859076,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -7021,11 +7021,11 @@
         "r2": 0.8856461554794468
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:05",
-        "duration_seconds": 0.29129729999112897,
+        "timestamp": "2026-11-23 16:47:14",
+        "duration_seconds": 0.3026945000165142,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -7143,11 +7143,11 @@
         "r2": 0.9160124156547422
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:05",
-        "duration_seconds": 0.5398457999981474,
+        "timestamp": "2026-11-23 16:47:15",
+        "duration_seconds": 0.48253129998920485,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -7265,11 +7265,11 @@
         "r2": 0.6797437967016832
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:06",
-        "duration_seconds": 0.1791520999977365,
+        "timestamp": "2026-11-23 16:47:15",
+        "duration_seconds": 0.20804789999965578,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -7396,11 +7396,11 @@
         "r2": 0.8667050307568026
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:06",
-        "duration_seconds": 0.41269820000161417,
+        "timestamp": "2026-11-23 16:47:15",
+        "duration_seconds": 0.4092281000048388,
         "output_paths": {
           "residuals": null,
           "forecast": null
@@ -7536,11 +7536,11 @@
         "r2": 0.9156817765700762
       },
       "execution_info": {
-        "run_id": "dataset2_20261123_154951_786eea",
+        "run_id": "dataset2_20261123_164700_07c69c",
         "status": "SUCCESS",
         "error_message": null,
-        "timestamp": "2026-11-23 15:50:07",
-        "duration_seconds": 0.589815900020767,
+        "timestamp": "2026-11-23 16:47:16",
+        "duration_seconds": 0.6049054999893997,
         "output_paths": {
           "residuals": null,
           "forecast": null

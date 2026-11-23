@@ -1,0 +1,25 @@
+{
+  "run_id": "dataset2_20261123_164700_07c69c",
+  "dataset_key": "dataset2",
+  "model_name": "Log-SARIMA(1,1,0)x(0,1,1)_12",
+  "use_log_transform": true,
+  "aic": -327.47,
+  "bic": -320.0,
+  "metrics": {
+    "MAE": 12.35,
+    "RMSE": 15.12,
+    "MAPE (%)": 2.81,
+    "R2": 0.9626,
+    "MAPE": 2.81
+  },
+  "diagnostics": {
+    "mean": -0.0055,
+    "std": 0.0737,
+    "ljung_box_q": 9.24,
+    "ljung_box_p": 0.997,
+    "jarque_bera_p": 0.0,
+    "heteroskedasticity_p": 0.0001,
+    "is_white_noise": true
+  },
+  "model_file": "models\\lab02\\dataset2\\best_model.pkl"
+}
