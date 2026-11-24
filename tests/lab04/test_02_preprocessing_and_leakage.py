@@ -1,6 +1,6 @@
 r"""
 Kiểm thử Mục 3, Mục 4 & Mục 5: Phân chia Tuần tự Chống Rò rỉ Dữ liệu (Anti-Data-Leakage),
-Kiểm định Dừng ADF, Cửa sổ Trượt 24h (105 Đặc trưng XGBoost & Tensor 3D LSTM) và 5-Fold TimeSeriesSplit
+Kiểm định Dừng ADF, Cửa sổ Trượt 24h (106 Đặc trưng XGBoost & Tensor 3D LSTM) và 5-Fold TimeSeriesSplit
 (tests/lab04/test_02_preprocessing_and_leakage.py).
 """
 
@@ -85,8 +85,8 @@ class Test02PreprocessingAndLeakage(unittest.TestCase):
         for item in rep["adf_after_diff1"]:
             self.assertLess(item["p_value"], 0.05)
 
-    def test_04_sliding_window_105_features_and_3d_sequence(self) -> None:
-        r"""Kiểm tra tạo cửa sổ trượt lookback=24h cho đúng 105 đặc trưng XGBoost và tensor (N-24, 24, 4) cho LSTM."""
+    def test_04_sliding_window_106_features_and_3d_sequence(self) -> None:
+        r"""Kiểm tra tạo cửa sổ trượt lookback=24h cho đúng 106 đặc trưng XGBoost và tensor (N-24, 24, 4) cho LSTM."""
         scaler = StandardScaler()
         df_s = pd.DataFrame(scaler.fit_transform(self.df.values), index=self.df.index, columns=self.df.columns)
 
@@ -94,8 +94,8 @@ class Test02PreprocessingAndLeakage(unittest.TestCase):
         X_seq, y_seq = build_sequence_windows_3d(df_s, lookback=24)
 
         expected_n = len(self.df) - 24
-        self.assertEqual(X_tab.shape, (expected_n, 105))
-        self.assertEqual(len(feat_names), 105)
+        self.assertEqual(X_tab.shape, (expected_n, 106))
+        self.assertEqual(len(feat_names), 106)
         self.assertEqual(X_seq.shape, (expected_n, 24, 4))
         self.assertEqual(len(ts_idx), expected_n)
         np.testing.assert_allclose(y_tab, y_seq, atol=1e-6)

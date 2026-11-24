@@ -1,6 +1,6 @@
 # BÁO CÁO TỔNG HỢP HỒ SƠ THỐNG KÊ TOÀN BỘ MÔ HÌNH LAB 04 (MASTER MODEL SUMMARY)
 
-- **Run ID**: `20261117_160932_3fe70f` | **Thời điểm kết xuất**: `2026-11-17 16:19:33`
+- **Run ID**: `20261124_193611_5cd58d` | **Thời điểm kết xuất**: `2026-11-24 19:44:12`
 - **Thiết bị tính toán**: `NVIDIA GeForce RTX 3050 6GB Laptop GPU`
 - **Tổng số thực thể đánh giá mô hình trong Lab 04**: **36 thực thể (Thành công: 36/36, Thất bại: 0)**
   1. **Dataset 1 — Electricity Load & Weather (`reports/model_summary/lab04/dataset1/`)**: **24 thực thể mô hình** (03 Hold-out + 03 Weather Ablation + 03 Walk-Forward 168h + 15 Fold Models thuộc 5-Fold TimeSeriesSplit CV).
@@ -10,8 +10,8 @@
 
 
 ## 1. Thông tin Phiên Thực nghiệm & Bộ dữ liệu (Provenance & Dataset Info)
-- **Run ID**: `20261117_160932_3fe70f`
-- **Thời điểm xuất báo cáo**: `2026-11-17 16:19:33`
+- **Run ID**: `20261124_193611_5cd58d`
+- **Thời điểm xuất báo cáo**: `2026-11-24 19:44:12`
 - **Dataset Key**: `dataset1` (`data/raw/electricity_load.csv`)
 - **Tên bộ dữ liệu**: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 - **Tổng số quan sát**: 35,065 giờ (2011-01-01 00:00:00 to 2015-01-01 00:00:00)
@@ -21,7 +21,7 @@
 - **Tập Xác thực (Validation - 15%)**: 5,260 quan sát
 - **Tập Kiểm thử Độc lập (Hold-out Test - 15%)**: 5,260 quan sát
 - **Tổng số thực thể mô hình được thống kê**: 24 (Thành công: 24, Thất bại: 0)
-  - **03 Mô hình Đa biến Chính (Hold-out 70/15/15)**: `VAR(24)`, `XGBoost (105 Features)`, `Stacked 2-Layer LSTM + Residual Highway`
+  - **03 Mô hình Đa biến Chính (Hold-out 70/15/15)**: `VAR(24)`, `XGBoost (106 Features)`, `Stacked 2-Layer LSTM + Residual Highway`
   - **03 Mô hình Đối chứng Loại bỏ Thời tiết (Feature Ablation)**: `AR(24) Univariate`, `XGBoost NoWeather`, `LSTM NoWeather`
   - **03 Mô hình Vận hành Cuốn chiếu Thực tế (Walk-Forward 168h)**: `VAR Walk-Forward`, `XGBoost Walk-Forward`, `LSTM Walk-Forward`
   - **15 Mô hình Kiểm định Chéo Mở rộng (`5-Fold TimeSeriesSplit`)**: `Fold 1..5` cho cả 3 họ mô hình `VAR`, `XGBoost`, `LSTM`
@@ -32,38 +32,38 @@
 
 | # | Model | Family | Regime | Params / Feats | RMSE (kW) | MAE (kW) | MAPE (%) | R² | DW Stat | Ljung-Box Q | Device | Time (s) |
 |---:|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|:---|---:|
-| 1 | VAR(24) [Multivariate Differenced d=1, Hold-out] | VAR | `Hold-out_Test_15pct` | 97 | 7,122.36 | 4,576.49 | 2.0010 | 0.9935 | 2.3686 | 800.16 | `cpu` | 2.9913 |
-| 2 | XGBoost Multivariate Regressor [105 Features, Hold-out] | XGBoost | `Hold-out_Test_15pct` | 105 | 6,482.45 | 4,337.53 | 1.8922 | 0.9946 | 1.6171 | 2,163.86 | `cuda` | 5.6949 |
-| 3 | Stacked 2-Layer LSTM + Residual Highway [Multivariate, Hold-out] | LSTM | `Hold-out_Test_15pct` | 30,589 | 6,570.41 | 4,524.04 | 2.0185 | 0.9944 | 1.9519 | 721.46 | `cuda` | 92.2252 |
-| 4 | AR(24) [Univariate Differenced d=1, No Weather Ablation] | AR-Ablation | `Ablation_No_Weather` | 25 | 7,120.99 | 4,569.45 | 1.9958 | 0.9935 | 2.3702 | 808.92 | `cpu` | 1.9443 |
-| 5 | XGBoost Univariate [No Weather, 33 Load/Calendar Features] | XGBoost-Ablation | `Ablation_No_Weather` | 33 | 6,379.23 | 4,280.20 | 1.8586 | 0.9947 | 1.7422 | 1,465.22 | `cuda` | 3.7017 |
-| 6 | Stacked 2-Layer LSTM + Highway [No Weather, Input_Dim=1] | LSTM-Ablation | `Ablation_No_Weather` | 29,818 | 6,946.54 | 4,862.90 | 2.1741 | 0.9938 | 1.8465 | 1,310.76 | `cuda` | 59.9464 |
-| 7 | XGBoost [Walk-Forward Backtesting 168h Online Feedback] | XGBoost-WalkForward | `Walk_Forward_168h` | 105 | 4,870.64 | 3,582.84 | 1.6381 | 0.9950 | 2.5024 | 49.35 | `cuda` | 5.6949 |
-| 8 | VAR [Walk-Forward Backtesting 168h Online Feedback] | VAR-WalkForward | `Walk_Forward_168h` | 97 | 5,282.87 | 3,937.53 | 1.8182 | 0.9941 | 2.9518 | 77.87 | `cpu` | 2.9913 |
-| 9 | LSTM [Walk-Forward Backtesting 168h Online Feedback] | LSTM-WalkForward | `Walk_Forward_168h` | 30,589 | 5,810.71 | 4,238.78 | 1.9522 | 0.9929 | 2.8172 | 160.81 | `cuda` | 92.2252 |
-| 10 | VAR [5-Fold TimeSeriesSplit — Fold 1/5] | VAR-CV-Fold1 | `5Fold_CV_Fold_1` | 97 | 6,286.99 | 3,759.03 | 2.2744 | 0.9915 | 2.0353 | 733.40 | `cpu` | 0.8302 |
-| 11 | XGBoost [5-Fold TimeSeriesSplit — Fold 1/5] | XGBoost-CV-Fold1 | `5Fold_CV_Fold_1` | 105 | 12,836.99 | 8,234.13 | 5.2542 | 0.9647 | 0.4850 | 14,424.73 | `cuda` | 4.9675 |
-| 12 | LSTM [5-Fold TimeSeriesSplit — Fold 1/5] | LSTM-CV-Fold1 | `5Fold_CV_Fold_1` | 30,589 | 8,672.94 | 6,106.53 | 3.6206 | 0.9839 | 1.3610 | 3,820.59 | `cuda` | 10.8592 |
-| 13 | VAR [5-Fold TimeSeriesSplit — Fold 2/5] | VAR-CV-Fold2 | `5Fold_CV_Fold_2` | 97 | 8,731.46 | 5,508.47 | 2.2799 | 0.9926 | 2.3520 | 723.86 | `cpu` | 1.5272 |
-| 14 | XGBoost [5-Fold TimeSeriesSplit — Fold 2/5] | XGBoost-CV-Fold2 | `5Fold_CV_Fold_2` | 105 | 17,914.25 | 10,471.79 | 3.8495 | 0.9690 | 0.8209 | 13,686.20 | `cuda` | 3.4974 |
-| 15 | LSTM [5-Fold TimeSeriesSplit — Fold 2/5] | LSTM-CV-Fold2 | `5Fold_CV_Fold_2` | 30,589 | 13,520.61 | 8,974.15 | 3.7969 | 0.9824 | 1.4323 | 4,285.88 | `cuda` | 13.3197 |
-| 16 | VAR [5-Fold TimeSeriesSplit — Fold 3/5] | VAR-CV-Fold3 | `5Fold_CV_Fold_3` | 97 | 6,685.48 | 4,065.42 | 2.3303 | 0.9938 | 2.2766 | 655.04 | `cpu` | 2.2394 |
-| 17 | XGBoost [5-Fold TimeSeriesSplit — Fold 3/5] | XGBoost-CV-Fold3 | `5Fold_CV_Fold_3` | 105 | 8,234.82 | 5,685.14 | 3.1051 | 0.9905 | 1.0880 | 4,979.06 | `cuda` | 1.8797 |
-| 18 | LSTM [5-Fold TimeSeriesSplit — Fold 3/5] | LSTM-CV-Fold3 | `5Fold_CV_Fold_3` | 30,589 | 7,395.36 | 5,055.66 | 2.8405 | 0.9924 | 1.7680 | 2,052.64 | `cuda` | 30.4732 |
-| 19 | VAR [5-Fold TimeSeriesSplit — Fold 4/5] | VAR-CV-Fold4 | `5Fold_CV_Fold_4` | 97 | 6,580.69 | 3,697.58 | 6.7214 | 0.9910 | 2.3427 | 1,173.80 | `cpu` | 2.9518 |
-| 20 | XGBoost [5-Fold TimeSeriesSplit — Fold 4/5] | XGBoost-CV-Fold4 | `5Fold_CV_Fold_4` | 105 | 5,732.55 | 3,700.07 | 6.5246 | 0.9932 | 1.5827 | 1,905.74 | `cuda` | 6.2938 |
-| 21 | LSTM [5-Fold TimeSeriesSplit — Fold 4/5] | LSTM-CV-Fold4 | `5Fold_CV_Fold_4` | 30,589 | 6,375.93 | 4,191.20 | 7.0281 | 0.9915 | 1.8685 | 801.37 | `cuda` | 39.5551 |
-| 22 | VAR [5-Fold TimeSeriesSplit — Fold 5/5] | VAR-CV-Fold5 | `5Fold_CV_Fold_5` | 97 | 6,983.07 | 4,527.47 | 1.9895 | 0.9935 | 2.3682 | 779.92 | `cpu` | 3.7818 |
-| 23 | XGBoost [5-Fold TimeSeriesSplit — Fold 5/5] | XGBoost-CV-Fold5 | `5Fold_CV_Fold_5` | 105 | 6,428.21 | 4,319.27 | 1.8771 | 0.9945 | 1.6303 | 2,011.82 | `cuda` | 6.2370 |
-| 24 | LSTM [5-Fold TimeSeriesSplit — Fold 5/5] | LSTM-CV-Fold5 | `5Fold_CV_Fold_5` | 30,589 | 6,741.05 | 4,731.91 | 2.1160 | 0.9940 | 1.8892 | 1,145.67 | `cuda` | 49.2265 |
+| 1 | VAR(24) [Multivariate Differenced d=1, Hold-out] | VAR | `Hold-out_Test_15pct` | 97 | 7,122.36 | 4,576.49 | 2.0010 | 0.9935 | 2.3686 | 800.16 | `cpu` | 3.0565 |
+| 2 | XGBoost Multivariate Regressor [106 Features, Hold-out] | XGBoost | `Hold-out_Test_15pct` | 106 | 6,320.97 | 4,273.05 | 1.8683 | 0.9948 | 1.8247 | 1,165.65 | `cuda` | 5.2138 |
+| 3 | Stacked 2-Layer LSTM + Residual Highway [Multivariate, Hold-out] | LSTM | `Hold-out_Test_15pct` | 30,589 | 6,570.41 | 4,524.04 | 2.0185 | 0.9944 | 1.9519 | 721.46 | `cuda` | 97.0233 |
+| 4 | AR(24) [Univariate Differenced d=1, No Weather Ablation] | AR-Ablation | `Ablation_No_Weather` | 25 | 7,120.99 | 4,569.45 | 1.9958 | 0.9935 | 2.3702 | 808.92 | `cpu` | 1.9867 |
+| 5 | XGBoost Univariate [No Weather, 34 Load/Calendar Features] | XGBoost-Ablation | `Ablation_No_Weather` | 34 | 6,285.65 | 4,270.67 | 1.8571 | 0.9949 | 1.8921 | 833.61 | `cuda` | 3.3890 |
+| 6 | Stacked 2-Layer LSTM + Highway [No Weather, Input_Dim=1] | LSTM-Ablation | `Ablation_No_Weather` | 29,818 | 7,078.22 | 4,930.62 | 2.2122 | 0.9935 | 1.7710 | 1,407.58 | `cuda` | 63.0651 |
+| 7 | XGBoost [Walk-Forward Backtesting 168h Online Feedback] | XGBoost-WalkForward | `Walk_Forward_168h` | 106 | 5,356.26 | 3,973.05 | 1.8012 | 0.9940 | 2.5319 | 64.42 | `cuda` | 5.2138 |
+| 8 | VAR [Walk-Forward Backtesting 168h Online Feedback] | VAR-WalkForward | `Walk_Forward_168h` | 97 | 5,282.87 | 3,937.53 | 1.8182 | 0.9941 | 2.9518 | 77.87 | `cpu` | 3.0565 |
+| 9 | LSTM [Walk-Forward Backtesting 168h Online Feedback] | LSTM-WalkForward | `Walk_Forward_168h` | 30,589 | 5,810.71 | 4,238.78 | 1.9522 | 0.9929 | 2.8172 | 160.81 | `cuda` | 97.0233 |
+| 10 | VAR [5-Fold TimeSeriesSplit — Fold 1/5] | VAR-CV-Fold1 | `5Fold_CV_Fold_1` | 97 | 5,787.58 | 3,841.17 | 1.7099 | 0.9938 | 1.7117 | 648.28 | `cpu` | 0.7028 |
+| 11 | XGBoost [5-Fold TimeSeriesSplit — Fold 1/5] | XGBoost-CV-Fold1 | `5Fold_CV_Fold_1` | 106 | 11,718.06 | 6,691.03 | 3.5454 | 0.9747 | 0.5293 | 15,585.70 | `cuda` | 6.1018 |
+| 12 | LSTM [5-Fold TimeSeriesSplit — Fold 1/5] | LSTM-CV-Fold1 | `5Fold_CV_Fold_1` | 30,589 | 8,537.15 | 5,980.96 | 2.8019 | 0.9866 | 1.2214 | 5,160.10 | `cuda` | 9.2671 |
+| 13 | VAR [5-Fold TimeSeriesSplit — Fold 2/5] | VAR-CV-Fold2 | `5Fold_CV_Fold_2` | 97 | 8,793.84 | 5,499.72 | 2.8433 | 0.9927 | 2.3749 | 795.16 | `cpu` | 1.2285 |
+| 14 | XGBoost [5-Fold TimeSeriesSplit — Fold 2/5] | XGBoost-CV-Fold2 | `5Fold_CV_Fold_2` | 106 | 18,281.70 | 10,829.08 | 4.5498 | 0.9684 | 0.7210 | 13,999.57 | `cuda` | 5.0186 |
+| 15 | LSTM [5-Fold TimeSeriesSplit — Fold 2/5] | LSTM-CV-Fold2 | `5Fold_CV_Fold_2` | 30,589 | 13,336.46 | 8,866.25 | 4.3257 | 0.9832 | 1.5095 | 4,222.09 | `cuda` | 10.0490 |
+| 16 | VAR [5-Fold TimeSeriesSplit — Fold 3/5] | VAR-CV-Fold3 | `5Fold_CV_Fold_3` | 97 | 7,213.96 | 3,871.26 | 2.4843 | 0.9891 | 2.3936 | 918.61 | `cpu` | 1.7816 |
+| 17 | XGBoost [5-Fold TimeSeriesSplit — Fold 3/5] | XGBoost-CV-Fold3 | `5Fold_CV_Fold_3` | 106 | 8,892.65 | 5,870.95 | 3.4442 | 0.9834 | 1.2754 | 4,569.64 | `cuda` | 2.7909 |
+| 18 | LSTM [5-Fold TimeSeriesSplit — Fold 3/5] | LSTM-CV-Fold3 | `5Fold_CV_Fold_3` | 30,589 | 8,183.92 | 5,488.88 | 3.3260 | 0.9860 | 1.6549 | 1,893.45 | `cuda` | 26.6055 |
+| 19 | VAR [5-Fold TimeSeriesSplit — Fold 4/5] | VAR-CV-Fold4 | `5Fold_CV_Fold_4` | 97 | 7,237.27 | 4,600.41 | 1.9333 | 0.9938 | 2.3878 | 632.65 | `cpu` | 2.4096 |
+| 20 | XGBoost [5-Fold TimeSeriesSplit — Fold 4/5] | XGBoost-CV-Fold4 | `5Fold_CV_Fold_4` | 106 | 7,055.79 | 4,715.85 | 1.9782 | 0.9941 | 1.7396 | 715.67 | `cuda` | 4.0364 |
+| 21 | LSTM [5-Fold TimeSeriesSplit — Fold 4/5] | LSTM-CV-Fold4 | `5Fold_CV_Fold_4` | 30,589 | 7,784.54 | 5,585.09 | 2.4227 | 0.9929 | 1.9134 | 1,094.08 | `cuda` | 34.7935 |
+| 22 | VAR [5-Fold TimeSeriesSplit — Fold 5/5] | VAR-CV-Fold5 | `5Fold_CV_Fold_5` | 97 | 5,991.19 | 3,511.07 | 7.5620 | 0.9898 | 2.1684 | 925.27 | `cpu` | 2.9439 |
+| 23 | XGBoost [5-Fold TimeSeriesSplit — Fold 5/5] | XGBoost-CV-Fold5 | `5Fold_CV_Fold_5` | 106 | 5,227.53 | 3,497.29 | 7.3346 | 0.9922 | 1.6790 | 1,147.97 | `cuda` | 4.0384 |
+| 24 | LSTM [5-Fold TimeSeriesSplit — Fold 5/5] | LSTM-CV-Fold5 | `5Fold_CV_Fold_5` | 30,589 | 5,982.23 | 3,977.50 | 7.8120 | 0.9898 | 1.8342 | 950.64 | `cuda` | 42.9271 |
 
-### Diễn giải Đa Tiêu chí Tự động (Run ID: `20261117_160932_3fe70f` — Dataset 1: Electricity Load & Weather)
+### Diễn giải Đa Tiêu chí Tự động (Run ID: `20261124_193611_5cd58d` — Dataset 1: Electricity Load & Weather)
 
 #### A. Mô hình Tốt nhất theo Từng Quy trình Kiểm định Độc lập (Regime-Specific Leaders)
-- **Tiêu chí 1 — Độ chính xác cao nhất trên Tập Hold-out Test độc lập (15% - 5,260 giờ)**: **XGBoost** (`RMSE = 6,482.45 kW`, `MAE = 4,337.53 kW`, `MAPE = 1.8922%`, `R² = 0.9946`).
-- **Tiêu chí 2 — Độ ổn định cao nhất trên Kiểm định Chéo 5-Fold TimeSeriesSplit (Expanding Window)**: **VAR** (`RMSE = 7,053.54 ± 970.44 kW`, `MAE = 4,311.59 ± 745.33 kW`, `R² = 0.9925 ± 0.0012`).
-- **Tiêu chí 3 — Hiệu năng cao nhất trong Vận hành Cuốn chiếu Walk-Forward Backtesting (168 giờ)**: **XGBoost** (`RMSE = 4,870.64 kW`, `MAE = 3,582.84 kW`, `MAPE = 1.6381%`, `R² = 0.9950`).
-- **Tiêu chí 4 — Mô hình khai thác biến ngoại sinh thời tiết hiệu quả nhất (Feature Ablation Impact)**: **Stacked 2-Layer LSTM + Residual Highway** giúp giảm `5.41%` sai số RMSE (từ `6,946.54 kW` khi không có thời tiết xuống `6,570.41 kW` khi kết hợp `temperature`, `humidity`, `wind_speed`) và giảm `7.16%` MAPE.
+- **Tiêu chí 1 — Độ chính xác cao nhất trên Tập Hold-out Test độc lập (15% - 5,260 giờ)**: **XGBoost** (`RMSE = 6,320.97 kW`, `MAE = 4,273.05 kW`, `MAPE = 1.8683%`, `R² = 0.9948`).
+- **Tiêu chí 2 — Độ ổn định cao nhất trên Kiểm định Chéo 5-Fold TimeSeriesSplit (Expanding Window)**: **VAR** (`RMSE = 7,004.77 ± 1,204.93 kW`, `MAE = 4,264.73 ± 796.89 kW`, `R² = 0.9918 ± 0.0022`).
+- **Tiêu chí 3 — Hiệu năng cao nhất trong Vận hành Cuốn chiếu Walk-Forward Backtesting (168 giờ)**: **VAR** (`RMSE = 5,282.87 kW`, `MAE = 3,937.53 kW`, `MAPE = 1.8182%`, `R² = 0.9941`).
+- **Tiêu chí 4 — Mô hình khai thác biến ngoại sinh thời tiết hiệu quả nhất (Feature Ablation Impact)**: **Stacked 2-Layer LSTM + Residual Highway** giúp giảm `7.17%` sai số RMSE (từ `7,078.22 kW` khi không có thời tiết xuống `6,570.41 kW` khi kết hợp `temperature`, `humidity`, `wind_speed`) và giảm `8.76%` MAPE.
 - **Tiêu chí 5 — Khử tự tương quan phần dư bậc 1 tốt nhất (Durbin-Watson gần 2.00 nhất & Ljung-Box Q thấp nhất trên Hold-out Test)**: **Stacked 2-Layer LSTM + Residual Highway** (`DW = 1.9519`, `Ljung-Box Q(24) = 721.46`, `Heteroskedasticity H = 1.1835`).
 
 ## 3. Hồ sơ Thống kê Chi tiết Từng Mô hình (Individual Model Cards — 24 Models)
@@ -72,7 +72,7 @@
 ```text
 VAR / AR Multivariate Model Summary - Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: Hold-out Split (70% Train - 15% Val - 15% Test)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: Hold-out Split (70% Train - 15% Val - 15% Test)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Date range: 2011-01-01 00:00:00 to 2015-01-01 00:00:00 (Freq: 1h)
 Observations: 35,065 (Train: 24,545, Val: 5,260, Eval/Test: 5,260)
@@ -85,7 +85,7 @@ Model: VAR(24) [Multivariate Differenced d=1, Hold-out]
 Log Likelihood (Load Eq):  -250953.731   AIC (Load Eq):     502101.462
 BIC (Load Eq):              502887.865   HQIC (Load Eq):    502356.233
 FPE (Final Pred Error):    45779369.30   Device:                   cpu
-Converged:                        True   Train / Pred:    2.9913s / 0.2545s
+Converged:                        True   Train / Pred:    3.0565s / 0.2574s
 ------------------------------------------------------------------------------
 CROSS-VARIABLE LAG INFLUENCE ON TARGET EQUATION (Delta_load_t, p=24 Lags):
 Variable          Lags    Sum(Coef)      L1 Norm      L2 Norm    Dominant Lag
@@ -208,180 +208,181 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=5,260):
   MAPE =        2.0010% | R²   =     0.9935    | Max Error = 130,203.94 kW
   [In-Sample Train (70%)] RMSE = 6,739.3319 kW | MAE = 4,197.6541 kW | MAPE = 2.0323% | R² = 0.9937
   [Validation Set (15%)]  RMSE = 6,501.0348 kW | MAE = 3,568.5953 kW | MAPE = 7.2729% | R² = 0.9882
-  [5-Fold Expanding CV]   RMSE = 7,053.54 ± 970.44 kW | MAE = 4,311.59 ± 745.33 kW | R² = 0.9925 ± 0.0012
+  [5-Fold Expanding CV]   RMSE = 7,004.77 ± 1,204.93 kW | MAE = 4,264.73 ± 796.89 kW | R² = 0.9918 ± 0.0022
   [Weather Ablation]      With Weather RMSE = 7,122.36 kW vs. Without Weather RMSE = 7,120.99 kW (Delta = -0.02%)
 ==============================================================================
 ```
 
-### 3.2. XGBoost Multivariate Regressor [105 Features, Hold-out]
+### 3.2. XGBoost Multivariate Regressor [106 Features, Hold-out]
 ```text
 XGBoost Gradient Boosting Model Summary - Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: Hold-out Split (70% Train - 15% Val - 15% Test)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: Hold-out Split (70% Train - 15% Val - 15% Test)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Date range: 2011-01-01 00:00:00 to 2015-01-01 00:00:00 (Freq: 1h)
 Observations: 35,065 (Train: 24,545, Val: 5,260, Eval/Test: 5,260)
-Features: 105 Tabular Features | Trees Configured: 450 | Best Iteration: 449
+Features: 106 Tabular Features | Trees Configured: 450 | Best Iteration: 358
 Max Depth: 6 | Learning Rate (eta): 0.045 | Subsample: 0.85 | Colsample: 0.85
 Regularization: L1 (alpha)=0.1, L2 (lambda)=1.0 | Tree Method: hist (cuda)
 Transformation: StandardScaler (Fit on Train Only) + Inverse Transform to Original Scale (kW)
-Model: XGBoost Multivariate Regressor [105 Features, Hold-out]
+Model: XGBoost Multivariate Regressor [106 Features, Hold-out]
 ==============================================================================
             XGBoost Boosting Convergence & Feature Importance Fit             
 ==============================================================================
-Train Scaled RMSE (Tree 1 -> End): 0.955735 -> 0.043310
-Val Scaled RMSE   (Tree 1 -> Best): 0.821509 -> 0.066113
-Converged:                        True   Train / Pred:    5.6949s / 0.1125s
+Train Scaled RMSE (Tree 1 -> End): 0.955722 -> 0.043671
+Val Scaled RMSE   (Tree 1 -> Best): 0.821423 -> 0.065047
+Converged:                        True   Train / Pred:    5.2138s / 0.0995s
 ------------------------------------------------------------------------------
 BOOSTING ITERATION CONVERGENCE TRAJECTORY (Extracted from evals_result_):
   Tree #  Train RMSE (Scaled)  Val RMSE (Scaled)      Gen Gap           Status
 ------------------------------------------------------------------------------
-       1             0.955735           0.821509    -0.134226     Initial Tree
-      10             0.638113           0.550413    -0.087699         Boosting
-      25             0.331821           0.289812    -0.042009         Boosting
-      50             0.131115           0.120498    -0.010617         Boosting
-     100             0.067032           0.071110    +0.004078         Boosting
-     150             0.059268           0.068470    +0.009202         Boosting
-     200             0.055143           0.067492    +0.012349         Boosting
-     250             0.052056           0.066980    +0.014923         Boosting
-     300             0.049547           0.066612    +0.017065         Boosting
-     350             0.047346           0.066398    +0.019051         Boosting
-     400             0.045240           0.066208    +0.020967         Boosting
-     450             0.043310           0.066113    +0.022803 Best Val RMSE (Selected)
+       1             0.955722           0.821423    -0.134300     Initial Tree
+      10             0.638098           0.550294    -0.087804         Boosting
+      25             0.331789           0.289683    -0.042106         Boosting
+      50             0.130762           0.120341    -0.010421         Boosting
+     100             0.064996           0.069367    +0.004371         Boosting
+     150             0.056804           0.066319    +0.009515         Boosting
+     200             0.052635           0.065599    +0.012964         Boosting
+     250             0.049817           0.065331    +0.015514         Boosting
+     300             0.047330           0.065137    +0.017807         Boosting
+     350             0.045153           0.065067    +0.019914         Boosting
+     359             0.044828           0.065047    +0.020219 Best Val RMSE (Selected)
+     389             0.043671           0.065053    +0.021382         Boosting
 ------------------------------------------------------------------------------
-FEATURE IMPORTANCE AGGREGATED BY FUNCTIONAL GROUP (105 Engineered Features):
+FEATURE IMPORTANCE AGGREGATED BY FUNCTIONAL GROUP (106 Engineered Features):
 Feature Group                                  Count  Share (%)    Top Feature
 ------------------------------------------------------------------------------
-1. Autoregressive Load Lags (load_lag_1h..24h)    24     93.99%   load_lag_24h
-4. Exogenous Humidity Lags (humidity_lag_1h..2    24      1.84% humidity_lag_12h
-3. Cyclical Fourier & Calendar (sin/cos, weeke     5      1.73%       cos_hour
-5. Exogenous Temperature Lags (temperature_lag    24      1.61% temperature_lag_10h
-2. Load Rolling & Trend Stats (roll_mean, roll     4      0.42% load_roll_mean_24h
-6. Exogenous Wind Speed Lags (wind_speed_lag_1    24      0.40% wind_speed_lag_18h
+1. Autoregressive Load Lags (load_lag_1h..24h)    24     96.13%   load_lag_24h
+4. Exogenous Humidity Lags (humidity_lag_1h..2    24      1.33% humidity_lag_12h
+5. Exogenous Temperature Lags (temperature_lag    24      0.99% temperature_lag_13h
+3. Cyclical Fourier & Calendar (sin/cos, weeke     5      0.81%       sin_hour
+2. Load Rolling & Trend Stats (roll, trend_24h     5      0.46% load_trend_24h
+6. Exogenous Wind Speed Lags (wind_speed_lag_1    24      0.28% wind_speed_lag_21h
 ------------------------------------------------------------------------------
-COMPLETE FEATURE IMPORTANCE RANKING (All 105/105 Features Extracted):
+COMPLETE FEATURE IMPORTANCE RANKING (All 106/106 Features Extracted):
 Rank Feature Name              Gain Importance   Share (%)   Cumulative (%)
 ------------------------------------------------------------------------------
-   1 load_lag_24h                     0.628052      62.81%           62.81%
-   2 load_lag_23h                     0.189816      18.98%           81.79%
-   3 load_lag_1h                      0.093452       9.35%           91.13%
-   4 cos_hour                         0.006380       0.64%           91.77%
-   5 humidity_lag_12h                 0.005469       0.55%           92.32%
-   6 sin_hour                         0.004539       0.45%           92.77%
-   7 is_weekend                       0.003984       0.40%           93.17%
-   8 load_lag_20h                     0.003592       0.36%           93.53%
-   9 load_lag_21h                     0.003419       0.34%           93.87%
-  10 load_lag_22h                     0.002926       0.29%           94.16%
-  11 temperature_lag_10h              0.002186       0.22%           94.38%
-  12 temperature_lag_20h              0.002125       0.21%           94.59%
-  13 load_lag_19h                     0.001766       0.18%           94.77%
-  14 humidity_lag_13h                 0.001659       0.17%           94.94%
-  15 load_lag_2h                      0.001600       0.16%           95.10%
-  16 humidity_lag_11h                 0.001539       0.15%           95.25%
-  17 load_lag_14h                     0.001520       0.15%           95.40%
-  18 load_lag_15h                     0.001335       0.13%           95.54%
-  19 load_roll_mean_24h               0.001323       0.13%           95.67%
-  20 sin_dayofweek                    0.001306       0.13%           95.80%
-  21 load_lag_16h                     0.001304       0.13%           95.93%
-  22 load_lag_13h                     0.001293       0.13%           96.06%
-  23 temperature_lag_13h              0.001243       0.12%           96.18%
-  24 humidity_lag_21h                 0.001225       0.12%           96.31%
-  25 humidity_lag_1h                  0.001154       0.12%           96.42%
-  26 cos_dayofweek                    0.001136       0.11%           96.53%
-  27 load_roll_std_24h                0.001110       0.11%           96.65%
-  28 temperature_lag_19h              0.001094       0.11%           96.75%
-  29 load_lag_17h                     0.001091       0.11%           96.86%
-  30 load_lag_12h                     0.001070       0.11%           96.97%
-  31 load_lag_11h                     0.001046       0.10%           97.08%
-  32 load_lag_18h                     0.001016       0.10%           97.18%
-  33 load_roll_std_6h                 0.001014       0.10%           97.28%
-  34 load_lag_3h                      0.000926       0.09%           97.37%
-  35 temperature_lag_11h              0.000906       0.09%           97.46%
-  36 load_lag_4h                      0.000862       0.09%           97.55%
-  37 load_lag_10h                     0.000790       0.08%           97.63%
-  38 temperature_lag_22h              0.000789       0.08%           97.71%
-  39 temperature_lag_21h              0.000780       0.08%           97.78%
-  40 load_roll_mean_6h                0.000764       0.08%           97.86%
-  41 load_lag_6h                      0.000753       0.08%           97.94%
-  42 temperature_lag_12h              0.000729       0.07%           98.01%
-  43 temperature_lag_23h              0.000702       0.07%           98.08%
-  44 load_lag_8h                      0.000670       0.07%           98.15%
-  45 temperature_lag_1h               0.000652       0.07%           98.21%
-  46 load_lag_7h                      0.000626       0.06%           98.27%
-  47 humidity_lag_22h                 0.000605       0.06%           98.33%
-  48 humidity_lag_10h                 0.000600       0.06%           98.39%
-  49 temperature_lag_24h              0.000586       0.06%           98.45%
-  50 humidity_lag_23h                 0.000561       0.06%           98.51%
-  51 load_lag_9h                      0.000557       0.06%           98.56%
-  52 humidity_lag_20h                 0.000557       0.06%           98.62%
-  53 humidity_lag_7h                  0.000530       0.05%           98.67%
-  54 temperature_lag_9h               0.000501       0.05%           98.72%
-  55 temperature_lag_8h               0.000483       0.05%           98.77%
-  56 temperature_lag_14h              0.000482       0.05%           98.82%
-  57 humidity_lag_19h                 0.000479       0.05%           98.87%
-  58 humidity_lag_18h                 0.000459       0.05%           98.91%
-  59 humidity_lag_15h                 0.000459       0.05%           98.96%
-  60 load_lag_5h                      0.000455       0.05%           99.00%
-  61 temperature_lag_4h               0.000431       0.04%           99.05%
-  62 humidity_lag_8h                  0.000395       0.04%           99.09%
-  63 humidity_lag_24h                 0.000387       0.04%           99.13%
-  64 temperature_lag_17h              0.000382       0.04%           99.16%
-  65 temperature_lag_6h               0.000344       0.03%           99.20%
-  66 humidity_lag_9h                  0.000335       0.03%           99.23%
-  67 temperature_lag_15h              0.000318       0.03%           99.26%
-  68 humidity_lag_6h                  0.000307       0.03%           99.29%
-  69 temperature_lag_16h              0.000302       0.03%           99.32%
-  70 wind_speed_lag_18h               0.000300       0.03%           99.35%
-  71 humidity_lag_17h                 0.000296       0.03%           99.38%
-  72 humidity_lag_14h                 0.000295       0.03%           99.41%
-  73 humidity_lag_16h                 0.000289       0.03%           99.44%
-  74 wind_speed_lag_21h               0.000287       0.03%           99.47%
-  75 temperature_lag_2h               0.000254       0.03%           99.50%
-  76 humidity_lag_3h                  0.000245       0.02%           99.52%
-  77 temperature_lag_3h               0.000229       0.02%           99.54%
-  78 temperature_lag_5h               0.000212       0.02%           99.57%
-  79 wind_speed_lag_19h               0.000209       0.02%           99.59%
-  80 wind_speed_lag_1h                0.000205       0.02%           99.61%
-  81 temperature_lag_7h               0.000204       0.02%           99.63%
-  82 wind_speed_lag_2h                0.000202       0.02%           99.65%
-  83 humidity_lag_2h                  0.000196       0.02%           99.67%
-  84 humidity_lag_5h                  0.000195       0.02%           99.69%
-  85 wind_speed_lag_22h               0.000188       0.02%           99.71%
-  86 temperature_lag_18h              0.000180       0.02%           99.72%
-  87 humidity_lag_4h                  0.000180       0.02%           99.74%
-  88 wind_speed_lag_14h               0.000165       0.02%           99.76%
-  89 wind_speed_lag_7h                0.000162       0.02%           99.77%
-  90 wind_speed_lag_10h               0.000161       0.02%           99.79%
-  91 wind_speed_lag_16h               0.000158       0.02%           99.81%
-  92 wind_speed_lag_4h                0.000156       0.02%           99.82%
-  93 wind_speed_lag_24h               0.000156       0.02%           99.84%
-  94 wind_speed_lag_13h               0.000152       0.02%           99.85%
-  95 wind_speed_lag_6h                0.000145       0.01%           99.87%
-  96 wind_speed_lag_11h               0.000145       0.01%           99.88%
-  97 wind_speed_lag_15h               0.000142       0.01%           99.90%
-  98 wind_speed_lag_5h                0.000140       0.01%           99.91%
-  99 wind_speed_lag_23h               0.000136       0.01%           99.92%
- 100 wind_speed_lag_12h               0.000136       0.01%           99.94%
- 101 wind_speed_lag_8h                0.000135       0.01%           99.95%
- 102 wind_speed_lag_9h                0.000133       0.01%           99.96%
- 103 wind_speed_lag_20h               0.000129       0.01%           99.98%
- 104 wind_speed_lag_17h               0.000120       0.01%           99.99%
- 105 wind_speed_lag_3h                0.000116       0.01%          100.00%
+   1 load_lag_24h                     0.711656      71.17%           71.17%
+   2 load_lag_23h                     0.146604      14.66%           85.83%
+   3 load_lag_1h                      0.083991       8.40%           94.23%
+   4 humidity_lag_12h                 0.003471       0.35%           94.57%
+   5 sin_hour                         0.002987       0.30%           94.87%
+   6 load_lag_22h                     0.002617       0.26%           95.13%
+   7 load_lag_20h                     0.002380       0.24%           95.37%
+   8 cos_hour                         0.002286       0.23%           95.60%
+   9 load_lag_21h                     0.002129       0.21%           95.81%
+  10 load_trend_24h                   0.001835       0.18%           96.00%
+  11 humidity_lag_11h                 0.001674       0.17%           96.16%
+  12 temperature_lag_13h              0.001343       0.13%           96.30%
+  13 load_lag_2h                      0.001257       0.13%           96.42%
+  14 is_weekend                       0.001213       0.12%           96.54%
+  15 humidity_lag_13h                 0.001181       0.12%           96.66%
+  16 temperature_lag_20h              0.001045       0.10%           96.77%
+  17 load_lag_15h                     0.001001       0.10%           96.87%
+  18 load_lag_19h                     0.000971       0.10%           96.96%
+  19 humidity_lag_21h                 0.000915       0.09%           97.06%
+  20 load_lag_13h                     0.000905       0.09%           97.15%
+  21 load_roll_mean_24h               0.000889       0.09%           97.23%
+  22 load_roll_std_24h                0.000881       0.09%           97.32%
+  23 sin_dayofweek                    0.000875       0.09%           97.41%
+  24 load_lag_16h                     0.000803       0.08%           97.49%
+  25 temperature_lag_12h              0.000783       0.08%           97.57%
+  26 load_lag_14h                     0.000757       0.08%           97.64%
+  27 load_lag_17h                     0.000749       0.07%           97.72%
+  28 cos_dayofweek                    0.000713       0.07%           97.79%
+  29 load_lag_11h                     0.000711       0.07%           97.86%
+  30 load_lag_3h                      0.000705       0.07%           97.93%
+  31 load_roll_std_6h                 0.000691       0.07%           98.00%
+  32 humidity_lag_10h                 0.000645       0.06%           98.07%
+  33 load_lag_12h                     0.000636       0.06%           98.13%
+  34 temperature_lag_11h              0.000617       0.06%           98.19%
+  35 load_lag_18h                     0.000589       0.06%           98.25%
+  36 load_lag_10h                     0.000585       0.06%           98.31%
+  37 temperature_lag_10h              0.000540       0.05%           98.36%
+  38 temperature_lag_22h              0.000528       0.05%           98.42%
+  39 humidity_lag_19h                 0.000525       0.05%           98.47%
+  40 temperature_lag_21h              0.000513       0.05%           98.52%
+  41 load_lag_4h                      0.000489       0.05%           98.57%
+  42 temperature_lag_23h              0.000469       0.05%           98.62%
+  43 temperature_lag_1h               0.000461       0.05%           98.66%
+  44 humidity_lag_22h                 0.000459       0.05%           98.71%
+  45 load_lag_6h                      0.000457       0.05%           98.75%
+  46 humidity_lag_23h                 0.000452       0.05%           98.80%
+  47 load_lag_8h                      0.000449       0.04%           98.84%
+  48 temperature_lag_19h              0.000419       0.04%           98.89%
+  49 humidity_lag_24h                 0.000406       0.04%           98.93%
+  50 temperature_lag_24h              0.000386       0.04%           98.96%
+  51 humidity_lag_1h                  0.000368       0.04%           99.00%
+  52 humidity_lag_20h                 0.000364       0.04%           99.04%
+  53 temperature_lag_14h              0.000364       0.04%           99.07%
+  54 load_lag_9h                      0.000334       0.03%           99.11%
+  55 humidity_lag_6h                  0.000332       0.03%           99.14%
+  56 humidity_lag_7h                  0.000318       0.03%           99.17%
+  57 load_roll_mean_6h                0.000317       0.03%           99.20%
+  58 load_lag_7h                      0.000313       0.03%           99.24%
+  59 temperature_lag_17h              0.000299       0.03%           99.27%
+  60 humidity_lag_8h                  0.000282       0.03%           99.29%
+  61 temperature_lag_8h               0.000275       0.03%           99.32%
+  62 humidity_lag_18h                 0.000258       0.03%           99.35%
+  63 temperature_lag_15h              0.000249       0.02%           99.37%
+  64 humidity_lag_15h                 0.000240       0.02%           99.40%
+  65 temperature_lag_9h               0.000235       0.02%           99.42%
+  66 temperature_lag_16h              0.000232       0.02%           99.44%
+  67 load_lag_5h                      0.000232       0.02%           99.47%
+  68 temperature_lag_4h               0.000221       0.02%           99.49%
+  69 humidity_lag_16h                 0.000210       0.02%           99.51%
+  70 wind_speed_lag_21h               0.000209       0.02%           99.53%
+  71 humidity_lag_14h                 0.000203       0.02%           99.55%
+  72 humidity_lag_17h                 0.000203       0.02%           99.57%
+  73 wind_speed_lag_22h               0.000202       0.02%           99.59%
+  74 temperature_lag_5h               0.000191       0.02%           99.61%
+  75 humidity_lag_9h                  0.000189       0.02%           99.63%
+  76 temperature_lag_6h               0.000188       0.02%           99.65%
+  77 wind_speed_lag_18h               0.000187       0.02%           99.67%
+  78 humidity_lag_3h                  0.000182       0.02%           99.68%
+  79 wind_speed_lag_14h               0.000177       0.02%           99.70%
+  80 wind_speed_lag_19h               0.000176       0.02%           99.72%
+  81 humidity_lag_2h                  0.000176       0.02%           99.74%
+  82 temperature_lag_3h               0.000155       0.02%           99.75%
+  83 wind_speed_lag_2h                0.000154       0.02%           99.77%
+  84 wind_speed_lag_1h                0.000152       0.02%           99.78%
+  85 humidity_lag_4h                  0.000150       0.01%           99.80%
+  86 temperature_lag_18h              0.000147       0.01%           99.81%
+  87 temperature_lag_2h               0.000120       0.01%           99.82%
+  88 wind_speed_lag_7h                0.000115       0.01%           99.84%
+  89 temperature_lag_7h               0.000111       0.01%           99.85%
+  90 humidity_lag_5h                  0.000108       0.01%           99.86%
+  91 wind_speed_lag_15h               0.000108       0.01%           99.87%
+  92 wind_speed_lag_10h               0.000102       0.01%           99.88%
+  93 wind_speed_lag_20h               0.000098       0.01%           99.89%
+  94 wind_speed_lag_24h               0.000097       0.01%           99.90%
+  95 wind_speed_lag_23h               0.000093       0.01%           99.91%
+  96 wind_speed_lag_12h               0.000090       0.01%           99.92%
+  97 wind_speed_lag_5h                0.000089       0.01%           99.93%
+  98 wind_speed_lag_9h                0.000089       0.01%           99.93%
+  99 wind_speed_lag_8h                0.000087       0.01%           99.94%
+ 100 wind_speed_lag_4h                0.000086       0.01%           99.95%
+ 101 wind_speed_lag_13h               0.000085       0.01%           99.96%
+ 102 wind_speed_lag_6h                0.000083       0.01%           99.97%
+ 103 wind_speed_lag_3h                0.000081       0.01%           99.98%
+ 104 wind_speed_lag_17h               0.000080       0.01%           99.98%
+ 105 wind_speed_lag_11h               0.000079       0.01%           99.99%
+ 106 wind_speed_lag_16h               0.000071       0.01%          100.00%
 ==============================================================================
-Ljung-Box (L=24) (Q):    2163.86   Jarque-Bera (JB):    269756.02
+Ljung-Box (L=24) (Q):    1165.65   Jarque-Bera (JB):    367765.21
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     1.2750   Skew:                   1.1082
-Prob(H) (two-sided):       0.0000   Kurtosis:              38.0131
-Durbin-Watson (DW):        1.6171   MedAE (kW):            3042.98
-Residual Mean (kW):     -158.6351   Residual Std (kW):   6480.5125
+Heteroskedasticity(H):     1.1191   Skew:                   1.6379
+Prob(H) (two-sided):       0.0185   Kurtosis:              43.8324
+Durbin-Watson (DW):        1.8247   MedAE (kW):            3044.20
+Residual Mean (kW):     -111.2241   Residual Std (kW):   6319.9956
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=5,260):
-  MSE  = 42,022,207.1643 | RMSE = 6,482.4538 kW | MAE = 4,337.5276 kW
-  MAPE =        1.8922% | R²   =     0.9946    | Max Error = 129,028.65 kW
-  [In-Sample Train (70%)] RMSE = 3,671.3019 kW | MAE = 2,692.9497 kW | MAPE = 1.2392% | R² = 0.9981
-  [Validation Set (15%)]  RMSE = 5,604.2708 kW | MAE = 3,607.2464 kW | MAPE = 7.0705% | R² = 0.9912
-  [5-Fold Expanding CV]   RMSE = 10,229.36 ± 5,111.40 kW | MAE = 6,482.08 ± 2,830.19 kW | R² = 0.9824 ± 0.0143
-  [Weather Ablation]      With Weather RMSE = 6,482.45 kW vs. Without Weather RMSE = 6,379.23 kW (Delta = -1.62%)
+  MSE  = 39,954,715.6783 | RMSE = 6,320.9743 kW | MAE = 4,273.0535 kW
+  MAPE =        1.8683% | R²   =     0.9948    | Max Error = 132,576.21 kW
+  [In-Sample Train (70%)] RMSE = 3,800.0003 kW | MAE = 2,755.1280 kW | MAPE = 1.2562% | R² = 0.9980
+  [Validation Set (15%)]  RMSE = 5,513.8774 kW | MAE = 3,559.0320 kW | MAPE = 7.0071% | R² = 0.9915
+  [5-Fold Expanding CV]   RMSE = 10,235.15 ± 5,097.38 kW | MAE = 6,320.84 ± 2,793.39 kW | R² = 0.9826 ± 0.0111
+  [Weather Ablation]      With Weather RMSE = 6,320.97 kW vs. Without Weather RMSE = 6,285.65 kW (Delta = -0.56%)
 ==============================================================================
 ```
 
@@ -389,7 +390,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=5,260):
 ```text
 Stacked 2-Layer LSTM Deep Learning Model Summary - Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: Hold-out Split (70% Train - 15% Val - 15% Test)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: Hold-out Split (70% Train - 15% Val - 15% Test)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Date range: 2011-01-01 00:00:00 to 2015-01-01 00:00:00 (Freq: 1h)
 Observations: 35,065 (Train: 24,545, Val: 5,260, Eval/Test: 5,260)
@@ -402,7 +403,7 @@ Model: Stacked 2-Layer LSTM + Residual Highway [Multivariate, Hold-out]
 ==============================================================================
 Initial Train Loss:           0.016259   Best Val Loss:       0.004957
 Final Train Loss:             0.005305   Best Epoch:           27 / 30  
-Hardware Device:                  cuda   Train / Pred:    92.2252s / 0.7567s
+Hardware Device:                  cuda   Train / Pred:    97.0233s / 0.8064s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from lstm_model.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
@@ -475,8 +476,8 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=5,260):
   MAPE =        2.0185% | R²   =     0.9944     | Max Error = 128,134.0402 kW
   [In-Sample Train (70%)] RMSE = 6,104.3941 kW | MAE = 4,069.9218 kW | MAPE = 1.9624% | R² = 0.9948
   [Validation Set (15%)]  RMSE = 5,968.2838 kW | MAE = 3,784.7711 kW | MAPE = 7.1742% | R² = 0.9901
-  [5-Fold Expanding CV]   RMSE = 8,541.18 ± 2,917.78 kW | MAE = 5,811.89 ± 1,900.76 kW | R² = 0.9888 ± 0.0053
-  [Weather Ablation]      With Weather RMSE = 6,570.41 kW vs. Without Weather RMSE = 6,946.54 kW (Delta = +5.41%)
+  [5-Fold Expanding CV]   RMSE = 8,764.86 ± 2,738.29 kW | MAE = 5,979.73 ± 1,784.49 kW | R² = 0.9877 ± 0.0037
+  [Weather Ablation]      With Weather RMSE = 6,570.41 kW vs. Without Weather RMSE = 7,078.22 kW (Delta = +7.17%)
 ==============================================================================
 ```
 
@@ -484,7 +485,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=5,260):
 ```text
 VAR / AR Multivariate Model Summary - Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: Feature Ablation Study (Univariate Load Only — No Weather)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: Feature Ablation Study (Univariate Load Only — No Weather)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Date range: 2011-01-01 00:00:00 to 2015-01-01 00:00:00 (Freq: 1h)
 Observations: 35,065 (Train: 24,545, Val: 5,260, Eval/Test: 5,260)
@@ -494,10 +495,10 @@ Model: AR(24) [Univariate Differenced d=1, No Weather Ablation]
 ==============================================================================
              VAR / OLS Statistical Fit & Information Criteria                 
 ==============================================================================
-Log Likelihood (Load Eq):  -250953.731   AIC (Load Eq):     502101.462
-BIC (Load Eq):              502887.865   HQIC (Load Eq):    502356.233
-FPE (Final Pred Error):    45779369.30   Device:                   cpu
-Converged:                        True   Train / Pred:    1.9443s / 0.1909s
+Log Likelihood (Load Eq):  -252304.446   AIC (Load Eq):     504658.892
+BIC (Load Eq):              504861.573   HQIC (Load Eq):    504724.555
+FPE (Final Pred Error):    50812036.41   Device:                   cpu
+Converged:                        True   Train / Pred:    1.9867s / 0.1931s
 ------------------------------------------------------------------------------
 KEY AUTOREGRESSIVE PARAMETER ESTIMATES (const, L1..L3, L6, L12, L23, L24):
 param                       coef     std err         z    P>|z|      [0.025      0.975]
@@ -526,82 +527,61 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=5,260):
 ==============================================================================
 ```
 
-### 3.5. XGBoost Univariate [No Weather, 33 Load/Calendar Features]
+### 3.5. XGBoost Univariate [No Weather, 34 Load/Calendar Features]
 ```text
 XGBoost Gradient Boosting Model Summary - Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: Feature Ablation Study (Univariate Load Only — No Weather)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: Feature Ablation Study (Univariate Load Only — No Weather)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Date range: 2011-01-01 00:00:00 to 2015-01-01 00:00:00 (Freq: 1h)
 Observations: 35,065 (Train: 24,545, Val: 5,260, Eval/Test: 5,260)
-Features: 33 Tabular Features | Trees Configured: 450 | Best Iteration: 449
+Features: 34 Tabular Features | Trees Configured: 450 | Best Iteration: 358
 Max Depth: 6 | Learning Rate (eta): 0.045 | Subsample: 0.85 | Colsample: 0.85
 Regularization: L1 (alpha)=0.1, L2 (lambda)=1.0 | Tree Method: hist (cuda)
 Transformation: StandardScaler (Fit on Train Only) + Inverse Transform to Original Scale (kW)
-Model: XGBoost Univariate [No Weather, 33 Load/Calendar Features]
+Model: XGBoost Univariate [No Weather, 34 Load/Calendar Features]
 ==============================================================================
             XGBoost Boosting Convergence & Feature Importance Fit             
 ==============================================================================
-Train Scaled RMSE (Tree 1 -> End): 0.955735 -> 0.043310
-Val Scaled RMSE   (Tree 1 -> Best): 0.821509 -> 0.066113
-Converged:                        True   Train / Pred:    3.7017s / 0.0844s
+Converged:                        True   Train / Pred:    3.3890s / 0.0747s
 ------------------------------------------------------------------------------
-BOOSTING ITERATION CONVERGENCE TRAJECTORY (Extracted from evals_result_):
-  Tree #  Train RMSE (Scaled)  Val RMSE (Scaled)      Gen Gap           Status
-------------------------------------------------------------------------------
-       1             0.955735           0.821509    -0.134226     Initial Tree
-      10             0.638113           0.550413    -0.087699         Boosting
-      25             0.331821           0.289812    -0.042009         Boosting
-      50             0.131115           0.120498    -0.010617         Boosting
-     100             0.067032           0.071110    +0.004078         Boosting
-     150             0.059268           0.068470    +0.009202         Boosting
-     200             0.055143           0.067492    +0.012349         Boosting
-     250             0.052056           0.066980    +0.014923         Boosting
-     300             0.049547           0.066612    +0.017065         Boosting
-     350             0.047346           0.066398    +0.019051         Boosting
-     400             0.045240           0.066208    +0.020967         Boosting
-     450             0.043310           0.066113    +0.022803 Best Val RMSE (Selected)
-------------------------------------------------------------------------------
-FEATURE IMPORTANCE AGGREGATED BY FUNCTIONAL GROUP (105 Engineered Features):
+FEATURE IMPORTANCE AGGREGATED BY FUNCTIONAL GROUP (34 Engineered Features):
 Feature Group                                  Count  Share (%)    Top Feature
 ------------------------------------------------------------------------------
-1. Autoregressive Load Lags (load_lag_1h..24h)    24     93.99%   load_lag_24h
-4. Exogenous Humidity Lags (humidity_lag_1h..2    24      1.84% humidity_lag_12h
-3. Cyclical Fourier & Calendar (sin/cos, weeke     5      1.73%       cos_hour
-5. Exogenous Temperature Lags (temperature_lag    24      1.61% temperature_lag_10h
-2. Load Rolling & Trend Stats (roll_mean, roll     4      0.42% load_roll_mean_24h
-6. Exogenous Wind Speed Lags (wind_speed_lag_1    24      0.40% wind_speed_lag_18h
+1. Autoregressive Load Lags (load_lag_1h..24h)    24     98.70%   load_lag_24h
+3. Cyclical Fourier & Calendar (sin/cos, weeke     5      0.83%       sin_hour
+2. Load Rolling & Trend Stats (roll, trend_24h     5      0.47% load_trend_24h
 ------------------------------------------------------------------------------
 TOP 15 DOMINANT FEATURES BY GAIN IMPORTANCE:
 Rank Feature Name              Gain Importance   Share (%)   Cumulative (%)
 ------------------------------------------------------------------------------
-   1 load_lag_24h                     0.628052      62.81%           62.81%
-   2 load_lag_23h                     0.189816      18.98%           81.79%
-   3 load_lag_1h                      0.093452       9.35%           91.13%
-   4 cos_hour                         0.006380       0.64%           91.77%
-   5 humidity_lag_12h                 0.005469       0.55%           92.32%
-   6 sin_hour                         0.004539       0.45%           92.77%
-   7 is_weekend                       0.003984       0.40%           93.17%
-   8 load_lag_20h                     0.003592       0.36%           93.53%
-   9 load_lag_21h                     0.003419       0.34%           93.87%
-  10 load_lag_22h                     0.002926       0.29%           94.16%
-  11 temperature_lag_10h              0.002186       0.22%           94.38%
-  12 temperature_lag_20h              0.002125       0.21%           94.59%
-  13 load_lag_19h                     0.001766       0.18%           94.77%
-  14 humidity_lag_13h                 0.001659       0.17%           94.94%
-  15 load_lag_2h                      0.001600       0.16%           95.10%
+   1 load_lag_24h                     0.711656      73.06%           73.06%
+   2 load_lag_23h                     0.146604      15.05%           88.12%
+   3 load_lag_1h                      0.083991       8.62%           96.74%
+   4 sin_hour                         0.002987       0.31%           97.05%
+   5 load_lag_22h                     0.002617       0.27%           97.31%
+   6 load_lag_20h                     0.002380       0.24%           97.56%
+   7 cos_hour                         0.002286       0.23%           97.79%
+   8 load_lag_21h                     0.002129       0.22%           98.01%
+   9 load_trend_24h                   0.001835       0.19%           98.20%
+  10 load_lag_2h                      0.001257       0.13%           98.33%
+  11 is_weekend                       0.001213       0.12%           98.45%
+  12 load_lag_15h                     0.001001       0.10%           98.56%
+  13 load_lag_19h                     0.000971       0.10%           98.66%
+  14 load_lag_13h                     0.000905       0.09%           98.75%
+  15 load_roll_mean_24h               0.000889       0.09%           98.84%
 ==============================================================================
-Ljung-Box (L=24) (Q):    1465.22   Jarque-Bera (JB):    305182.63
+Ljung-Box (L=24) (Q):     833.61   Jarque-Bera (JB):    387131.49
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     1.1334   Skew:                   1.2998
-Prob(H) (two-sided):       0.0088   Kurtosis:              40.2251
-Durbin-Watson (DW):        1.7422   MedAE (kW):            3009.11
-Residual Mean (kW):      -80.1242   Residual Std (kW):   6378.7302
+Heteroskedasticity(H):     1.0626   Skew:                   1.6871
+Prob(H) (two-sided):       0.2035   Kurtosis:              44.8926
+Durbin-Watson (DW):        1.8921   MedAE (kW):            3046.86
+Residual Mean (kW):      -61.9715   Residual Std (kW):   6285.3406
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=5,260):
-  MSE  = 40,694,620.0475 | RMSE = 6,379.2335 kW | MAE = 4,280.1958 kW
-  MAPE =        1.8586% | R²   =     0.9947    | Max Error = 128,919.73 kW
-  [Weather Ablation]      With Weather RMSE = 6,482.45 kW vs. Without Weather RMSE = 6,379.23 kW (Delta = -1.62%)
+  MSE  = 39,509,346.8944 | RMSE = 6,285.6461 kW | MAE = 4,270.6723 kW
+  MAPE =        1.8571% | R²   =     0.9949    | Max Error = 132,242.04 kW
+  [Weather Ablation]      With Weather RMSE = 6,320.97 kW vs. Without Weather RMSE = 6,285.65 kW (Delta = -0.56%)
 ==============================================================================
 ```
 
@@ -609,32 +589,30 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=5,260):
 ```text
 Stacked 2-Layer LSTM (Univariate Ablation) Deep Learning Model Summary - Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: Feature Ablation Study (Univariate Load Only — No Weather)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: Feature Ablation Study (Univariate Load Only — No Weather)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Date range: 2011-01-01 00:00:00 to 2015-01-01 00:00:00 (Freq: 1h)
 Observations: 35,065 (Train: 24,545, Val: 5,260, Eval/Test: 5,260)
 Architecture: Input(24,1) -> LSTM(64) -> Dropout(0.1) -> LSTM(32) -> LayerNorm -> GELU -> Linear(1) + Highway(24->1)
-Trainable Parameters: 30,589 | Optimizer: AdamW + CosineAnnealingLR + EarlyStopping
+Trainable Parameters: 29,818 | Optimizer: AdamW + CosineAnnealingLR + EarlyStopping
 Transformation: StandardScaler (Fit on Train Only) + Inverse Transform (kW)
 Model: Stacked 2-Layer LSTM + Highway [No Weather, Input_Dim=1]
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.016259   Best Val Loss:       0.004957
-Final Train Loss:             0.005305   Best Epoch:           27 / 30  
-Hardware Device:                  cuda   Train / Pred:    59.9464s / 0.5675s
+Hardware Device:                  cuda   Train / Pred:    63.0651s / 0.6048s
 ==============================================================================
-Ljung-Box (L=24) (Q):    1310.76   Jarque-Bera (JB):    233844.03
+Ljung-Box (L=24) (Q):    1407.58   Jarque-Bera (JB):    176311.86
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     1.1780   Skew:                   0.9055
-Prob(H) (two-sided):       0.0006   Kurtosis:              35.6143
-Durbin-Watson (DW):        1.8465   MedAE (kW):        3663.7805
-Residual Mean (kW):   -874.3347   Residual Std:        6891.2972
+Heteroskedasticity(H):     1.1876   Skew:                   0.9160
+Prob(H) (two-sided):       0.0003   Kurtosis:              31.3039
+Durbin-Watson (DW):        1.7710   MedAE (kW):        3734.5786
+Residual Mean (kW):    -74.1782   Residual Std:        7077.8314
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=5,260):
-  MSE  = 48,254,437.4219 | RMSE = 6,946.5414 kW | MAE = 4,862.9039 kW
-  MAPE =        2.1741% | R²   =     0.9938     | Max Error = 124,491.6855 kW
-  [Weather Ablation]      With Weather RMSE = 6,570.41 kW vs. Without Weather RMSE = 6,946.54 kW (Delta = +5.41%)
+  MSE  = 50,101,199.7840 | RMSE = 7,078.2201 kW | MAE = 4,930.6207 kW
+  MAPE =        2.2122% | R²   =     0.9935     | Max Error = 124,077.7816 kW
+  [Weather Ablation]      With Weather RMSE = 6,570.41 kW vs. Without Weather RMSE = 7,078.22 kW (Delta = +7.17%)
 ==============================================================================
 ```
 
@@ -642,11 +620,11 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=5,260):
 ```text
 XGBoost Gradient Boosting Model Summary - Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: Walk-Forward Backtesting (168 Hours Rolling 1-Step Feedback)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: Walk-Forward Backtesting (168 Hours Rolling 1-Step Feedback)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Date range: 2014-05-26 21:00:00 to 2014-06-02 20:00:00 (Freq: 1h)
 Observations: 35,065 (Train: 24,545, Val: 5,260, Eval/Test: 168)
-Features: 105 Tabular Features | Trees Configured: 450 | Best Iteration: 449
+Features: 106 Tabular Features | Trees Configured: 450 | Best Iteration: 358
 Max Depth: 6 | Learning Rate (eta): 0.045 | Subsample: 0.85 | Colsample: 0.85
 Regularization: L1 (alpha)=0.1, L2 (lambda)=1.0 | Tree Method: hist (cuda)
 Transformation: StandardScaler (Fit on Train Only) + Inverse Transform to Original Scale (kW)
@@ -654,65 +632,65 @@ Model: XGBoost [Walk-Forward Backtesting 168h Online Feedback]
 ==============================================================================
             XGBoost Boosting Convergence & Feature Importance Fit             
 ==============================================================================
-Train Scaled RMSE (Tree 1 -> End): 0.955735 -> 0.043310
-Val Scaled RMSE   (Tree 1 -> Best): 0.821509 -> 0.066113
-Converged:                        True   Train / Pred:    5.6949s / 0.1125s
+Train Scaled RMSE (Tree 1 -> End): 0.955722 -> 0.043671
+Val Scaled RMSE   (Tree 1 -> Best): 0.821423 -> 0.065047
+Converged:                        True   Train / Pred:    5.2138s / 0.0995s
 ------------------------------------------------------------------------------
 BOOSTING ITERATION CONVERGENCE TRAJECTORY (Extracted from evals_result_):
   Tree #  Train RMSE (Scaled)  Val RMSE (Scaled)      Gen Gap           Status
 ------------------------------------------------------------------------------
-       1             0.955735           0.821509    -0.134226     Initial Tree
-      10             0.638113           0.550413    -0.087699         Boosting
-      25             0.331821           0.289812    -0.042009         Boosting
-      50             0.131115           0.120498    -0.010617         Boosting
-     100             0.067032           0.071110    +0.004078         Boosting
-     150             0.059268           0.068470    +0.009202         Boosting
-     200             0.055143           0.067492    +0.012349         Boosting
-     250             0.052056           0.066980    +0.014923         Boosting
-     300             0.049547           0.066612    +0.017065         Boosting
-     350             0.047346           0.066398    +0.019051         Boosting
-     400             0.045240           0.066208    +0.020967         Boosting
-     450             0.043310           0.066113    +0.022803 Best Val RMSE (Selected)
+       1             0.955722           0.821423    -0.134300     Initial Tree
+      10             0.638098           0.550294    -0.087804         Boosting
+      25             0.331789           0.289683    -0.042106         Boosting
+      50             0.130762           0.120341    -0.010421         Boosting
+     100             0.064996           0.069367    +0.004371         Boosting
+     150             0.056804           0.066319    +0.009515         Boosting
+     200             0.052635           0.065599    +0.012964         Boosting
+     250             0.049817           0.065331    +0.015514         Boosting
+     300             0.047330           0.065137    +0.017807         Boosting
+     350             0.045153           0.065067    +0.019914         Boosting
+     359             0.044828           0.065047    +0.020219 Best Val RMSE (Selected)
+     389             0.043671           0.065053    +0.021382         Boosting
 ------------------------------------------------------------------------------
-FEATURE IMPORTANCE AGGREGATED BY FUNCTIONAL GROUP (105 Engineered Features):
+FEATURE IMPORTANCE AGGREGATED BY FUNCTIONAL GROUP (106 Engineered Features):
 Feature Group                                  Count  Share (%)    Top Feature
 ------------------------------------------------------------------------------
-1. Autoregressive Load Lags (load_lag_1h..24h)    24     93.99%   load_lag_24h
-4. Exogenous Humidity Lags (humidity_lag_1h..2    24      1.84% humidity_lag_12h
-3. Cyclical Fourier & Calendar (sin/cos, weeke     5      1.73%       cos_hour
-5. Exogenous Temperature Lags (temperature_lag    24      1.61% temperature_lag_10h
-2. Load Rolling & Trend Stats (roll_mean, roll     4      0.42% load_roll_mean_24h
-6. Exogenous Wind Speed Lags (wind_speed_lag_1    24      0.40% wind_speed_lag_18h
+1. Autoregressive Load Lags (load_lag_1h..24h)    24     96.13%   load_lag_24h
+4. Exogenous Humidity Lags (humidity_lag_1h..2    24      1.33% humidity_lag_12h
+5. Exogenous Temperature Lags (temperature_lag    24      0.99% temperature_lag_13h
+3. Cyclical Fourier & Calendar (sin/cos, weeke     5      0.81%       sin_hour
+2. Load Rolling & Trend Stats (roll, trend_24h     5      0.46% load_trend_24h
+6. Exogenous Wind Speed Lags (wind_speed_lag_1    24      0.28% wind_speed_lag_21h
 ------------------------------------------------------------------------------
 TOP 15 DOMINANT FEATURES BY GAIN IMPORTANCE:
 Rank Feature Name              Gain Importance   Share (%)   Cumulative (%)
 ------------------------------------------------------------------------------
-   1 load_lag_24h                     0.628052      62.81%           62.81%
-   2 load_lag_23h                     0.189816      18.98%           81.79%
-   3 load_lag_1h                      0.093452       9.35%           91.13%
-   4 cos_hour                         0.006380       0.64%           91.77%
-   5 humidity_lag_12h                 0.005469       0.55%           92.32%
-   6 sin_hour                         0.004539       0.45%           92.77%
-   7 is_weekend                       0.003984       0.40%           93.17%
-   8 load_lag_20h                     0.003592       0.36%           93.53%
-   9 load_lag_21h                     0.003419       0.34%           93.87%
-  10 load_lag_22h                     0.002926       0.29%           94.16%
-  11 temperature_lag_10h              0.002186       0.22%           94.38%
-  12 temperature_lag_20h              0.002125       0.21%           94.59%
-  13 load_lag_19h                     0.001766       0.18%           94.77%
-  14 humidity_lag_13h                 0.001659       0.17%           94.94%
-  15 load_lag_2h                      0.001600       0.16%           95.10%
+   1 load_lag_24h                     0.711656      71.17%           71.17%
+   2 load_lag_23h                     0.146604      14.66%           85.83%
+   3 load_lag_1h                      0.083991       8.40%           94.23%
+   4 humidity_lag_12h                 0.003471       0.35%           94.57%
+   5 sin_hour                         0.002987       0.30%           94.87%
+   6 load_lag_22h                     0.002617       0.26%           95.13%
+   7 load_lag_20h                     0.002380       0.24%           95.37%
+   8 cos_hour                         0.002286       0.23%           95.60%
+   9 load_lag_21h                     0.002129       0.21%           95.81%
+  10 load_trend_24h                   0.001835       0.18%           96.00%
+  11 humidity_lag_11h                 0.001674       0.17%           96.16%
+  12 temperature_lag_13h              0.001343       0.13%           96.30%
+  13 load_lag_2h                      0.001257       0.13%           96.42%
+  14 is_weekend                       0.001213       0.12%           96.54%
+  15 humidity_lag_13h                 0.001181       0.12%           96.66%
 ==============================================================================
-Ljung-Box (L=24) (Q):      49.35   Jarque-Bera (JB):        13.89
-Prob(Q):                   0.0017   Prob(JB):               0.0010
-Heteroskedasticity(H):     2.6184   Skew:                   0.5174
-Prob(H) (two-sided):       0.0004   Kurtosis:               3.9556
-Durbin-Watson (DW):        2.5024   MedAE (kW):            2621.39
-Residual Mean (kW):      920.1650   Residual Std (kW):   4782.9278
+Ljung-Box (L=24) (Q):      64.42   Jarque-Bera (JB):        11.04
+Prob(Q):                   0.0000   Prob(JB):               0.0040
+Heteroskedasticity(H):     2.3835   Skew:                   0.4589
+Prob(H) (two-sided):       0.0014   Kurtosis:               3.8571
+Durbin-Watson (DW):        2.5319   MedAE (kW):            2659.04
+Residual Mean (kW):      897.7841   Residual Std (kW):   5280.4863
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=168):
-  MSE  = 23,723,101.9398 | RMSE = 4,870.6367 kW | MAE = 3,582.8443 kW
-  MAPE =        1.6381% | R²   =     0.9950    | Max Error =  17,249.55 kW
+  MSE  = 28,689,551.8835 | RMSE = 5,356.2629 kW | MAE = 3,973.0530 kW
+  MAPE =        1.8012% | R²   =     0.9940    | Max Error =  18,006.66 kW
 ==============================================================================
 ```
 
@@ -720,7 +698,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=168):
 ```text
 VAR / AR Multivariate Model Summary - Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: Walk-Forward Backtesting (168 Hours Rolling 1-Step Feedback)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: Walk-Forward Backtesting (168 Hours Rolling 1-Step Feedback)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Date range: 2014-05-26 21:00:00 to 2014-06-02 20:00:00 (Freq: 1h)
 Observations: 35,065 (Train: 24,545, Val: 5,260, Eval/Test: 168)
@@ -733,7 +711,7 @@ Model: VAR [Walk-Forward Backtesting 168h Online Feedback]
 Log Likelihood (Load Eq):  -250953.731   AIC (Load Eq):     502101.462
 BIC (Load Eq):              502887.865   HQIC (Load Eq):    502356.233
 FPE (Final Pred Error):    45779369.30   Device:                   cpu
-Converged:                        True   Train / Pred:    2.9913s / 0.2545s
+Converged:                        True   Train / Pred:    3.0565s / 0.2574s
 ------------------------------------------------------------------------------
 CROSS-VARIABLE LAG INFLUENCE ON TARGET EQUATION (Delta_load_t, p=24 Lags):
 Variable          Lags    Sum(Coef)      L1 Norm      L2 Norm    Dominant Lag
@@ -782,7 +760,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=168):
 ```text
 Stacked 2-Layer LSTM (Walk-Forward 168h) Deep Learning Model Summary - Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: Walk-Forward Backtesting (168 Hours Rolling 1-Step Feedback)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: Walk-Forward Backtesting (168 Hours Rolling 1-Step Feedback)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Date range: 2014-05-26 21:00:00 to 2014-06-02 20:00:00 (Freq: 1h)
 Observations: 35,065 (Train: 24,545, Val: 5,260, Eval/Test: 168)
@@ -795,7 +773,7 @@ Model: LSTM [Walk-Forward Backtesting 168h Online Feedback]
 ==============================================================================
 Initial Train Loss:           0.016259   Best Val Loss:       0.004957
 Final Train Loss:             0.005305   Best Epoch:           27 / 30  
-Hardware Device:                  cuda   Train / Pred:    92.2252s / 0.7567s
+Hardware Device:                  cuda   Train / Pred:    97.0233s / 0.8064s
 ==============================================================================
 Ljung-Box (L=24) (Q):     160.81   Jarque-Bera (JB):        54.02
 Prob(Q):                   0.0000   Prob(JB):               0.0000
@@ -814,23 +792,23 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=168):
 ```text
 5-Fold Expanding Window CV Model Summary - VAR [5-Fold TimeSeriesSplit — Fold 1/5]
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Fold: 1 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 1 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
-Window Period: Train [2011-01-01 00:00:00..2011-09-01 12:00:00] -> Val [2011-09-01 13:00:00..2012-05-02 00:00:00]
-Observations: Train^(k) = 5,845 hours | Val^(k) = 5,844 hours | Device: cpu
-Model Family: VAR | Params / Features: 97 | Train Time: 0.8302s
+Window Period: Train [2011-01-01 00:00:00..2011-07-27 01:00:00] -> Val [2011-07-27 02:00:00..2012-02-19 00:00:00]
+Observations: Train^(k) = 4,970 hours | Val^(k) = 4,967 hours | Device: cpu
+Model Family: VAR | Params / Features: 97 | Train Time: 0.7028s
 ==============================================================================
-Ljung-Box (L=24) (Q):     733.40   Jarque-Bera (JB):   2373458.21
+Ljung-Box (L=24) (Q):     648.28   Jarque-Bera (JB):    101226.76
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     1.8266   Skew:                   0.3896
-Prob(H) (two-sided):       0.0000   Kurtosis:             101.7251
-Durbin-Watson (DW):        2.0353   MedAE (kW):            2645.73
-Residual Mean (kW):      -63.7256   Residual Std (kW):   6286.6713
+Heteroskedasticity(H):     1.4332   Skew:                   0.4853
+Prob(H) (two-sided):       0.0000   Kurtosis:              25.0947
+Durbin-Watson (DW):        1.7117   MedAE (kW):            2671.57
+Residual Mean (kW):      -99.5896   Residual Std (kW):   5786.7279
 ------------------------------------------------------------------------------
-OUT-OF-SAMPLE FOLD 1 VALIDATION METRICS (Original Scale kW, n_val=5,844):
-  MSE  = 39,526,297.0125 | RMSE = 6,286.9943 kW | MAE = 3,759.0343 kW
-  MAPE =        2.2744% | R²   =     0.9915    | Max Error = 131,469.06 kW
-  [5-Fold CV Mean ± Std]  RMSE = 7,053.54 ± 970.44 kW | R² = 0.9925 ± 0.0012
+OUT-OF-SAMPLE FOLD 1 VALIDATION METRICS (Original Scale kW, n_val=4,967):
+  MSE  = 33,496,137.4639 | RMSE = 5,787.5848 kW | MAE = 3,841.1737 kW
+  MAPE =        1.7099% | R²   =     0.9938    | Max Error =  89,463.11 kW
+  [5-Fold CV Mean ± Std]  RMSE = 7,004.77 ± 1,204.93 kW | R² = 0.9918 ± 0.0022
 ==============================================================================
 ```
 
@@ -838,23 +816,23 @@ OUT-OF-SAMPLE FOLD 1 VALIDATION METRICS (Original Scale kW, n_val=5,844):
 ```text
 5-Fold Expanding Window CV Model Summary - XGBoost [5-Fold TimeSeriesSplit — Fold 1/5]
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Fold: 1 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 1 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
-Window Period: Train [2011-01-01 00:00:00..2011-09-01 12:00:00] -> Val [2011-09-01 13:00:00..2012-05-02 00:00:00]
-Observations: Train^(k) = 5,845 hours | Val^(k) = 5,844 hours | Device: cuda
-Model Family: XGBoost | Params / Features: 105 | Train Time: 4.9675s
+Window Period: Train [2011-01-01 00:00:00..2011-07-27 01:00:00] -> Val [2011-07-27 02:00:00..2012-02-19 00:00:00]
+Observations: Train^(k) = 4,970 hours | Val^(k) = 4,967 hours | Device: cuda
+Model Family: XGBoost | Params / Features: 106 | Train Time: 6.1018s
 ==============================================================================
-Ljung-Box (L=24) (Q):   14424.73   Jarque-Bera (JB):    113972.23
+Ljung-Box (L=24) (Q):   15585.70   Jarque-Bera (JB):    187417.69
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     7.4358   Skew:                  -2.7737
-Prob(H) (two-sided):       0.0000   Kurtosis:              23.9113
-Durbin-Watson (DW):        0.4850   MedAE (kW):            5410.38
-Residual Mean (kW):    -4603.5060   Residual Std (kW):  11983.1532
+Heteroskedasticity(H):    12.5163   Skew:                  -3.7927
+Prob(H) (two-sided):       0.0000   Kurtosis:              32.1212
+Durbin-Watson (DW):        0.5293   MedAE (kW):            4155.35
+Residual Mean (kW):    -2755.7360   Residual Std (kW):  11389.4223
 ------------------------------------------------------------------------------
-OUT-OF-SAMPLE FOLD 1 VALIDATION METRICS (Original Scale kW, n_val=5,844):
-  MSE  = 164,788,227.0776 | RMSE = 12,836.9867 kW | MAE = 8,234.1254 kW
-  MAPE =        5.2542% | R²   =     0.9647    | Max Error = 138,133.62 kW
-  [5-Fold CV Mean ± Std]  RMSE = 10,229.36 ± 5,111.40 kW | R² = 0.9824 ± 0.0143
+OUT-OF-SAMPLE FOLD 1 VALIDATION METRICS (Original Scale kW, n_val=4,967):
+  MSE  = 137,313,020.3513 | RMSE = 11,718.0638 kW | MAE = 6,691.0340 kW
+  MAPE =        3.5454% | R²   =     0.9747    | Max Error = 126,647.05 kW
+  [5-Fold CV Mean ± Std]  RMSE = 10,235.15 ± 5,097.38 kW | R² = 0.9826 ± 0.0111
 ==============================================================================
 ```
 
@@ -862,23 +840,23 @@ OUT-OF-SAMPLE FOLD 1 VALIDATION METRICS (Original Scale kW, n_val=5,844):
 ```text
 5-Fold Expanding Window CV Model Summary - LSTM [5-Fold TimeSeriesSplit — Fold 1/5]
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Fold: 1 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 1 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
-Window Period: Train [2011-01-01 00:00:00..2011-09-01 12:00:00] -> Val [2011-09-01 13:00:00..2012-05-02 00:00:00]
-Observations: Train^(k) = 5,845 hours | Val^(k) = 5,844 hours | Device: cuda
-Model Family: LSTM | Params / Features: 30,589 | Train Time: 10.8592s
+Window Period: Train [2011-01-01 00:00:00..2011-07-27 01:00:00] -> Val [2011-07-27 02:00:00..2012-02-19 00:00:00]
+Observations: Train^(k) = 4,970 hours | Val^(k) = 4,967 hours | Device: cuda
+Model Family: LSTM | Params / Features: 30,589 | Train Time: 9.2671s
 ==============================================================================
-Ljung-Box (L=24) (Q):    3820.59   Jarque-Bera (JB):     95732.99
+Ljung-Box (L=24) (Q):    5160.10   Jarque-Bera (JB):     13070.06
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     1.8829   Skew:                  -0.7560
-Prob(H) (two-sided):       0.0000   Kurtosis:              22.7704
-Durbin-Watson (DW):        1.3610   MedAE (kW):            4664.71
-Residual Mean (kW):    -1972.5290   Residual Std (kW):   8445.6538
+Heteroskedasticity(H):     2.2902   Skew:                  -0.7043
+Prob(H) (two-sided):       0.0000   Kurtosis:              10.8210
+Durbin-Watson (DW):        1.2214   MedAE (kW):            4420.27
+Residual Mean (kW):     -541.2321   Residual Std (kW):   8519.9778
 ------------------------------------------------------------------------------
-OUT-OF-SAMPLE FOLD 1 VALIDATION METRICS (Original Scale kW, n_val=5,844):
-  MSE  = 75,219,939.1400 | RMSE = 8,672.9429 kW | MAE = 6,106.5271 kW
-  MAPE =        3.6206% | R²   =     0.9839    | Max Error = 134,121.20 kW
-  [5-Fold CV Mean ± Std]  RMSE = 8,541.18 ± 2,917.78 kW | R² = 0.9888 ± 0.0053
+OUT-OF-SAMPLE FOLD 1 VALIDATION METRICS (Original Scale kW, n_val=4,967):
+  MSE  = 72,882,953.1316 | RMSE = 8,537.1513 kW | MAE = 5,980.9555 kW
+  MAPE =        2.8019% | R²   =     0.9866    | Max Error =  67,703.68 kW
+  [5-Fold CV Mean ± Std]  RMSE = 8,764.86 ± 2,738.29 kW | R² = 0.9877 ± 0.0037
 ==============================================================================
 ```
 
@@ -886,23 +864,23 @@ OUT-OF-SAMPLE FOLD 1 VALIDATION METRICS (Original Scale kW, n_val=5,844):
 ```text
 5-Fold Expanding Window CV Model Summary - VAR [5-Fold TimeSeriesSplit — Fold 2/5]
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Fold: 2 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 2 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
-Window Period: Train [2011-01-01 00:00:00..2012-05-02 00:00:00] -> Val [2012-05-02 01:00:00..2012-12-31 12:00:00]
-Observations: Train^(k) = 11,689 hours | Val^(k) = 5,844 hours | Device: cpu
-Model Family: VAR | Params / Features: 97 | Train Time: 1.5272s
+Window Period: Train [2011-01-01 00:00:00..2012-02-19 00:00:00] -> Val [2012-02-19 01:00:00..2012-09-12 23:00:00]
+Observations: Train^(k) = 9,937 hours | Val^(k) = 4,967 hours | Device: cpu
+Model Family: VAR | Params / Features: 97 | Train Time: 1.2285s
 ==============================================================================
-Ljung-Box (L=24) (Q):     723.86   Jarque-Bera (JB):    157069.09
+Ljung-Box (L=24) (Q):     795.16   Jarque-Bera (JB):    224823.35
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.7015   Skew:                   0.1124
-Prob(H) (two-sided):       0.0000   Kurtosis:              28.3968
-Durbin-Watson (DW):        2.3520   MedAE (kW):            3541.17
-Residual Mean (kW):      -11.0740   Residual Std (kW):   8731.4571
+Heteroskedasticity(H):     1.4943   Skew:                   0.1894
+Prob(H) (two-sided):       0.0000   Kurtosis:              35.9572
+Durbin-Watson (DW):        2.3749   MedAE (kW):            3713.68
+Residual Mean (kW):       31.6079   Residual Std (kW):   8793.7818
 ------------------------------------------------------------------------------
-OUT-OF-SAMPLE FOLD 2 VALIDATION METRICS (Original Scale kW, n_val=5,844):
-  MSE  = 76,238,466.1853 | RMSE = 8,731.4641 kW | MAE = 5,508.4725 kW
-  MAPE =        2.2799% | R²   =     0.9926    | Max Error = 128,177.18 kW
-  [5-Fold CV Mean ± Std]  RMSE = 7,053.54 ± 970.44 kW | R² = 0.9925 ± 0.0012
+OUT-OF-SAMPLE FOLD 2 VALIDATION METRICS (Original Scale kW, n_val=4,967):
+  MSE  = 77,331,598.1471 | RMSE = 8,793.8386 kW | MAE = 5,499.7215 kW
+  MAPE =        2.8433% | R²   =     0.9927    | Max Error = 134,139.59 kW
+  [5-Fold CV Mean ± Std]  RMSE = 7,004.77 ± 1,204.93 kW | R² = 0.9918 ± 0.0022
 ==============================================================================
 ```
 
@@ -910,23 +888,23 @@ OUT-OF-SAMPLE FOLD 2 VALIDATION METRICS (Original Scale kW, n_val=5,844):
 ```text
 5-Fold Expanding Window CV Model Summary - XGBoost [5-Fold TimeSeriesSplit — Fold 2/5]
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Fold: 2 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 2 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
-Window Period: Train [2011-01-01 00:00:00..2012-05-02 00:00:00] -> Val [2012-05-02 01:00:00..2012-12-31 12:00:00]
-Observations: Train^(k) = 11,689 hours | Val^(k) = 5,844 hours | Device: cuda
-Model Family: XGBoost | Params / Features: 105 | Train Time: 3.4974s
+Window Period: Train [2011-01-01 00:00:00..2012-02-19 00:00:00] -> Val [2012-02-19 01:00:00..2012-09-12 23:00:00]
+Observations: Train^(k) = 9,937 hours | Val^(k) = 4,967 hours | Device: cuda
+Model Family: XGBoost | Params / Features: 106 | Train Time: 5.0186s
 ==============================================================================
-Ljung-Box (L=24) (Q):   13686.20   Jarque-Bera (JB):     14796.31
+Ljung-Box (L=24) (Q):   13999.57   Jarque-Bera (JB):      9625.28
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.2452   Skew:                   1.6936
-Prob(H) (two-sided):       0.0000   Kurtosis:              10.0208
-Durbin-Watson (DW):        0.8209   MedAE (kW):            5276.89
-Residual Mean (kW):     2856.8736   Residual Std (kW):  17684.9836
+Heteroskedasticity(H):    20.8340   Skew:                   1.5831
+Prob(H) (two-sided):       0.0000   Kurtosis:               9.0402
+Durbin-Watson (DW):        0.7210   MedAE (kW):            5447.09
+Residual Mean (kW):     2807.9241   Residual Std (kW):  18064.7796
 ------------------------------------------------------------------------------
-OUT-OF-SAMPLE FOLD 2 VALIDATION METRICS (Original Scale kW, n_val=5,844):
-  MSE  = 320,920,372.4353 | RMSE = 17,914.2505 kW | MAE = 10,471.7941 kW
-  MAPE =        3.8495% | R²   =     0.9690    | Max Error = 129,361.15 kW
-  [5-Fold CV Mean ± Std]  RMSE = 10,229.36 ± 5,111.40 kW | R² = 0.9824 ± 0.0143
+OUT-OF-SAMPLE FOLD 2 VALIDATION METRICS (Original Scale kW, n_val=4,967):
+  MSE  = 334,220,698.1683 | RMSE = 18,281.7039 kW | MAE = 10,829.0768 kW
+  MAPE =        4.5498% | R²   =     0.9684    | Max Error = 131,001.66 kW
+  [5-Fold CV Mean ± Std]  RMSE = 10,235.15 ± 5,097.38 kW | R² = 0.9826 ± 0.0111
 ==============================================================================
 ```
 
@@ -934,23 +912,23 @@ OUT-OF-SAMPLE FOLD 2 VALIDATION METRICS (Original Scale kW, n_val=5,844):
 ```text
 5-Fold Expanding Window CV Model Summary - LSTM [5-Fold TimeSeriesSplit — Fold 2/5]
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Fold: 2 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 2 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
-Window Period: Train [2011-01-01 00:00:00..2012-05-02 00:00:00] -> Val [2012-05-02 01:00:00..2012-12-31 12:00:00]
-Observations: Train^(k) = 11,689 hours | Val^(k) = 5,844 hours | Device: cuda
-Model Family: LSTM | Params / Features: 30,589 | Train Time: 13.3197s
+Window Period: Train [2011-01-01 00:00:00..2012-02-19 00:00:00] -> Val [2012-02-19 01:00:00..2012-09-12 23:00:00]
+Observations: Train^(k) = 9,937 hours | Val^(k) = 4,967 hours | Device: cuda
+Model Family: LSTM | Params / Features: 30,589 | Train Time: 10.0490s
 ==============================================================================
-Ljung-Box (L=24) (Q):    4285.88   Jarque-Bera (JB):     10749.08
+Ljung-Box (L=24) (Q):    4222.09   Jarque-Bera (JB):     12240.29
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.4985   Skew:                   0.7477
-Prob(H) (two-sided):       0.0000   Kurtosis:               9.4736
-Durbin-Watson (DW):        1.4323   MedAE (kW):            5892.16
-Residual Mean (kW):    -1588.5417   Residual Std (kW):  13426.9686
+Heteroskedasticity(H):     3.8104   Skew:                   0.7302
+Prob(H) (two-sided):       0.0000   Kurtosis:              10.5505
+Durbin-Watson (DW):        1.5095   MedAE (kW):            6054.22
+Residual Mean (kW):      317.8793   Residual Std (kW):  13332.6704
 ------------------------------------------------------------------------------
-OUT-OF-SAMPLE FOLD 2 VALIDATION METRICS (Original Scale kW, n_val=5,844):
-  MSE  = 182,806,950.9156 | RMSE = 13,520.6121 kW | MAE = 8,974.1465 kW
-  MAPE =        3.7969% | R²   =     0.9824    | Max Error = 122,342.05 kW
-  [5-Fold CV Mean ± Std]  RMSE = 8,541.18 ± 2,917.78 kW | R² = 0.9888 ± 0.0053
+OUT-OF-SAMPLE FOLD 2 VALIDATION METRICS (Original Scale kW, n_val=4,967):
+  MSE  = 177,861,148.2063 | RMSE = 13,336.4594 kW | MAE = 8,866.2547 kW
+  MAPE =        4.3257% | R²   =     0.9832    | Max Error = 130,657.77 kW
+  [5-Fold CV Mean ± Std]  RMSE = 8,764.86 ± 2,738.29 kW | R² = 0.9877 ± 0.0037
 ==============================================================================
 ```
 
@@ -958,23 +936,23 @@ OUT-OF-SAMPLE FOLD 2 VALIDATION METRICS (Original Scale kW, n_val=5,844):
 ```text
 5-Fold Expanding Window CV Model Summary - VAR [5-Fold TimeSeriesSplit — Fold 3/5]
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Fold: 3 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 3 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
-Window Period: Train [2011-01-01 00:00:00..2012-12-31 12:00:00] -> Val [2012-12-31 13:00:00..2013-09-01 00:00:00]
-Observations: Train^(k) = 17,533 hours | Val^(k) = 5,844 hours | Device: cpu
-Model Family: VAR | Params / Features: 97 | Train Time: 2.2394s
+Window Period: Train [2011-01-01 00:00:00..2012-09-12 23:00:00] -> Val [2012-09-13 00:00:00..2013-04-07 22:00:00]
+Observations: Train^(k) = 14,904 hours | Val^(k) = 4,967 hours | Device: cpu
+Model Family: VAR | Params / Features: 97 | Train Time: 1.7816s
 ==============================================================================
-Ljung-Box (L=24) (Q):     655.04   Jarque-Bera (JB):    886098.23
+Ljung-Box (L=24) (Q):     918.61   Jarque-Bera (JB):   2087237.63
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     2.9322   Skew:                   0.3514
-Prob(H) (two-sided):       0.0000   Kurtosis:              63.3201
-Durbin-Watson (DW):        2.2766   MedAE (kW):            2685.41
-Residual Mean (kW):       33.7140   Residual Std (kW):   6685.3903
+Heteroskedasticity(H):     0.5462   Skew:                   0.0301
+Prob(H) (two-sided):       0.0000   Kurtosis:             103.4256
+Durbin-Watson (DW):        2.3936   MedAE (kW):            2445.71
+Residual Mean (kW):     -105.9128   Residual Std (kW):   7213.1845
 ------------------------------------------------------------------------------
-OUT-OF-SAMPLE FOLD 3 VALIDATION METRICS (Original Scale kW, n_val=5,844):
-  MSE  = 44,695,579.5233 | RMSE = 6,685.4753 kW | MAE = 4,065.4171 kW
-  MAPE =        2.3303% | R²   =     0.9938    | Max Error = 126,810.22 kW
-  [5-Fold CV Mean ± Std]  RMSE = 7,053.54 ± 970.44 kW | R² = 0.9925 ± 0.0012
+OUT-OF-SAMPLE FOLD 3 VALIDATION METRICS (Original Scale kW, n_val=4,967):
+  MSE  = 52,041,247.5759 | RMSE = 7,213.9620 kW | MAE = 3,871.2630 kW
+  MAPE =        2.4843% | R²   =     0.9891    | Max Error = 128,523.04 kW
+  [5-Fold CV Mean ± Std]  RMSE = 7,004.77 ± 1,204.93 kW | R² = 0.9918 ± 0.0022
 ==============================================================================
 ```
 
@@ -982,23 +960,23 @@ OUT-OF-SAMPLE FOLD 3 VALIDATION METRICS (Original Scale kW, n_val=5,844):
 ```text
 5-Fold Expanding Window CV Model Summary - XGBoost [5-Fold TimeSeriesSplit — Fold 3/5]
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Fold: 3 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 3 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
-Window Period: Train [2011-01-01 00:00:00..2012-12-31 12:00:00] -> Val [2012-12-31 13:00:00..2013-09-01 00:00:00]
-Observations: Train^(k) = 17,533 hours | Val^(k) = 5,844 hours | Device: cuda
-Model Family: XGBoost | Params / Features: 105 | Train Time: 1.8797s
+Window Period: Train [2011-01-01 00:00:00..2012-09-12 23:00:00] -> Val [2012-09-13 00:00:00..2013-04-07 22:00:00]
+Observations: Train^(k) = 14,904 hours | Val^(k) = 4,967 hours | Device: cuda
+Model Family: XGBoost | Params / Features: 106 | Train Time: 2.7909s
 ==============================================================================
-Ljung-Box (L=24) (Q):    4979.06   Jarque-Bera (JB):     59919.47
+Ljung-Box (L=24) (Q):    4569.64   Jarque-Bera (JB):    152544.57
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.8807   Skew:                  -0.3799
-Prob(H) (two-sided):       0.0051   Kurtosis:              18.6684
-Durbin-Watson (DW):        1.0880   MedAE (kW):            3986.20
-Residual Mean (kW):     1418.1105   Residual Std (kW):   8111.7931
+Heteroskedasticity(H):     1.0952   Skew:                  -1.1675
+Prob(H) (two-sided):       0.0643   Kurtosis:              30.0486
+Durbin-Watson (DW):        1.2754   MedAE (kW):            4037.28
+Residual Mean (kW):     1320.7753   Residual Std (kW):   8794.0221
 ------------------------------------------------------------------------------
-OUT-OF-SAMPLE FOLD 3 VALIDATION METRICS (Original Scale kW, n_val=5,844):
-  MSE  = 67,812,225.2409 | RMSE = 8,234.8179 kW | MAE = 5,685.1361 kW
-  MAPE =        3.1051% | R²   =     0.9905    | Max Error = 128,596.29 kW
-  [5-Fold CV Mean ± Std]  RMSE = 10,229.36 ± 5,111.40 kW | R² = 0.9824 ± 0.0143
+OUT-OF-SAMPLE FOLD 3 VALIDATION METRICS (Original Scale kW, n_val=4,967):
+  MSE  = 79,079,271.2600 | RMSE = 8,892.6527 kW | MAE = 5,870.9476 kW
+  MAPE =        3.4442% | R²   =     0.9834    | Max Error = 129,752.69 kW
+  [5-Fold CV Mean ± Std]  RMSE = 10,235.15 ± 5,097.38 kW | R² = 0.9826 ± 0.0111
 ==============================================================================
 ```
 
@@ -1006,23 +984,23 @@ OUT-OF-SAMPLE FOLD 3 VALIDATION METRICS (Original Scale kW, n_val=5,844):
 ```text
 5-Fold Expanding Window CV Model Summary - LSTM [5-Fold TimeSeriesSplit — Fold 3/5]
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Fold: 3 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 3 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
-Window Period: Train [2011-01-01 00:00:00..2012-12-31 12:00:00] -> Val [2012-12-31 13:00:00..2013-09-01 00:00:00]
-Observations: Train^(k) = 17,533 hours | Val^(k) = 5,844 hours | Device: cuda
-Model Family: LSTM | Params / Features: 30,589 | Train Time: 30.4732s
+Window Period: Train [2011-01-01 00:00:00..2012-09-12 23:00:00] -> Val [2012-09-13 00:00:00..2013-04-07 22:00:00]
+Observations: Train^(k) = 14,904 hours | Val^(k) = 4,967 hours | Device: cuda
+Model Family: LSTM | Params / Features: 30,589 | Train Time: 26.6055s
 ==============================================================================
-Ljung-Box (L=24) (Q):    2052.64   Jarque-Bera (JB):    163354.83
+Ljung-Box (L=24) (Q):    1893.45   Jarque-Bera (JB):    245030.42
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     2.2516   Skew:                   0.1422
-Prob(H) (two-sided):       0.0000   Kurtosis:              28.8994
-Durbin-Watson (DW):        1.7680   MedAE (kW):            3782.25
-Residual Mean (kW):     -206.4309   Residual Std (kW):   7392.4831
+Heteroskedasticity(H):     0.4990   Skew:                  -0.2947
+Prob(H) (two-sided):       0.0000   Kurtosis:              37.4037
+Durbin-Watson (DW):        1.6549   MedAE (kW):            4054.09
+Residual Mean (kW):      -85.7942   Residual Std (kW):   8183.4698
 ------------------------------------------------------------------------------
-OUT-OF-SAMPLE FOLD 3 VALIDATION METRICS (Original Scale kW, n_val=5,844):
-  MSE  = 54,691,420.3121 | RMSE = 7,395.3648 kW | MAE = 5,055.6623 kW
-  MAPE =        2.8405% | R²   =     0.9924    | Max Error = 124,251.58 kW
-  [5-Fold CV Mean ± Std]  RMSE = 8,541.18 ± 2,917.78 kW | R² = 0.9888 ± 0.0053
+OUT-OF-SAMPLE FOLD 3 VALIDATION METRICS (Original Scale kW, n_val=4,967):
+  MSE  = 66,976,539.1108 | RMSE = 8,183.9195 kW | MAE = 5,488.8784 kW
+  MAPE =        3.3260% | R²   =     0.9860    | Max Error = 127,752.50 kW
+  [5-Fold CV Mean ± Std]  RMSE = 8,764.86 ± 2,738.29 kW | R² = 0.9877 ± 0.0037
 ==============================================================================
 ```
 
@@ -1030,23 +1008,23 @@ OUT-OF-SAMPLE FOLD 3 VALIDATION METRICS (Original Scale kW, n_val=5,844):
 ```text
 5-Fold Expanding Window CV Model Summary - VAR [5-Fold TimeSeriesSplit — Fold 4/5]
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Fold: 4 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 4 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
-Window Period: Train [2011-01-01 00:00:00..2013-09-01 00:00:00] -> Val [2013-09-01 01:00:00..2014-05-02 12:00:00]
-Observations: Train^(k) = 23,377 hours | Val^(k) = 5,844 hours | Device: cpu
-Model Family: VAR | Params / Features: 97 | Train Time: 2.9518s
+Window Period: Train [2011-01-01 00:00:00..2013-04-07 22:00:00] -> Val [2013-04-07 23:00:00..2013-10-31 21:00:00]
+Observations: Train^(k) = 19,871 hours | Val^(k) = 4,967 hours | Device: cpu
+Model Family: VAR | Params / Features: 97 | Train Time: 2.4096s
 ==============================================================================
-Ljung-Box (L=24) (Q):    1173.80   Jarque-Bera (JB):   2602224.42
+Ljung-Box (L=24) (Q):     632.65   Jarque-Bera (JB):    238866.95
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.7937   Skew:                   0.0159
-Prob(H) (two-sided):       0.0000   Kurtosis:             106.3767
-Durbin-Watson (DW):        2.3427   MedAE (kW):            2493.74
-Residual Mean (kW):      -49.2612   Residual Std (kW):   6580.5062
+Heteroskedasticity(H):     1.6673   Skew:                   0.6200
+Prob(H) (two-sided):       0.0000   Kurtosis:              36.9506
+Durbin-Watson (DW):        2.3878   MedAE (kW):            3136.56
+Residual Mean (kW):       12.8795   Residual Std (kW):   7237.2587
 ------------------------------------------------------------------------------
-OUT-OF-SAMPLE FOLD 4 VALIDATION METRICS (Original Scale kW, n_val=5,844):
-  MSE  = 43,305,487.9519 | RMSE = 6,580.6905 kW | MAE = 3,697.5826 kW
-  MAPE =        6.7214% | R²   =     0.9910    | Max Error = 130,849.01 kW
-  [5-Fold CV Mean ± Std]  RMSE = 7,053.54 ± 970.44 kW | R² = 0.9925 ± 0.0012
+OUT-OF-SAMPLE FOLD 4 VALIDATION METRICS (Original Scale kW, n_val=4,967):
+  MSE  = 52,378,079.9660 | RMSE = 7,237.2702 kW | MAE = 4,600.4121 kW
+  MAPE =        1.9333% | R²   =     0.9938    | Max Error = 111,877.32 kW
+  [5-Fold CV Mean ± Std]  RMSE = 7,004.77 ± 1,204.93 kW | R² = 0.9918 ± 0.0022
 ==============================================================================
 ```
 
@@ -1054,23 +1032,23 @@ OUT-OF-SAMPLE FOLD 4 VALIDATION METRICS (Original Scale kW, n_val=5,844):
 ```text
 5-Fold Expanding Window CV Model Summary - XGBoost [5-Fold TimeSeriesSplit — Fold 4/5]
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Fold: 4 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 4 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
-Window Period: Train [2011-01-01 00:00:00..2013-09-01 00:00:00] -> Val [2013-09-01 01:00:00..2014-05-02 12:00:00]
-Observations: Train^(k) = 23,377 hours | Val^(k) = 5,844 hours | Device: cuda
-Model Family: XGBoost | Params / Features: 105 | Train Time: 6.2938s
+Window Period: Train [2011-01-01 00:00:00..2013-04-07 22:00:00] -> Val [2013-04-07 23:00:00..2013-10-31 21:00:00]
+Observations: Train^(k) = 19,871 hours | Val^(k) = 4,967 hours | Device: cuda
+Model Family: XGBoost | Params / Features: 106 | Train Time: 4.0364s
 ==============================================================================
-Ljung-Box (L=24) (Q):    1905.74   Jarque-Bera (JB):   1329217.18
+Ljung-Box (L=24) (Q):     715.67   Jarque-Bera (JB):     85997.73
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.7203   Skew:                  -0.9809
-Prob(H) (two-sided):       0.0000   Kurtosis:              76.8576
-Durbin-Watson (DW):        1.5827   MedAE (kW):            2631.23
-Residual Mean (kW):       71.4036   Residual Std (kW):   5732.1040
+Heteroskedasticity(H):     1.1127   Skew:                   1.4293
+Prob(H) (two-sided):       0.0299   Kurtosis:              23.1832
+Durbin-Watson (DW):        1.7396   MedAE (kW):            3288.00
+Residual Mean (kW):      122.2813   Residual Std (kW):   7054.7331
 ------------------------------------------------------------------------------
-OUT-OF-SAMPLE FOLD 4 VALIDATION METRICS (Original Scale kW, n_val=5,844):
-  MSE  = 32,862,114.7716 | RMSE = 5,732.5487 kW | MAE = 3,700.0679 kW
-  MAPE =        6.5246% | R²   =     0.9932    | Max Error = 126,565.58 kW
-  [5-Fold CV Mean ± Std]  RMSE = 10,229.36 ± 5,111.40 kW | R² = 0.9824 ± 0.0143
+OUT-OF-SAMPLE FOLD 4 VALIDATION METRICS (Original Scale kW, n_val=4,967):
+  MSE  = 49,784,212.2314 | RMSE = 7,055.7928 kW | MAE = 4,715.8494 kW
+  MAPE =        1.9782% | R²   =     0.9941    | Max Error = 115,494.00 kW
+  [5-Fold CV Mean ± Std]  RMSE = 10,235.15 ± 5,097.38 kW | R² = 0.9826 ± 0.0111
 ==============================================================================
 ```
 
@@ -1078,23 +1056,23 @@ OUT-OF-SAMPLE FOLD 4 VALIDATION METRICS (Original Scale kW, n_val=5,844):
 ```text
 5-Fold Expanding Window CV Model Summary - LSTM [5-Fold TimeSeriesSplit — Fold 4/5]
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Fold: 4 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 4 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
-Window Period: Train [2011-01-01 00:00:00..2013-09-01 00:00:00] -> Val [2013-09-01 01:00:00..2014-05-02 12:00:00]
-Observations: Train^(k) = 23,377 hours | Val^(k) = 5,844 hours | Device: cuda
-Model Family: LSTM | Params / Features: 30,589 | Train Time: 39.5551s
+Window Period: Train [2011-01-01 00:00:00..2013-04-07 22:00:00] -> Val [2013-04-07 23:00:00..2013-10-31 21:00:00]
+Observations: Train^(k) = 19,871 hours | Val^(k) = 4,967 hours | Device: cuda
+Model Family: LSTM | Params / Features: 30,589 | Train Time: 34.7935s
 ==============================================================================
-Ljung-Box (L=24) (Q):     801.37   Jarque-Bera (JB):   1184615.29
+Ljung-Box (L=24) (Q):    1094.08   Jarque-Bera (JB):     56595.42
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.8915   Skew:                  -0.2048
-Prob(H) (two-sided):       0.0113   Kurtosis:              72.7480
-Durbin-Watson (DW):        1.8685   MedAE (kW):            3071.81
-Residual Mean (kW):       26.4820   Residual Std (kW):   6375.8794
+Heteroskedasticity(H):     1.3448   Skew:                   0.9478
+Prob(H) (two-sided):       0.0000   Kurtosis:              19.4277
+Durbin-Watson (DW):        1.9134   MedAE (kW):            4381.60
+Residual Mean (kW):     -377.4048   Residual Std (kW):   7775.3843
 ------------------------------------------------------------------------------
-OUT-OF-SAMPLE FOLD 4 VALIDATION METRICS (Original Scale kW, n_val=5,844):
-  MSE  = 40,652,538.9355 | RMSE = 6,375.9344 kW | MAE = 4,191.1987 kW
-  MAPE =        7.0281% | R²   =     0.9915    | Max Error = 131,686.59 kW
-  [5-Fold CV Mean ± Std]  RMSE = 8,541.18 ± 2,917.78 kW | R² = 0.9888 ± 0.0053
+OUT-OF-SAMPLE FOLD 4 VALIDATION METRICS (Original Scale kW, n_val=4,967):
+  MSE  = 60,599,035.9841 | RMSE = 7,784.5383 kW | MAE = 5,585.0868 kW
+  MAPE =        2.4227% | R²   =     0.9929    | Max Error = 117,036.81 kW
+  [5-Fold CV Mean ± Std]  RMSE = 8,764.86 ± 2,738.29 kW | R² = 0.9877 ± 0.0037
 ==============================================================================
 ```
 
@@ -1102,23 +1080,23 @@ OUT-OF-SAMPLE FOLD 4 VALIDATION METRICS (Original Scale kW, n_val=5,844):
 ```text
 5-Fold Expanding Window CV Model Summary - VAR [5-Fold TimeSeriesSplit — Fold 5/5]
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Fold: 5 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 5 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
-Window Period: Train [2011-01-01 00:00:00..2014-05-02 12:00:00] -> Val [2014-05-02 13:00:00..2015-01-01 00:00:00]
-Observations: Train^(k) = 29,221 hours | Val^(k) = 5,844 hours | Device: cpu
-Model Family: VAR | Params / Features: 97 | Train Time: 3.7818s
+Window Period: Train [2011-01-01 00:00:00..2013-10-31 21:00:00] -> Val [2013-10-31 22:00:00..2014-05-26 20:00:00]
+Observations: Train^(k) = 24,838 hours | Val^(k) = 4,967 hours | Device: cpu
+Model Family: VAR | Params / Features: 97 | Train Time: 2.9439s
 ==============================================================================
-Ljung-Box (L=24) (Q):     779.92   Jarque-Bera (JB):    657619.95
+Ljung-Box (L=24) (Q):     925.27   Jarque-Bera (JB):   2660436.85
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     1.7357   Skew:                   0.3667
-Prob(H) (two-sided):       0.0000   Kurtosis:              54.9631
-Durbin-Watson (DW):        2.3682   MedAE (kW):            3163.45
-Residual Mean (kW):      -36.5437   Residual Std (kW):   6982.9700
+Heteroskedasticity(H):     1.3319   Skew:                  -0.3868
+Prob(H) (two-sided):       0.0000   Kurtosis:             116.3770
+Durbin-Watson (DW):        2.1684   MedAE (kW):            2407.98
+Residual Mean (kW):      -12.2415   Residual Std (kW):   5991.1754
 ------------------------------------------------------------------------------
-OUT-OF-SAMPLE FOLD 5 VALIDATION METRICS (Original Scale kW, n_val=5,844):
-  MSE  = 48,763,206.1510 | RMSE = 6,983.0657 kW | MAE = 4,527.4671 kW
-  MAPE =        1.9895% | R²   =     0.9935    | Max Error = 130,503.43 kW
-  [5-Fold CV Mean ± Std]  RMSE = 7,053.54 ± 970.44 kW | R² = 0.9925 ± 0.0012
+OUT-OF-SAMPLE FOLD 5 VALIDATION METRICS (Original Scale kW, n_val=4,967):
+  MSE  = 35,894,332.1253 | RMSE = 5,991.1879 kW | MAE = 3,511.0698 kW
+  MAPE =        7.5620% | R²   =     0.9898    | Max Error = 130,954.28 kW
+  [5-Fold CV Mean ± Std]  RMSE = 7,004.77 ± 1,204.93 kW | R² = 0.9918 ± 0.0022
 ==============================================================================
 ```
 
@@ -1126,23 +1104,23 @@ OUT-OF-SAMPLE FOLD 5 VALIDATION METRICS (Original Scale kW, n_val=5,844):
 ```text
 5-Fold Expanding Window CV Model Summary - XGBoost [5-Fold TimeSeriesSplit — Fold 5/5]
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Fold: 5 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 5 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
-Window Period: Train [2011-01-01 00:00:00..2014-05-02 12:00:00] -> Val [2014-05-02 13:00:00..2015-01-01 00:00:00]
-Observations: Train^(k) = 29,221 hours | Val^(k) = 5,844 hours | Device: cuda
-Model Family: XGBoost | Params / Features: 105 | Train Time: 6.2370s
+Window Period: Train [2011-01-01 00:00:00..2013-10-31 21:00:00] -> Val [2013-10-31 22:00:00..2014-05-26 20:00:00]
+Observations: Train^(k) = 24,838 hours | Val^(k) = 4,967 hours | Device: cuda
+Model Family: XGBoost | Params / Features: 106 | Train Time: 4.0384s
 ==============================================================================
-Ljung-Box (L=24) (Q):    2011.82   Jarque-Bera (JB):    267853.90
+Ljung-Box (L=24) (Q):    1147.97   Jarque-Bera (JB):   1199272.62
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     1.2991   Skew:                   1.1267
-Prob(H) (two-sided):       0.0000   Kurtosis:              36.0899
-Durbin-Watson (DW):        1.6303   MedAE (kW):            3021.13
-Residual Mean (kW):     -170.6816   Residual Std (kW):   6425.9428
+Heteroskedasticity(H):     1.2621   Skew:                  -3.3366
+Prob(H) (two-sided):       0.0000   Kurtosis:              78.8302
+Durbin-Watson (DW):        1.6790   MedAE (kW):            2545.08
+Residual Mean (kW):      122.5057   Residual Std (kW):   5226.0943
 ------------------------------------------------------------------------------
-OUT-OF-SAMPLE FOLD 5 VALIDATION METRICS (Original Scale kW, n_val=5,844):
-  MSE  = 41,321,873.6470 | RMSE = 6,428.2092 kW | MAE = 4,319.2741 kW
-  MAPE =        1.8771% | R²   =     0.9945    | Max Error = 129,118.48 kW
-  [5-Fold CV Mean ± Std]  RMSE = 10,229.36 ± 5,111.40 kW | R² = 0.9824 ± 0.0143
+OUT-OF-SAMPLE FOLD 5 VALIDATION METRICS (Original Scale kW, n_val=4,967):
+  MSE  = 27,327,069.5854 | RMSE = 5,227.5300 kW | MAE = 3,497.2875 kW
+  MAPE =        7.3346% | R²   =     0.9922    | Max Error = 126,895.46 kW
+  [5-Fold CV Mean ± Std]  RMSE = 10,235.15 ± 5,097.38 kW | R² = 0.9826 ± 0.0111
 ==============================================================================
 ```
 
@@ -1150,23 +1128,23 @@ OUT-OF-SAMPLE FOLD 5 VALIDATION METRICS (Original Scale kW, n_val=5,844):
 ```text
 5-Fold Expanding Window CV Model Summary - LSTM [5-Fold TimeSeriesSplit — Fold 5/5]
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Fold: 5 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 5 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
-Window Period: Train [2011-01-01 00:00:00..2014-05-02 12:00:00] -> Val [2014-05-02 13:00:00..2015-01-01 00:00:00]
-Observations: Train^(k) = 29,221 hours | Val^(k) = 5,844 hours | Device: cuda
-Model Family: LSTM | Params / Features: 30,589 | Train Time: 49.2265s
+Window Period: Train [2011-01-01 00:00:00..2013-10-31 21:00:00] -> Val [2013-10-31 22:00:00..2014-05-26 20:00:00]
+Observations: Train^(k) = 24,838 hours | Val^(k) = 4,967 hours | Device: cuda
+Model Family: LSTM | Params / Features: 30,589 | Train Time: 42.9271s
 ==============================================================================
-Ljung-Box (L=24) (Q):    1145.67   Jarque-Bera (JB):    258945.34
+Ljung-Box (L=24) (Q):     950.64   Jarque-Bera (JB):   1118923.11
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     1.1541   Skew:                   0.8519
-Prob(H) (two-sided):       0.0016   Kurtosis:              35.5657
-Durbin-Watson (DW):        1.8892   MedAE (kW):            3572.37
-Residual Mean (kW):     -263.6258   Residual Std (kW):   6735.8968
+Heteroskedasticity(H):     1.4570   Skew:                  -1.0503
+Prob(H) (two-sided):       0.0000   Kurtosis:              76.4990
+Durbin-Watson (DW):        1.8342   MedAE (kW):            2896.01
+Residual Mean (kW):     -359.2133   Residual Std (kW):   5971.4322
 ------------------------------------------------------------------------------
-OUT-OF-SAMPLE FOLD 5 VALIDATION METRICS (Original Scale kW, n_val=5,844):
-  MSE  = 45,441,803.6795 | RMSE = 6,741.0536 kW | MAE = 4,731.9143 kW
-  MAPE =        2.1160% | R²   =     0.9940    | Max Error = 125,415.27 kW
-  [5-Fold CV Mean ± Std]  RMSE = 8,541.18 ± 2,917.78 kW | R² = 0.9888 ± 0.0053
+OUT-OF-SAMPLE FOLD 5 VALIDATION METRICS (Original Scale kW, n_val=4,967):
+  MSE  = 35,787,037.1541 | RMSE = 5,982.2268 kW | MAE = 3,977.4965 kW
+  MAPE =        7.8120% | R²   =     0.9898    | Max Error = 130,637.10 kW
+  [5-Fold CV Mean ± Std]  RMSE = 8,764.86 ± 2,738.29 kW | R² = 0.9877 ± 0.0037
 ==============================================================================
 ```
 
@@ -1175,8 +1153,8 @@ OUT-OF-SAMPLE FOLD 5 VALIDATION METRICS (Original Scale kW, n_val=5,844):
 
 
 ## 1. Thông tin Phiên Thực nghiệm & Bộ dữ liệu Đồ thị Không gian - Thời gian (Provenance & Graph Info)
-- **Run ID**: `20261117_160932_3fe70f`
-- **Thời điểm xuất báo cáo**: `2026-11-17 16:19:33`
+- **Run ID**: `20261124_193611_5cd58d`
+- **Thời điểm xuất báo cáo**: `2026-11-24 19:44:12`
 - **Dataset Key**: `dataset2` (`data/raw/pems-bay.h5` + `data/sensor_graph/adj_mx_bay.pkl`)
 - **Tên bộ dữ liệu**: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 - **Kích thước chuỗi không gian - thời gian**: 8,640 bước thời gian (5 phút/bước) × 207 trạm cảm biến cao tốc
@@ -1189,22 +1167,22 @@ OUT-OF-SAMPLE FOLD 5 VALIDATION METRICS (Original Scale kW, n_val=5,844):
 
 | # | Model & Horizon | Family | Horizon | Params | MSE | RMSE (mph) | MAE (mph) | MAPE (%) | R² | Max Error | Device | Train Time (s) |
 |---:|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|:---|---:|
-| 1 | DCRNN (Graph Diffusion + GRU) — Horizon 15_min (15 min / t+3) | `DCRNN` | `Horizon_15_min` | 21,290 | 7.6291 | 2.7621 | 1.3094 | 2.7182 | 0.9196 | 47.18 | `cuda` | 66.9065 |
-| 2 | DCRNN (Graph Diffusion + GRU) — Horizon 30_min (30 min / t+6) | `DCRNN` | `Horizon_30_min` | 21,290 | 15.4535 | 3.9311 | 1.7338 | 3.8915 | 0.8372 | 55.52 | `cuda` | 66.9065 |
-| 3 | DCRNN (Graph Diffusion + GRU) — Horizon 60_min (60 min / t+12) | `DCRNN` | `Horizon_60_min` | 21,290 | 27.8962 | 5.2817 | 2.3040 | 5.6224 | 0.7063 | 58.62 | `cuda` | 66.9065 |
-| 4 | DCRNN (Graph Diffusion + GRU) — Horizon Average_All_Horizons (35 min / t+7) | `DCRNN` | `Horizon_Average_All_Horizons` | 21,290 | 16.9929 | 3.9916 | 1.7824 | 4.0774 | 0.8210 | 58.62 | `cuda` | 66.9065 |
-| 5 | Multi-Horizon TCN (Causal Conv1D) — Horizon 15_min (15 min / t+3) | `Multi_Horizon_TCN` | `Horizon_15_min` | 3,370 | 8.6841 | 2.9469 | 1.3541 | 2.8546 | 0.9085 | 50.96 | `cuda` | 14.5001 |
-| 6 | Multi-Horizon TCN (Causal Conv1D) — Horizon 30_min (30 min / t+6) | `Multi_Horizon_TCN` | `Horizon_30_min` | 3,370 | 19.0388 | 4.3633 | 1.8552 | 4.1751 | 0.7994 | 55.86 | `cuda` | 14.5001 |
-| 7 | Multi-Horizon TCN (Causal Conv1D) — Horizon 60_min (60 min / t+12) | `Multi_Horizon_TCN` | `Horizon_60_min` | 3,370 | 37.1624 | 6.0961 | 2.6242 | 6.5286 | 0.6087 | 58.90 | `cuda` | 14.5001 |
-| 8 | Multi-Horizon TCN (Causal Conv1D) — Horizon Average_All_Horizons (35 min / t+7) | `Multi_Horizon_TCN` | `Horizon_Average_All_Horizons` | 3,370 | 21.6284 | 4.4688 | 1.9445 | 4.5194 | 0.7722 | 58.90 | `cuda` | 14.5001 |
-| 9 | Multi-Horizon LSTM (Temporal Only) — Horizon 15_min (15 min / t+3) | `Multi_Horizon_LSTM` | `Horizon_15_min` | 110,292 | 8.4484 | 2.9066 | 1.4182 | 2.9199 | 0.9110 | 47.02 | `cuda` | 8.1749 |
-| 10 | Multi-Horizon LSTM (Temporal Only) — Horizon 30_min (30 min / t+6) | `Multi_Horizon_LSTM` | `Horizon_30_min` | 110,292 | 16.2314 | 4.0288 | 1.8885 | 4.0697 | 0.8290 | 50.79 | `cuda` | 8.1749 |
-| 11 | Multi-Horizon LSTM (Temporal Only) — Horizon 60_min (60 min / t+12) | `Multi_Horizon_LSTM` | `Horizon_60_min` | 110,292 | 28.6132 | 5.3491 | 2.4986 | 5.4961 | 0.6987 | 54.84 | `cuda` | 8.1749 |
-| 12 | Multi-Horizon LSTM (Temporal Only) — Horizon Average_All_Horizons (35 min / t+7) | `Multi_Horizon_LSTM` | `Horizon_Average_All_Horizons` | 110,292 | 17.7643 | 4.0948 | 1.9351 | 4.1619 | 0.8129 | 54.84 | `cuda` | 8.1749 |
+| 1 | DCRNN (Graph Diffusion + GRU) — Horizon 15_min (15 min / t+3) | `DCRNN` | `Horizon_15_min` | 21,290 | 7.5867 | 2.7544 | 1.2991 | 2.6945 | 0.9201 | 48.11 | `cuda` | 67.9647 |
+| 2 | DCRNN (Graph Diffusion + GRU) — Horizon 30_min (30 min / t+6) | `DCRNN` | `Horizon_30_min` | 21,290 | 15.2795 | 3.9089 | 1.7241 | 3.8977 | 0.8390 | 55.70 | `cuda` | 67.9647 |
+| 3 | DCRNN (Graph Diffusion + GRU) — Horizon 60_min (60 min / t+12) | `DCRNN` | `Horizon_60_min` | 21,290 | 27.7368 | 5.2666 | 2.3004 | 5.6861 | 0.7079 | 58.60 | `cuda` | 67.9647 |
+| 4 | DCRNN (Graph Diffusion + GRU) — Horizon Average_All_Horizons (35 min / t+7) | `DCRNN` | `Horizon_Average_All_Horizons` | 21,290 | 16.8677 | 3.9766 | 1.7745 | 4.0928 | 0.8223 | 58.60 | `cuda` | 67.9647 |
+| 5 | Multi-Horizon TCN (Causal Conv1D) — Horizon 15_min (15 min / t+3) | `Multi_Horizon_TCN` | `Horizon_15_min` | 3,370 | 8.7019 | 2.9499 | 1.3532 | 2.8495 | 0.9083 | 52.68 | `cuda` | 15.3117 |
+| 6 | Multi-Horizon TCN (Causal Conv1D) — Horizon 30_min (30 min / t+6) | `Multi_Horizon_TCN` | `Horizon_30_min` | 3,370 | 19.0428 | 4.3638 | 1.8605 | 4.2009 | 0.7994 | 55.81 | `cuda` | 15.3117 |
+| 7 | Multi-Horizon TCN (Causal Conv1D) — Horizon 60_min (60 min / t+12) | `Multi_Horizon_TCN` | `Horizon_60_min` | 3,370 | 36.9984 | 6.0826 | 2.6396 | 6.6155 | 0.6104 | 58.77 | `cuda` | 15.3117 |
+| 8 | Multi-Horizon TCN (Causal Conv1D) — Horizon Average_All_Horizons (35 min / t+7) | `Multi_Horizon_TCN` | `Horizon_Average_All_Horizons` | 3,370 | 21.5810 | 4.4654 | 1.9511 | 4.5553 | 0.7727 | 58.77 | `cuda` | 15.3117 |
+| 9 | Multi-Horizon LSTM (Temporal Only) — Horizon 15_min (15 min / t+3) | `Multi_Horizon_LSTM` | `Horizon_15_min` | 110,292 | 8.5194 | 2.9188 | 1.4283 | 2.9292 | 0.9102 | 47.20 | `cuda` | 8.9257 |
+| 10 | Multi-Horizon LSTM (Temporal Only) — Horizon 30_min (30 min / t+6) | `Multi_Horizon_LSTM` | `Horizon_30_min` | 110,292 | 16.6435 | 4.0796 | 1.9189 | 4.1104 | 0.8247 | 52.46 | `cuda` | 8.9257 |
+| 11 | Multi-Horizon LSTM (Temporal Only) — Horizon 60_min (60 min / t+12) | `Multi_Horizon_LSTM` | `Horizon_60_min` | 110,292 | 30.0549 | 5.4822 | 2.5517 | 5.5572 | 0.6835 | 56.68 | `cuda` | 8.9257 |
+| 12 | Multi-Horizon LSTM (Temporal Only) — Horizon Average_All_Horizons (35 min / t+7) | `Multi_Horizon_LSTM` | `Horizon_Average_All_Horizons` | 110,292 | 18.4059 | 4.1602 | 1.9663 | 4.1989 | 0.8061 | 56.68 | `cuda` | 8.9257 |
 
-### Diễn giải Đa Tiêu chí Tự động (Run ID: `20261117_160932_3fe70f` — Dataset 2: PEMS-BAY Traffic Graph)
+### Diễn giải Đa Tiêu chí Tự động (Run ID: `20261124_193611_5cd58d` — Dataset 2: PEMS-BAY Traffic Graph)
 
-- **Mô hình vượt trội nhất ở cả 3 tầm nhìn (15 phút, 30 phút, 60 phút)**: **DCRNN (Graph Diffusion + GRU)** đạt trung bình `RMSE = 3.9916 mph`, `MAE = 1.7824 mph`, `MAPE = 4.0774%` và `R² = 0.8210`.
+- **Mô hình vượt trội nhất ở cả 3 tầm nhìn (15 phút, 30 phút, 60 phút)**: **DCRNN (Graph Diffusion + GRU)** đạt trung bình `RMSE = 3.9766 mph`, `MAE = 1.7745 mph`, `MAPE = 4.0928%` và `R² = 0.8223`.
 - **Vai trò quyết định của Đồ thị Không gian (`adj_mx_bay.pkl`) ở tầm nhìn xa 60 phút ($t+12$)**: Khi dự báo xa 60 phút, sóng tắc nghẽn giao thông lan truyền từ các nút lân cận trên mạng lưới cao tốc. Do đó **DCRNN** (`RMSE = 5.2817 mph`, `MAE = 2.3040 mph`, `R² = 0.7063`) bỏ xa cả **Multi-Horizon LSTM** (`RMSE = 5.3491 mph`, `MAE = 2.4986 mph`) và **Multi-Horizon TCN** (`RMSE = 6.0961 mph`, `MAE = 2.6243 mph`).
 - **Hiệu quả tham số (Parameter Efficiency)**: **DCRNN** chỉ cần `21,290` tham số khả huấn luyện (nhờ chia sẻ bộ lọc khuếch tán đồ thị trên 5 ma trận hỗ trợ $\mathcal{S} \in \mathbb{R}^{5 \times 207 \times 207}$), ít hơn gấp 5.18 lần so với **Multi-Horizon LSTM** (`110,292` tham số).
 
@@ -1214,7 +1192,7 @@ OUT-OF-SAMPLE FOLD 5 VALIDATION METRICS (Original Scale kW, n_val=5,844):
 ```text
 DCRNN (Graph Diffusion + GRU) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (15_min, 15 min ahead)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (15_min, 15 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -1225,66 +1203,66 @@ Model: DCRNN (Graph Diffusion + GRU) — Horizon 15_min (15 min / t+3)
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.118180   Best Val Loss:       0.230240
-Final Train Loss:             0.090550   Best Epoch:           11 / 12  
-Hardware Device:                  cuda   Train / Pred:    66.9065s / 0.0850s
+Initial Train Loss:           0.119470   Best Val Loss:       0.230090
+Final Train Loss:             0.090960   Best Epoch:           12 / 12  
+Hardware Device:                  cuda   Train / Pred:    67.9647s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from dcrnn_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
 supports_stack*            (5, 207, 207)    214,245  +0.00483  0.06024     [-0.974, +1.498]
-cell1.gate_linear.weight   (64, 165)         10,560  +0.00006  0.19202     [-1.047, +1.039]
-cell1.gate_linear.bias     (64,)                 64  -0.00579  0.16632     [-0.438, +0.487]
-cell1.cand_linear.weight   (32, 165)          5,280  -0.00071  0.08735     [-0.445, +0.458]
-cell1.cand_linear.bias     (32,)                 32  -0.00049  0.05887     [-0.126, +0.136]
-norm.weight                (32,)                 32  +1.00541  0.07076     [+0.849, +1.140]
-norm.bias                  (32,)                 32  +0.00028  0.02501     [-0.047, +0.047]
-proj.0.weight              (32, 160)          5,120  +0.00048  0.06583     [-0.296, +0.327]
-proj.0.bias                (32,)                 32  -0.02567  0.05406     [-0.119, +0.065]
-proj.2.weight              (3, 32)               96  +0.00667  0.12173     [-0.196, +0.275]
-proj.2.bias                (3,)                   3  -0.03100  0.05782     [-0.099, +0.042]
-ar_highway.weight          (3, 12)               36  +0.06285  0.22385     [-0.058, +0.883]
-ar_highway.bias            (3,)                   3  +0.01399  0.01026     [-0.001, +0.022]
+cell1.gate_linear.weight   (64, 165)         10,560  +0.00328  0.17942     [-0.949, +0.833]
+cell1.gate_linear.bias     (64,)                 64  -0.00059  0.13166     [-0.525, +0.224]
+cell1.cand_linear.weight   (32, 165)          5,280  +0.00187  0.08680     [-0.454, +0.367]
+cell1.cand_linear.bias     (32,)                 32  -0.00769  0.05903     [-0.104, +0.153]
+norm.weight                (32,)                 32  +1.03368  0.07079     [+0.929, +1.239]
+norm.bias                  (32,)                 32  +0.00069  0.01864     [-0.046, +0.054]
+proj.0.weight              (32, 160)          5,120  +0.00079  0.06632     [-0.355, +0.283]
+proj.0.bias                (32,)                 32  -0.03269  0.04898     [-0.102, +0.080]
+proj.2.weight              (3, 32)               96  +0.00123  0.12815     [-0.232, +0.271]
+proj.2.bias                (3,)                   3  +0.05229  0.10033     [-0.089, +0.129]
+ar_highway.weight          (3, 12)               36  +0.06657  0.22843     [-0.058, +0.897]
+ar_highway.bias            (3,)                   3  -0.00989  0.03417     [-0.043, +0.037]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_highway.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:-0.013 L7:-0.003 L4:-0.022 L3:-0.058 L2:+0.048 L1:+0.883
-  30_min (t+6) : L12:-0.013 L7:+0.003 L4:-0.023 L3:-0.050 L2:+0.059 L1:+0.803
-  60_min (t+12): L12:-0.017 L7:-0.002 L4:-0.028 L3:-0.058 L2:+0.035 L1:+0.708
+  15_min (t+3) : L12:-0.011 L7:-0.002 L4:-0.024 L3:-0.049 L2:+0.064 L1:+0.897
+  30_min (t+6) : L12:-0.009 L7:+0.006 L4:-0.031 L3:-0.058 L2:+0.065 L1:+0.831
+  60_min (t+12): L12:-0.007 L7:+0.000 L4:-0.028 L3:-0.052 L2:+0.055 L1:+0.721
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.11818            0.25975        +0.14157               
-    2                0.10791            0.25081        +0.14290               
-    3                0.10285            0.24239        +0.13954               
-    4                0.10022            0.24268        +0.14246               
-    5                0.09802            0.24054        +0.14252               
-    6                0.09657            0.23871        +0.14214               
-    7                0.09496            0.23554        +0.14058               
-    8                0.09343            0.23332        +0.13989               
-    9                0.09241            0.23362        +0.14121               
-   10                0.09162            0.23151        +0.13989               
-   11                0.09095            0.23024        +0.13929 <-- Best Checkpoint
-   12                0.09055            0.23175        +0.14120               
+    1                0.11947            0.26165        +0.14218               
+    2                0.10931            0.25225        +0.14294               
+    3                0.10410            0.24648        +0.14238               
+    4                0.10077            0.24020        +0.13943               
+    5                0.09888            0.24222        +0.14334               
+    6                0.09701            0.23819        +0.14118               
+    7                0.09567            0.23683        +0.14116               
+    8                0.09426            0.23340        +0.13914               
+    9                0.09284            0.23268        +0.13984               
+   10                0.09211            0.23241        +0.14030               
+   11                0.09138            0.23183        +0.14045               
+   12                0.09096            0.23009        +0.13913 <-- Best Checkpoint
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    7.6291   2.7621   1.3094   2.7182%   0.9196    47.18
-30_min                   6   15.4535   3.9311   1.7338   3.8915%   0.8372    55.52
-60_min                  12   27.8962   5.2817   2.3040   5.6224%   0.7063    58.62
-Average_All_Horizons     7   16.9929   3.9916   1.7824   4.0774%   0.8210    58.62
+15_min                   3    7.5867   2.7544   1.2991   2.6945%   0.9201    48.11
+30_min                   6   15.2795   3.9089   1.7241   3.8977%   0.8390    55.70
+60_min                  12   27.7368   5.2666   2.3004   5.6861%   0.7079    58.60
+Average_All_Horizons     7   16.8677   3.9766   1.7745   4.0928%   0.8223    58.60
 ==============================================================================
-Ljung-Box (L=24) (Q):    2303.23   Jarque-Bera (JB):       885.86
+Ljung-Box (L=24) (Q):    1973.72   Jarque-Bera (JB):       943.55
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.8014   Skew:                  -0.5684
-Prob(H) (two-sided):       0.0222   Kurtosis:               6.9055
-Durbin-Watson (DW):        0.3666   MedAE (mph):           0.2129
-Residual Mean (mph):     -0.0199   Residual Std:           2.7620
+Heteroskedasticity(H):     0.8514   Skew:                  -0.6081
+Prob(H) (two-sided):       0.0966   Kurtosis:               7.0179
+Durbin-Watson (DW):        0.3784   MedAE (mph):           0.2216
+Residual Mean (mph):     -0.0881   Residual Std:           2.7530
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =         7.6291 | RMSE =     2.7621 mph | MAE =     1.3094 mph
-  MAPE =        2.7182% | R²   =     0.9196     | Max Error =    47.1802 mph
+  MSE  =         7.5867 | RMSE =     2.7544 mph | MAE =     1.2991 mph
+  MAPE =        2.6945% | R²   =     0.9201     | Max Error =    48.1141 mph
 ==============================================================================
 ```
 
@@ -1292,7 +1270,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 DCRNN (Graph Diffusion + GRU) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (30_min, 30 min ahead)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (30_min, 30 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -1303,66 +1281,66 @@ Model: DCRNN (Graph Diffusion + GRU) — Horizon 30_min (30 min / t+6)
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.118180   Best Val Loss:       0.230240
-Final Train Loss:             0.090550   Best Epoch:           11 / 12  
-Hardware Device:                  cuda   Train / Pred:    66.9065s / 0.0850s
+Initial Train Loss:           0.119470   Best Val Loss:       0.230090
+Final Train Loss:             0.090960   Best Epoch:           12 / 12  
+Hardware Device:                  cuda   Train / Pred:    67.9647s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from dcrnn_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
 supports_stack*            (5, 207, 207)    214,245  +0.00483  0.06024     [-0.974, +1.498]
-cell1.gate_linear.weight   (64, 165)         10,560  +0.00006  0.19202     [-1.047, +1.039]
-cell1.gate_linear.bias     (64,)                 64  -0.00579  0.16632     [-0.438, +0.487]
-cell1.cand_linear.weight   (32, 165)          5,280  -0.00071  0.08735     [-0.445, +0.458]
-cell1.cand_linear.bias     (32,)                 32  -0.00049  0.05887     [-0.126, +0.136]
-norm.weight                (32,)                 32  +1.00541  0.07076     [+0.849, +1.140]
-norm.bias                  (32,)                 32  +0.00028  0.02501     [-0.047, +0.047]
-proj.0.weight              (32, 160)          5,120  +0.00048  0.06583     [-0.296, +0.327]
-proj.0.bias                (32,)                 32  -0.02567  0.05406     [-0.119, +0.065]
-proj.2.weight              (3, 32)               96  +0.00667  0.12173     [-0.196, +0.275]
-proj.2.bias                (3,)                   3  -0.03100  0.05782     [-0.099, +0.042]
-ar_highway.weight          (3, 12)               36  +0.06285  0.22385     [-0.058, +0.883]
-ar_highway.bias            (3,)                   3  +0.01399  0.01026     [-0.001, +0.022]
+cell1.gate_linear.weight   (64, 165)         10,560  +0.00328  0.17942     [-0.949, +0.833]
+cell1.gate_linear.bias     (64,)                 64  -0.00059  0.13166     [-0.525, +0.224]
+cell1.cand_linear.weight   (32, 165)          5,280  +0.00187  0.08680     [-0.454, +0.367]
+cell1.cand_linear.bias     (32,)                 32  -0.00769  0.05903     [-0.104, +0.153]
+norm.weight                (32,)                 32  +1.03368  0.07079     [+0.929, +1.239]
+norm.bias                  (32,)                 32  +0.00069  0.01864     [-0.046, +0.054]
+proj.0.weight              (32, 160)          5,120  +0.00079  0.06632     [-0.355, +0.283]
+proj.0.bias                (32,)                 32  -0.03269  0.04898     [-0.102, +0.080]
+proj.2.weight              (3, 32)               96  +0.00123  0.12815     [-0.232, +0.271]
+proj.2.bias                (3,)                   3  +0.05229  0.10033     [-0.089, +0.129]
+ar_highway.weight          (3, 12)               36  +0.06657  0.22843     [-0.058, +0.897]
+ar_highway.bias            (3,)                   3  -0.00989  0.03417     [-0.043, +0.037]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_highway.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:-0.013 L7:-0.003 L4:-0.022 L3:-0.058 L2:+0.048 L1:+0.883
-  30_min (t+6) : L12:-0.013 L7:+0.003 L4:-0.023 L3:-0.050 L2:+0.059 L1:+0.803
-  60_min (t+12): L12:-0.017 L7:-0.002 L4:-0.028 L3:-0.058 L2:+0.035 L1:+0.708
+  15_min (t+3) : L12:-0.011 L7:-0.002 L4:-0.024 L3:-0.049 L2:+0.064 L1:+0.897
+  30_min (t+6) : L12:-0.009 L7:+0.006 L4:-0.031 L3:-0.058 L2:+0.065 L1:+0.831
+  60_min (t+12): L12:-0.007 L7:+0.000 L4:-0.028 L3:-0.052 L2:+0.055 L1:+0.721
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.11818            0.25975        +0.14157               
-    2                0.10791            0.25081        +0.14290               
-    3                0.10285            0.24239        +0.13954               
-    4                0.10022            0.24268        +0.14246               
-    5                0.09802            0.24054        +0.14252               
-    6                0.09657            0.23871        +0.14214               
-    7                0.09496            0.23554        +0.14058               
-    8                0.09343            0.23332        +0.13989               
-    9                0.09241            0.23362        +0.14121               
-   10                0.09162            0.23151        +0.13989               
-   11                0.09095            0.23024        +0.13929 <-- Best Checkpoint
-   12                0.09055            0.23175        +0.14120               
+    1                0.11947            0.26165        +0.14218               
+    2                0.10931            0.25225        +0.14294               
+    3                0.10410            0.24648        +0.14238               
+    4                0.10077            0.24020        +0.13943               
+    5                0.09888            0.24222        +0.14334               
+    6                0.09701            0.23819        +0.14118               
+    7                0.09567            0.23683        +0.14116               
+    8                0.09426            0.23340        +0.13914               
+    9                0.09284            0.23268        +0.13984               
+   10                0.09211            0.23241        +0.14030               
+   11                0.09138            0.23183        +0.14045               
+   12                0.09096            0.23009        +0.13913 <-- Best Checkpoint
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    7.6291   2.7621   1.3094   2.7182%   0.9196    47.18
-30_min                   6   15.4535   3.9311   1.7338   3.8915%   0.8372    55.52
-60_min                  12   27.8962   5.2817   2.3040   5.6224%   0.7063    58.62
-Average_All_Horizons     7   16.9929   3.9916   1.7824   4.0774%   0.8210    58.62
+15_min                   3    7.5867   2.7544   1.2991   2.6945%   0.9201    48.11
+30_min                   6   15.2795   3.9089   1.7241   3.8977%   0.8390    55.70
+60_min                  12   27.7368   5.2666   2.3004   5.6861%   0.7079    58.60
+Average_All_Horizons     7   16.8677   3.9766   1.7745   4.0928%   0.8223    58.60
 ==============================================================================
-Ljung-Box (L=24) (Q):    4517.53   Jarque-Bera (JB):       690.98
+Ljung-Box (L=24) (Q):    4176.75   Jarque-Bera (JB):       765.99
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.7785   Skew:                  -0.8079
-Prob(H) (two-sided):       0.0097   Kurtosis:               6.2085
-Durbin-Watson (DW):        0.1305   MedAE (mph):           0.2967
-Residual Mean (mph):     -0.1243   Residual Std:           3.9291
+Heteroskedasticity(H):     0.7850   Skew:                  -1.0607
+Prob(H) (two-sided):       0.0124   Kurtosis:               6.1315
+Durbin-Watson (DW):        0.1327   MedAE (mph):           0.3028
+Residual Mean (mph):     -0.1858   Residual Std:           3.9045
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =        15.4535 | RMSE =     3.9311 mph | MAE =     1.7338 mph
-  MAPE =        3.8915% | R²   =     0.8372     | Max Error =    55.5159 mph
+  MSE  =        15.2795 | RMSE =     3.9089 mph | MAE =     1.7241 mph
+  MAPE =        3.8977% | R²   =     0.8390     | Max Error =    55.7045 mph
 ==============================================================================
 ```
 
@@ -1370,7 +1348,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 DCRNN (Graph Diffusion + GRU) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (60_min, 60 min ahead)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (60_min, 60 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -1381,66 +1359,66 @@ Model: DCRNN (Graph Diffusion + GRU) — Horizon 60_min (60 min / t+12)
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.118180   Best Val Loss:       0.230240
-Final Train Loss:             0.090550   Best Epoch:           11 / 12  
-Hardware Device:                  cuda   Train / Pred:    66.9065s / 0.0850s
+Initial Train Loss:           0.119470   Best Val Loss:       0.230090
+Final Train Loss:             0.090960   Best Epoch:           12 / 12  
+Hardware Device:                  cuda   Train / Pred:    67.9647s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from dcrnn_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
 supports_stack*            (5, 207, 207)    214,245  +0.00483  0.06024     [-0.974, +1.498]
-cell1.gate_linear.weight   (64, 165)         10,560  +0.00006  0.19202     [-1.047, +1.039]
-cell1.gate_linear.bias     (64,)                 64  -0.00579  0.16632     [-0.438, +0.487]
-cell1.cand_linear.weight   (32, 165)          5,280  -0.00071  0.08735     [-0.445, +0.458]
-cell1.cand_linear.bias     (32,)                 32  -0.00049  0.05887     [-0.126, +0.136]
-norm.weight                (32,)                 32  +1.00541  0.07076     [+0.849, +1.140]
-norm.bias                  (32,)                 32  +0.00028  0.02501     [-0.047, +0.047]
-proj.0.weight              (32, 160)          5,120  +0.00048  0.06583     [-0.296, +0.327]
-proj.0.bias                (32,)                 32  -0.02567  0.05406     [-0.119, +0.065]
-proj.2.weight              (3, 32)               96  +0.00667  0.12173     [-0.196, +0.275]
-proj.2.bias                (3,)                   3  -0.03100  0.05782     [-0.099, +0.042]
-ar_highway.weight          (3, 12)               36  +0.06285  0.22385     [-0.058, +0.883]
-ar_highway.bias            (3,)                   3  +0.01399  0.01026     [-0.001, +0.022]
+cell1.gate_linear.weight   (64, 165)         10,560  +0.00328  0.17942     [-0.949, +0.833]
+cell1.gate_linear.bias     (64,)                 64  -0.00059  0.13166     [-0.525, +0.224]
+cell1.cand_linear.weight   (32, 165)          5,280  +0.00187  0.08680     [-0.454, +0.367]
+cell1.cand_linear.bias     (32,)                 32  -0.00769  0.05903     [-0.104, +0.153]
+norm.weight                (32,)                 32  +1.03368  0.07079     [+0.929, +1.239]
+norm.bias                  (32,)                 32  +0.00069  0.01864     [-0.046, +0.054]
+proj.0.weight              (32, 160)          5,120  +0.00079  0.06632     [-0.355, +0.283]
+proj.0.bias                (32,)                 32  -0.03269  0.04898     [-0.102, +0.080]
+proj.2.weight              (3, 32)               96  +0.00123  0.12815     [-0.232, +0.271]
+proj.2.bias                (3,)                   3  +0.05229  0.10033     [-0.089, +0.129]
+ar_highway.weight          (3, 12)               36  +0.06657  0.22843     [-0.058, +0.897]
+ar_highway.bias            (3,)                   3  -0.00989  0.03417     [-0.043, +0.037]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_highway.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:-0.013 L7:-0.003 L4:-0.022 L3:-0.058 L2:+0.048 L1:+0.883
-  30_min (t+6) : L12:-0.013 L7:+0.003 L4:-0.023 L3:-0.050 L2:+0.059 L1:+0.803
-  60_min (t+12): L12:-0.017 L7:-0.002 L4:-0.028 L3:-0.058 L2:+0.035 L1:+0.708
+  15_min (t+3) : L12:-0.011 L7:-0.002 L4:-0.024 L3:-0.049 L2:+0.064 L1:+0.897
+  30_min (t+6) : L12:-0.009 L7:+0.006 L4:-0.031 L3:-0.058 L2:+0.065 L1:+0.831
+  60_min (t+12): L12:-0.007 L7:+0.000 L4:-0.028 L3:-0.052 L2:+0.055 L1:+0.721
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.11818            0.25975        +0.14157               
-    2                0.10791            0.25081        +0.14290               
-    3                0.10285            0.24239        +0.13954               
-    4                0.10022            0.24268        +0.14246               
-    5                0.09802            0.24054        +0.14252               
-    6                0.09657            0.23871        +0.14214               
-    7                0.09496            0.23554        +0.14058               
-    8                0.09343            0.23332        +0.13989               
-    9                0.09241            0.23362        +0.14121               
-   10                0.09162            0.23151        +0.13989               
-   11                0.09095            0.23024        +0.13929 <-- Best Checkpoint
-   12                0.09055            0.23175        +0.14120               
+    1                0.11947            0.26165        +0.14218               
+    2                0.10931            0.25225        +0.14294               
+    3                0.10410            0.24648        +0.14238               
+    4                0.10077            0.24020        +0.13943               
+    5                0.09888            0.24222        +0.14334               
+    6                0.09701            0.23819        +0.14118               
+    7                0.09567            0.23683        +0.14116               
+    8                0.09426            0.23340        +0.13914               
+    9                0.09284            0.23268        +0.13984               
+   10                0.09211            0.23241        +0.14030               
+   11                0.09138            0.23183        +0.14045               
+   12                0.09096            0.23009        +0.13913 <-- Best Checkpoint
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    7.6291   2.7621   1.3094   2.7182%   0.9196    47.18
-30_min                   6   15.4535   3.9311   1.7338   3.8915%   0.8372    55.52
-60_min                  12   27.8962   5.2817   2.3040   5.6224%   0.7063    58.62
-Average_All_Horizons     7   16.9929   3.9916   1.7824   4.0774%   0.8210    58.62
+15_min                   3    7.5867   2.7544   1.2991   2.6945%   0.9201    48.11
+30_min                   6   15.2795   3.9089   1.7241   3.8977%   0.8390    55.70
+60_min                  12   27.7368   5.2666   2.3004   5.6861%   0.7079    58.60
+Average_All_Horizons     7   16.8677   3.9766   1.7745   4.0928%   0.8223    58.60
 ==============================================================================
-Ljung-Box (L=24) (Q):    7839.87   Jarque-Bera (JB):       920.60
+Ljung-Box (L=24) (Q):    7723.98   Jarque-Bera (JB):       836.30
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.8457   Skew:                  -1.2878
-Prob(H) (two-sided):       0.0833   Kurtosis:               6.2497
-Durbin-Watson (DW):        0.0483   MedAE (mph):           0.4447
-Residual Mean (mph):     -0.2987   Residual Std:           5.2732
+Heteroskedasticity(H):     0.7953   Skew:                  -1.2949
+Prob(H) (two-sided):       0.0180   Kurtosis:               5.9855
+Durbin-Watson (DW):        0.0437   MedAE (mph):           0.4440
+Residual Mean (mph):     -0.3568   Residual Std:           5.2545
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =        27.8962 | RMSE =     5.2817 mph | MAE =     2.3040 mph
-  MAPE =        5.6224% | R²   =     0.7063     | Max Error =    58.6159 mph
+  MSE  =        27.7368 | RMSE =     5.2666 mph | MAE =     2.3004 mph
+  MAPE =        5.6861% | R²   =     0.7079     | Max Error =    58.6043 mph
 ==============================================================================
 ```
 
@@ -1448,7 +1426,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 DCRNN (Graph Diffusion + GRU) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (Average_All_Horizons, 35 min ahead)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (Average_All_Horizons, 35 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -1459,66 +1437,66 @@ Model: DCRNN (Graph Diffusion + GRU) — Horizon Average_All_Horizons (35 min / 
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.118180   Best Val Loss:       0.230240
-Final Train Loss:             0.090550   Best Epoch:           11 / 12  
-Hardware Device:                  cuda   Train / Pred:    66.9065s / 0.0850s
+Initial Train Loss:           0.119470   Best Val Loss:       0.230090
+Final Train Loss:             0.090960   Best Epoch:           12 / 12  
+Hardware Device:                  cuda   Train / Pred:    67.9647s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from dcrnn_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
 supports_stack*            (5, 207, 207)    214,245  +0.00483  0.06024     [-0.974, +1.498]
-cell1.gate_linear.weight   (64, 165)         10,560  +0.00006  0.19202     [-1.047, +1.039]
-cell1.gate_linear.bias     (64,)                 64  -0.00579  0.16632     [-0.438, +0.487]
-cell1.cand_linear.weight   (32, 165)          5,280  -0.00071  0.08735     [-0.445, +0.458]
-cell1.cand_linear.bias     (32,)                 32  -0.00049  0.05887     [-0.126, +0.136]
-norm.weight                (32,)                 32  +1.00541  0.07076     [+0.849, +1.140]
-norm.bias                  (32,)                 32  +0.00028  0.02501     [-0.047, +0.047]
-proj.0.weight              (32, 160)          5,120  +0.00048  0.06583     [-0.296, +0.327]
-proj.0.bias                (32,)                 32  -0.02567  0.05406     [-0.119, +0.065]
-proj.2.weight              (3, 32)               96  +0.00667  0.12173     [-0.196, +0.275]
-proj.2.bias                (3,)                   3  -0.03100  0.05782     [-0.099, +0.042]
-ar_highway.weight          (3, 12)               36  +0.06285  0.22385     [-0.058, +0.883]
-ar_highway.bias            (3,)                   3  +0.01399  0.01026     [-0.001, +0.022]
+cell1.gate_linear.weight   (64, 165)         10,560  +0.00328  0.17942     [-0.949, +0.833]
+cell1.gate_linear.bias     (64,)                 64  -0.00059  0.13166     [-0.525, +0.224]
+cell1.cand_linear.weight   (32, 165)          5,280  +0.00187  0.08680     [-0.454, +0.367]
+cell1.cand_linear.bias     (32,)                 32  -0.00769  0.05903     [-0.104, +0.153]
+norm.weight                (32,)                 32  +1.03368  0.07079     [+0.929, +1.239]
+norm.bias                  (32,)                 32  +0.00069  0.01864     [-0.046, +0.054]
+proj.0.weight              (32, 160)          5,120  +0.00079  0.06632     [-0.355, +0.283]
+proj.0.bias                (32,)                 32  -0.03269  0.04898     [-0.102, +0.080]
+proj.2.weight              (3, 32)               96  +0.00123  0.12815     [-0.232, +0.271]
+proj.2.bias                (3,)                   3  +0.05229  0.10033     [-0.089, +0.129]
+ar_highway.weight          (3, 12)               36  +0.06657  0.22843     [-0.058, +0.897]
+ar_highway.bias            (3,)                   3  -0.00989  0.03417     [-0.043, +0.037]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_highway.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:-0.013 L7:-0.003 L4:-0.022 L3:-0.058 L2:+0.048 L1:+0.883
-  30_min (t+6) : L12:-0.013 L7:+0.003 L4:-0.023 L3:-0.050 L2:+0.059 L1:+0.803
-  60_min (t+12): L12:-0.017 L7:-0.002 L4:-0.028 L3:-0.058 L2:+0.035 L1:+0.708
+  15_min (t+3) : L12:-0.011 L7:-0.002 L4:-0.024 L3:-0.049 L2:+0.064 L1:+0.897
+  30_min (t+6) : L12:-0.009 L7:+0.006 L4:-0.031 L3:-0.058 L2:+0.065 L1:+0.831
+  60_min (t+12): L12:-0.007 L7:+0.000 L4:-0.028 L3:-0.052 L2:+0.055 L1:+0.721
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.11818            0.25975        +0.14157               
-    2                0.10791            0.25081        +0.14290               
-    3                0.10285            0.24239        +0.13954               
-    4                0.10022            0.24268        +0.14246               
-    5                0.09802            0.24054        +0.14252               
-    6                0.09657            0.23871        +0.14214               
-    7                0.09496            0.23554        +0.14058               
-    8                0.09343            0.23332        +0.13989               
-    9                0.09241            0.23362        +0.14121               
-   10                0.09162            0.23151        +0.13989               
-   11                0.09095            0.23024        +0.13929 <-- Best Checkpoint
-   12                0.09055            0.23175        +0.14120               
+    1                0.11947            0.26165        +0.14218               
+    2                0.10931            0.25225        +0.14294               
+    3                0.10410            0.24648        +0.14238               
+    4                0.10077            0.24020        +0.13943               
+    5                0.09888            0.24222        +0.14334               
+    6                0.09701            0.23819        +0.14118               
+    7                0.09567            0.23683        +0.14116               
+    8                0.09426            0.23340        +0.13914               
+    9                0.09284            0.23268        +0.13984               
+   10                0.09211            0.23241        +0.14030               
+   11                0.09138            0.23183        +0.14045               
+   12                0.09096            0.23009        +0.13913 <-- Best Checkpoint
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    7.6291   2.7621   1.3094   2.7182%   0.9196    47.18
-30_min                   6   15.4535   3.9311   1.7338   3.8915%   0.8372    55.52
-60_min                  12   27.8962   5.2817   2.3040   5.6224%   0.7063    58.62
-Average_All_Horizons     7   16.9929   3.9916   1.7824   4.0774%   0.8210    58.62
+15_min                   3    7.5867   2.7544   1.2991   2.6945%   0.9201    48.11
+30_min                   6   15.2795   3.9089   1.7241   3.8977%   0.8390    55.70
+60_min                  12   27.7368   5.2666   2.3004   5.6861%   0.7079    58.60
+Average_All_Horizons     7   16.8677   3.9766   1.7745   4.0928%   0.8223    58.60
 ==============================================================================
-Ljung-Box (L=24) (Q):     187.97   Jarque-Bera (JB):      3244.79
+Ljung-Box (L=24) (Q):     187.26   Jarque-Bera (JB):      3258.89
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     1.2200   Skew:                  -0.0925
-Prob(H) (two-sided):       0.1425   Kurtosis:              10.7826
-Durbin-Watson (DW):        1.7550   MedAE (mph):           1.2120
-Residual Mean (mph):     -0.1476   Residual Std:           3.9881
+Heteroskedasticity(H):     1.2200   Skew:                  -0.1323
+Prob(H) (two-sided):       0.1425   Kurtosis:              10.7972
+Durbin-Watson (DW):        1.7550   MedAE (mph):           1.2067
+Residual Mean (mph):     -0.2102   Residual Std:           3.9707
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =        16.9929 | RMSE =     3.9916 mph | MAE =     1.7824 mph
-  MAPE =        4.0774% | R²   =     0.8210     | Max Error =    58.6159 mph
+  MSE  =        16.8677 | RMSE =     3.9766 mph | MAE =     1.7745 mph
+  MAPE =        4.0928% | R²   =     0.8223     | Max Error =    58.6043 mph
 ==============================================================================
 ```
 
@@ -1526,7 +1504,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 Multi-Horizon TCN (Causal Conv1D) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (15_min, 15 min ahead)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (15_min, 15 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -1537,59 +1515,59 @@ Model: Multi-Horizon TCN (Causal Conv1D) — Horizon 15_min (15 min / t+3)
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.118770   Best Val Loss:       0.259500
-Final Train Loss:             0.112640   Best Epoch:            7 / 10  
-Hardware Device:                  cuda   Train / Pred:    14.5001s / 0.0850s
+Initial Train Loss:           0.119540   Best Val Loss:       0.259410
+Final Train Loss:             0.112840   Best Epoch:           10 / 10  
+Hardware Device:                  cuda   Train / Pred:    15.3117s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from tcn_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
-conv1.weight               (32, 1, 3)            96  -0.02726  0.40867     [-0.750, +0.873]
-conv1.bias                 (32,)                 32  +0.01144  0.30184     [-0.520, +0.503]
-conv2.weight               (32, 32, 3)        3,072  -0.01373  0.10859     [-0.656, +0.540]
-conv2.bias                 (32,)                 32  -0.02430  0.06916     [-0.130, +0.095]
-head.weight                (3, 32)               96  +0.03396  0.16630     [-0.560, +0.401]
-head.bias                  (3,)                   3  -0.01119  0.11303     [-0.140, +0.135]
-ar_linear.weight           (3, 12)               36  +0.06352  0.23086     [-0.073, +0.838]
-ar_linear.bias             (3,)                   3  +0.00073  0.02226     [-0.025, +0.029]
+conv1.weight               (32, 1, 3)            96  -0.03180  0.39511     [-0.715, +0.944]
+conv1.bias                 (32,)                 32  +0.00644  0.31037     [-0.502, +0.524]
+conv2.weight               (32, 32, 3)        3,072  -0.01147  0.11678     [-0.675, +0.713]
+conv2.bias                 (32,)                 32  -0.01704  0.06051     [-0.112, +0.081]
+head.weight                (3, 32)               96  +0.00514  0.16485     [-0.442, +0.372]
+head.bias                  (3,)                   3  +0.02752  0.05627     [-0.016, +0.107]
+ar_linear.weight           (3, 12)               36  +0.06506  0.23014     [-0.076, +0.842]
+ar_linear.bias             (3,)                   3  +0.00338  0.01774     [-0.019, +0.024]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_linear.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:-0.036 L7:+0.002 L4:+0.004 L3:+0.005 L2:+0.003 L1:+0.827
-  30_min (t+6) : L12:-0.051 L7:-0.003 L4:+0.002 L3:+0.003 L2:+0.022 L1:+0.838
-  60_min (t+12): L12:-0.073 L7:-0.021 L4:-0.003 L3:-0.002 L2:-0.005 L1:+0.817
+  15_min (t+3) : L12:-0.036 L7:-0.001 L4:+0.013 L3:+0.004 L2:+0.005 L1:+0.842
+  30_min (t+6) : L12:-0.050 L7:+0.001 L4:+0.006 L3:+0.006 L2:+0.014 L1:+0.827
+  60_min (t+12): L12:-0.076 L7:-0.010 L4:+0.005 L3:+0.004 L2:+0.007 L1:+0.810
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.11877            0.26513        +0.14636               
-    2                0.11521            0.26258        +0.14737               
-    3                0.11422            0.26152        +0.14730               
-    4                0.11411            0.26246        +0.14835               
-    5                0.11349            0.26339        +0.14990               
-    6                0.11367            0.26294        +0.14927               
-    7                0.11300            0.25950        +0.14650 <-- Best Checkpoint
-    8                0.11290            0.26106        +0.14816               
-    9                0.11273            0.25993        +0.14720               
-   10                0.11264            0.26017        +0.14753               
+    1                0.11954            0.26682        +0.14728               
+    2                0.11625            0.26499        +0.14874               
+    3                0.11473            0.26186        +0.14713               
+    4                0.11411            0.26202        +0.14791               
+    5                0.11399            0.26250        +0.14851               
+    6                0.11352            0.26294        +0.14942               
+    7                0.11373            0.26011        +0.14638               
+    8                0.11304            0.25946        +0.14642               
+    9                0.11294            0.25991        +0.14697               
+   10                0.11284            0.25941        +0.14657 <-- Best Checkpoint
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    8.6841   2.9469   1.3541   2.8546%   0.9085    50.96
-30_min                   6   19.0388   4.3633   1.8552   4.1751%   0.7994    55.86
-60_min                  12   37.1624   6.0961   2.6242   6.5286%   0.6087    58.90
-Average_All_Horizons     7   21.6284   4.4688   1.9445   4.5194%   0.7722    58.90
+15_min                   3    8.7019   2.9499   1.3532   2.8495%   0.9083    52.68
+30_min                   6   19.0428   4.3638   1.8605   4.2009%   0.7994    55.81
+60_min                  12   36.9984   6.0826   2.6396   6.6155%   0.6104    58.77
+Average_All_Horizons     7   21.5810   4.4654   1.9511   4.5553%   0.7727    58.77
 ==============================================================================
-Ljung-Box (L=24) (Q):    6961.02   Jarque-Bera (JB):       415.03
+Ljung-Box (L=24) (Q):    6833.44   Jarque-Bera (JB):       424.32
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.7227   Skew:                  -0.5298
-Prob(H) (two-sided):       0.0008   Kurtosis:               5.5746
-Durbin-Watson (DW):        0.1413   MedAE (mph):           0.2604
-Residual Mean (mph):     -0.0368   Residual Std:           2.9466
+Heteroskedasticity(H):     0.7228   Skew:                  -0.4636
+Prob(H) (two-sided):       0.0008   Kurtosis:               5.6581
+Durbin-Watson (DW):        0.1432   MedAE (mph):           0.2571
+Residual Mean (mph):     -0.0345   Residual Std:           2.9497
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =         8.6841 | RMSE =     2.9469 mph | MAE =     1.3541 mph
-  MAPE =        2.8546% | R²   =     0.9085     | Max Error =    50.9629 mph
+  MSE  =         8.7019 | RMSE =     2.9499 mph | MAE =     1.3532 mph
+  MAPE =        2.8495% | R²   =     0.9083     | Max Error =    52.6765 mph
 ==============================================================================
 ```
 
@@ -1597,7 +1575,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 Multi-Horizon TCN (Causal Conv1D) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (30_min, 30 min ahead)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (30_min, 30 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -1608,59 +1586,59 @@ Model: Multi-Horizon TCN (Causal Conv1D) — Horizon 30_min (30 min / t+6)
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.118770   Best Val Loss:       0.259500
-Final Train Loss:             0.112640   Best Epoch:            7 / 10  
-Hardware Device:                  cuda   Train / Pred:    14.5001s / 0.0850s
+Initial Train Loss:           0.119540   Best Val Loss:       0.259410
+Final Train Loss:             0.112840   Best Epoch:           10 / 10  
+Hardware Device:                  cuda   Train / Pred:    15.3117s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from tcn_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
-conv1.weight               (32, 1, 3)            96  -0.02726  0.40867     [-0.750, +0.873]
-conv1.bias                 (32,)                 32  +0.01144  0.30184     [-0.520, +0.503]
-conv2.weight               (32, 32, 3)        3,072  -0.01373  0.10859     [-0.656, +0.540]
-conv2.bias                 (32,)                 32  -0.02430  0.06916     [-0.130, +0.095]
-head.weight                (3, 32)               96  +0.03396  0.16630     [-0.560, +0.401]
-head.bias                  (3,)                   3  -0.01119  0.11303     [-0.140, +0.135]
-ar_linear.weight           (3, 12)               36  +0.06352  0.23086     [-0.073, +0.838]
-ar_linear.bias             (3,)                   3  +0.00073  0.02226     [-0.025, +0.029]
+conv1.weight               (32, 1, 3)            96  -0.03180  0.39511     [-0.715, +0.944]
+conv1.bias                 (32,)                 32  +0.00644  0.31037     [-0.502, +0.524]
+conv2.weight               (32, 32, 3)        3,072  -0.01147  0.11678     [-0.675, +0.713]
+conv2.bias                 (32,)                 32  -0.01704  0.06051     [-0.112, +0.081]
+head.weight                (3, 32)               96  +0.00514  0.16485     [-0.442, +0.372]
+head.bias                  (3,)                   3  +0.02752  0.05627     [-0.016, +0.107]
+ar_linear.weight           (3, 12)               36  +0.06506  0.23014     [-0.076, +0.842]
+ar_linear.bias             (3,)                   3  +0.00338  0.01774     [-0.019, +0.024]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_linear.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:-0.036 L7:+0.002 L4:+0.004 L3:+0.005 L2:+0.003 L1:+0.827
-  30_min (t+6) : L12:-0.051 L7:-0.003 L4:+0.002 L3:+0.003 L2:+0.022 L1:+0.838
-  60_min (t+12): L12:-0.073 L7:-0.021 L4:-0.003 L3:-0.002 L2:-0.005 L1:+0.817
+  15_min (t+3) : L12:-0.036 L7:-0.001 L4:+0.013 L3:+0.004 L2:+0.005 L1:+0.842
+  30_min (t+6) : L12:-0.050 L7:+0.001 L4:+0.006 L3:+0.006 L2:+0.014 L1:+0.827
+  60_min (t+12): L12:-0.076 L7:-0.010 L4:+0.005 L3:+0.004 L2:+0.007 L1:+0.810
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.11877            0.26513        +0.14636               
-    2                0.11521            0.26258        +0.14737               
-    3                0.11422            0.26152        +0.14730               
-    4                0.11411            0.26246        +0.14835               
-    5                0.11349            0.26339        +0.14990               
-    6                0.11367            0.26294        +0.14927               
-    7                0.11300            0.25950        +0.14650 <-- Best Checkpoint
-    8                0.11290            0.26106        +0.14816               
-    9                0.11273            0.25993        +0.14720               
-   10                0.11264            0.26017        +0.14753               
+    1                0.11954            0.26682        +0.14728               
+    2                0.11625            0.26499        +0.14874               
+    3                0.11473            0.26186        +0.14713               
+    4                0.11411            0.26202        +0.14791               
+    5                0.11399            0.26250        +0.14851               
+    6                0.11352            0.26294        +0.14942               
+    7                0.11373            0.26011        +0.14638               
+    8                0.11304            0.25946        +0.14642               
+    9                0.11294            0.25991        +0.14697               
+   10                0.11284            0.25941        +0.14657 <-- Best Checkpoint
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    8.6841   2.9469   1.3541   2.8546%   0.9085    50.96
-30_min                   6   19.0388   4.3633   1.8552   4.1751%   0.7994    55.86
-60_min                  12   37.1624   6.0961   2.6242   6.5286%   0.6087    58.90
-Average_All_Horizons     7   21.6284   4.4688   1.9445   4.5194%   0.7722    58.90
+15_min                   3    8.7019   2.9499   1.3532   2.8495%   0.9083    52.68
+30_min                   6   19.0428   4.3638   1.8605   4.2009%   0.7994    55.81
+60_min                  12   36.9984   6.0826   2.6396   6.6155%   0.6104    58.77
+Average_All_Horizons     7   21.5810   4.4654   1.9511   4.5553%   0.7727    58.77
 ==============================================================================
-Ljung-Box (L=24) (Q):    8785.76   Jarque-Bera (JB):       469.39
+Ljung-Box (L=24) (Q):    8754.20   Jarque-Bera (JB):       456.22
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.7123   Skew:                  -0.1771
-Prob(H) (two-sided):       0.0005   Kurtosis:               5.9396
-Durbin-Watson (DW):        0.0443   MedAE (mph):           0.3668
-Residual Mean (mph):     -0.0720   Residual Std:           4.3628
+Heteroskedasticity(H):     0.7119   Skew:                  -0.2467
+Prob(H) (two-sided):       0.0005   Kurtosis:               5.8771
+Durbin-Watson (DW):        0.0454   MedAE (mph):           0.3784
+Residual Mean (mph):     -0.0681   Residual Std:           4.3633
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =        19.0388 | RMSE =     4.3633 mph | MAE =     1.8552 mph
-  MAPE =        4.1751% | R²   =     0.7994     | Max Error =    55.8628 mph
+  MSE  =        19.0428 | RMSE =     4.3638 mph | MAE =     1.8605 mph
+  MAPE =        4.2009% | R²   =     0.7994     | Max Error =    55.8093 mph
 ==============================================================================
 ```
 
@@ -1668,7 +1646,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 Multi-Horizon TCN (Causal Conv1D) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (60_min, 60 min ahead)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (60_min, 60 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -1679,59 +1657,59 @@ Model: Multi-Horizon TCN (Causal Conv1D) — Horizon 60_min (60 min / t+12)
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.118770   Best Val Loss:       0.259500
-Final Train Loss:             0.112640   Best Epoch:            7 / 10  
-Hardware Device:                  cuda   Train / Pred:    14.5001s / 0.0850s
+Initial Train Loss:           0.119540   Best Val Loss:       0.259410
+Final Train Loss:             0.112840   Best Epoch:           10 / 10  
+Hardware Device:                  cuda   Train / Pred:    15.3117s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from tcn_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
-conv1.weight               (32, 1, 3)            96  -0.02726  0.40867     [-0.750, +0.873]
-conv1.bias                 (32,)                 32  +0.01144  0.30184     [-0.520, +0.503]
-conv2.weight               (32, 32, 3)        3,072  -0.01373  0.10859     [-0.656, +0.540]
-conv2.bias                 (32,)                 32  -0.02430  0.06916     [-0.130, +0.095]
-head.weight                (3, 32)               96  +0.03396  0.16630     [-0.560, +0.401]
-head.bias                  (3,)                   3  -0.01119  0.11303     [-0.140, +0.135]
-ar_linear.weight           (3, 12)               36  +0.06352  0.23086     [-0.073, +0.838]
-ar_linear.bias             (3,)                   3  +0.00073  0.02226     [-0.025, +0.029]
+conv1.weight               (32, 1, 3)            96  -0.03180  0.39511     [-0.715, +0.944]
+conv1.bias                 (32,)                 32  +0.00644  0.31037     [-0.502, +0.524]
+conv2.weight               (32, 32, 3)        3,072  -0.01147  0.11678     [-0.675, +0.713]
+conv2.bias                 (32,)                 32  -0.01704  0.06051     [-0.112, +0.081]
+head.weight                (3, 32)               96  +0.00514  0.16485     [-0.442, +0.372]
+head.bias                  (3,)                   3  +0.02752  0.05627     [-0.016, +0.107]
+ar_linear.weight           (3, 12)               36  +0.06506  0.23014     [-0.076, +0.842]
+ar_linear.bias             (3,)                   3  +0.00338  0.01774     [-0.019, +0.024]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_linear.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:-0.036 L7:+0.002 L4:+0.004 L3:+0.005 L2:+0.003 L1:+0.827
-  30_min (t+6) : L12:-0.051 L7:-0.003 L4:+0.002 L3:+0.003 L2:+0.022 L1:+0.838
-  60_min (t+12): L12:-0.073 L7:-0.021 L4:-0.003 L3:-0.002 L2:-0.005 L1:+0.817
+  15_min (t+3) : L12:-0.036 L7:-0.001 L4:+0.013 L3:+0.004 L2:+0.005 L1:+0.842
+  30_min (t+6) : L12:-0.050 L7:+0.001 L4:+0.006 L3:+0.006 L2:+0.014 L1:+0.827
+  60_min (t+12): L12:-0.076 L7:-0.010 L4:+0.005 L3:+0.004 L2:+0.007 L1:+0.810
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.11877            0.26513        +0.14636               
-    2                0.11521            0.26258        +0.14737               
-    3                0.11422            0.26152        +0.14730               
-    4                0.11411            0.26246        +0.14835               
-    5                0.11349            0.26339        +0.14990               
-    6                0.11367            0.26294        +0.14927               
-    7                0.11300            0.25950        +0.14650 <-- Best Checkpoint
-    8                0.11290            0.26106        +0.14816               
-    9                0.11273            0.25993        +0.14720               
-   10                0.11264            0.26017        +0.14753               
+    1                0.11954            0.26682        +0.14728               
+    2                0.11625            0.26499        +0.14874               
+    3                0.11473            0.26186        +0.14713               
+    4                0.11411            0.26202        +0.14791               
+    5                0.11399            0.26250        +0.14851               
+    6                0.11352            0.26294        +0.14942               
+    7                0.11373            0.26011        +0.14638               
+    8                0.11304            0.25946        +0.14642               
+    9                0.11294            0.25991        +0.14697               
+   10                0.11284            0.25941        +0.14657 <-- Best Checkpoint
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    8.6841   2.9469   1.3541   2.8546%   0.9085    50.96
-30_min                   6   19.0388   4.3633   1.8552   4.1751%   0.7994    55.86
-60_min                  12   37.1624   6.0961   2.6242   6.5286%   0.6087    58.90
-Average_All_Horizons     7   21.6284   4.4688   1.9445   4.5194%   0.7722    58.90
+15_min                   3    8.7019   2.9499   1.3532   2.8495%   0.9083    52.68
+30_min                   6   19.0428   4.3638   1.8605   4.2009%   0.7994    55.81
+60_min                  12   36.9984   6.0826   2.6396   6.6155%   0.6104    58.77
+Average_All_Horizons     7   21.5810   4.4654   1.9511   4.5553%   0.7727    58.77
 ==============================================================================
-Ljung-Box (L=24) (Q):   11060.86   Jarque-Bera (JB):       307.59
+Ljung-Box (L=24) (Q):   11130.17   Jarque-Bera (JB):       302.77
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.6888   Skew:                  -0.2845
-Prob(H) (two-sided):       0.0001   Kurtosis:               5.3283
-Durbin-Watson (DW):        0.0164   MedAE (mph):           0.5676
-Residual Mean (mph):     -0.2736   Residual Std:           6.0900
+Heteroskedasticity(H):     0.6868   Skew:                  -0.4529
+Prob(H) (two-sided):       0.0001   Kurtosis:               5.1987
+Durbin-Watson (DW):        0.0167   MedAE (mph):           0.6010
+Residual Mean (mph):     -0.2492   Residual Std:           6.0775
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =        37.1624 | RMSE =     6.0961 mph | MAE =     2.6242 mph
-  MAPE =        6.5286% | R²   =     0.6087     | Max Error =    58.8953 mph
+  MSE  =        36.9984 | RMSE =     6.0826 mph | MAE =     2.6396 mph
+  MAPE =        6.6155% | R²   =     0.6104     | Max Error =    58.7673 mph
 ==============================================================================
 ```
 
@@ -1739,7 +1717,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 Multi-Horizon TCN (Causal Conv1D) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (Average_All_Horizons, 35 min ahead)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (Average_All_Horizons, 35 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -1750,59 +1728,59 @@ Model: Multi-Horizon TCN (Causal Conv1D) — Horizon Average_All_Horizons (35 mi
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.118770   Best Val Loss:       0.259500
-Final Train Loss:             0.112640   Best Epoch:            7 / 10  
-Hardware Device:                  cuda   Train / Pred:    14.5001s / 0.0850s
+Initial Train Loss:           0.119540   Best Val Loss:       0.259410
+Final Train Loss:             0.112840   Best Epoch:           10 / 10  
+Hardware Device:                  cuda   Train / Pred:    15.3117s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from tcn_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
-conv1.weight               (32, 1, 3)            96  -0.02726  0.40867     [-0.750, +0.873]
-conv1.bias                 (32,)                 32  +0.01144  0.30184     [-0.520, +0.503]
-conv2.weight               (32, 32, 3)        3,072  -0.01373  0.10859     [-0.656, +0.540]
-conv2.bias                 (32,)                 32  -0.02430  0.06916     [-0.130, +0.095]
-head.weight                (3, 32)               96  +0.03396  0.16630     [-0.560, +0.401]
-head.bias                  (3,)                   3  -0.01119  0.11303     [-0.140, +0.135]
-ar_linear.weight           (3, 12)               36  +0.06352  0.23086     [-0.073, +0.838]
-ar_linear.bias             (3,)                   3  +0.00073  0.02226     [-0.025, +0.029]
+conv1.weight               (32, 1, 3)            96  -0.03180  0.39511     [-0.715, +0.944]
+conv1.bias                 (32,)                 32  +0.00644  0.31037     [-0.502, +0.524]
+conv2.weight               (32, 32, 3)        3,072  -0.01147  0.11678     [-0.675, +0.713]
+conv2.bias                 (32,)                 32  -0.01704  0.06051     [-0.112, +0.081]
+head.weight                (3, 32)               96  +0.00514  0.16485     [-0.442, +0.372]
+head.bias                  (3,)                   3  +0.02752  0.05627     [-0.016, +0.107]
+ar_linear.weight           (3, 12)               36  +0.06506  0.23014     [-0.076, +0.842]
+ar_linear.bias             (3,)                   3  +0.00338  0.01774     [-0.019, +0.024]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_linear.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:-0.036 L7:+0.002 L4:+0.004 L3:+0.005 L2:+0.003 L1:+0.827
-  30_min (t+6) : L12:-0.051 L7:-0.003 L4:+0.002 L3:+0.003 L2:+0.022 L1:+0.838
-  60_min (t+12): L12:-0.073 L7:-0.021 L4:-0.003 L3:-0.002 L2:-0.005 L1:+0.817
+  15_min (t+3) : L12:-0.036 L7:-0.001 L4:+0.013 L3:+0.004 L2:+0.005 L1:+0.842
+  30_min (t+6) : L12:-0.050 L7:+0.001 L4:+0.006 L3:+0.006 L2:+0.014 L1:+0.827
+  60_min (t+12): L12:-0.076 L7:-0.010 L4:+0.005 L3:+0.004 L2:+0.007 L1:+0.810
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.11877            0.26513        +0.14636               
-    2                0.11521            0.26258        +0.14737               
-    3                0.11422            0.26152        +0.14730               
-    4                0.11411            0.26246        +0.14835               
-    5                0.11349            0.26339        +0.14990               
-    6                0.11367            0.26294        +0.14927               
-    7                0.11300            0.25950        +0.14650 <-- Best Checkpoint
-    8                0.11290            0.26106        +0.14816               
-    9                0.11273            0.25993        +0.14720               
-   10                0.11264            0.26017        +0.14753               
+    1                0.11954            0.26682        +0.14728               
+    2                0.11625            0.26499        +0.14874               
+    3                0.11473            0.26186        +0.14713               
+    4                0.11411            0.26202        +0.14791               
+    5                0.11399            0.26250        +0.14851               
+    6                0.11352            0.26294        +0.14942               
+    7                0.11373            0.26011        +0.14638               
+    8                0.11304            0.25946        +0.14642               
+    9                0.11294            0.25991        +0.14697               
+   10                0.11284            0.25941        +0.14657 <-- Best Checkpoint
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    8.6841   2.9469   1.3541   2.8546%   0.9085    50.96
-30_min                   6   19.0388   4.3633   1.8552   4.1751%   0.7994    55.86
-60_min                  12   37.1624   6.0961   2.6242   6.5286%   0.6087    58.90
-Average_All_Horizons     7   21.6284   4.4688   1.9445   4.5194%   0.7722    58.90
+15_min                   3    8.7019   2.9499   1.3532   2.8495%   0.9083    52.68
+30_min                   6   19.0428   4.3638   1.8605   4.2009%   0.7994    55.81
+60_min                  12   36.9984   6.0826   2.6396   6.6155%   0.6104    58.77
+Average_All_Horizons     7   21.5810   4.4654   1.9511   4.5553%   0.7727    58.77
 ==============================================================================
-Ljung-Box (L=24) (Q):     210.44   Jarque-Bera (JB):      3739.07
+Ljung-Box (L=24) (Q):     210.28   Jarque-Bera (JB):      3655.36
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     1.2200   Skew:                  -0.0714
-Prob(H) (two-sided):       0.1425   Kurtosis:              11.3555
-Durbin-Watson (DW):        1.7550   MedAE (mph):           1.3223
-Residual Mean (mph):     -0.1275   Residual Std:           4.4665
+Heteroskedasticity(H):     1.2200   Skew:                  -0.0657
+Prob(H) (two-sided):       0.1425   Kurtosis:              11.2616
+Durbin-Watson (DW):        1.7550   MedAE (mph):           1.3267
+Residual Mean (mph):     -0.1173   Residual Std:           4.4635
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =        21.6284 | RMSE =     4.4688 mph | MAE =     1.9445 mph
-  MAPE =        4.5194% | R²   =     0.7722     | Max Error =    58.8953 mph
+  MSE  =        21.5810 | RMSE =     4.4654 mph | MAE =     1.9511 mph
+  MAPE =        4.5553% | R²   =     0.7727     | Max Error =    58.7673 mph
 ==============================================================================
 ```
 
@@ -1810,7 +1788,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 Multi-Horizon LSTM (Temporal Baseline) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (15_min, 15 min ahead)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (15_min, 15 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -1821,57 +1799,57 @@ Model: Multi-Horizon LSTM (Temporal Only) — Horizon 15_min (15 min / t+3)
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.106340   Best Val Loss:       0.217570
-Final Train Loss:             0.068050   Best Epoch:            4 / 8   
-Hardware Device:                  cuda   Train / Pred:    8.1749s / 0.0850s
+Initial Train Loss:           0.106210   Best Val Loss:       0.216930
+Final Train Loss:             0.067730   Best Epoch:            4 / 8   
+Hardware Device:                  cuda   Train / Pred:    8.9257s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from lstm_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
-lstm.weight_ih_l0          (256, 207)        52,992  -0.00532  0.10222     [-0.425, +0.435]
-lstm.weight_hh_l0          (256, 64)         16,384  +0.00231  0.12385     [-0.533, +0.590]
-lstm.bias_ih_l0            (256,)               256  +0.00217  0.08432     [-0.225, +0.173]
-lstm.bias_hh_l0            (256,)               256  +0.01034  0.08024     [-0.156, +0.217]
-head.weight                (621, 64)         39,744  -0.00068  0.17614     [-0.818, +0.983]
-head.bias                  (621,)               621  +0.00068  0.12349     [-0.421, +0.377]
-ar_linear.weight           (3, 12)               36  +0.05058  0.19192     [-0.124, +0.825]
-ar_linear.bias             (3,)                   3  -0.00568  0.01720     [-0.030, +0.010]
+lstm.weight_ih_l0          (256, 207)        52,992  -0.00308  0.10151     [-0.501, +0.468]
+lstm.weight_hh_l0          (256, 64)         16,384  +0.00488  0.12429     [-0.645, +0.567]
+lstm.bias_ih_l0            (256,)               256  +0.00500  0.08308     [-0.198, +0.207]
+lstm.bias_hh_l0            (256,)               256  +0.01379  0.08142     [-0.177, +0.195]
+head.weight                (621, 64)         39,744  -0.00687  0.17543     [-0.876, +0.824]
+head.bias                  (621,)               621  -0.00713  0.11989     [-0.411, +0.341]
+ar_linear.weight           (3, 12)               36  +0.04937  0.19177     [-0.129, +0.828]
+ar_linear.bias             (3,)                   3  -0.02207  0.01584     [-0.044, -0.006]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_linear.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:+0.003 L7:-0.002 L4:-0.027 L3:-0.020 L2:+0.028 L1:+0.825
-  30_min (t+6) : L12:+0.012 L7:+0.009 L4:-0.027 L3:-0.040 L2:-0.033 L1:+0.691
-  60_min (t+12): L12:+0.025 L7:+0.011 L4:-0.019 L3:-0.062 L2:-0.124 L1:+0.483
+  15_min (t+3) : L12:+0.001 L7:-0.003 L4:-0.028 L3:-0.020 L2:+0.028 L1:+0.828
+  30_min (t+6) : L12:+0.010 L7:+0.008 L4:-0.027 L3:-0.040 L2:-0.033 L1:+0.690
+  60_min (t+12): L12:+0.020 L7:+0.011 L4:-0.018 L3:-0.062 L2:-0.129 L1:+0.471
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.10634            0.23636        +0.13002               
-    2                0.08778            0.22650        +0.13872               
-    3                0.08029            0.22182        +0.14153               
-    4                0.07648            0.21757        +0.14109 <-- Best Checkpoint
-    5                0.07303            0.21994        +0.14691               
-    6                0.07087            0.21817        +0.14730               
-    7                0.06944            0.22147        +0.15203               
-    8                0.06805            0.21870        +0.15065               
+    1                0.10621            0.23572        +0.12951               
+    2                0.08720            0.22561        +0.13841               
+    3                0.08024            0.21968        +0.13944               
+    4                0.07586            0.21693        +0.14107 <-- Best Checkpoint
+    5                0.07267            0.21747        +0.14480               
+    6                0.07050            0.22136        +0.15086               
+    7                0.06886            0.21962        +0.15076               
+    8                0.06773            0.22047        +0.15274               
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    8.4484   2.9066   1.4182   2.9199%   0.9110    47.02
-30_min                   6   16.2314   4.0288   1.8885   4.0697%   0.8290    50.79
-60_min                  12   28.6132   5.3491   2.4986   5.4961%   0.6987    54.84
-Average_All_Horizons     7   17.7643   4.0948   1.9351   4.1619%   0.8129    54.84
+15_min                   3    8.5194   2.9188   1.4283   2.9292%   0.9102    47.20
+30_min                   6   16.6435   4.0796   1.9189   4.1104%   0.8247    52.46
+60_min                  12   30.0549   5.4822   2.5517   5.5572%   0.6835    56.68
+Average_All_Horizons     7   18.4059   4.1602   1.9663   4.1989%   0.8061    56.68
 ==============================================================================
-Ljung-Box (L=24) (Q):    5938.12   Jarque-Bera (JB):      5757.19
+Ljung-Box (L=24) (Q):    6588.81   Jarque-Bera (JB):      7491.45
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.1485   Skew:                   2.0971
-Prob(H) (two-sided):       0.0000   Kurtosis:              12.4835
-Durbin-Watson (DW):        0.1489   MedAE (mph):           0.2311
-Residual Mean (mph):      0.0986   Residual Std:           2.9049
+Heteroskedasticity(H):     0.1347   Skew:                   2.4605
+Prob(H) (two-sided):       0.0000   Kurtosis:              13.7565
+Durbin-Watson (DW):        0.1386   MedAE (mph):           0.2369
+Residual Mean (mph):      0.1375   Residual Std:           2.9156
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =         8.4484 | RMSE =     2.9066 mph | MAE =     1.4182 mph
-  MAPE =        2.9199% | R²   =     0.9110     | Max Error =    47.0235 mph
+  MSE  =         8.5194 | RMSE =     2.9188 mph | MAE =     1.4283 mph
+  MAPE =        2.9292% | R²   =     0.9102     | Max Error =    47.2004 mph
 ==============================================================================
 ```
 
@@ -1879,7 +1857,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 Multi-Horizon LSTM (Temporal Baseline) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (30_min, 30 min ahead)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (30_min, 30 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -1890,57 +1868,57 @@ Model: Multi-Horizon LSTM (Temporal Only) — Horizon 30_min (30 min / t+6)
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.106340   Best Val Loss:       0.217570
-Final Train Loss:             0.068050   Best Epoch:            4 / 8   
-Hardware Device:                  cuda   Train / Pred:    8.1749s / 0.0850s
+Initial Train Loss:           0.106210   Best Val Loss:       0.216930
+Final Train Loss:             0.067730   Best Epoch:            4 / 8   
+Hardware Device:                  cuda   Train / Pred:    8.9257s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from lstm_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
-lstm.weight_ih_l0          (256, 207)        52,992  -0.00532  0.10222     [-0.425, +0.435]
-lstm.weight_hh_l0          (256, 64)         16,384  +0.00231  0.12385     [-0.533, +0.590]
-lstm.bias_ih_l0            (256,)               256  +0.00217  0.08432     [-0.225, +0.173]
-lstm.bias_hh_l0            (256,)               256  +0.01034  0.08024     [-0.156, +0.217]
-head.weight                (621, 64)         39,744  -0.00068  0.17614     [-0.818, +0.983]
-head.bias                  (621,)               621  +0.00068  0.12349     [-0.421, +0.377]
-ar_linear.weight           (3, 12)               36  +0.05058  0.19192     [-0.124, +0.825]
-ar_linear.bias             (3,)                   3  -0.00568  0.01720     [-0.030, +0.010]
+lstm.weight_ih_l0          (256, 207)        52,992  -0.00308  0.10151     [-0.501, +0.468]
+lstm.weight_hh_l0          (256, 64)         16,384  +0.00488  0.12429     [-0.645, +0.567]
+lstm.bias_ih_l0            (256,)               256  +0.00500  0.08308     [-0.198, +0.207]
+lstm.bias_hh_l0            (256,)               256  +0.01379  0.08142     [-0.177, +0.195]
+head.weight                (621, 64)         39,744  -0.00687  0.17543     [-0.876, +0.824]
+head.bias                  (621,)               621  -0.00713  0.11989     [-0.411, +0.341]
+ar_linear.weight           (3, 12)               36  +0.04937  0.19177     [-0.129, +0.828]
+ar_linear.bias             (3,)                   3  -0.02207  0.01584     [-0.044, -0.006]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_linear.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:+0.003 L7:-0.002 L4:-0.027 L3:-0.020 L2:+0.028 L1:+0.825
-  30_min (t+6) : L12:+0.012 L7:+0.009 L4:-0.027 L3:-0.040 L2:-0.033 L1:+0.691
-  60_min (t+12): L12:+0.025 L7:+0.011 L4:-0.019 L3:-0.062 L2:-0.124 L1:+0.483
+  15_min (t+3) : L12:+0.001 L7:-0.003 L4:-0.028 L3:-0.020 L2:+0.028 L1:+0.828
+  30_min (t+6) : L12:+0.010 L7:+0.008 L4:-0.027 L3:-0.040 L2:-0.033 L1:+0.690
+  60_min (t+12): L12:+0.020 L7:+0.011 L4:-0.018 L3:-0.062 L2:-0.129 L1:+0.471
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.10634            0.23636        +0.13002               
-    2                0.08778            0.22650        +0.13872               
-    3                0.08029            0.22182        +0.14153               
-    4                0.07648            0.21757        +0.14109 <-- Best Checkpoint
-    5                0.07303            0.21994        +0.14691               
-    6                0.07087            0.21817        +0.14730               
-    7                0.06944            0.22147        +0.15203               
-    8                0.06805            0.21870        +0.15065               
+    1                0.10621            0.23572        +0.12951               
+    2                0.08720            0.22561        +0.13841               
+    3                0.08024            0.21968        +0.13944               
+    4                0.07586            0.21693        +0.14107 <-- Best Checkpoint
+    5                0.07267            0.21747        +0.14480               
+    6                0.07050            0.22136        +0.15086               
+    7                0.06886            0.21962        +0.15076               
+    8                0.06773            0.22047        +0.15274               
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    8.4484   2.9066   1.4182   2.9199%   0.9110    47.02
-30_min                   6   16.2314   4.0288   1.8885   4.0697%   0.8290    50.79
-60_min                  12   28.6132   5.3491   2.4986   5.4961%   0.6987    54.84
-Average_All_Horizons     7   17.7643   4.0948   1.9351   4.1619%   0.8129    54.84
+15_min                   3    8.5194   2.9188   1.4283   2.9292%   0.9102    47.20
+30_min                   6   16.6435   4.0796   1.9189   4.1104%   0.8247    52.46
+60_min                  12   30.0549   5.4822   2.5517   5.5572%   0.6835    56.68
+Average_All_Horizons     7   18.4059   4.1602   1.9663   4.1989%   0.8061    56.68
 ==============================================================================
-Ljung-Box (L=24) (Q):    7938.64   Jarque-Bera (JB):     11315.69
+Ljung-Box (L=24) (Q):    8640.23   Jarque-Bera (JB):     12177.08
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.0817   Skew:                   2.8929
-Prob(H) (two-sided):       0.0000   Kurtosis:              16.3367
-Durbin-Watson (DW):        0.0512   MedAE (mph):           0.3429
-Residual Mean (mph):      0.2363   Residual Std:           4.0219
+Heteroskedasticity(H):     0.0828   Skew:                   3.0878
+Prob(H) (two-sided):       0.0000   Kurtosis:              16.7584
+Durbin-Watson (DW):        0.0469   MedAE (mph):           0.3700
+Residual Mean (mph):      0.3406   Residual Std:           4.0654
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =        16.2314 | RMSE =     4.0288 mph | MAE =     1.8885 mph
-  MAPE =        4.0697% | R²   =     0.8290     | Max Error =    50.7904 mph
+  MSE  =        16.6435 | RMSE =     4.0796 mph | MAE =     1.9189 mph
+  MAPE =        4.1104% | R²   =     0.8247     | Max Error =    52.4626 mph
 ==============================================================================
 ```
 
@@ -1948,7 +1926,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 Multi-Horizon LSTM (Temporal Baseline) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (60_min, 60 min ahead)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (60_min, 60 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -1959,57 +1937,57 @@ Model: Multi-Horizon LSTM (Temporal Only) — Horizon 60_min (60 min / t+12)
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.106340   Best Val Loss:       0.217570
-Final Train Loss:             0.068050   Best Epoch:            4 / 8   
-Hardware Device:                  cuda   Train / Pred:    8.1749s / 0.0850s
+Initial Train Loss:           0.106210   Best Val Loss:       0.216930
+Final Train Loss:             0.067730   Best Epoch:            4 / 8   
+Hardware Device:                  cuda   Train / Pred:    8.9257s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from lstm_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
-lstm.weight_ih_l0          (256, 207)        52,992  -0.00532  0.10222     [-0.425, +0.435]
-lstm.weight_hh_l0          (256, 64)         16,384  +0.00231  0.12385     [-0.533, +0.590]
-lstm.bias_ih_l0            (256,)               256  +0.00217  0.08432     [-0.225, +0.173]
-lstm.bias_hh_l0            (256,)               256  +0.01034  0.08024     [-0.156, +0.217]
-head.weight                (621, 64)         39,744  -0.00068  0.17614     [-0.818, +0.983]
-head.bias                  (621,)               621  +0.00068  0.12349     [-0.421, +0.377]
-ar_linear.weight           (3, 12)               36  +0.05058  0.19192     [-0.124, +0.825]
-ar_linear.bias             (3,)                   3  -0.00568  0.01720     [-0.030, +0.010]
+lstm.weight_ih_l0          (256, 207)        52,992  -0.00308  0.10151     [-0.501, +0.468]
+lstm.weight_hh_l0          (256, 64)         16,384  +0.00488  0.12429     [-0.645, +0.567]
+lstm.bias_ih_l0            (256,)               256  +0.00500  0.08308     [-0.198, +0.207]
+lstm.bias_hh_l0            (256,)               256  +0.01379  0.08142     [-0.177, +0.195]
+head.weight                (621, 64)         39,744  -0.00687  0.17543     [-0.876, +0.824]
+head.bias                  (621,)               621  -0.00713  0.11989     [-0.411, +0.341]
+ar_linear.weight           (3, 12)               36  +0.04937  0.19177     [-0.129, +0.828]
+ar_linear.bias             (3,)                   3  -0.02207  0.01584     [-0.044, -0.006]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_linear.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:+0.003 L7:-0.002 L4:-0.027 L3:-0.020 L2:+0.028 L1:+0.825
-  30_min (t+6) : L12:+0.012 L7:+0.009 L4:-0.027 L3:-0.040 L2:-0.033 L1:+0.691
-  60_min (t+12): L12:+0.025 L7:+0.011 L4:-0.019 L3:-0.062 L2:-0.124 L1:+0.483
+  15_min (t+3) : L12:+0.001 L7:-0.003 L4:-0.028 L3:-0.020 L2:+0.028 L1:+0.828
+  30_min (t+6) : L12:+0.010 L7:+0.008 L4:-0.027 L3:-0.040 L2:-0.033 L1:+0.690
+  60_min (t+12): L12:+0.020 L7:+0.011 L4:-0.018 L3:-0.062 L2:-0.129 L1:+0.471
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.10634            0.23636        +0.13002               
-    2                0.08778            0.22650        +0.13872               
-    3                0.08029            0.22182        +0.14153               
-    4                0.07648            0.21757        +0.14109 <-- Best Checkpoint
-    5                0.07303            0.21994        +0.14691               
-    6                0.07087            0.21817        +0.14730               
-    7                0.06944            0.22147        +0.15203               
-    8                0.06805            0.21870        +0.15065               
+    1                0.10621            0.23572        +0.12951               
+    2                0.08720            0.22561        +0.13841               
+    3                0.08024            0.21968        +0.13944               
+    4                0.07586            0.21693        +0.14107 <-- Best Checkpoint
+    5                0.07267            0.21747        +0.14480               
+    6                0.07050            0.22136        +0.15086               
+    7                0.06886            0.21962        +0.15076               
+    8                0.06773            0.22047        +0.15274               
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    8.4484   2.9066   1.4182   2.9199%   0.9110    47.02
-30_min                   6   16.2314   4.0288   1.8885   4.0697%   0.8290    50.79
-60_min                  12   28.6132   5.3491   2.4986   5.4961%   0.6987    54.84
-Average_All_Horizons     7   17.7643   4.0948   1.9351   4.1619%   0.8129    54.84
+15_min                   3    8.5194   2.9188   1.4283   2.9292%   0.9102    47.20
+30_min                   6   16.6435   4.0796   1.9189   4.1104%   0.8247    52.46
+60_min                  12   30.0549   5.4822   2.5517   5.5572%   0.6835    56.68
+Average_All_Horizons     7   18.4059   4.1602   1.9663   4.1989%   0.8061    56.68
 ==============================================================================
-Ljung-Box (L=24) (Q):   10223.45   Jarque-Bera (JB):     14990.97
+Ljung-Box (L=24) (Q):   10918.80   Jarque-Bera (JB):     14778.93
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.0397   Skew:                   3.4026
-Prob(H) (two-sided):       0.0000   Kurtosis:              18.2865
-Durbin-Watson (DW):        0.0246   MedAE (mph):           0.5407
-Residual Mean (mph):      0.4652   Residual Std:           5.3289
+Heteroskedasticity(H):     0.0461   Skew:                   3.4950
+Prob(H) (two-sided):       0.0000   Kurtosis:              18.0720
+Durbin-Watson (DW):        0.0219   MedAE (mph):           0.5196
+Residual Mean (mph):      0.5697   Residual Std:           5.4526
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =        28.6132 | RMSE =     5.3491 mph | MAE =     2.4986 mph
-  MAPE =        5.4961% | R²   =     0.6987     | Max Error =    54.8376 mph
+  MSE  =        30.0549 | RMSE =     5.4822 mph | MAE =     2.5517 mph
+  MAPE =        5.5572% | R²   =     0.6835     | Max Error =    56.6844 mph
 ==============================================================================
 ```
 
@@ -2017,7 +1995,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 Multi-Horizon LSTM (Temporal Baseline) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261117_160932_3fe70f | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (Average_All_Horizons, 35 min ahead)
+Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (Average_All_Horizons, 35 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -2028,56 +2006,56 @@ Model: Multi-Horizon LSTM (Temporal Only) — Horizon Average_All_Horizons (35 m
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.106340   Best Val Loss:       0.217570
-Final Train Loss:             0.068050   Best Epoch:            4 / 8   
-Hardware Device:                  cuda   Train / Pred:    8.1749s / 0.0850s
+Initial Train Loss:           0.106210   Best Val Loss:       0.216930
+Final Train Loss:             0.067730   Best Epoch:            4 / 8   
+Hardware Device:                  cuda   Train / Pred:    8.9257s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from lstm_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
-lstm.weight_ih_l0          (256, 207)        52,992  -0.00532  0.10222     [-0.425, +0.435]
-lstm.weight_hh_l0          (256, 64)         16,384  +0.00231  0.12385     [-0.533, +0.590]
-lstm.bias_ih_l0            (256,)               256  +0.00217  0.08432     [-0.225, +0.173]
-lstm.bias_hh_l0            (256,)               256  +0.01034  0.08024     [-0.156, +0.217]
-head.weight                (621, 64)         39,744  -0.00068  0.17614     [-0.818, +0.983]
-head.bias                  (621,)               621  +0.00068  0.12349     [-0.421, +0.377]
-ar_linear.weight           (3, 12)               36  +0.05058  0.19192     [-0.124, +0.825]
-ar_linear.bias             (3,)                   3  -0.00568  0.01720     [-0.030, +0.010]
+lstm.weight_ih_l0          (256, 207)        52,992  -0.00308  0.10151     [-0.501, +0.468]
+lstm.weight_hh_l0          (256, 64)         16,384  +0.00488  0.12429     [-0.645, +0.567]
+lstm.bias_ih_l0            (256,)               256  +0.00500  0.08308     [-0.198, +0.207]
+lstm.bias_hh_l0            (256,)               256  +0.01379  0.08142     [-0.177, +0.195]
+head.weight                (621, 64)         39,744  -0.00687  0.17543     [-0.876, +0.824]
+head.bias                  (621,)               621  -0.00713  0.11989     [-0.411, +0.341]
+ar_linear.weight           (3, 12)               36  +0.04937  0.19177     [-0.129, +0.828]
+ar_linear.bias             (3,)                   3  -0.02207  0.01584     [-0.044, -0.006]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_linear.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:+0.003 L7:-0.002 L4:-0.027 L3:-0.020 L2:+0.028 L1:+0.825
-  30_min (t+6) : L12:+0.012 L7:+0.009 L4:-0.027 L3:-0.040 L2:-0.033 L1:+0.691
-  60_min (t+12): L12:+0.025 L7:+0.011 L4:-0.019 L3:-0.062 L2:-0.124 L1:+0.483
+  15_min (t+3) : L12:+0.001 L7:-0.003 L4:-0.028 L3:-0.020 L2:+0.028 L1:+0.828
+  30_min (t+6) : L12:+0.010 L7:+0.008 L4:-0.027 L3:-0.040 L2:-0.033 L1:+0.690
+  60_min (t+12): L12:+0.020 L7:+0.011 L4:-0.018 L3:-0.062 L2:-0.129 L1:+0.471
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.10634            0.23636        +0.13002               
-    2                0.08778            0.22650        +0.13872               
-    3                0.08029            0.22182        +0.14153               
-    4                0.07648            0.21757        +0.14109 <-- Best Checkpoint
-    5                0.07303            0.21994        +0.14691               
-    6                0.07087            0.21817        +0.14730               
-    7                0.06944            0.22147        +0.15203               
-    8                0.06805            0.21870        +0.15065               
+    1                0.10621            0.23572        +0.12951               
+    2                0.08720            0.22561        +0.13841               
+    3                0.08024            0.21968        +0.13944               
+    4                0.07586            0.21693        +0.14107 <-- Best Checkpoint
+    5                0.07267            0.21747        +0.14480               
+    6                0.07050            0.22136        +0.15086               
+    7                0.06886            0.21962        +0.15076               
+    8                0.06773            0.22047        +0.15274               
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    8.4484   2.9066   1.4182   2.9199%   0.9110    47.02
-30_min                   6   16.2314   4.0288   1.8885   4.0697%   0.8290    50.79
-60_min                  12   28.6132   5.3491   2.4986   5.4961%   0.6987    54.84
-Average_All_Horizons     7   17.7643   4.0948   1.9351   4.1619%   0.8129    54.84
+15_min                   3    8.5194   2.9188   1.4283   2.9292%   0.9102    47.20
+30_min                   6   16.6435   4.0796   1.9189   4.1104%   0.8247    52.46
+60_min                  12   30.0549   5.4822   2.5517   5.5572%   0.6835    56.68
+Average_All_Horizons     7   18.4059   4.1602   1.9663   4.1989%   0.8061    56.68
 ==============================================================================
-Ljung-Box (L=24) (Q):     192.83   Jarque-Bera (JB):      2357.17
+Ljung-Box (L=24) (Q):     195.91   Jarque-Bera (JB):      2358.99
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     1.2200   Skew:                   0.1632
-Prob(H) (two-sided):       0.1425   Kurtosis:               9.6271
-Durbin-Watson (DW):        1.7550   MedAE (mph):           1.3159
-Residual Mean (mph):      0.2667   Residual Std:           4.0852
+Heteroskedasticity(H):     1.2200   Skew:                   0.2107
+Prob(H) (two-sided):       0.1425   Kurtosis:               9.6243
+Durbin-Watson (DW):        1.7550   MedAE (mph):           1.3371
+Residual Mean (mph):      0.3493   Residual Std:           4.1445
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =        17.7643 | RMSE =     4.0948 mph | MAE =     1.9351 mph
-  MAPE =        4.1619% | R²   =     0.8129     | Max Error =    54.8376 mph
+  MSE  =        18.4059 | RMSE =     4.1602 mph | MAE =     1.9663 mph
+  MAPE =        4.1989% | R²   =     0.8061     | Max Error =    56.6844 mph
 ==============================================================================
 ```

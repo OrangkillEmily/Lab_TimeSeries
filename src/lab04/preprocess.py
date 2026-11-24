@@ -7,7 +7,8 @@ cho Bài thực hành Lab 04.
 2. Kiểm định chéo chuỗi thời gian 5-Fold (TimeSeriesSplit K=5): mỗi Fold k thuộc {1..5} có một bộ
    StandardScaler riêng chỉ fit trên tập Train^(k).
 3. Kiểm định tính dừng Augmented Dickey-Fuller (ADF) và lấy sai phân tự động cho mô hình VAR.
-4. Tạo cửa sổ trượt (Sliding Window Lookback = 24h) cho LSTM và 105 đặc trưng trễ/cuốn/Fourier cho XGBoost.
+4. Tạo cửa sổ trượt (Sliding Window Lookback = 24h) cho LSTM và 106 đặc trưng trễ/cuốn/Trend/Fourier cho XGBoost
+   (đáp ứng đủ Mục 5.2 practice 4.pdf: rolling mean 6h, rolling std 24h và load_trend_24h = load_{t-1} - load_{t-24}).
 """
 
 import inspect
@@ -38,11 +39,6 @@ def _run_adfuller_safe(series_1d: np.ndarray, maxlag: int = 24) -> Tuple[float, 
     r"""
     Purpose: Thực thi kiểm định nghiệm đơn vị Augmented Dickey-Fuller (ADF) tương thích hoàn toàn
              với mọi phiên bản statsmodels trên Python 3.11 - 3.14 mà không phát sinh FutureWarning.
-    Input-Output:
-        - Input: series_1d (np.ndarray 1 chiều), maxlag (int = 24).
-        - Output: Tuple (adf_stat, p_value, used_lag, n_obs, crit_values_dict).
-    How: Kiểm tra tham số 'result_object' trong chữ ký hàm adfuller; nếu có thì truyền result_object=False
-         bên trong ngữ cảnh catch_warnings.
     """
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=FutureWarning)
@@ -75,10 +71,6 @@ def run_adf_stationarity_test(
 ) -> List[Dict[str, Any]]:
     r"""
     Purpose: Kiểm định tính dừng (Stationarity) bằng kiểm định Augmented Dickey-Fuller (ADF) cho từng biến.
-    Input-Output:
-        - Input: df (pd.DataFrame), significance (mức ý nghĩa alpha = 0.05), maxlag (int = 24).
-        - Output: Danh sách từ điển chứa ADF Statistic, p-value, Critical Values (1%, 5%, 10%) và kết luận dừng.
-    How: Ước lượng phương trình kiểm định ADF trên mẫu con tối đa 15,000 quan sát gần nhất để tối ưu tốc độ.
     """
     results: List[Dict[str, Any]] = []
     for col in df.columns:
@@ -109,10 +101,6 @@ def chronological_split_dataframe(
 ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, Dict[str, Any]]:
     r"""
     Purpose: Chia tách chuỗi thời gian theo đúng thứ tự thời gian (70% Train - 15% Validation - 15% Test, shuffle=False).
-    Input-Output:
-        - Input: df (pd.DataFrame), train_ratio (0.70), val_ratio (0.15).
-        - Output: Tuple (train_df, val_df, test_df, split_meta).
-    How: Tính chỉ số cắt n_train = int(0.70 * N) và n_val = int(0.85 * N), cắt lát tuần tự không xáo trộn.
     """
     n_total = len(df)
     n_train = int(n_total * train_ratio)
@@ -142,11 +130,6 @@ def ensure_stationarity_for_var(
 ) -> Dict[str, Any]:
     r"""
     Purpose: Kiểm tra tính dừng ADF trước và sau khi lấy sai phân bậc 1 để phục vụ mô hình Vector Autoregression (VAR).
-    Input-Output:
-        - Input: train_df (pd.DataFrame), significance (float = 0.05).
-        - Output: Từ điển chứa kết quả ADF gốc, ADF sau sai phân bậc 1 và bậc sai phân áp dụng (diff_order_applied = 1).
-    How: Chạy kiểm định ADF trên cả 4 biến; áp dụng sai phân bậc 1 (Delta Y_t = Y_t - Y_{t-1}) cho VAR để đảm bảo
-         tính dừng tuyệt đối và miễn nhiễm với dịch chuyển mức nền (level shift).
     """
     adf_raw = run_adf_stationarity_test(train_df, significance=significance)
     diff1_df = train_df.diff().dropna()
@@ -166,22 +149,23 @@ def build_tabular_lag_features(
     lookback: int = 24,
 ) -> Tuple[np.ndarray, np.ndarray, pd.DatetimeIndex, List[str]]:
     r"""
-    Purpose: Thiết kế ma trận đặc trưng dạng bảng (105 đặc trưng) cho mô hình XGBoost Multivariate Forecaster.
+    Purpose: Thiết kế ma trận đặc trưng dạng bảng (106 đặc trưng) cho mô hình XGBoost Multivariate Forecaster.
     Input-Output:
-        - Input: df_scaled (DataFrame đã chuẩn hóa Z-Score), df_raw (DataFrame gốc), lookback (int = 24).
-        - Output:
-            + X_tab: Ma trận đặc trưng (N - lookback, 105) kiểu float32.
-            + y_tab_scaled: Vector mục tiêu đã chuẩn hóa (N - lookback,) kiểu float32.
-            + target_timestamps: Nhãn thời gian tương ứng của từng mẫu dự báo.
-            + feature_names: Danh sách tên 105 đặc trưng.
-    How: Tại mỗi thời điểm t từ lookback đến T-1:
-         - Trích xuất toàn bộ 24 bước trễ quá khứ (t-1 .. t-24) của cả 4 biến (24 * 4 = 96 đặc trưng).
-         - Bổ sung 4 thống kê trượt (Rolling Mean & Std 6h, 24h) của biến phụ tải điện.
-         - Bổ sung 5 đặc trưng chu kỳ thời gian (sin_hour, cos_hour, sin_dow, cos_dow, is_weekend).
+    - Input: df_scaled (DataFrame đã chuẩn hóa Z-Score), df_raw (DataFrame gốc), lookback (int = 24).
+    - Output:
+        + X_tab: Ma trận đặc trưng (N - lookback, 106) kiểu float32.
+        + y_tab_scaled: Vector mục tiêu đã chuẩn hóa (N - lookback,) kiểu float32.
+        + target_timestamps: Nhãn thời gian tương ứng của từng mẫu dự báo.
+        + feature_names: Danh sách tên 106 đặc trưng.
+    How: Tại mỗi thời điểm dự báo t (từ lookback đến T-1):
+    - 96 đặc trưng trễ quá khứ (t-1 .. t-24 của cả 4 biến).
+    - 5 đặc trưng động lượng & xu hướng (Mục 5.2): load_roll_mean_6h, load_roll_std_6h,
+      load_roll_mean_24h, load_roll_std_24h, và load_trend_24h = load_{t-1} - load_{t-24} (thuần nhân quả).
+    - 5 đặc trưng chu kỳ thời gian: sin_hour, cos_hour, sin_dayofweek, cos_dayofweek, is_weekend.
     """
     values_scaled = df_scaled.to_numpy(dtype=np.float32)
     cols = list(df_scaled.columns)
-    n_samples, n_vars = values_scaled.shape
+    n_samples, _ = values_scaled.shape
     n_valid = n_samples - lookback
 
     feat_list: List[np.ndarray] = []
@@ -199,9 +183,14 @@ def build_tabular_lag_features(
     r_mean_24 = load_series.shift(1).rolling(24, min_periods=1).mean().to_numpy(dtype=np.float32)[lookback:]
     r_std_24 = load_series.shift(1).rolling(24, min_periods=1).std().fillna(0.0).to_numpy(dtype=np.float32)[lookback:]
 
-    rolling_mat = np.column_stack([r_mean_6, r_std_6, r_mean_24, r_std_24])
+    # Bổ sung đúng đặc trưng bắt buộc Mục 5.2: Load trend = load_{t-1} - load_{t-24} (không rò rỉ tương lai)
+    load_lag_1 = values_scaled[lookback - 1 : n_samples - 1, 0]
+    load_lag_24 = values_scaled[0 : n_samples - lookback, 0]
+    load_trend_24 = (load_lag_1 - load_lag_24).astype(np.float32)
+
+    rolling_mat = np.column_stack([r_mean_6, r_std_6, r_mean_24, r_std_24, load_trend_24])
     feat_list.append(rolling_mat)
-    feat_names.extend(["load_roll_mean_6h", "load_roll_std_6h", "load_roll_mean_24h", "load_roll_std_24h"])
+    feat_names.extend(["load_roll_mean_6h", "load_roll_std_6h", "load_roll_mean_24h", "load_roll_std_24h", "load_trend_24h"])
 
     target_idx = df_raw.index[lookback:]
     hours = target_idx.hour.to_numpy(dtype=np.float32)
@@ -229,10 +218,6 @@ def build_sequence_windows_3d(
 ) -> Tuple[np.ndarray, np.ndarray]:
     r"""
     Purpose: Tạo tensor chuỗi 3 chiều (Samples, Timesteps=24, Features=4) cho mạng học sâu LSTM.
-    Input-Output:
-        - Input: df_scaled (pd.DataFrame đã chuẩn hóa), lookback (int = 24).
-        - Output: Tuple (X_seq_3d shape [N-L, 24, 4], y_seq_scaled shape [N-L,]).
-    How: Sử dụng sliding_window_view của NumPy để vector hóa hoàn toàn quá trình cắt cửa sổ 24 giờ.
     """
     arr = df_scaled.to_numpy(dtype=np.float32)
     n_samples, n_features = arr.shape
@@ -252,17 +237,12 @@ def build_time_series_cv_folds(
 ) -> List[Dict[str, Any]]:
     r"""
     Purpose: Thiết lập 5-Fold TimeSeriesSplit (Expanding Window Cross-Validation) chống rò rỉ dữ liệu.
-    Input-Output:
-        - Input: df (pd.DataFrame), n_splits (int = 5), lookback (int = 24).
-        - Output: Danh sách 5 từ điển chứa dữ liệu và bộ chuẩn hóa riêng biệt của từng Fold k = 1..5.
-    How: Với mỗi Fold k, chỉ fit StandardScaler trên tập Train^(k), sau đó transform sang Validation^(k).
     """
     tscv = TimeSeriesSplit(n_splits=n_splits)
     folds_data: List[Dict[str, Any]] = []
 
     for fold_idx, (train_indices, val_indices) in enumerate(tscv.split(df), start=1):
         fold_train_raw = df.iloc[train_indices].copy()
-        # Ghép thêm lookback giờ cuối của tập train vào đầu tập val để dự báo liên tục từ giờ đầu tiên của val
         val_start_with_ctx = max(0, val_indices[0] - lookback)
         fold_val_with_ctx_raw = df.iloc[val_start_with_ctx : val_indices[-1] + 1].copy()
 
@@ -316,12 +296,6 @@ def prepare_pems_bay_tensors(
     r"""
     Purpose: Tiền xử lý dữ liệu tốc độ giao thông PEMS-BAY và xây dựng cửa sổ đa tầm nhìn
              (Multi-Horizon: 15 phút t+3, 30 phút t+6, 60 phút t+12) cho DCRNN, Multi-Horizon TCN và LSTM.
-    Input-Output:
-        - Input: df_speed (DataFrame T x N), adj_mx (ndarray N x N), config (Dict).
-        - Output: Từ điển chứa các tensor X_train, Y_train, X_val, Y_val, X_test, Y_test,
-                  thống kê chuẩn hóa (mean, std) chỉ tính trên tập Train, và ma trận chuyển tiếp đồ thị.
-    How: Chia 70/15/15 theo thời gian, tính mu_train và sigma_train trên tập Train,
-         tạo cửa sổ quá khứ L = 12 bước (60 phút) và đầu ra 3 mốc tương lai [t+3, t+6, t+12].
     """
     pems_cfg = config.get("data", {}).get("pems_bay", {})
     lookback = int(pems_cfg.get("lookback_steps", 12))
@@ -391,15 +365,6 @@ def main(run_id: Optional[str] = None) -> Dict[str, Any]:
     r"""
     Purpose: Thực thi toàn trình bước Tiền xử lý Dữ liệu & Kỹ thuật Đặc trưng (Mục 3, 4, 5)
              và lưu gói dữ liệu đã xử lý vào data/processed/lab04/processed_bundle.pkl.
-    Input-Output:
-        - Input: run_id (Optional[str]).
-        - Output: Từ điển tóm tắt thông số tiền xử lý, kiểm định dừng ADF và kích thước các tensor.
-    How:
-        - Chia 70/15/15 theo thời gian (shuffle=False).
-        - Fit StandardScaler chỉ trên 70% tập Train, lưu scaler_statistics.json.
-        - Tạo cửa sổ trượt 24h cho XGBoost (105 đặc trưng) và LSTM (24x4).
-        - Tạo 5-Fold TimeSeriesSplit độc lập.
-        - Chuẩn bị tensor đa bước cho PEMS-BAY.
     """
     t0 = time.perf_counter()
     cfg = load_config()
@@ -427,7 +392,6 @@ def main(run_id: Optional[str] = None) -> Dict[str, Any]:
         significance=float(prep_cfg.get("stationarity", {}).get("adf_significance", 0.05)),
     )
 
-    # Fit StandardScaler CHỈ trên tập Train (Anti-Data-Leakage Rule)
     scaler = StandardScaler()
     train_scaled_arr = scaler.fit_transform(train_df.values)
 
@@ -453,7 +417,7 @@ def main(run_id: Optional[str] = None) -> Dict[str, Any]:
     y_val_orig = val_df["load"].to_numpy(dtype=np.float64)
     y_test_orig = test_df["load"].to_numpy(dtype=np.float64)
 
-    cv_folds = build_time_series_cv_folds(df_elec, n_splits=n_splits, lookback=lookback)
+    cv_folds = build_time_series_cv_folds(pd.concat([train_df, val_df]), n_splits=n_splits, lookback=lookback)
     pems_bundle = prepare_pems_bay_tensors(df_pems, adj_mx, cfg)
 
     scaler_stats = {

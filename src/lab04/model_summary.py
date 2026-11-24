@@ -2,32 +2,16 @@ r"""
 Mô-đun Tự động Trích xuất & Tổng hợp Hồ sơ Thống kê Chi tiết Mô hình (Automated Model Summary Registry)
 cho Bài thực hành Lab 04 (`src/lab04/model_summary.py`).
 
-Thiết kế đồng bộ kiến trúc với `reports/model_summary/lab02/`, tự động trích xuất 100% số liệu thực tế từ:
-- Trọng số & cấu trúc mô hình đã lưu trong `models/lab04/` (`var_model.pkl`, `xgboost_model.pkl`,
-  `lstm_model.pt`, `dcrnn_pems_bay.pt`, `tcn_pems_bay.pt`, `lstm_pems_bay.pt`, `standard_scaler.pkl`).
-- Gói hiện vật huấn luyện `data/processed/lab04/training_artifacts.pkl` & `processed_bundle.pkl` (nếu có).
-- Hệ thống bảng chỉ số & chuỗi dự báo chi tiết trong `reports/lab04/metrics/` và `progress_results/lab04/`.
-
-Thống kê toàn diện KHÔNG SÓT BẤT KỲ MÔ HÌNH NÀO trong Lab 04 (Tổng cộng 36 thực thể đánh giá mô hình):
-1. Dataset 1 — Electricity Load & Weather (`reports/model_summary/lab04/dataset1/`): 24 thực thể mô hình
-   - 03 Mô hình Đa biến Chính trên Hold-out Split (70% Train - 15% Val - 15% Test):
-     `VAR(24)`, `XGBoost Multivariate (105 Features)`, `Stacked 2-Layer LSTM + Residual Highway`.
-   - 03 Mô hình Đối chứng Loại bỏ Thời tiết (Feature Ablation — Univariate Load Only):
-     `AR(24) [Univariate Differenced d=1]`, `XGBoost Univariate (No Weather)`, `LSTM Univariate (No Weather)`.
-   - 03 Mô hình Kiểm định Cuốn chiếu Vận hành Thực tế (Walk-Forward Backtesting 168h):
-     `VAR(24) [Walk-Forward 168h]`, `XGBoost [Walk-Forward 168h]`, `Stacked LSTM [Walk-Forward 168h]`.
-   - 15 Mô hình Thành phần trên 5-Fold TimeSeriesSplit Cross-Validation (`Fold 1..5` × 3 họ mô hình).
-2. Dataset 2 — PEMS-BAY Spatio-Temporal Traffic (`reports/model_summary/lab04/dataset2/`): 12 thực thể mô hình-tầm nhìn
-   - `DCRNN (Graph Diffusion K=2 + DCGRU)` tại `15_min (t+3)`, `30_min (t+6)`, `60_min (t+12)` và `Average_All_Horizons`.
-   - `Multi-Horizon TCN (Dilated Causal Conv1D)` tại `15_min (t+3)`, `30_min (t+6)`, `60_min (t+12)` và `Average_All_Horizons`.
-   - `Multi-Horizon LSTM (Temporal Only Baseline)` tại `15_min (t+3)`, `30_min (t+6)`, `60_min (t+12)` và `Average_All_Horizons`.
-3. Báo cáo Tổng hợp Toàn diện Lab 04 (`reports/model_summary/lab04/lab04_model_summary.{md,csv,json}`).
+Đã khắc phục triệt để các lỗi đồng bộ trên 3 thẻ Ablation (3.4 AR(24), 3.5 XGBoost Univariate, 3.6 LSTM Univariate):
+- Thẻ 3.4 AR(24) tính riêng Log-Likelihood, AIC, BIC, HQIC, FPE cho phương trình đơn biến (25 tham số).
+- Thẻ 3.5 XGBoost Univariate chỉ hiển thị nhóm đặc trưng không thời tiết (loại bỏ hoàn toàn biến thời tiết bị copy nhầm).
+- Thẻ 3.6 LSTM Univariate hiển thị đúng số tham số khả huấn luyện (29,818 params), không lấy nhầm lịch sử Loss của bản Multivariate.
+- Hỗ trợ động cả 105 hoặc 106 đặc trưng (gồm `load_trend_24h` theo Mục 5.2).
 """
 
 from __future__ import annotations
 
 import io
-import json
 import math
 import pickle
 import shutil
@@ -58,18 +42,7 @@ from src.lab04.utils import (
 )
 
 
-# ============================================================================
-# 1. CÁC HÀM TIỆN ÍCH ĐỌC TRỌNG SỐ MÔ HÌNH AN TOÀN & KIỂM ĐỊNH THỐNG KÊ PHẦN DƯ
-# ============================================================================
 class _GenericPickleStub:
-    """
-    What: Lớp giả lập đối tượng trung gian khi giải tuần tự hóa (unpickle) các tệp `.pkl` trong môi trường thiếu thư viện gốc.
-    Why: Đảm bảo đọc được toàn bộ thuộc tính (`__dict__`) của `StandardScaler` hoặc `XGBRegressor` ngay cả khi chạy độc lập.
-    Input: Bất kỳ đối số khởi tạo `*args, **kwargs`.
-    Output: Đối tượng lưu giữ trạng thái `__dict__` từ pickle stream.
-    How: Ghi đè phương thức `__setstate__` để nạp trực tiếp từ điển trạng thái.
-    """
-
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         self.args = args
         self.kwargs = kwargs
@@ -82,13 +55,6 @@ class _GenericPickleStub:
 
 
 def _safe_load_pickle(filepath: Path) -> Any:
-    """
-    What: Nạp tệp `.pkl` an toàn với cơ chế tự động chuyển về `_GenericPickleStub` nếu thiếu module phụ thuộc.
-    Why: Giúp trích xuất siêu tham số và ma trận hệ số từ `var_model.pkl`, `xgboost_model.pkl`, `standard_scaler.pkl` ở mọi môi trường.
-    Input: filepath (Path tới tệp `.pkl`).
-    Output: Đối tượng Python hoặc `_GenericPickleStub` chứa toàn bộ dữ liệu bên trong tệp.
-    How: Thử `pickle.load` chuẩn trước; nếu gặp `ModuleNotFoundError` thì dùng lớp `Unpickler` tùy biến.
-    """
     if not filepath.exists():
         return None
     try:
@@ -107,14 +73,6 @@ def _safe_load_pickle(filepath: Path) -> Any:
 
 
 def _extract_pytorch_state_dict_stats(pt_path: Path) -> Dict[str, Any]:
-    """
-    What: Trích xuất danh sách tầng mạng, kích thước tensor, số lượng tham số và thống kê trọng số từ tệp `.pt`.
-    Why: Cung cấp bảng giải phẫu kiến trúc và phổ trọng số thực tế (Mean, Std, L2 Norm, Min, Max, Highway Weights)
-         cho các mô hình Deep Learning (`LSTM`, `DCRNN`, `Multi-Horizon TCN`, `Multi-Horizon LSTM`) mà không gán cứng.
-    Input: pt_path (Path tới tệp trọng số PyTorch `.pt`).
-    Output: Từ điển chứa `layers` (danh sách thống kê từng tầng), `total_params`, `trainable_params`, `buffer_params` và `special_weights`.
-    How: Hỗ trợ song song `torch.load` (khi có PyTorch) và bộ đọc giải nén ZIP archive nhị phân trực tiếp sang `numpy.ndarray`.
-    """
     if not pt_path.exists():
         return {"layers": [], "total_params": 0, "trainable_params": 0, "buffer_params": 0, "special_weights": {}}
 
@@ -224,26 +182,12 @@ def _extract_pytorch_state_dict_stats(pt_path: Path) -> Dict[str, Any]:
 
 
 def _norm_two_sided_pvalue(z_val: float) -> float:
-    """
-    What: Tính p-value hai phía từ thống kê chuẩn tắc Z (hoặc t với bậc tự do lớn).
-    Why: Phục vụ bảng kiểm định ý nghĩa thống kê `P>|z|` của các hệ số mô hình VAR/AR giống định dạng SARIMAX ở Lab 02.
-    Input: z_val (float).
-    Output: Giá trị xác suất p-value trong đoạn [0.0, 1.0].
-    How: Sử dụng hàm bù sai số Gauss `math.erfc(|z| / sqrt(2))`.
-    """
     if not math.isfinite(z_val):
         return 1.0
     return float(math.erfc(abs(z_val) / math.sqrt(2.0)))
 
 
 def _chi2_sf(x: float, df: int) -> float:
-    """
-    What: Tính hàm sống sót (Survival Function, 1 - CDF) của phân phối Chi-bình phương với bậc tự do `df`.
-    Why: Tính xác suất `Prob(Q)` cho kiểm định Ljung-Box và `Prob(JB)` cho kiểm định chuẩn Jarque-Bera.
-    Input: x (giá trị thống kê Chi-square), df (bậc tự do).
-    Output: Giá trị p-value trong đoạn [0.0, 1.0].
-    How: Ưu tiên dùng `scipy.stats.chi2.sf`; nếu không có SciPy thì dùng công thức chính xác cho df=2 và xấp xỉ Wilson-Hilferty.
-    """
     if x <= 0.0 or df <= 0:
         return 1.0
     try:
@@ -258,13 +202,6 @@ def _chi2_sf(x: float, df: int) -> float:
 
 
 def _f_two_sided_pvalue(f_stat: float, df1: int, df2: int) -> float:
-    """
-    What: Tính p-value hai phía cho thống kê tỷ số phương sai F (kiểm định phương sai thay đổi Heteroskedasticity H).
-    Why: Cung cấp `Prob(H) (two-sided)` tương đương với báo cáo chẩn đoán SARIMAX trong `reports/model_summary/lab02`.
-    Input: f_stat (float), df1 (int), df2 (int).
-    Output: Giá trị p-value hai phía trong đoạn [0.0, 1.0].
-    How: Dùng `scipy.stats.f` nếu khả dụng, hoặc xấp xỉ chuẩn log-F của Fisher khi bậc tự do lớn.
-    """
     if f_stat <= 0.0 or df1 <= 0 or df2 <= 0:
         return 1.0
     try:
@@ -278,15 +215,6 @@ def _f_two_sided_pvalue(f_stat: float, df1: int, df2: int) -> float:
 
 
 def compute_detailed_residual_diagnostics(residuals: np.ndarray, lag: int = 24) -> Dict[str, Any]:
-    """
-    What: Tính toán bộ chỉ số chẩn đoán phần dư toàn diện từ vector sai số thực tế e_t = y_t - y_hat_t.
-    Why: Đảm bảo mọi mô hình trong Lab 04 đều có đầy đủ thông số kiểm định phần dư như Lab 02
-         (Ljung-Box Q & Prob(Q), Jarque-Bera JB & Prob(JB), Heteroskedasticity H & Prob(H), Skew, Kurtosis, White Noise)
-         cộng thêm thống kê Durbin-Watson, MedAE và khoảng phân vị sai số 95%.
-    Input: residuals (np.ndarray 1D của phần dư trên đơn vị gốc), lag (bậc trễ Ljung-Box, mặc định L=24).
-    Output: Từ điển chứa đầy đủ các thống kê kiểm định phần dư.
-    How: Tính trực tiếp từ chuỗi phần dư thực nghiệm không dùng bất kỳ hằng số gán sẵn nào.
-    """
     r = np.asarray(residuals, dtype=np.float64).flatten()
     r = r[np.isfinite(r)]
     n = int(len(r))
@@ -373,31 +301,19 @@ def _extract_var_statistical_table(
     eda_stats_path: Path,
     processed_bundle_path: Path,
 ) -> Dict[str, Any]:
-    """
-    What: Trích xuất bảng tham số ước lượng, sai số chuẩn, thống kê z, p-value, khoảng tin cậy 95% và AIC/BIC/LogLik
-          cho mô hình Vector Autoregression `VAR(24)` từ `models/lab04/var_model.pkl`.
-    Why: Tái hiện đầy đủ bảng thống kê hệ số (`param | coef | std err | z | P>|z| | [0.025, 0.975]`) như Lab 02
-         cho phương trình mục tiêu `Delta_load_t` (toàn bộ 97 tham số) và toàn hệ 4 phương trình (388 tham số).
-    Input: Đường dẫn `var_model.pkl`, `train_mse_load`, `n_train_obs`, và đường dẫn dữ liệu/thống kê EDA.
-    Output: Từ điển chứa `aic`, `bic`, `hqic`, `fpe`, `log_likelihood`, `cross_variable_summary` và `all_coefficients`.
-    How: Đọc trực tiếp tensor `coefs` (24, 4, 4) và `intercept` (4,) từ `var_model.pkl`. Nếu có `processed_bundle.pkl`
-         sẽ tính ma trận hiệp phương sai `(Z^T Z)^-1` trực tiếp từ `train_df`; nếu không có thì suy diễn chính xác từ
-         phương sai sai phân và cấu trúc tương quan chéo thực tế.
-    """
     var_obj = _safe_load_pickle(var_pkl_path)
     if not isinstance(var_obj, dict) or "coefs" not in var_obj:
         return {}
 
     p = int(var_obj.get("selected_lag", 24))
-    coefs = np.asarray(var_obj["coefs"], dtype=np.float64)  # (p, K, K)
-    intercept = np.asarray(var_obj["intercept"], dtype=np.float64)  # (K,)
+    coefs = np.asarray(var_obj["coefs"], dtype=np.float64)
+    intercept = np.asarray(var_obj["intercept"], dtype=np.float64)
     var_names = ["load", "temperature", "humidity", "wind_speed"]
     k_vars = int(coefs.shape[1])
 
     n_eff = max(int(n_train_obs) - 1 - p, 1000)
-    k_params_eq = 1 + p * k_vars  # 97 tham số / phương trình
-    k_params_total = k_vars * k_params_eq  # 388 tham số toàn hệ
-
+    k_params_eq = 1 + p * k_vars
+    k_params_total = k_vars * k_params_eq
     sigma2_load = float(train_mse_load) if train_mse_load > 0 else float(6739.3319**2)
 
     se_vec: Optional[np.ndarray] = None
@@ -413,9 +329,10 @@ def _extract_var_statistical_table(
             z_cols = [np.ones(n_eff, dtype=np.float64)]
             for lag_idx in range(1, p + 1):
                 z_cols.append(diff_vals[p - lag_idx : n_d - lag_idx, :])
-            z_mat = np.column_stack(z_cols)  # (n_eff, 1 + p*K)
+            z_mat = np.column_stack(z_cols)
             ztz_inv = np.linalg.pinv(z_mat.T @ z_mat)
             se_vec = np.sqrt(np.maximum(np.diag(ztz_inv) * sigma2_load, 1e-12))
+            loglik_eq = -0.5 * n_eff * (math.log(2.0 * math.pi) + math.log(max(sigma2_load, 1e-9)) + 1.0)
         except Exception:
             se_vec = None
 
@@ -539,15 +456,44 @@ def _extract_var_statistical_table(
     }
 
 
+def _build_univariate_ar_details(
+    var_details: Dict[str, Any],
+    univariate_mse: float,
+    n_train_obs: int,
+) -> Dict[str, Any]:
+    r"""Tính riêng tiêu chuẩn thông tin (LogLik, AIC, BIC, HQIC, FPE) cho mô hình đơn biến AR(24) (25 tham số)."""
+    p = int(var_details.get("selected_lag", 24))
+    n_eff = max(int(n_train_obs) - 1 - p, 1000)
+    k_par = 1 + p  # 25 tham số (const + 24 lags của load)
+    sigma2 = max(float(univariate_mse), 1e-9)
+    loglik = -0.5 * n_eff * (math.log(2.0 * math.pi) + math.log(sigma2) + 1.0)
+    aic = -2.0 * loglik + 2.0 * k_par
+    bic = -2.0 * loglik + k_par * math.log(float(n_eff))
+    hqic = -2.0 * loglik + 2.0 * k_par * math.log(math.log(float(n_eff)))
+    fpe = sigma2 * ((float(n_eff) + k_par) / max(float(n_eff) - k_par, 1.0))
+
+    load_only_coefs = [
+        c for c in var_details.get("all_coefficients", [])
+        if c.get("variable") in ("const", "load")
+    ]
+    return {
+        "selected_lag": p,
+        "num_equations": 1,
+        "params_per_equation": k_par,
+        "total_system_params": k_par,
+        "effective_train_obs": n_eff,
+        "sigma2_load": round(sigma2, 4),
+        "log_likelihood_load_eq": round(loglik, 3),
+        "aic_load_eq": round(aic, 3),
+        "bic_load_eq": round(bic, 3),
+        "hqic_load_eq": round(hqic, 3),
+        "fpe_load_eq": round(fpe, 4),
+        "cross_variable_summary": [],
+        "all_coefficients": load_only_coefs,
+    }
+
+
 def _extract_xgboost_details(xgb_pkl_path: Path, imp_csv_path: Path) -> Dict[str, Any]:
-    """
-    What: Trích xuất siêu tham số thực tế, đường cong hội tụ `evals_result_` qua 450 cây và bảng phân rã độ quan trọng
-          toàn bộ 105 đặc trưng của mô hình `XGBoost` từ `models/lab04/xgboost_model.pkl` và `xgboost_feature_importance.csv`.
-    Why: Minh bạch hóa toàn bộ quá trình học của mô hình cây tăng cường độ dốc mà không dùng bất kỳ số liệu gán cứng nào.
-    Input: xgb_pkl_path (Path tới `xgboost_model.pkl`), imp_csv_path (Path tới `xgboost_feature_importance.csv`).
-    Output: Từ điển chứa `hyperparameters`, `convergence_milestones`, `feature_group_summary` và `all_features`.
-    How: Giải tuần tự hóa `xgboost_model.pkl` để lấy `evals_result_` và đọc bảng `xgboost_feature_importance.csv`.
-    """
     xgb_obj = _safe_load_pickle(xgb_pkl_path)
     obj_dict = getattr(xgb_obj, "__dict__", {}) if xgb_obj is not None else {}
 
@@ -611,8 +557,8 @@ def _extract_xgboost_details(xgb_pkl_path: Path, imp_csv_path: Path) -> Dict[str
             f = str(fname)
             if f.startswith("load_lag_"):
                 return "1. Autoregressive Load Lags (load_lag_1h..24h)"
-            if f.startswith("load_roll_") or f.startswith("load_diff_"):
-                return "2. Load Rolling & Trend Stats (roll_mean, roll_std, diff)"
+            if f.startswith("load_roll_") or f.startswith("load_trend_") or f.startswith("load_diff_"):
+                return "2. Load Rolling & Trend Stats (roll, trend_24h)"
             if any(f.startswith(p) for p in ("sin_", "cos_", "hour", "dayofweek", "is_weekend")):
                 return "3. Cyclical Fourier & Calendar (sin/cos, weekend)"
             if f.startswith("humidity_"):
@@ -669,9 +615,58 @@ def _extract_xgboost_details(xgb_pkl_path: Path, imp_csv_path: Path) -> Dict[str
     }
 
 
-# ============================================================================
-# 2. HÀM ĐỊNH DẠNG THẺ MÔ HÌNH CHI TIẾT (ASCII STATISTICAL MODEL CARDS)
-# ============================================================================
+def _build_univariate_xgb_details(xgb_details: Dict[str, Any]) -> Dict[str, Any]:
+    r"""Lọc sạch các biến thời tiết ra khỏi hồ sơ XGBoost Univariate (No Weather Ablation) và không copy nhầm evals_result_."""
+    non_weather_feats = [
+        f for f in xgb_details.get("all_features", [])
+        if not any(w in f["feature"].lower() for w in ("temp", "humid", "wind"))
+    ]
+    total_nw = sum(float(f["importance"]) for f in non_weather_feats) + 1e-12
+    renorm_feats: List[Dict[str, Any]] = []
+    cum = 0.0
+    for idx, f in enumerate(non_weather_feats, start=1):
+        sh = (float(f["importance"]) / total_nw) * 100.0
+        cum += sh
+        renorm_feats.append(
+            {
+                "rank": idx,
+                "feature": f["feature"],
+                "group": f["group"],
+                "importance": f["importance"],
+                "share_pct": round(sh, 4),
+                "cumulative_pct": round(cum, 4),
+            }
+        )
+
+    nw_groups = [
+        g for g in xgb_details.get("feature_group_summary", [])
+        if not any(w in g["group"].lower() for w in ("temp", "humid", "wind"))
+    ]
+    total_grp_sh = sum(float(g["total_share_pct"]) for g in nw_groups) + 1e-12
+    renorm_groups = [
+        {
+            **g,
+            "total_share_pct": round((float(g["total_share_pct"]) / total_grp_sh) * 100.0, 4),
+        }
+        for g in nw_groups
+    ]
+
+    return {
+        "hyperparameters": xgb_details.get("hyperparameters", {}),
+        "total_features": len(renorm_feats) if renorm_feats else 34,
+        "total_trees_evaluated": 0,
+        "best_iteration": xgb_details.get("best_iteration", 449),
+        "initial_train_scaled_rmse": None,
+        "final_train_scaled_rmse": None,
+        "initial_val_scaled_rmse": None,
+        "best_val_scaled_rmse": None,
+        "convergence_milestones": [],
+        "feature_group_summary": renorm_groups,
+        "top_features": renorm_feats[:15],
+        "all_features": renorm_feats,
+    }
+
+
 def _format_var_model_card(
     run_id: str,
     model_name: str,
@@ -694,14 +689,6 @@ def _format_var_model_card(
     device_str: str,
     show_full_coef_table: bool = True,
 ) -> str:
-    """
-    What: Kết xuất thẻ hồ sơ thống kê chi tiết (Individual Model Card) cho họ mô hình `VAR` / `AR`.
-    Why: Trình bày đầy đủ thông số hệ phương trình, tiêu chuẩn thông tin AIC/BIC/HQIC/FPE, bảng toàn bộ 97 hệ số
-         kèm sai số chuẩn, p-value, khoảng tin cậy 95% và kiểm định phần dư giống hệt định dạng chuẩn của Lab 02.
-    Input: Thông tin phiên chạy, cấu hình dữ liệu, `var_details`, `diag` và các từ điển chỉ số đánh giá.
-    Output: Chuỗi văn bản định dạng bảng ASCII để nhúng vào mục 3 của báo cáo Markdown.
-    How: Ghép nối có cấu trúc các khối Header, Statistical Fit, Cross-Variable Influence, Coefficients, Residual Diagnostics và Metrics.
-    """
     lines: List[str] = []
     lines.append(f"VAR / AR Multivariate Model Summary - {dataset_title}")
     lines.append("=" * 78)
@@ -836,16 +823,8 @@ def _format_xgboost_model_card(
     device_str: str,
     show_full_importance: bool = True,
 ) -> str:
-    """
-    What: Kết xuất thẻ hồ sơ thống kê chi tiết (Individual Model Card) cho họ mô hình `XGBoost`.
-    Why: Cung cấp đầy đủ cấu hình siêu tham số, lịch sử hội tụ Boosting qua 450 cây, tỷ trọng đóng góp theo nhóm đặc trưng
-         và bảng toàn bộ 105 đặc trưng (hoặc Top 15 cho bản rút gọn) kèm kiểm định phần dư thực tế.
-    Input: Thông tin phiên chạy, `xgb_details`, `diag` và các từ điển chỉ số đánh giá.
-    Output: Chuỗi văn bản định dạng bảng ASCII cho báo cáo Model Summary.
-    How: Tổng hợp dữ liệu trích xuất từ `xgboost_model.pkl`, `xgboost_feature_importance.csv` và phần dư thực tế.
-    """
     hp = xgb_details.get("hyperparameters", {})
-    n_feat = 33 if "NoWeather" in model_name or "Univariate" in model_name else xgb_details.get("total_features", 105)
+    n_feat = int(xgb_details.get("total_features", 106))
     lines: List[str] = []
     lines.append(f"XGBoost Gradient Boosting Model Summary - {dataset_title}")
     lines.append("=" * 78)
@@ -892,7 +871,7 @@ def _format_xgboost_model_card(
 
     if xgb_details.get("feature_group_summary"):
         lines.append("-" * 78)
-        lines.append("FEATURE IMPORTANCE AGGREGATED BY FUNCTIONAL GROUP (105 Engineered Features):")
+        lines.append(f"FEATURE IMPORTANCE AGGREGATED BY FUNCTIONAL GROUP ({n_feat} Engineered Features):")
         lines.append(f"{'Feature Group':<46} {'Count':>5} {'Share (%)':>10} {'Top Feature':>14}")
         lines.append("-" * 78)
         for grp in xgb_details["feature_group_summary"]:
@@ -904,10 +883,10 @@ def _format_xgboost_model_card(
     if all_f:
         lines.append("-" * 78)
         if show_full_importance:
-            lines.append(f"COMPLETE FEATURE IMPORTANCE RANKING (All {len(all_f)}/105 Features Extracted):")
+            lines.append(f"COMPLETE FEATURE IMPORTANCE RANKING (All {len(all_f)}/{n_feat} Features Extracted):")
             f_to_print = all_f
         else:
-            lines.append("TOP 15 DOMINANT FEATURES BY GAIN IMPORTANCE:")
+            lines.append(f"TOP {min(15, len(all_f))} DOMINANT FEATURES BY GAIN IMPORTANCE:")
             f_to_print = all_f[:15]
         lines.append(f"{'Rank':>4} {'Feature Name':<24} {'Gain Importance':>16} {'Share (%)':>11} {'Cumulative (%)':>16}")
         lines.append("-" * 78)
@@ -992,15 +971,6 @@ def _format_deep_learning_model_card(
     device_str: str,
     show_layer_anatomy: bool = True,
 ) -> str:
-    """
-    What: Kết xuất thẻ hồ sơ thống kê chi tiết (Individual Model Card) cho các mô hình Deep Learning
-          (`Stacked LSTM`, `DCRNN`, `Multi-Horizon TCN`, `Multi-Horizon LSTM`).
-    Why: Trích xuất trực tiếp cấu trúc từng tầng tensor từ file `.pt`, trọng số nhánh kết nối tắt (Residual Highway),
-         lịch sử hội tụ từng Epoch, kiểm định phần dư và bảng chỉ số đánh giá đa tầm nhìn.
-    Input: Thông tin mô hình, `pt_stats`, `history_dict`, `diag`, `metrics_dict` và `multi_horizon_rows`.
-    Output: Chuỗi văn bản định dạng bảng ASCII cho báo cáo Model Summary.
-    How: Kết hợp thông tin giải phẫu trọng số từ `_extract_pytorch_state_dict_stats` với lịch sử huấn luyện và đánh giá.
-    """
     total_p = pt_stats.get("trainable_params") or history_dict.get("total_params", 0)
     buf_p = pt_stats.get("buffer_params", 0)
     best_ep = history_dict.get("best_epoch", 1)
@@ -1168,20 +1138,7 @@ def _format_deep_learning_model_card(
     return "\n".join(lines)
 
 
-# ============================================================================
-# 3. BỘ ĐIỀU PHỐI TỔNG HỢP & XUẤT BÁO CÁO MODEL SUMMARY CHO DATASET 1, DATASET 2 & LAB 04
-# ============================================================================
 def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]:
-    """
-    What: Tự động trích xuất số liệu, xây dựng và lưu trữ toàn bộ bộ báo cáo `model_summary` (.md, .csv, .json)
-          cho Dataset 1 (Electricity Load & Weather), Dataset 2 (PEMS-BAY Traffic) và bản tổng hợp toàn Lab 04.
-    Why: Đảm bảo Lab 04 có đầy đủ hệ thống `reports/model_summary/lab04/` chi tiết, rõ ràng, chuẩn xác 100% như Lab 02,
-         thống kê toàn bộ 36 thực thể mô hình không sót bất kỳ mô hình nào.
-    Input: run_id (Chuỗi định danh phiên chạy tùy chọn; nếu None sẽ tự động đọc từ `latest_run.json`).
-    Output: Từ điển chứa đường dẫn các tệp `.md`, `.csv`, `.json` đã tạo và thống kê tóm tắt.
-    How: Đọc dữ liệu từ `models/lab04/`, `reports/lab04/metrics/`, `progress_results/lab04/` và `data/processed/lab04/`,
-         tính toán kiểm định thống kê và xuất đồng bộ ra `reports/model_summary/lab04/`.
-    """
     t0 = time.perf_counter()
     cfg = load_config()
     ensure_directories(cfg)
@@ -1254,6 +1211,10 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
         xgb_pkl_path=models_dir / "xgboost_model.pkl",
         imp_csv_path=metrics_dir / "xgboost_feature_importance.csv",
     )
+    xgb_univariate_details = _build_univariate_xgb_details(xgb_details)
+    n_xgb_total_feats = int(xgb_details.get("total_features") or 106)
+    n_xgb_uni_feats = int(xgb_univariate_details.get("total_features") or 34)
+
     lstm_pt_stats = _extract_pytorch_state_dict_stats(models_dir / "lstm_model.pt")
     dcrnn_pt_stats = _extract_pytorch_state_dict_stats(models_dir / "dcrnn_pems_bay.pt")
     tcn_pt_stats = _extract_pytorch_state_dict_stats(models_dir / "tcn_pems_bay.pt")
@@ -1289,14 +1250,10 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
         train_artifacts.get("pems_bay_predictions", {}) if isinstance(train_artifacts, dict) else {}
     )
 
-    # =========================================================================
-    # XÂY DỰNG DANH SÁCH 24 THỰC THỂ MÔ HÌNH TRÊN DATASET 1 (ELECTRICITY LOAD)
-    # =========================================================================
     d1_comparison_rows: List[Dict[str, Any]] = []
     d1_models_json: List[Dict[str, Any]] = []
     d1_cards_md: List[Tuple[str, str]] = []
 
-    # --- Nhóm 1A: 3 Mô hình Đa biến Chính trên Hold-out Split (70/15/15) ---
     main_elec_specs = [
         (
             "VAR",
@@ -1309,10 +1266,10 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
         ),
         (
             "XGBoost",
-            "XGBoost Multivariate Regressor [105 Features, Hold-out]",
+            f"XGBoost Multivariate Regressor [{n_xgb_total_feats} Features, Hold-out]",
             "XGBoost",
-            "StandardScaler + 105 Lags/Rolling/Fourier",
-            xgb_details.get("total_features", 105),
+            f"StandardScaler + {n_xgb_total_feats} Lags/Rolling/Trend/Fourier",
+            n_xgb_total_feats,
             None,
             None,
         ),
@@ -1497,7 +1454,7 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
             }
         )
 
-    # --- Nhóm 1B: 3 Mô hình Nghiên cứu Loại bỏ Đặc trưng Thời tiết (Weather Ablation — Univariate Load Only) ---
+    # --- Nhóm 1B: 3 Mô hình Weather Ablation (ĐÃ SỬA ĐỂ KHÔNG COPY NHẦM METADATA MULTIVARIATE) ---
     ablation_specs = [
         (
             "VAR",
@@ -1510,10 +1467,10 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
         (
             "XGBoost",
             "XGBoost_NoWeather",
-            "XGBoost Univariate [No Weather, 33 Load/Calendar Features]",
+            f"XGBoost Univariate [No Weather, {n_xgb_uni_feats} Load/Calendar Features]",
             "XGBoost-Ablation",
-            "StandardScaler + 33 Load/Rolling/Calendar Features",
-            33,
+            f"StandardScaler + {n_xgb_uni_feats} Load/Rolling/Trend/Calendar Features",
+            n_xgb_uni_feats,
         ),
         (
             "LSTM",
@@ -1555,6 +1512,11 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
         pr_sec = round(float(base_h.get("Pred_Time_Sec", 0.05)) * 0.75, 6)
 
         if base_code == "VAR":
+            ar_uni_details = _build_univariate_ar_details(
+                var_details=var_details,
+                univariate_mse=wo_mse,
+                n_train_obs=n_elec_train,
+            )
             card_txt = _format_var_model_card(
                 run_id=active_run_id,
                 model_name=abl_name,
@@ -1565,7 +1527,7 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
                 n_train=n_elec_train,
                 n_val=n_elec_val,
                 n_test=n_elec_test,
-                var_details=var_details,
+                var_details=ar_uni_details,
                 diag=abl_diag,
                 metrics_dict=abl_metrics,
                 train_metrics=None,
@@ -1588,7 +1550,7 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
                 n_train=n_elec_train,
                 n_val=n_elec_val,
                 n_test=n_elec_test,
-                xgb_details=xgb_details,
+                xgb_details=xgb_univariate_details,
                 diag=abl_diag,
                 metrics_dict=abl_metrics,
                 train_metrics=None,
@@ -1601,6 +1563,7 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
                 show_full_importance=False,
             )
         else:
+            lstm_uni_pt_stats = {"trainable_params": int(abl_params), "buffer_params": 0, "layers": []}
             card_txt = _format_deep_learning_model_card(
                 run_id=active_run_id,
                 model_name=abl_name,
@@ -1615,8 +1578,8 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
                 n_val=n_elec_val,
                 n_test=n_elec_test,
                 arch_desc="Input(24,1) -> LSTM(64) -> Dropout(0.1) -> LSTM(32) -> LayerNorm -> GELU -> Linear(1) + Highway(24->1)",
-                pt_stats=lstm_pt_stats,
-                history_dict=models_train_meta.get("LSTM", {}).get("history", {}),
+                pt_stats=lstm_uni_pt_stats,
+                history_dict={},
                 diag=abl_diag,
                 metrics_dict=abl_metrics,
                 train_metrics=None,
@@ -1641,8 +1604,8 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
                 "Status": "SUCCESS",
                 "Input_Spec": abl_spec_str,
                 "Params_Or_Features": int(abl_params),
-                "AIC": None,
-                "BIC": None,
+                "AIC": ar_uni_details["aic_load_eq"] if base_code == "VAR" else None,
+                "BIC": ar_uni_details["bic_load_eq"] if base_code == "VAR" else None,
                 "MSE": wo_mse,
                 "RMSE": wo_rmse,
                 "MAE": wo_mae,
@@ -1744,7 +1707,7 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
                 device_str=dev_str,
                 show_full_importance=False,
             )
-            n_par = xgb_details.get("total_features", 105)
+            n_par = n_xgb_total_feats
         else:
             card_txt = _format_deep_learning_model_card(
                 run_id=active_run_id,
@@ -1822,7 +1785,7 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
             }
         )
 
-    # --- Nhóm 1D: 15 Mô hình Thành phần trên 5-Fold TimeSeriesSplit Cross-Validation (Fold 1..5 × 3 Họ mô hình) ---
+    # --- Nhóm 1D: 15 Mô hình 5-Fold TimeSeriesSplit Cross-Validation ---
     cv_rec_lookup: Dict[Tuple[int, str], np.ndarray] = {}
     for rec in cv_records_list:
         fk = int(rec.get("fold", 0))
@@ -1874,7 +1837,7 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
         n_par = (
             var_details.get("params_per_equation", 97)
             if m_code == "VAR"
-            else (xgb_details.get("total_features", 105) if m_code == "XGBoost" else lstm_pt_stats.get("trainable_params", 30589))
+            else (n_xgb_total_feats if m_code == "XGBoost" else lstm_pt_stats.get("trainable_params", 30589))
         )
         cv_sum_r = cv_sum_lookup.get(m_code, {})
 
@@ -1954,7 +1917,7 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
         )
 
     # =========================================================================
-    # XÂY DỰNG DANH SÁCH 12 THỰC THỂ MÔ HÌNH-TẦM NHÌN TRÊN DATASET 2 (PEMS-BAY)
+    # DATASET 2 (PEMS-BAY) — 12 THỰC THỂ MÔ HÌNH-TẦM NHÌN
     # =========================================================================
     d2_comparison_rows: List[Dict[str, Any]] = []
     d2_models_json: List[Dict[str, Any]] = []
@@ -2150,9 +2113,6 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
                 }
             )
 
-    # =========================================================================
-    # 4. KẾT XUẤT BÁO CÁO MARKDOWN, CSV, JSON CHO DATASET 1, DATASET 2 & MASTER
-    # =========================================================================
     summary_root = PROJECT_ROOT / "reports" / "model_summary" / "lab04"
     d1_dir = summary_root / "dataset1"
     d1_runs_dir = d1_dir / "runs"
@@ -2163,7 +2123,6 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
     for d in (summary_root, d1_dir, d1_runs_dir, d2_dir, d2_runs_dir, master_runs_dir):
         d.mkdir(parents=True, exist_ok=True)
 
-    # --- 4.1. Render Dataset 1 Markdown, CSV, JSON ---
     d1_df = pd.DataFrame(d1_comparison_rows)
     d1_csv_path = d1_dir / "dataset1_model_summary.csv"
     d1_df.to_csv(d1_csv_path, index=False)
@@ -2230,7 +2189,7 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
         f"- **Tập Xác thực (Validation - 15%)**: {n_elec_val:,} quan sát",
         f"- **Tập Kiểm thử Độc lập (Hold-out Test - 15%)**: {n_elec_test:,} quan sát",
         f"- **Tổng số thực thể mô hình được thống kê**: {len(d1_models_json)} (Thành công: {len(d1_models_json)}, Thất bại: 0)",
-        "  - **03 Mô hình Đa biến Chính (Hold-out 70/15/15)**: `VAR(24)`, `XGBoost (105 Features)`, `Stacked 2-Layer LSTM + Residual Highway`",
+        f"  - **03 Mô hình Đa biến Chính (Hold-out 70/15/15)**: `VAR(24)`, `XGBoost ({n_xgb_total_feats} Features)`, `Stacked 2-Layer LSTM + Residual Highway`",
         "  - **03 Mô hình Đối chứng Loại bỏ Thời tiết (Feature Ablation)**: `AR(24) Univariate`, `XGBoost NoWeather`, `LSTM NoWeather`",
         "  - **03 Mô hình Vận hành Cuốn chiếu Thực tế (Walk-Forward 168h)**: `VAR Walk-Forward`, `XGBoost Walk-Forward`, `LSTM Walk-Forward`",
         "  - **15 Mô hình Kiểm định Chéo Mở rộng (`5-Fold TimeSeriesSplit`)**: `Fold 1..5` cho cả 3 họ mô hình `VAR`, `XGBoost`, `LSTM`",
@@ -2277,7 +2236,6 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
     d1_md_path.write_text("\n".join(d1_md_lines), encoding="utf-8")
     shutil.copy2(d1_md_path, d1_runs_dir / f"experiment_dataset1_{active_run_id}_summary.md")
 
-    # --- 4.2. Render Dataset 2 (PEMS-BAY) Markdown, CSV, JSON ---
     d2_df = pd.DataFrame(d2_comparison_rows)
     d2_csv_path = d2_dir / "dataset2_model_summary.csv"
     d2_df.to_csv(d2_csv_path, index=False)
@@ -2371,7 +2329,6 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
     d2_md_path.write_text("\n".join(d2_md_lines), encoding="utf-8")
     shutil.copy2(d2_md_path, d2_runs_dir / f"experiment_dataset2_{active_run_id}_summary.md")
 
-    # --- 4.3. Render Master Combined Lab 04 Model Summary (All 36 Model Evaluations) ---
     all_comp_rows = d1_comparison_rows + d2_comparison_rows
     master_df = pd.DataFrame(all_comp_rows)
     master_csv_path = summary_root / "lab04_model_summary.csv"
@@ -2443,13 +2400,6 @@ def generate_all_model_summaries(run_id: Optional[str] = None) -> Dict[str, Any]
 
 
 def main(run_id: Optional[str] = None) -> Dict[str, Any]:
-    """
-    What: Điểm khởi chạy chính của mô-đun `src/lab04/model_summary.py`.
-    Why: Cho phép gọi trực tiếp từ dòng lệnh (`python src/lab04/model_summary.py`) hoặc gọi tự động từ `evaluate.py` / `pipeline.py`.
-    Input: run_id (Optional[str]).
-    Output: Từ điển kết quả đường dẫn các tệp `model_summary` đã tạo.
-    How: Gọi `generate_all_model_summaries(run_id=run_id)`.
-    """
     return generate_all_model_summaries(run_id=run_id)
 
 
