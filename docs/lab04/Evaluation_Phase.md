@@ -75,17 +75,17 @@ Mục đích cốt lõi của giai đoạn này là:
      - **30 phút ($t+6$):** `DCRNN` đạt `MAE = 1.7338 mph` (`RMSE = 3.9311 mph`, $R^2 = 0.8372$) $<$ `TCN` (`MAE = 1.8553 mph`) $<$ `LSTM` (`MAE = 1.8885 mph`).
      - **60 phút ($t+12$):** `DCRNN` đạt `MAE = 2.3040 mph` (`RMSE = 5.2817 mph`, $R^2 = 0.7063$), thấp hơn rõ rệt so với `Multi-Horizon LSTM` (`MAE = 2.4986 mph`, $R^2 = 0.6987$) và `Multi-Horizon TCN` (`MAE = 2.6243 mph`, $R^2 = 0.6087$), chứng minh giá trị cốt lõi của cấu trúc mạng lưới không gian khi dự báo sóng lan truyền tắc nghẽn giao thông ở tầm nhìn xa.
 
-## 4. Evaluation metrics — Công thức Toán học & Bảng Tổng hợp 5 Chỉ số Chuẩn
+## 4. Evaluation metrics
 
 Với $y_t$ là giá trị thực tế và $\hat{y}_t$ là giá trị dự báo (trên thang đo gốc `kW` hoặc `mph`), 5 chỉ số được tính nhất quán trên mọi bảng kết quả:
 
-| STT | Chỉ số (Metric) | Công thức Toán học | Kết quả Hold-out Test (`XGBoost` / `LSTM` / `VAR`) |
-|---:|---|---|---|
-| 1 | **MSE (Mean Squared Error $\downarrow$)** | $\text{MSE} = \frac{1}{N}\sum_{t=1}^{N}\left(y_t - \hat{y}_t\right)^2$ | `4.2022e+07` / `4.3170e+07` / `5.0728e+07` ($\text{kW}^2$) |
-| 2 | **RMSE (Root Mean Squared Error $\downarrow$)** | $\text{RMSE} = \sqrt{\text{MSE}}$ | **`6,482.45 kW`** / `6,570.41 kW` / `7,122.36 kW` |
-| 3 | **MAE (Mean Absolute Error $\downarrow$)** | $\text{MAE} = \frac{1}{N}\sum_{t=1}^{N}\left|y_t - \hat{y}_t\right|$ | **`4,337.53 kW`** / `4,524.04 kW` / `4,576.49 kW` |
-| 4 | **MAPE (Mean Absolute Percentage Error $\downarrow$)** | $\text{MAPE} = \frac{100\%}{N}\sum_{t=1}^{N}\left|\frac{y_t - \hat{y}_t}{\max(|y_t|, \epsilon)}\right|$ | **`1.8922%`** / `2.0185%` / `2.0010%` |
-| 5 | **$R^2$ Score (Coefficient of Determination $\uparrow$)** | $R^2 = 1 - \frac{\sum_{t=1}^{N}\left(y_t - \hat{y}_t\right)^2}{\sum_{t=1}^{N}\left(y_t - \bar{y}\right)^2}$ | **`0.9946`** / `0.9944` / `0.9935` |
+| STT | Chỉ số (Metric) |
+|---:|---|
+| 1 | **MSE (Mean Squared Error $\downarrow$)** |
+| 2 | **RMSE (Root Mean Squared Error $\downarrow$)** |
+| 3 | **MAE (Mean Absolute Error $\downarrow$)**| 
+| 4 | **MAPE (Mean Absolute Percentage Error $\downarrow$)** |
+| 5 | **$R^2$ Score (Coefficient of Determination $\uparrow$)** |
 
 ## 5. Used data — Dữ liệu sử dụng
 

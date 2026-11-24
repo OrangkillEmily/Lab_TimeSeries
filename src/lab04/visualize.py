@@ -157,7 +157,7 @@ def main(run_id: Optional[str] = None) -> Dict[str, Any]:
         ax1.barh(f"Fold {k}", tr_sz, left=0, height=0.52, color="#1d5843", alpha=0.85, label="Expanding Train" if k == 1 else "")
         ax1.barh(f"Fold {k}", va_sz, left=tr_sz, height=0.52, color="#d95f02", alpha=0.90, label="Temporal Validation" if k == 1 else "")
     ax1.invert_yaxis()
-    ax1.set_xlabel("Chỉ số Bước Thời gian (Hours Index: 0 → 35,065)")
+    ax1.set_xlabel("Chỉ số Bước Thời gian (Hours Index: 0 → 29,805 (Train + Val))")
     ax1.set_title("Cấu trúc Kiểm định Chéo Chuỗi Thời gian 5-Fold (Expanding Window TimeSeriesSplit K=5)", fontsize=11.5, fontweight="bold", color="#183f35")
     ax1.legend(loc="lower right", fontsize=9.5)
     ax1.grid(True, linestyle="--", alpha=0.35)

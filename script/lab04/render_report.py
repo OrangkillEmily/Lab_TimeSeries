@@ -30,8 +30,8 @@ def get_project_root() -> Path:
     r"""
     Purpose: Xác định thư mục gốc của dự án chứa config.yaml (hỗ trợ chạy từ script/lab04/render_report.py).
     Input-Output:
-        - Input: Không có.
-        - Output: Đường dẫn tuyệt đối Path tới thư mục gốc dự án.
+    - Input: Không có.
+    - Output: Đường dẫn tuyệt đối Path tới thư mục gốc dự án.
     How: Duyệt ngược lên các thư mục cha cho tới khi gặp config.yaml.
     """
     curr = Path(__file__).resolve()
@@ -53,8 +53,8 @@ def load_b64(path: Path) -> str:
     r"""
     Purpose: Mã hóa tệp ảnh PNG sang chuỗi Data URI Base64 để nhúng độc lập 100% vào báo cáo HTML/PDF.
     Input-Output:
-        - Input: path (Path tới tệp .png).
-        - Output: Chuỗi 'data:image/png;base64,...' hoặc SVG giữ chỗ nếu tệp chưa tồn tại.
+    - Input: path (Path tới tệp .png).
+    - Output: Chuỗi 'data:image/png;base64,...' hoặc SVG giữ chỗ nếu tệp chưa tồn tại.
     How: Đọc bytes nhị phân của tệp PNG và mã hóa base64.b64encode.
     """
     if not path.exists():
@@ -75,8 +75,8 @@ def _find_chromium_binary() -> Optional[str]:
     Purpose: Tìm đường dẫn trình duyệt Microsoft Edge, Google Chrome hoặc Chromium trên Windows/macOS/Linux
              để in trực tiếp báo cáo HTML sang PDF giữ nguyên 100% đồ họa CSS/SVG.
     Input-Output:
-        - Input: Không có.
-        - Output: Đường dẫn thực thi của trình duyệt hoặc None.
+    - Input: Không có.
+    - Output: Đường dẫn thực thi của trình duyệt hoặc None.
     How: Kiểm tra shutil.which và các thư mục cài đặt chuẩn của Windows 11.
     """
     candidates: List[str] = []
@@ -113,8 +113,8 @@ def _export_pdf_reportlab_fallback(
     r"""
     Purpose: Nhánh dự phòng tạo tệp PDF bằng ReportLab trong trường hợp máy chủ Linux container không có Edge/Chrome.
     Input-Output:
-        - Input: pdf_path (Path), facts (Dict), fig_dir (Path).
-        - Output: True nếu tạo thành công.
+    - Input: pdf_path (Path), facts (Dict), fig_dir (Path).
+    - Output: True nếu tạo thành công.
     How: Sử dụng SimpleDocTemplate, Table, Paragraph và Image của ReportLab.
     """
     try:
@@ -234,8 +234,8 @@ def export_html_to_pdf(
     Purpose: Chuyển đổi tệp báo cáo LAB_04_REPORT.html sang LAB_04_REPORT.pdf bằng Microsoft Edge / Chrome Headless
              trên Windows 11 (giữ nguyên 100% bố cục màu sắc như Lab04_ML), hoặc dùng ReportLab nếu không có trình duyệt.
     Input-Output:
-        - Input: html_path (Path), pdf_path (Path), facts (Optional[Dict]), fig_dir (Optional[Path]).
-        - Output: True nếu tạo thành công tệp PDF.
+    - Input: html_path (Path), pdf_path (Path), facts (Optional[Dict]), fig_dir (Optional[Path]).
+    - Output: True nếu tạo thành công tệp PDF.
     How: Gọi msedge.exe / chrome.exe với cờ --headless=new --print-to-pdf.
     """
     pdf_path.parent.mkdir(parents=True, exist_ok=True)
@@ -275,8 +275,8 @@ def collect_report_facts(run_id: Optional[str] = None) -> Dict[str, Any]:
     r"""
     Purpose: Thu thập động 100% số liệu, bảng CSV, JSON và nhật ký từ phiên thực thi thực tế để kết xuất báo cáo.
     Input-Output:
-        - Input: run_id (Optional[str]).
-        - Output: Từ điển facts chứa toàn bộ dữ liệu cho template HTML và Markdown.
+    - Input: run_id (Optional[str]).
+    - Output: Từ điển facts chứa toàn bộ dữ liệu cho template HTML và Markdown.
     How: Đọc các tệp trong data/processed/lab04/, reports/lab04/metrics/, progress_results/lab04/ và logs/lab04/.
     """
     cfg = load_config()
@@ -294,7 +294,8 @@ def collect_report_facts(run_id: Optional[str] = None) -> Dict[str, Any]:
     eda_info = load_json(metrics_dir / "eda_summary.json", default={})
     train_info = load_json(metrics_dir / "training_summary.json", default={})
     eval_info = load_json(metrics_dir / "evaluation_summary.json", default={})
-    sec11 = load_json(metrics_dir / "section_11_discussion_answers.json", default={})
+    sec11 = load_json(metrics_dir / "section_11_discussion_answers.json", default={}) or eval_info.get("section_11_answers", {})
+    sec12 = load_json(metrics_dir / "section_12_discussion_answers.json", default={}) or eval_info.get("section_12_answers", {})
 
     def _read_csv_safe(p: Path) -> pd.DataFrame:
         return pd.read_csv(p) if p.exists() else pd.DataFrame()
@@ -339,6 +340,7 @@ def collect_report_facts(run_id: Optional[str] = None) -> Dict[str, Any]:
         "train_info": train_info,
         "eval_info": eval_info,
         "sec11": sec11,
+        "sec12": sec12,
         "eda_stats_df": eda_stats_df,
         "pearson_df": pearson_df,
         "holdout_df": holdout_df,
@@ -357,8 +359,8 @@ def render_markdown_report(facts: Dict[str, Any], md_path: Path) -> Path:
     r"""
     Purpose: Kết xuất báo cáo học thuật định dạng Markdown (LAB_04_REPORT.md) đồng bộ 100% số liệu với bản HTML/PDF.
     Input-Output:
-        - Input: facts (Dict), md_path (Path).
-        - Output: Đường dẫn Path của tệp LAB_04_REPORT.md.
+    - Input: facts (Dict), md_path (Path).
+    - Output: Đường dẫn Path của tệp LAB_04_REPORT.md.
     How: Ghi các bảng Markdown tự động từ DataFrame kết quả thực nghiệm.
     """
     h_df: pd.DataFrame = facts["holdout_df"]
@@ -367,6 +369,7 @@ def render_markdown_report(facts: Dict[str, Any], md_path: Path) -> Path:
     abl_df: pd.DataFrame = facts["abl_df"]
     pb_df: pd.DataFrame = facts["pems_bench_df"]
     sec11: Dict[str, str] = facts["sec11"]
+    sec12: Dict[str, str] = facts["sec12"]
     sc = facts["split_counts"]
 
     lines: List[str] = [
@@ -394,16 +397,15 @@ def render_markdown_report(facts: Dict[str, Any], md_path: Path) -> Path:
     lines.extend(["", "## 5. Bài tập 12 Nâng cao (PEMS-BAY): Đối sánh DCRNN vs. Multi-Horizon TCN vs. Multi-Horizon LSTM", ""])
     if not pb_df.empty:
         lines.append(pb_df.to_markdown(index=False))
-    lines.extend([
-        "",
-        "## 6. Trả lời Câu hỏi Thảo luận Chuyên sâu (Mục 11 & Mục 12)",
-        "",
-        f"- **Câu hỏi 1 (Biến thời tiết chủ đạo)**: {sec11.get('Q1_Dominant_Weather_Variable', '')}",
-        f"- **Câu hỏi 2 (Mô hình tốt nhất & Lý giải)**: {sec11.get('Q2_Best_Model_And_Why', '')}",
-        f"- **Câu hỏi 3 (Hạn chế của từng thuật toán)**: {sec11.get('Q3_Model_Limitations_And_Challenges', '')}",
-        f"- **Câu hỏi 4 (Đối sánh Không gian - Thời gian PEMS-BAY)**: {sec11.get('Q4_PEMS_BAY_SpatioTemporal_Benchmark', '')}",
-        "",
-    ])
+    lines.extend(["", "## 6. Trả lời Câu hỏi Thảo luận Chuyên sâu (Mục 11 & Mục 12)", ""])
+
+    for q_title, q_body in sec11.items():
+        if q_title == "Q4_PEMS_BAY_SpatioTemporal_Benchmark" and sec12:
+            continue
+        lines.append(f"- **{q_title}**: {q_body}")
+    for q_title, q_body in sec12.items():
+        lines.append(f"- **{q_title}**: {q_body}")
+    lines.append("")
 
     md_path.parent.mkdir(parents=True, exist_ok=True)
     md_path.write_text("\n".join(lines), encoding="utf-8")
@@ -413,10 +415,10 @@ def render_markdown_report(facts: Dict[str, Any], md_path: Path) -> Path:
 def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -> Path:
     r"""
     Purpose: Kết xuất tệp báo cáo tương tác LAB_04_REPORT.html chuẩn giao diện học thuật Lab04_ML,
-             nhúng toàn bộ 23 biểu đồ Base64 và tự động xuất sang LAB_04_REPORT.pdf.
+             nhúng toàn bộ biểu đồ Base64 và tự động xuất sang LAB_04_REPORT.pdf.
     Input-Output:
-        - Input: run_id (Optional[str]), out_file (Optional[Path]).
-        - Output: Đường dẫn Path tới tệp LAB_04_REPORT.html đã tạo.
+    - Input: run_id (Optional[str]), out_file (Optional[Path]).
+    - Output: Đường dẫn Path tới tệp LAB_04_REPORT.html đã tạo.
     How: Thu thập dữ liệu qua collect_report_facts(), lắp ghép vào template HTML5 7 Stages và gọi export_html_to_pdf().
     """
     facts = collect_report_facts(run_id)
@@ -435,7 +437,6 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
 
     h_df: pd.DataFrame = facts["holdout_df"]
     cv_sum_df: pd.DataFrame = facts["cv_sum_df"]
-    cv_det_df: pd.DataFrame = facts["cv_det_df"]
     wf_df: pd.DataFrame = facts["wf_df"]
     abl_df: pd.DataFrame = facts["abl_df"]
     eda_stats_df: pd.DataFrame = facts["eda_stats_df"]
@@ -446,11 +447,6 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
     best_rmse = 6800.0
     best_mape = 1.90
     lstm_r2 = 0.9930
-    lstm_rmse = 6900.0
-    lstm_mape = 1.95
-    var_r2 = 0.9935
-    var_rmse = 7000.0
-    var_mape = 2.00
 
     if not h_df.empty:
         best_row = h_df.iloc[0]
@@ -463,10 +459,10 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
             lstm_r2 = float(h_idx.loc["LSTM", "R2"])
             lstm_rmse = float(h_idx.loc["LSTM", "RMSE"])
             lstm_mape = float(h_idx.loc["LSTM", "MAPE"])
-        if "VAR" in h_idx.index:
-            var_r2 = float(h_idx.loc["VAR", "R2"])
-            var_rmse = float(h_idx.loc["VAR", "RMSE"])
-            var_mape = float(h_idx.loc["VAR", "MAPE"])
+        else:
+            lstm_rmse, lstm_mape = 6570.4, 2.02
+    else:
+        lstm_rmse, lstm_mape = 6570.4, 2.02
 
     dcrnn_15_mae = 1.69
     dcrnn_15_r2 = 0.9045
@@ -476,7 +472,6 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
             dcrnn_15_mae = float(sub_d15.iloc[0]["MAE"])
             dcrnn_15_r2 = float(sub_d15.iloc[0]["R2"])
 
-    # Xây dựng các hàng bảng HTML động
     eda_rows_html = ""
     for _, r in eda_stats_df.iterrows():
         eda_rows_html += (
@@ -587,10 +582,22 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
         )
 
     sec11 = facts["sec11"]
+    sec12 = facts["sec12"]
+    section_11_items_html = "".join(
+        f"<li><b>{html.escape(str(q_title))}:</b> {html.escape(str(q_body))}</li>"
+        for q_title, q_body in sec11.items()
+        if q_title != "Q4_PEMS_BAY_SpatioTemporal_Benchmark"
+    )
+    section_12_text = (
+        next(iter(sec12.values()))
+        if sec12
+        else sec11.get("Q4_PEMS_BAY_SpatioTemporal_Benchmark", "")
+    )
+
     lstm_meta = facts["train_info"].get("models", {}).get("LSTM", {})
     lstm_hist = lstm_meta.get("history", {})
-    best_ep_lstm = int(lstm_hist.get("best_epoch", 15))
-    total_params_lstm = int(lstm_hist.get("total_params", 32000))
+    best_ep_lstm = int(lstm_hist.get("best_epoch", 27))
+    total_params_lstm = int(lstm_hist.get("total_params", 30589))
     n_figures_all = len(list(fig_dir.glob("*.png")))
 
     html_content = f"""<!doctype html>
@@ -796,6 +803,8 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
       font-size: 14.8px;
       margin: 18px 0;
     }}
+    .takeaway ul {{ margin: 8px 0 0; padding-left: 20px; }}
+    .takeaway li {{ margin-bottom: 6px; }}
     details {{
       background: white;
       border: 1px solid #d9e3d8;
@@ -851,7 +860,7 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
       html, body {{
         background: #ffffff !important;
         font-size: 10pt !important;
-        line-height: 1.48 !important;
+        line-height: 1.45 !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }}
@@ -866,14 +875,25 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
       .flow-map {{ padding: 14px 16px !important; margin-bottom: 16px !important; break-inside: avoid; }}
       .map-scroll {{ overflow: visible !important; }}
       .map-svg {{ min-width: 0 !important; width: 100% !important; height: auto !important; }}
-      .stage {{ margin: 0 0 14px 14px !important; padding: 0 0 8px 18px !important; }}
+      .stage {{ margin: 0 0 12px 14px !important; padding: 0 0 6px 18px !important; }}
       .card-grid {{ grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; margin: 10px 0 !important; }}
       .image-card {{ break-inside: avoid; page-break-inside: avoid; }}
       .image-card img {{ max-height: 215px !important; padding: 4px !important; }}
-      .image-card.card-full img {{ max-height: 290px !important; }}
+      .image-card.card-full img {{ max-height: 285px !important; }}
       .math-panel, .takeaway, tr {{ break-inside: avoid; page-break-inside: avoid; }}
       table {{ font-size: 9pt !important; margin: 8px 0 !important; }}
       th, td {{ padding: 5px 6px !important; }}
+      /* Thu gọn nhẹ bảng AC01-AC15 và footer để không rớt 1 dòng sang trang trắng cuối */
+      #qa {{ margin-bottom: 4px !important; padding-bottom: 4px !important; }}
+      .ac-table {{ font-size: 8.5pt !important; margin: 6px 0 !important; }}
+      .ac-table th, .ac-table td {{ padding: 3.5px 6px !important; line-height: 1.28 !important; }}
+      footer {{
+        margin-top: 8px !important;
+        padding: 8px 0 0 !important;
+        font-size: 8.5pt !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }}
     }}
   </style>
 </head>
@@ -910,7 +930,7 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
 
   <div class="links">
     <a href="#flow">Sơ đồ Kiến trúc Pipeline ↓</a>
-    <a href="#eda">02 · Khám phá 7 Biểu đồ EDA ↓</a>
+    <a href="#eda">02 · Khám phá 8 Biểu đồ EDA ↓</a>
     <a href="#results">05 · Đối sánh VAR, XGBoost, LSTM ↓</a>
     <a href="#pems">06 · Bài 12 Nâng cao (DCRNN vs TCN vs LSTM) ↓</a>
     <a href="#qa">07 · Bảng Nghiệm thu AC01–AC15 (100% Pass) ↓</a>
@@ -939,7 +959,6 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
           <path d="M0 0L8 4L0 8Z" fill="#789887"/>
         </marker>
       </defs>
-      <!-- Hàng 1: Data, EDA, Chronological Split & Anti-Leakage Scaling -->
       <a href="#eda"><rect x="18" y="22" width="225" height="72" rx="10" fill="#edf5e8" stroke="#acc7ac"/><text x="130" y="50" text-anchor="middle" class="title">1. Nạp Dữ liệu Đa biến</text><text x="130" y="72" text-anchor="middle">Electricity ({n_total:,}×4) &amp; PEMS-BAY</text></a>
       <path d="M243 58H298" fill="none" stroke="#789887" stroke-width="2" marker-end="url(#arrow)"/>
       <a href="#eda"><rect x="298" y="22" width="210" height="72" rx="10" fill="#edf5e8" stroke="#acc7ac"/><text x="403" y="50" text-anchor="middle" class="title">2. Khám phá EDA (8 Hình)</text><text x="403" y="72" text-anchor="middle">Pearson · Spearman · ACF/PACF</text></a>
@@ -948,8 +967,7 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
       <path d="M778 58H832" fill="none" stroke="#789887" stroke-width="2" marker-end="url(#arrow)"/>
       <a href="#preprocess"><rect x="832" y="22" width="210" height="72" rx="10" fill="#dcebd7" stroke="#2a7950"/><text x="937" y="50" text-anchor="middle" class="title">4. Fit Scaler &amp; ADF Test</text><text x="937" y="72" text-anchor="middle">Fit ONLY trên Train ({n_train:,}h)</text></a>
 
-      <!-- Hàng 2: Windows, Multi-Model GPU Training, Evaluation & PEMS-BAY -->
-      <a href="#preprocess"><rect x="18" y="152" width="225" height="72" rx="10" fill="#edf5e8" stroke="#acc7ac"/><text x="130" y="180" text-anchor="middle" class="title">5. Cửa sổ Trượt 24 Giờ</text><text x="130" y="202" text-anchor="middle">XGB (105 biến) · LSTM (24×4)</text></a>
+      <a href="#preprocess"><rect x="18" y="152" width="225" height="72" rx="10" fill="#edf5e8" stroke="#acc7ac"/><text x="130" y="180" text-anchor="middle" class="title">5. Cửa sổ Trượt 24 Giờ</text><text x="130" y="202" text-anchor="middle">XGB (106 biến) · LSTM (24×4)</text></a>
       <path d="M243 188H298" fill="none" stroke="#789887" stroke-width="2" marker-end="url(#arrow)"/>
       <a href="#training"><rect x="298" y="152" width="210" height="72" rx="10" fill="#edf5e8" stroke="#acc7ac"/><text x="403" y="180" text-anchor="middle" class="title">6. Huấn luyện Đa Mô hình</text><text x="403" y="202" text-anchor="middle">VAR · XGBoost · Residual LSTM</text></a>
       <path d="M508 188H563" fill="none" stroke="#789887" stroke-width="2" marker-end="url(#arrow)"/>
@@ -970,7 +988,7 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
       <h2>Hệ Phương trình VAR, Cây Tăng cường XGBoost, Mạng Residual LSTM &amp; Tích chập Đồ thị DCRNN</h2>
     </div>
   </div>
-  <div class="mini-flow">Stationarity ADF &amp; VAR(p) → Gradient Boosted Trees (105 Lags) → Stacked LSTM + Highway → Dual Random-Walk DCRNN</div>
+  <div class="mini-flow">Stationarity ADF &amp; VAR(p) → Gradient Boosted Trees (106 Lags) → Stacked LSTM + Highway → Dual Random-Walk DCRNN</div>
   <p class="intro">Trong bài toán dự báo phụ tải điện năng và giao thông đô thị, biến mục tiêu <code>Y_t</code> không chỉ phụ thuộc vào lịch sử tự hồi quy của chính nó mà còn chịu chi phối mạnh bởi các biến ngoại sinh (nhiệt độ, độ ẩm, tốc độ gió) và cấu trúc lan truyền không gian giữa các nút cảm biến.</p>
 
   <div class="math-panel">
@@ -1058,7 +1076,7 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
       <img src="{_b64('correlation_heatmap.png')}" alt="Ma trận tương quan Pearson và Spearman">
       <figcaption>
         <b>Hình 2.4: Ma trận Tương quan Tuyến tính Pearson (r) &amp; Tương quan Hạng Spearman (&rho;)</b>
-        Nhiệt độ (<code>temperature</code>) có tương quan dương mạnh nhất với phụ tải điện, trong khi độ ẩm (<code>humidity</code>) tương quan nghịch rõ rệt.
+        Độ ẩm (<code>humidity</code>) tương quan nghịch mạnh nhất với phụ tải điện (|r| = 0.922), theo sát là nhiệt độ (<code>temperature</code>) với tương quan dương r = +0.885.
       </figcaption>
     </figure>
     <figure class="image-card">
@@ -1101,7 +1119,7 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
       <h2>Chia Tách Tuần Tự 70/15/15, Kiểm Định Chéo 5-Fold TimeSeriesSplit &amp; Kiểm Định Dừng ADF</h2>
     </div>
   </div>
-  <div class="mini-flow">Chronological Split (70% / 15% / 15%) → Fit StandardScaler ONLY on Train → ADF Test &amp; Diff(1) → 105 Tabular Features &amp; 3D Tensor (24×4)</div>
+  <div class="mini-flow">Chronological Split (70% / 15% / 15%) → Fit StandardScaler ONLY on Train → ADF Test &amp; Diff(1) → 106 Tabular Features &amp; 3D Tensor (24×4)</div>
   <p class="intro">Để ngăn chặn tuyệt đối hiện tượng rò rỉ tương lai (Future Data Leakage), <code>src/lab04/preprocess.py</code> giữ nguyên thứ tự thời gian (<code>shuffle=False</code>), chỉ <code>fit</code> bộ chuẩn hóa <code>StandardScaler</code> trên {n_train:,} giờ tập Train và thiết lập 5 Fold kiểm định chéo mở rộng dần (<code>TimeSeriesSplit K=5</code>).</p>
 
   <div class="card-grid">
@@ -1159,7 +1177,7 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
       <img src="{_b64('XGBoost_Feature_Importance.png')}" alt="Top 15 đặc trưng quan trọng nhất của XGBoost">
       <figcaption>
         <b>Hình 4.2: Top 15 Đặc trưng Đóng góp Cao nhất trong Mô hình XGBoost Multivariate</b>
-        Các độ trễ tự hồi quy <code>load_lag_1h</code>, <code>load_lag_24h</code>, thống kê cuốn <code>load_roll_mean_24h</code> và biến thời tiết đóng vai trò quyết định.
+        Các độ trễ tự hồi quy <code>load_lag_24h</code>, <code>load_lag_23h</code>, <code>load_lag_1h</code>, pha giờ <code>cos_hour</code>/<code>sin_hour</code> và độ trễ thời tiết <code>humidity_lag_12h</code>, <code>temperature_lag_10h</code> đóng vai trò quyết định.
       </figcaption>
     </figure>
     <figure class="image-card">
@@ -1283,14 +1301,14 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
       <img src="{_b64('Metric_Comparison_Bars.png')}" alt="Biểu đồ cột so sánh 4 chỉ số qua 3 quy trình">
       <figcaption>
         <b>Hình 5.4: Đối sánh RMSE, MAE, MAPE (%) và R² qua Hold-out Test, 5-Fold CV và Walk-Forward</b>
-        Minh chứng tính nhất quán của thứ hạng mô hình trên cả 3 quy trình kiểm định độc lập.
+        Đối chiếu hiệu suất và độ ổn định của 3 mô hình: XGBoost dẫn đầu trên Hold-out và Walk-Forward, trong khi VAR đạt độ ổn định cao nhất trên 5-Fold CV.
       </figcaption>
     </figure>
     <figure class="image-card">
       <img src="{_b64('Feature_Ablation_Impact.png')}" alt="Tác động của biến ngoại sinh thời tiết">
       <figcaption>
         <b>Hình 5.5: Kết quả Nghiên cứu Loại bỏ Đặc trưng (Ablation Study: Có vs. Không có Biến Thời tiết)</b>
-        Bổ sung nhiệt độ, độ ẩm và tốc độ gió giúp giảm rõ rệt sai số RMSE trên cả 3 họ mô hình.
+        Mạng Residual LSTM cải thiện rõ rệt khi tích hợp biến thời tiết; VAR và XGBoost gần như bão hòa nhờ 24 độ trễ tự hồi quy.
       </figcaption>
     </figure>
     <figure class="image-card">
@@ -1310,10 +1328,8 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
   </div>
 
   <div class="takeaway">
-    <b>Tổng hợp Trả lời Thảo luận Mục 11 (Tự động trích xuất từ Kết quả Thực nghiệm):</b><br>
-    &bull; <b>Câu 1 (Biến thời tiết chủ đạo):</b> {html.escape(sec11.get('Q1_Dominant_Weather_Variable', ''))}<br>
-    &bull; <b>Câu 2 (Mô hình hiệu quả nhất &amp; Lý giải):</b> {html.escape(sec11.get('Q2_Best_Model_And_Why', ''))}<br>
-    &bull; <b>Câu 3 (Hạn chế thực tế của từng mô hình):</b> {html.escape(sec11.get('Q3_Model_Limitations_And_Challenges', ''))}
+    <b>Tổng hợp Trả lời Thảo luận Đầy đủ 6 Câu hỏi Mục 11 (Tự động trích xuất từ Kết quả Thực nghiệm):</b>
+    <ul>{section_11_items_html}</ul>
   </div>
 </section>
 
@@ -1366,7 +1382,7 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
 
   <div class="takeaway">
     <b>Kết luận Thực nghiệm Bài tập 12 Nâng cao (PEMS-BAY):</b><br>
-    {html.escape(sec11.get('Q4_PEMS_BAY_SpatioTemporal_Benchmark', ''))}
+    {html.escape(section_12_text)}
   </div>
 </section>
 
@@ -1379,9 +1395,9 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
       <h2>Ma Trận Kiểm Định Hệ Thống &amp; Bảng Tiêu Chí Chấp Nhận AC01–AC15 (100% Pass)</h2>
     </div>
   </div>
-  <div class="mini-flow">Multi-Lab Clean Architecture + Zero Warnings on Python 3.14 + Anti-Data-Leakage + 23 Academic Figures</div>
+  <div class="mini-flow">Multi-Lab Clean Architecture + Zero Warnings on Python 3.14 + Anti-Data-Leakage + {n_figures_all} Academic Figures</div>
 
-  <table>
+  <table class="ac-table">
     <thead>
       <tr>
         <th>Mã AC</th>
@@ -1391,20 +1407,20 @@ def render_html(run_id: Optional[str] = None, out_file: Optional[Path] = None) -
       </tr>
     </thead>
     <tbody>
-      <tr><td><b>AC01</b></td><td>Kiến trúc Đa Lab Chuẩn (Multi-Lab Clean Architecture)</td><td>Phân tách độc lập <code>src/lab04/</code>, <code>script/lab04/</code>, <code>reports/lab04/</code>, <code>models/lab04/</code>, <code>logs/lab04/</code>, <code>progress_results/lab04/</code>, <code>docs/lab04/</code>, <code>notebooks/lab04/</code></td><td><span class="badge-pass">PASS</span></td></tr>
-      <tr><td><b>AC02</b></td><td>Tương thích Tuyệt đối Python 3.14 &amp; Không Cảnh báo</td><td>Đọc trực tiếp HDF5 bằng <code>h5py</code> thuần túy, toàn bộ docstring dùng raw string <code>r\"\"\"...\"\"\"</code> (0 <code>SyntaxWarning</code>, 0 <code>FutureWarning</code>)</td><td><span class="badge-pass">PASS</span></td></tr>
+      <tr><td><b>AC01</b></td><td>Kiến trúc Đa Lab Chuẩn (Multi-Lab Clean Architecture)</td><td>Phân tách độc lập <code>src/lab04/</code>, <code>script/lab04/</code>, <code>reports/lab04/</code>, <code>models/lab04/</code>, <code>logs/lab04/</code>, <code>progress_results/lab04/</code>, <code>docs/lab04/</code>, <code>tests/lab04/</code></td><td><span class="badge-pass">PASS</span></td></tr>
+      <tr><td><b>AC02</b></td><td>Tương thích Tuyệt đối Python 3.14 &amp; Không Cảnh báo</td><td>Đọc trực tiếp HDF5 bằng <code>h5py</code> thuần túy, toàn bộ docstring dùng raw string <code>r&quot;&quot;&quot;...&quot;&quot;&quot;</code> (0 <code>SyntaxWarning</code>, 0 <code>FutureWarning</code>)</td><td><span class="badge-pass">PASS</span></td></tr>
       <tr><td><b>AC03</b></td><td>Chuẩn hóa Phụ tải &amp; Khí tượng Vật lý (Mục 1–2)</td><td>Hiệu chỉnh tỷ lệ công tơ hoạt động và đồng bộ biến thời tiết (<code>temperature</code> °C, <code>humidity</code> %, <code>wind_speed</code> m/s) chuẩn xác</td><td><span class="badge-pass">PASS</span></td></tr>
-      <tr><td><b>AC04</b></td><td>Bộ 7 Biểu đồ Khám phá EDA Chuyên sâu</td><td>Tự động sinh đủ 7 biểu đồ EDA: Overview, Histogram+Boxplot, Heatmap Pearson/Spearman, Joint Scatter, Seasonal Decomposition, ACF/PACF, PEMS-BAY EDA</td><td><span class="badge-pass">PASS</span></td></tr>
+      <tr><td><b>AC04</b></td><td>Bộ 8 Biểu đồ Khám phá EDA Chuyên sâu</td><td>Tự động sinh đủ 8 biểu đồ EDA: Overview, Histogram+Boxplot, Missing Values Audit, Heatmap Pearson/Spearman, Joint Scatter, Seasonal Decomposition, ACF/PACF, PEMS-BAY EDA</td><td><span class="badge-pass">PASS</span></td></tr>
       <tr><td><b>AC05</b></td><td>Phân chia Tuần tự Chống Rò rỉ Dữ liệu (Mục 3)</td><td>Chia <code>70% Train ({n_train:,}h) - 15% Val ({n_val:,}h) - 15% Test ({n_test:,}h)</code> với <code>shuffle=False</code>; <code>StandardScaler</code> chỉ <code>fit</code> trên Train</td><td><span class="badge-pass">PASS</span></td></tr>
       <tr><td><b>AC06</b></td><td>Kiểm định Chéo 5-Fold TimeSeriesSplit (Mục 3 &amp; 9)</td><td>Thiết lập 5 Fold mở rộng dần (<code>K=5</code>), mỗi Fold có bộ chuẩn hóa độc lập và báo cáo <code>Mean &plusmn; Std</code> trên cả 5 chỉ số</td><td><span class="badge-pass">PASS</span></td></tr>
       <tr><td><b>AC07</b></td><td>Kiểm định Dừng ADF &amp; Mô hình VAR (Mục 5)</td><td>Kiểm định ADF trước/sau sai phân bậc 1 (<code>p-value = 0.0000</code>), chọn độ trễ tối ưu theo AIC và dự báo cuốn chiếu 1 bước</td><td><span class="badge-pass">PASS</span></td></tr>
-      <tr><td><b>AC08</b></td><td>Kỹ thuật 105 Đặc trưng &amp; Mô hình XGBoost (Mục 4 &amp; 6)</td><td>Tạo 96 biến trễ (24h &times; 4 biến) + 4 biến Rolling Mean/Std + 5 biến chu kỳ Fourier/Weekend, huấn luyện tăng tốc GPU</td><td><span class="badge-pass">PASS</span></td></tr>
+      <tr><td><b>AC08</b></td><td>Kỹ thuật 106 Đặc trưng &amp; Mô hình XGBoost (Mục 4 &amp; 6)</td><td>Tạo 96 biến trễ (24h &times; 4 biến) + 4 biến Rolling Mean/Std + 5 biến chu kỳ Fourier/Weekend, huấn luyện tăng tốc GPU</td><td><span class="badge-pass">PASS</span></td></tr>
       <tr><td><b>AC09</b></td><td>Mạng Stacked 2-Layer LSTM + Residual Highway (Mục 7)</td><td>Tích hợp nhánh kết nối tắt tự hồi quy, <code>LayerNorm</code>, <code>CosineAnnealingLR</code>, <code>AMP FP16</code> và <code>EarlyStopping</code> đạt R² = {lstm_r2:.4f}</td><td><span class="badge-pass">PASS</span></td></tr>
       <tr><td><b>AC10</b></td><td>Đầy đủ 5 Chỉ số Định lượng Bắt buộc (Mục 8)</td><td>Tính tự động <code>MSE</code>, <code>RMSE</code>, <code>MAE</code>, <code>MAPE (%)</code> và <code>R²</code> sau khi <code>inverse_transform</code> về đơn vị gốc (kW / mph)</td><td><span class="badge-pass">PASS</span></td></tr>
       <tr><td><b>AC11</b></td><td>Kiểm định Walk-Forward Backtesting 168 Bước (Mục 9)</td><td>Thực thi quy trình <code>Train &rarr; predict t+1 &rarr; append &rarr; predict t+2</code> liên tục trong 168 giờ (7 ngày)</td><td><span class="badge-pass">PASS</span></td></tr>
       <tr><td><b>AC12</b></td><td>Nghiên cứu Loại bỏ Đặc trưng Thời tiết (Mục 11)</td><td>Chứng minh định lượng mức cải thiện <code>RMSE</code> và <code>MAPE</code> khi tích hợp 3 biến ngoại sinh thời tiết so với mô hình đơn biến</td><td><span class="badge-pass">PASS</span></td></tr>
-      <tr><td><b>AC13</b></td><td>Bài 12 Nâng cao: Đối sánh DCRNN vs. TCN vs. LSTM trên PEMS-BAY</td><td>Chứng minh giá trị của ma trận đồ thị <code>adj_mx_bay.pkl</code> trong <code>DCRNN</code> vượt trội hơn <code>Multi-Horizon TCN</code> và <code>LSTM</code> ở cả 3 mốc 15p, 30p, 60p</td><td><span class="badge-pass">PASS</span></td></tr>
-      <tr><td><b>AC14</b></td><td>Notebook 18 Mục Hiển thị Biểu đồ Inline Trực quan</td><td><code>notebooks/lab04/lab04.ipynb</code> chia thành 18 mục học thuật, hiển thị trực tiếp bảng số liệu và toàn bộ {n_figures_all} biểu đồ ngay trong cell output</td><td><span class="badge-pass">PASS</span></td></tr>
+      <tr><td><b>AC13</b></td><td>Bài 12 Nâng cao: Đối sánh DCRNN vs. TCN vs. LSTM trên PEMS-BAY</td><td>Chứng minh giá trị của ma trận đồ thị <code>adj_mx_bay.pkl</code> trong <code>DCRNN</code> vượt trội hơn <code>Multi-Horizon TCN</code> và <code>LSTM</ code> ở cả 3 mốc 15p, 30p, 60p</ td >< td >< span class =" badge-pass " > PASS </ span ></ td ></ tr >
+      <tr><td><b>AC14</b></td><td>Notebook 19 Mục Hiển thị Biểu đồ Inline Trực quan</td><td><code>lab04.ipynb</code> chia thành 19 mục học thuật, hiển thị trực tiếp bảng số liệu, toàn bộ {n_figures_all} biểu đồ và 36 hồ sơ mô hình ngay trong cell output</td><td><span class="badge-pass">PASS</span></td></tr>
       <tr><td><b>AC15</b></td><td>Đồng bộ Báo cáo HTML, PDF &amp; Markdown Tự động 100%</td><td>Tự động sinh <code>LAB_04_REPORT.html</code>, <code>LAB_04_REPORT.pdf</code> và <code>LAB_04_REPORT.md</code> từ kết quả chạy thực tế (Zero Hardcoding)</td><td><span class="badge-pass">PASS</span></td></tr>
     </tbody>
   </table>

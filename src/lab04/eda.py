@@ -1,28 +1,29 @@
 r"""
 Mô-đun Phân tích Khám phá Dữ liệu (Exploratory Data Analysis - EDA) cho Bài thực hành Lab 04.
 Thực hiện đầy đủ Mục 1 và Mục 2 trong đề bài (practice 4.pdf):
-1. Kiểm tra cấu trúc dữ liệu, thống kê mô tả 12 chỉ tiêu (Mean, Std, Min, Q25, Median, Q75, Max,
+1. Kiểm tra cấu trúc dữ liệu, thống kê mô tả 13 chỉ tiêu (Mean, Std, Min, Q25, Median, Q75, Max,
    Skewness, Kurtosis, IQR Outliers, Z-score Outliers) cho cả 4 biến: load, temperature, humidity, wind_speed.
 2. Phân tích ma trận tương quan tuyến tính (Pearson r) và phi tham số (Spearman rho).
-3. Khởi tạo trực tiếp 7 biểu đồ EDA cốt lõi lưu vào reports/lab04/figures/:
-   - multivariate_overview.png
+3. Khởi tạo trực tiếp 8 biểu đồ EDA cốt lõi lưu vào reports/lab04/figures/:
+   - multivariate_overview.png (đồng bộ 100% Min/Mean/Max ngày kèm ngày/tháng/năm dd/mm/yyyy)
    - feature_distributions_and_outliers.png
+   - missing_values_audit.png
    - correlation_heatmap.png
    - weather_vs_load_joint.png
    - seasonal_decomposition.png
-   - acf_pacf_load.png
+   - acf_pacf_load.png (đã loại bỏ hoàn toàn Lag 0, legend không che Lag 72h)
    - pems_bay_eda_overview.png
 """
 
 import shutil
 import time
-import matplotlib.dates as mdates
 import warnings
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import matplotlib
 matplotlib.use("Agg")
+import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -51,10 +52,8 @@ def compute_descriptive_statistics(
     r"""
     Purpose: Tính bảng thống kê mô tả toàn diện và phát hiện điểm ngoại lai (Outliers) theo IQR và Z-score.
     Input-Output:
-        - Input: df (pd.DataFrame), iqr_mult (float = 1.5), z_thresh (float = 3.0).
-        - Output: DataFrame chứa 13 cột thống kê cho từng biến số.
-    How: Với mỗi cột, tính Mean, Std, Min, Q25, Median, Q75, Max, Skewness, Kurtosis,
-         khoảng [Q25 - 1.5*IQR, Q75 + 1.5*IQR] và ngưỡng |Z| > 3.0.
+    - Input: df (pd.DataFrame), iqr_mult (float = 1.5), z_thresh (float = 3.0).
+    - Output: DataFrame chứa 15 cột thống kê cho từng biến số.
     """
     rows: List[Dict[str, Any]] = []
     n_total = max(len(df), 1)
@@ -97,11 +96,6 @@ def compute_descriptive_statistics(
 def compute_correlation_analysis(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame, Dict[str, Any]]:
     r"""
     Purpose: Tính ma trận tương quan tuyến tính Pearson (r) và tương quan hạng Spearman (rho).
-    Input-Output:
-        - Input: df (pd.DataFrame chứa load, temperature, humidity, wind_speed).
-        - Output: Tuple (pearson_df, spearman_df, summary_dict).
-    How: Gọi df.corr(method='pearson') và df.corr(method='spearman'), xác định biến thời tiết
-         có mức độ ảnh hưởng mạnh nhất tới 'load' (theo |r|).
     """
     pearson_df = df.corr(method="pearson").round(4)
     spearman_df = df.corr(method="spearman").round(4)
@@ -122,10 +116,6 @@ def compute_correlation_analysis(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.Dat
 def _sync_figure(fig: plt.Figure, filename: str, run_id: str, cfg: Dict[str, Any]) -> Path:
     r"""
     Purpose: Lưu biểu đồ vào kho trung tâm reports/lab04/figures/, bản sao theo run_id và docs/lab04/figures/.
-    Input-Output:
-        - Input: fig (plt.Figure), filename (str), run_id (str), cfg (Dict).
-        - Output: Đường dẫn Path chính tại reports/lab04/figures/<filename>.
-    How: Gọi fig.savefig(dpi=220) và shutil.copy2 sang các thư mục đồng bộ.
     """
     fig_dir = get_path("figures_dir", cfg)
     run_fig_dir = fig_dir / run_id
@@ -157,8 +147,8 @@ def generate_eda_figures(
     cfg: Dict[str, Any],
 ) -> List[str]:
     r"""
-    Purpose: Vẽ đầy đủ 8 biểu đồ EDA chuyên sâu (to, rõ, không chồng lấn chú thích, loại Lag 0 ở ACF/PACF,
-             hiển thị Min/Mean/Max theo tháng và kiểm tra trực quan Missing Values).
+    Purpose: Vẽ đầy đủ 8 biểu đồ EDA chuyên sâu (đồng bộ 100% Min/Mean/Max kèm ngày/tháng/năm dd/mm/yyyy,
+             loại bỏ hoàn toàn Lag 0 ở ACF/PACF, không chồng lấn chú thích và có biểu đồ kiểm toán Missing Values).
     """
     plt.rcParams.update({
         "font.sans-serif": ["DejaVu Sans", "Segoe UI", "Arial"],
@@ -180,13 +170,13 @@ def generate_eda_figures(
     ]
 
     # =========================================================================
-    # 1. EDA 01: Toàn cảnh Đa biến + Trung bình Tháng + Min/Mean/Max theo Tháng
+    # 1. EDA 01: Toàn cảnh Đa biến — Đồng bộ 100% Min/Mean/Max ngày kèm dd/mm/yyyy
     # =========================================================================
     fig, axes = plt.subplots(
         4, 2,
-        figsize=(19, 16.0),
+        figsize=(19, 16.2),
         sharex="col",
-        gridspec_kw={"width_ratios": [1.7, 1.0], "hspace": 0.38, "wspace": 0.16},
+        gridspec_kw={"width_ratios": [1.7, 1.0], "hspace": 0.40, "wspace": 0.16},
     )
     zoom_df = df_elec.iloc[-336:]  # 14 ngày cuối (336 giờ)
 
@@ -202,49 +192,44 @@ def generate_eda_figures(
         monthly_grp = s_hourly.resample("ME")
         monthly_s = monthly_grp.mean()[monthly_grp.count() >= 24 * 15]
 
-        # Thống kê trên dữ liệu gốc theo giờ (hiển thị ở tiêu đề từng biểu đồ)
-        min_idx = s_hourly.idxmin()
-        max_idx = s_hourly.idxmax()
-        min_val, mean_val, max_val = float(s_hourly.min()), float(s_hourly.mean()), float(s_hourly.max())
-        min_m, max_m = min_idx.strftime("%m/%Y"), max_idx.strftime("%m/%Y")
+        # Tính Min / Mean / Max đồng bộ 100% từ chính chuỗi daily_s kèm ngày/tháng/năm (dd/mm/yyyy)
+        d_max_idx, d_min_idx = daily_s.idxmax(), daily_s.idxmin()
+        d_max_val = float(daily_s.loc[d_max_idx])
+        d_min_val = float(daily_s.loc[d_min_idx])
+        d_mean_val = float(daily_s.mean())
+        d_max_date = d_max_idx.strftime("%d/%m/%Y")
+        d_min_date = d_min_idx.strftime("%d/%m/%Y")
 
-        # Đường trung bình ngày (nền) + trung bình tháng (nổi bật)
+        # Đường trung bình ngày (nền) + trung bình tháng (nổi bật) + Mean đồng bộ
         ax_full.plot(daily_s.index, daily_s.values, color=color, linewidth=0.9, alpha=0.35, label="Trung bình ngày")
         ax_full.plot(monthly_s.index, monthly_s.values, color="#0f172a", linewidth=2.1, marker="o", markersize=3.2, label="Trung bình tháng")
-        ax_full.axhline(mean_val, color="#b91c1c", linestyle="--", linewidth=1.2, alpha=0.85, label="Trung bình toàn kỳ (Mean)")
+        ax_full.axhline(d_mean_val, color="#b91c1c", linestyle="--", linewidth=1.2, alpha=0.85, label="Trung bình toàn kỳ (Mean)")
 
-        # Mở rộng trục Y đủ thoáng cho cả nhãn Max và Min
-        y_min_d, y_max_d = float(daily_s.min()), float(daily_s.max())
-        y_span = max(y_max_d - y_min_d, 1e-6)
-        ax_full.set_ylim(y_min_d - 0.24 * y_span, y_max_d + 0.26 * y_span)
-
-        # Đồng bộ 100% tọa độ chấm tròn và nhãn chữ theo chuỗi daily_s
-        d_max_idx, d_min_idx = daily_s.idxmax(), daily_s.idxmin()
-        d_max_val, d_min_val = float(daily_s.loc[d_max_idx]), float(daily_s.loc[d_min_idx])
-        d_max_m, d_min_m = d_max_idx.strftime("%m/%Y"), d_min_idx.strftime("%m/%Y")
+        y_span = max(d_max_val - d_min_val, 1e-6)
+        ax_full.set_ylim(d_min_val - 0.25 * y_span, d_max_val + 0.28 * y_span)
 
         ax_full.scatter([d_max_idx], [d_max_val], color="#dc2626", s=45, zorder=5)
         ax_full.scatter([d_min_idx], [d_min_val], color="#2563eb", s=45, zorder=5)
 
         ax_full.annotate(
-            f"Max ngày: {format(d_max_val, fmt)} {unit} (T{d_max_m})",
+            f"Max: {format(d_max_val, fmt)} {unit} ({d_max_date})",
             xy=(d_max_idx, d_max_val),
             xytext=(0, 10), textcoords="offset points", ha="center", va="bottom",
-            fontsize=8.8, fontweight="bold", color="#991b1b",
+            fontsize=8.6, fontweight="bold", color="#991b1b",
             bbox=dict(boxstyle="round,pad=0.22", fc="#fef2f2", ec="#fca5a5", alpha=0.95),
         )
         ax_full.annotate(
-            f"Min ngày: {format(d_min_val, fmt)} {unit} (T{d_min_m})",
+            f"Min: {format(d_min_val, fmt)} {unit} ({d_min_date})",
             xy=(d_min_idx, d_min_val),
             xytext=(0, -12), textcoords="offset points", ha="center", va="top",
-            fontsize=8.8, fontweight="bold", color="#1e40af",
+            fontsize=8.6, fontweight="bold", color="#1e40af",
             bbox=dict(boxstyle="round,pad=0.22", fc="#eff6ff", ec="#93c5fd", alpha=0.95),
         )
 
         ax_full.set_ylabel(label, fontweight="bold")
         ax_full.set_title(
-            f"{label}  |  Min giờ: {format(min_val, fmt)} (T{min_m})  •  Mean: {format(mean_val, fmt)}  •  Max giờ: {format(max_val, fmt)} (T{max_m})",
-            fontsize=10.5, fontweight="bold", color="#183f35", loc="left",
+            f"{label}  |  Min ngày: {format(d_min_val, fmt)} ({d_min_date})  •  Mean: {format(d_mean_val, fmt)}  •  Max ngày: {format(d_max_val, fmt)} ({d_max_date})",
+            fontsize=9.8, fontweight="bold", color="#183f35", loc="left",
         )
         ax_full.grid(True, linestyle="--", alpha=0.35)
 
@@ -255,7 +240,7 @@ def generate_eda_figures(
         ax_zoom.set_ylim(z_min - 0.12 * z_span, z_max + 0.15 * z_span)
         ax_zoom.set_title(
             f"14 Ngày Cuối (336h) — Mean: {format(float(zoom_df[col].mean()), fmt)} {unit}",
-            fontsize=10.5, fontweight="bold", color="#183f35", loc="left",
+            fontsize=10.2, fontweight="bold", color="#183f35", loc="left",
         )
         ax_zoom.grid(True, linestyle="--", alpha=0.35)
 
@@ -264,12 +249,11 @@ def generate_eda_figures(
             ax_full.xaxis.set_major_formatter(mdates.DateFormatter("%m/%Y"))
             ax_full.tick_params(axis="x", rotation=15)
 
-            # Dùng DayLocator(interval=3) + format %d/%m để tránh dính chữ ở mép phải
             ax_zoom.xaxis.set_major_locator(mdates.DayLocator(interval=3))
             ax_zoom.xaxis.set_major_formatter(mdates.DateFormatter("%d/%m"))
             ax_zoom.tick_params(axis="x", rotation=20)
 
-    # Đặt 1 thanh Legend chung ở phía trên cùng để không đè lên nhãn Max/Min trong các ô
+    # Thanh Legend chung ở phía trên cùng để không che nhãn Max/Min trong các ô
     handles, labels = axes[0, 0].get_legend_handles_labels()
     fig.legend(
         handles, labels,
@@ -284,10 +268,9 @@ def generate_eda_figures(
     fig.tight_layout(rect=[0, 0, 1, 0.94])
     _sync_figure(fig, "multivariate_overview.png", run_id, cfg)
     saved_files.append("multivariate_overview.png")
-    
 
     # =========================================================================
-    # 2. EDA 02: Phân phối Xác suất & Boxplot (Đổi sang 4x2 rộng rãi, không che KDE)
+    # 2. EDA 02: Phân phối Xác suất & Boxplot (4x2 rộng rãi, không che KDE)
     # =========================================================================
     fig, axes = plt.subplots(
         4, 2,
@@ -304,7 +287,6 @@ def generate_eda_figures(
         ax_hist.axvline(mean_v, color="#b91c1c", linestyle="--", linewidth=1.7, label=f"Mean: {format(mean_v, fmt)} {unit}")
         ax_hist.axvline(med_v, color="#0f172a", linestyle=":", linewidth=1.7, label=f"Median: {format(med_v, fmt)} {unit}")
 
-        # Nới đỉnh Y thêm 24% để legend đặt trên cùng không đè vào đỉnh KDE
         _, y_top = ax_hist.get_ylim()
         ax_hist.set_ylim(0, y_top * 1.24)
         ax_hist.set_title(
@@ -336,11 +318,10 @@ def generate_eda_figures(
     saved_files.append("feature_distributions_and_outliers.png")
 
     # =========================================================================
-    # 3. EDA 03 (MỚI): Trực quan hóa Kiểm tra Missing Values & Tính liên tục Thời gian
+    # 3. EDA 03: Trực quan hóa Kiểm tra Missing Values & Tính liên tục Thời gian
     # =========================================================================
     fig, axes = plt.subplots(1, 2, figsize=(16.5, 5.2), gridspec_kw={"wspace": 0.25})
 
-    # Trái: Số lượng & tỷ lệ Missing của 4 biến Electricity + toàn mạng PEMS-BAY
     audit_names = [
         "load (Elec)", "temperature (Elec)", "humidity (Elec)", "wind_speed (Elec)",
         f"PEMS-BAY ({df_pems.shape[1]} sensors)",
@@ -368,7 +349,6 @@ def generate_eda_figures(
         )
     axes[0].grid(True, axis="x", linestyle="--", alpha=0.35)
 
-    # Phải: Kiểm tra tính liên tục bước thời gian (Timestamp Gap Check)
     elec_diffs = df_elec.index.to_series().diff().dropna().dt.total_seconds() / 3600.0
     pems_diffs = df_pems.index.to_series().diff().dropna().dt.total_seconds() / 60.0
     elec_gaps = int((elec_diffs != 1.0).sum())
@@ -440,7 +420,7 @@ def generate_eda_figures(
         ax.plot(x_grid, y_trend, color="#0f172a", linewidth=2.4, label="Xu hướng Bậc 2 (Quadratic Fit)")
 
         y_lo, y_hi = ax.get_ylim()
-        ax.set_ylim(y_lo, y_hi + 0.16 * (y_hi - y_lo))  # Khoảng trống trên cùng cho legend
+        ax.set_ylim(y_lo, y_hi + 0.16 * (y_hi - y_lo))
         r_val = float(pearson_df.loc["load", col])
         rho_val = float(spearman_df.loc["load", col])
         ax.set_title(f"Load vs. {x_label}\nPearson r = {r_val:+.3f}  |  Spearman ρ = {rho_val:+.3f}", fontsize=11.5, fontweight="bold", color="#183f35")
@@ -502,17 +482,21 @@ def generate_eda_figures(
     axes[0].scatter(lags_acf, acf_vals, color="#1d5843", s=24, zorder=4)
     for peak_lag in (24, 48, 72):
         axes[0].axvline(peak_lag, color="#d95f02", linestyle="--", alpha=0.8, linewidth=1.3)
-        axes[0].text(peak_lag, acf_vals[peak_lag - 1] + 0.04, f"Lag {peak_lag}h\n({acf_vals[peak_lag - 1]:.2f})",
-                     ha="center", va="bottom", fontsize=8.8, fontweight="bold", color="#b45309")
+        axes[0].text(
+            peak_lag, acf_vals[peak_lag - 1] + 0.04,
+            f"Lag {peak_lag}h\n({acf_vals[peak_lag - 1]:.2f})",
+            ha="center", va="bottom", fontsize=8.8, fontweight="bold", color="#b45309",
+        )
     axes[0].fill_between(lags_acf, -conf_bound, conf_bound, color="#ef4444", alpha=0.14, label="95% Confidence Band")
     axes[0].axhline(0, color="black", linewidth=0.9)
-    axes[0].set_xlim(0.5, 73.5)
-    axes[0].set_ylim(min(acf_vals.min(), -0.1) - 0.12, max(acf_vals.max(), 0.5) + 0.18)
+    axes[0].set_xlim(0.5, 74.5)
+    axes[0].set_ylim(min(float(acf_vals.min()), -0.1) - 0.16, max(float(acf_vals.max()), 0.5) + 0.22)
     axes[0].set_xticks([1, 12, 24, 36, 48, 60, 72])
     axes[0].set_title("Hàm Tự tương quan ACF (Lag 1 → 72h, Đã loại Lag 0)", fontsize=12, fontweight="bold", color="#183f35")
     axes[0].set_xlabel("Độ trễ (Lag Hours)", fontweight="bold")
     axes[0].set_ylabel("Hệ số ACF", fontweight="bold")
-    axes[0].legend(loc="upper right", frameon=True, facecolor="white")
+    # Đặt legend ở góc dưới phải để không bao giờ che nhãn Lag 72h
+    axes[0].legend(loc="lower right", frameon=True, facecolor="white", framealpha=0.94)
     axes[0].grid(True, linestyle="--", alpha=0.35)
 
     lags_pacf = np.arange(1, len(pacf_vals) + 1)
@@ -529,7 +513,7 @@ def generate_eda_figures(
     axes[1].set_title("Hàm Tự tương quan Riêng phần PACF (Lag 1 → 48h, Đã loại Lag 0)", fontsize=12, fontweight="bold", color="#183f35")
     axes[1].set_xlabel("Độ trễ (Lag Hours)", fontweight="bold")
     axes[1].set_ylabel("Hệ số PACF", fontweight="bold")
-    axes[1].legend(loc="upper right", frameon=True, facecolor="white")
+    axes[1].legend(loc="upper right", frameon=True, facecolor="white", framealpha=0.94)
     axes[1].grid(True, linestyle="--", alpha=0.35)
 
     fig.suptitle("EDA 07: Phân tích Tự tương quan ACF & PACF Xác định Độ trễ Tối ưu (Không lấy Lag 0)", fontsize=14.5, fontweight="bold", y=1.02, color="#183f35")
@@ -572,7 +556,7 @@ def generate_eda_figures(
     q75_sensors = hourly_speed.quantile(0.75, axis=1)
     axes[2].plot(mean_across_sensors.index, mean_across_sensors.values, marker="o", color="#d95f02", linewidth=2.2, label="Vận tốc TB toàn mạng")
     axes[2].fill_between(mean_across_sensors.index, q25_sensors.values, q75_sensors.values, color="#d95f02", alpha=0.22, label="Dải phân vị IQR (25%–75%)")
-    axes[2].set_ylim(float(q25_sensors.min()) - 6.0, float(q75_sensors.max()) + 4.5)  # Nới đáy để legend không che giờ cao điểm
+    axes[2].set_ylim(float(q25_sensors.min()) - 6.0, float(q75_sensors.max()) + 4.5)
     axes[2].set_title("Biến thiên Vận tốc theo Giờ trong Ngày\n(Giảm mạnh giờ Cao điểm 8h & 17h)", fontsize=11, fontweight="bold", color="#183f35")
     axes[2].set_xlabel("Giờ trong ngày (00:00 – 23:00)", fontweight="bold")
     axes[2].set_ylabel("Vận tốc (mph)", fontweight="bold")
@@ -587,21 +571,17 @@ def generate_eda_figures(
 
     return saved_files
 
+
 def main(run_id: Optional[str] = None) -> Dict[str, Any]:
     r"""
-    Purpose: Thực thi toàn bộ quy trình Phân tích Khám phá Dữ liệu (EDA - Mục 1 & 2) và xuất 7 biểu đồ EDA.
-    Input-Output:
-        - Input: run_id (Optional[str]).
-        - Output: Từ điển chứa kết quả thống kê mô tả, tương quan Pearson/Spearman và danh sách 7 biểu đồ EDA.
-    How: Nạp dữ liệu từ data_loader, tính thống kê, lưu các bảng CSV vào reports/lab04/metrics/
-         và vẽ 7 biểu đồ EDA vào reports/lab04/figures/.
+    Purpose: Thực thi toàn bộ quy trình Phân tích Khám phá Dữ liệu (EDA - Mục 1 & 2) và xuất 8 biểu đồ EDA.
     """
     t0 = time.perf_counter()
     cfg = load_config()
     ensure_directories(cfg)
     active_run_id = get_active_run_id(run_id)
 
-    write_log(active_run_id, "EDA", "START", "Bắt đầu phân tích khám phá dữ liệu (EDA) và khởi tạo 7 biểu đồ chuyên sâu.")
+    write_log(active_run_id, "EDA", "START", "Bắt đầu phân tích khám phá dữ liệu (EDA) và khởi tạo 8 biểu đồ chuyên sâu.")
 
     df_elec, elec_meta = load_electricity_dataset(cfg)
     df_pems, adj_mx, pems_meta = load_pems_bay_dataset(cfg)
