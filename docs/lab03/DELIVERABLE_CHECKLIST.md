@@ -1,44 +1,26 @@
 # Lab 03 Deliverable Checklist
 
-## Architecture and source
-- [x] Lab 03-only package; no Lab 01/02/04 implementation copied into the package.
-- [x] Repository-style directories: `agents/lab03`, `docs/lab03`, `script/lab03`, `src/lab03`, `tests/lab03`, `data/processed/lab03`, `models/lab03`, `logs/lab03`, `reports/lab03`, `reports/model_summary/lab03`, `progress_results/lab03`, `notebooks/lab03`.
-- [x] Root `config.yaml` contains a `lab03` section only.
-- [x] Root `pipeline.py` orchestrates all phases.
-- [x] Both `scripts/run_lab.py` (required entrypoint) and `script/lab03/run_lab03.py` call the same pipeline.
-- [x] One estimator per `.py` file under `src/lab03/lab03_models/`.
-- [x] New estimator code and regression metrics do not import scikit-learn or XGBoost.
+## Completed in the runnable notebook
 
-## Methodology
-- [x] Chronological Train/Validation/Test = 70/15/15, no shuffle.
-- [x] Five expanding-window walk-forward folds, limited to Train.
-- [x] Validation RMSE selects champion; Test is held out from selection.
-- [x] Past-only lag and rolling features.
-- [x] Rolling one-step Test protocol and 24-step recursive future inference are distinguished.
+- [x] Current notebook uses the available `src/lab03` data, features, CV, metrics and scratch-model modules.
+- [x] Real AEP data is present at `data/raw/AEP_hourly.csv`; the notebook fails clearly instead of silently substituting synthetic data.
+- [x] Chronological 70/15/15 split, five expanding-window CV folds on Train, Validation-based selection and held-out Test evaluation.
+- [x] Past-only lag/rolling features and separate rolling Test versus 24-hour recursive forecast protocols.
+- [x] Each run saves its data, figures, predictions, five candidate models, champion forecast model and run summary under `reports/lab03/notebook_runs/<run_id>/`.
+- [x] Latest Markdown, HTML and PDF reports are written under `reports/lab03/`.
+- [x] Latest `model_summary.csv`, `.json`, `.md`, CV fold metrics and Validation/Test JSON metrics are written under `reports/model_summary/lab03/`.
+- [x] Model summary contains CV, Validation and Test metrics, timing, training-row counts, feature count, model parameters and model artifact paths.
+- [x] Notebook was executed end-to-end with the bundled AEP data; reports and all five model-summary artifacts were checked.
 
-## Logs and outputs
-- [x] Timestamped run log with START/SUCCESS and exception traceback on failure.
-- [x] All generated PNG figures go into `images/lab03/`.
-- [x] Report generator writes `.md`, `.html`, and `.pdf`.
-- [x] `model_summary.csv`, `.json`, `.md`, and CV fold metrics are generated.
-- [x] Cleaned data, split features, metrics and predictions are saved under Lab 03 directories.
+## Remaining gaps
 
-## Documentation
-- [x] Detailed documentation exists for each of the five algorithms.
-- [x] Every algorithm document contains Purpose, Input - Output, How to do, Evaluation Metrics and Used Data.
-- [x] Phase documents cover ingestion, cleaning, feature engineering, splitting, CV, training, model selection, inference, evaluation, reporting and experiment tracking.
-- [x] Every phase document contains Purpose, Input - Output, How to do, Evaluation Metrics and Used Data.
-- [x] Execution guide, file guide, architecture and model summary specification included.
+- [ ] A root `pipeline.py` and `scripts/run_lab.py` do not exist. The documented `script/lab03/run_lab03.py` imports the missing root pipeline, so it is not a working CLI entry point. Use the notebook for now.
+- [ ] Root `config.yaml` has shared Lab01/Lab02/Lab04 sections but no Lab03 section. One existing Lab03 test still expects a Lab03-only configuration and therefore fails.
+- [ ] The notebook does not yet write timestamped START/SUCCESS logs or progress-status files.
+- [ ] The earlier legacy notebook is no longer present in the current worktree; its old `src.lab03_utils` imports were unavailable.
 
-## Data and provenance
-- [x] Original executed notebook and legacy source code are preserved.
-- [x] Prior notebook images and results are stored separately as legacy provenance.
-- [x] Default run refuses to label synthetic data as AEP; synthetic data requires the explicit `--synthetic` option.
-- [ ] User must place original `AEP_hourly.csv` into `data/raw/` before running a real-data experiment.
+## Validation notes
 
-## Verified in the build environment
-- [x] Unit tests pass.
-- [x] Python source compilation passes.
-- [x] Explicit synthetic fast smoke run completes all pipeline phases.
-- [x] Smoke run creates all three report formats, model summary, log and 8 images.
-- [x] Generated PDF rendered for layout inspection.
+- Notebook execution on the bundled real dataset succeeds and produces non-empty MD/HTML/PDF reports and model-summary outputs.
+- The report-bundle unit test covers non-empty Markdown, HTML and PDF generation.
+- The full Lab03 unit-test runner currently has one pre-existing configuration assertion failure; the other eight tests pass.

@@ -1,41 +1,17 @@
-# Model Summary Specification — Lab 03
+# Lab 03 Model Summary
 
-The pipeline writes three synchronized views of the candidate comparison:
+Run: `20261125_043541`
 
-- `reports/model_summary/lab03/model_summary.csv`
-- `reports/model_summary/lab03/model_summary.json`
-- `reports/model_summary/lab03/model_summary.md`
+Champion selected by Validation RMSE: **Linear Regression**.
 
-It also writes `cv_fold_metrics.csv`, `validation_metrics.json` and `test_metrics.json`.
+Test metrics are for held-out Test and did not participate in selection.
 
-## Fields
+| model | selected_champion | cv_RMSE_mean | cv_RMSE_std | validation_RMSE | test_MAE | test_RMSE | test_MAPE (%) | test_R2 | fit_seconds | training_rows_used |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Linear Regression | True | 277.589 | 29.939 | 246.137 | 171.907 | 228.494 | 1.170 | 0.992 | 0.065 | 102958 |
+| CART | False | 513.221 | 37.486 | 466.009 | 375.121 | 465.906 | 2.558 | 0.965 | 0.499 | 2500 |
+| Naive Last-Value | False | 575.926 | 33.729 | 534.446 | 417.325 | 534.753 | 2.853 | 0.954 | 0.000 | 102958 |
+| Random Forest | False | 756.342 | 73.556 | 755.079 | 557.222 | 705.227 | 3.900 | 0.920 | 0.349 | 2500 |
+| XGBoost-style | False | 1435.365 | 72.273 | 1458.039 | 1135.129 | 1396.239 | 8.191 | 0.684 | 0.204 | 5000 |
 
-| Field group | Meaning |
-|---|---|
-| `model` | Candidate model name |
-| `cv_*_mean`, `cv_*_std` | Mean and standard deviation of fold metrics from 5-fold expanding-window CV on Train only |
-| `validation_*` | Metric obtained by fitting on Train and predicting Validation |
-| `test_*` | Final metric after refitting on Train+Validation and predicting held-out Test |
-| `fit_seconds`, `predict_seconds_test` | Wall-clock fit/predict durations for the final refit |
-| `training_rows_used` | Number of rows actually consumed by the estimator (can be capped for tree runtime) |
-| `total_train_validation_rows` | Full size of the final fit partition |
-| `feature_count` | Number of lag/rolling/calendar predictors |
-| `model_file` | Relative/absolute artifact path for the fitted estimator |
-| `model_parameters` | JSON serialization of model hyperparameters |
-
-## Selection rule
-
-Champion is selected using the minimum **Validation RMSE**. The model summary may be sorted by Test RMSE for reading convenience, but sorting does not change the already locked champion. Test values are never inputs to selection.
-
-## Interpretation
-
-- Lower MAE/RMSE means smaller errors in MW units; RMSE penalizes large misses more heavily.
-- MAPE is percentage-based and omits target values equal to zero; read it carefully when actual values are close to zero.
-- sMAPE uses the sum of absolute actual and predicted values in its denominator.
-- R² is not a percentage accuracy score and may be negative.
-- CV std is a stability diagnostic: a high value suggests performance varies by time period.
-- `training_rows_used` must be read together with `total_train_validation_rows` when a runtime cap is enabled.
-
-## Provenance
-
-Legacy notebook scores are documented separately in `reports/lab03/legacy/Legacy_Experiment_Results.md`; do not merge them into the current scratch model summary because estimator libraries, split protocol and features differ.
+See `MODEL_SUMMARY_SPEC.md` in `docs/lab03/` for field definitions.

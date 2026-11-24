@@ -1,49 +1,36 @@
 # Lab 03 Execution Guide
 
-## Environment
+## Requirements
 
 - Python 3.10+
-- Install packages from the root `requirements.txt`
-- Keep the working directory at the Lab 03 project root
-- Put `AEP_hourly.csv` in `data/raw/`
+- Dependencies from the repository root `requirements.txt`
+- The supplied `data/raw/AEP_hourly.csv` file
 
-## Full run
+## Run the notebook
+
+Open a terminal at the repository root and run:
 
 ```bash
 python -m pip install -r requirements.txt
-python scripts/run_lab.py
+python -m jupyter lab
 ```
 
-This command performs ingestion, cleaning, feature engineering, chronological split, 5-fold walk-forward CV, candidate training, validation-based selection, final refit, inference, evaluation, logging, figure creation, model summary and report generation.
+Open `notebooks/lab03/Lab03_TimeSeries.ipynb` and choose **Run All**. The notebook locates the repository root from its working directory and stops with a clear error if the AEP dataset is missing. It does not silently substitute synthetic data.
 
-## Alternatives
+The earlier notebook referred to old `src.lab03_utils` modules that are not part of the current source tree. Use the new notebook to run Lab 03.
 
-```bash
-python scripts/run_lab.py --fast
-python scripts/run_lab.py --data path/to/AEP_hourly.csv
-python scripts/run_lab.py --synthetic --fast
-python scripts/run_lab.py --no-cv --fast
+## Workflow and outputs
+
+The notebook loads and regularizes the hourly series, builds causal lag/rolling/calendar features, makes a chronological 70/15/15 split, runs five expanding-window folds on Train, selects a champion using Validation RMSE, evaluates candidates on the held-out Test set and produces a recursive 24-hour forecast.
+
+Every execution creates a unique output directory:
+
+```text
+reports/lab03/notebook_runs/<run_id>/
 ```
 
-- `--fast`: smaller tree ensembles/depth and row caps for development checks. Not the recommended final experiment configuration.
-- `--data`: override the AEP CSV location.
-- `--synthetic`: explicitly generate synthetic demo data if the real CSV is absent or to force a demo run.
-- `--no-cv`: skips the required 5-fold stage; use only for debugging, not the final deliverable run.
+It contains cleaned data, CV/validation/test metrics, Test predictions, the 24-hour forecast, a JSON run summary, figures and the fitted champion model. Test results are reported only after model selection and do not change the selected champion.
 
-## Alternative entry point
+The latest report bundle is also written directly to `reports/lab03/` as `Lab03_Report.md`, `Lab03_Report.html` and `Lab03_Report.pdf`. Latest model-comparison files are written to `reports/model_summary/lab03/`: `model_summary.csv`, `model_summary.json`, `model_summary.md`, `cv_fold_metrics.csv`, `validation_metrics.json` and `test_metrics.json`.
 
-```bash
-python script/lab03/run_lab03.py
-```
-
-Both entry points invoke the same root `pipeline.py`.
-
-## Verify completion
-
-A successful run must end with `LAB03 PIPELINE SUCCESS` in `logs/lab03/<run_id>.log`. Confirm the three reports, all PNG files, `model_summary` files, CV fold metrics, model `.pkl` files and `data/processed/lab03/run_result.json` exist. The report PDF should open in a PDF viewer.
-
-## Run tests
-
-```bash
-python tests/lab03/run_all_tests.py
-```
+The notebook is the supported Lab 03 entry point. The legacy CLI runner currently depends on a root `pipeline.py` that is not present.

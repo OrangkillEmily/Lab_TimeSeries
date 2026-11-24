@@ -157,7 +157,7 @@ def _markdown(report):
         "",
         "## 10. Reproducibility and limitations",
         "",
-        "- Re-run from the project root with `python scripts/run_lab.py`.",
+        "- Re-run from the repository root by opening `notebooks/lab03/Lab03_TimeSeries.ipynb` and choosing Run All.",
         "- Place the original `AEP_hourly.csv` in `data/raw/` with columns `Datetime` and `AEP_MW` for the real-data experiment.",
         "- If the AEP file is absent, the pipeline can run a clearly labelled synthetic smoke test; its scores are not AEP findings.",
         "- Linear Regression, CART, Random Forest and the XGBoost-style booster are implemented in this project with NumPy; no scikit-learn or XGBoost estimators/metrics are called by the new pipeline.",

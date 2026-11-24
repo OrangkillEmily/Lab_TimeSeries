@@ -2,12 +2,13 @@
 
 ## Start here
 
-1. [Execution Guide](EXECUTION_GUIDE.md) — environment, commands and completion checks.
-2. [File Guide](FILE_GUIDE.md) — responsibilities of every directory and key module.
-3. [Architecture](ARCHITECTURE.md) — pipeline phases and leakage controls.
-4. [Methodology](methodology.md) — forecasting protocol, features and metric definitions.
-5. [Model Summary](model_summary.md) — output schema and model-selection interpretation.
-6. [Deliverable Checklist](DELIVERABLE_CHECKLIST.md) — requirement coverage.
+1. [Lab 03 notebook](../../notebooks/lab03/Lab03_TimeSeries.ipynb) — runnable end-to-end experiment.
+2. [Execution Guide](EXECUTION_GUIDE.md) — environment, notebook launch and completion checks.
+3. [File Guide](FILE_GUIDE.md) — responsibilities of every directory and key module.
+4. [Architecture](ARCHITECTURE.md) — pipeline phases and leakage controls.
+5. [Methodology](methodology.md) — forecasting protocol, features and metric definitions.
+6. [Model Summary Specification](MODEL_SUMMARY_SPEC.md) — generated model comparison fields and interpretation.
+7. [Deliverable Checklist](DELIVERABLE_CHECKLIST.md) — requirement coverage.
 
 ## Algorithm documentation
 
@@ -37,6 +38,6 @@ Every model document contains Purpose, Input - Output, How to do, Evaluation Met
 
 Every phase document contains Purpose, Input - Output, How to do, Evaluation Metrics and Used Data.
 
-## Original Lab material
+## Legacy material
 
-The supplied executed notebook, legacy helper code and previous experiment output remain preserved separately. See `notebooks/lab03/archive/`, `legacy/`, `images/lab03/legacy/` and `reports/lab03/legacy/`. These materials are provenance only and are not imported by the new pipeline.
+The earlier legacy notebook is not present in the current worktree. The runnable Lab03 implementation is [Lab03_TimeSeries.ipynb](../../notebooks/lab03/Lab03_TimeSeries.ipynb).

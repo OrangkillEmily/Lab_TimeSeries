@@ -17,12 +17,14 @@
 | `data/processed/lab03/` | Cleaned series, features, predictions and audit files |
 | `models/lab03/` | Serialized fitted scratch models |
 | `logs/lab03/` | One timestamped log file per run |
-| `reports/lab03/` | Main report in MD/HTML/PDF and separate legacy notes |
-| `reports/model_summary/lab03/` | Model summary tables and fold metrics |
+| `reports/lab03/` | Latest and per-run report in MD/HTML/PDF, figures and separate legacy notes |
+| `reports/model_summary/lab03/` | Latest model summary CSV/JSON/MD and fold/partition metrics |
+| `docs/lab03/MODEL_SUMMARY_SPEC.md` | Model summary fields and interpretation |
 | `images/lab03/` | All generated PNG figures and separately preserved legacy images |
 | `progress_results/lab03/` | Latest-run status JSON |
 | `docs/lab03/models/` | One detailed algorithm document per model |
 | `docs/lab03/phases/` | Purpose/Input-Output/How-to/Evaluation/Used-Data for every pipeline phase |
-| `notebooks/lab03/` | Original executed Lab 03 notebook and archived copy |
+| `notebooks/lab03/Lab03_TimeSeries.ipynb` | Current runnable end-to-end Lab 03 notebook |
+| `notebooks/lab03/` | Current runnable notebook; the earlier legacy notebook is not present in the current worktree |
 | `legacy/` | Original helper code/methodology preserved for provenance; not imported by the new pipeline |
 | `tests/lab03/` | Unit tests and lab-specific test runner |
