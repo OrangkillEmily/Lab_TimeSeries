@@ -122,4 +122,51 @@ def save_all_figures(series, X_train, X_val, X_test, y_test, predictions,
         ax.grid(alpha=0.25)
         save(fig, "future_forecast", "08_recursive_future_forecast.png")
 
+    if champion_name in predictions:
+        actual = np.asarray(y_test, dtype=float)
+        pred = np.asarray(predictions[champion_name], dtype=float)
+        residual = actual - pred
+
+        fig, axes = plt.subplots(1, 2, figsize=(13, 4.8))
+        axes[0].scatter(actual, pred, s=8, alpha=0.28, edgecolors="none")
+        limits = [min(actual.min(), pred.min()), max(actual.max(), pred.max())]
+        axes[0].plot(limits, limits, color="tab:red", linestyle="--", linewidth=1.5,
+                     label="Prediction = actual")
+        axes[0].set_title(f"Actual vs prediction - {champion_name}")
+        axes[0].set_xlabel("Actual")
+        axes[0].set_ylabel("Predicted")
+        axes[0].legend()
+
+        axes[1].hist(residual, bins=50, color="tab:blue", alpha=0.82,
+                     edgecolor="white", linewidth=0.25)
+        axes[1].axvline(0, color="black", linewidth=1.0)
+        axes[1].axvline(residual.mean(), color="tab:red", linestyle="--", linewidth=1.5,
+                        label=f"Mean: {residual.mean():.1f}")
+        axes[1].set_title("Residual distribution")
+        axes[1].set_xlabel("Actual - prediction")
+        axes[1].legend()
+        for ax in axes:
+            ax.grid(alpha=0.25)
+        save(fig, "actual_vs_prediction", "09_actual_vs_prediction_residuals.png")
+
+        diagnostic = pd.DataFrame({
+            "actual": actual,
+            "prediction": pred,
+            "absolute_error": np.abs(residual),
+        }, index=y_test.index)
+        diagnostic["weekday"] = diagnostic.index.dayofweek
+        diagnostic["hour"] = diagnostic.index.hour
+        mae_matrix = diagnostic.pivot_table(
+            index="weekday", columns="hour", values="absolute_error", aggfunc="mean"
+        ).reindex(index=range(7), columns=range(24))
+        fig, ax = plt.subplots(figsize=(13, 5))
+        im = ax.imshow(mae_matrix.to_numpy(), aspect="auto", cmap="YlOrRd", origin="upper")
+        ax.set_title(f"Test MAE by weekday and hour - {champion_name}")
+        ax.set_xlabel("Hour")
+        ax.set_ylabel("Weekday")
+        ax.set_xticks(range(24), range(24))
+        ax.set_yticks(range(7), ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"])
+        fig.colorbar(im, ax=ax, label="MAE")
+        save(fig, "test_mae_weekday_hour", "10_test_mae_weekday_hour.png")
+
     return paths

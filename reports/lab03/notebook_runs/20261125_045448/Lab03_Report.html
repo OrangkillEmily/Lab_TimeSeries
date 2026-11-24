@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 03 Report</title><style>
+body{font-family:Arial,'DejaVu Sans',sans-serif;max-width:1120px;margin:32px auto;padding:0 28px;line-height:1.58;color:#20242a}
+h1,h2,h3{color:#18324f}table{border-collapse:collapse;width:100%;font-size:13px;margin:16px 0;display:block;overflow-x:auto}
+th,td{border:1px solid #c9d2dc;padding:7px 9px;text-align:left}th{background:#e8eef5}code{background:#f2f4f7;padding:2px 4px;border-radius:3px}
+li{margin:4px 0}img{max-width:100%;height:auto;border:1px solid #e3e7ec;border-radius:4px}
+blockquote{border-left:4px solid #8b9bad;padding:5px 14px;color:#4a5562;background:#f7f9fb}
+</style></head><body><h1>Lab 03 - Time Series Forecasting Report</h1>
+<p><strong>Run ID:</strong> <code>20261125_045448</code><br />
+<strong>Dataset:</strong> <code>AEP_hourly.csv</code> (<code>real_source</code>)<br />
+<strong>Selected model:</strong> <strong>Linear Regression</strong> (selected by Validation RMSE)<br />
+<strong>Run status:</strong> <code>SUCCESS</code></p>
+<blockquote>
+<p><strong>Important:</strong> Test metrics are reported only after model selection. The Test features are rolling one-step-ahead features, so actual observations from earlier test timestamps are available to form later lag features. This is not the same as a fixed-origin 24-hour forecast.</p>
+</blockquote>
+<h2>1. Executive summary</h2>
+<p>On AEP_hourly.csv, 121,296 cleaned hourly observations were used. Linear Regression was selected using Validation RMSE (246.14 MW). Its held-out Test RMSE was 228.49 MW. A recursive 24-hour forecast was generated.</p>
+<h2>2. Dataset and data quality</h2>
+<ul>
+<li>Source path: <code>C:\Users\Bin\Documents\Lab_TimeSeries\data\raw\AEP_hourly.csv</code></li>
+<li>Dataset type: <strong>real_source</strong></li>
+<li>Observations after cleaning: <strong>121,296</strong></li>
+<li>Time span: <strong>2004-10-01 01:00:00</strong> to <strong>2018-08-03 00:00:00</strong></li>
+<li>Frequency: <strong>h</strong></li>
+<li>Duplicate timestamps removed: <strong>4</strong></li>
+<li>Missing periods inserted: <strong>27</strong></li>
+<li>Missing values remaining after cleaning: <strong>0</strong></li>
+</ul>
+<h2>3. Preprocessing and chronological split</h2>
+<p>Feature rows are ordered by timestamp. Train/Validation/Test are contiguous chronological partitions with no shuffle.</p>
+<table>
+<thead>
+<tr>
+  <th>Partition</th>
+  <th>Rows</th>
+  <th>Start</th>
+  <th>End</th>
+  <th>Target ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Train</td>
+  <td>84,789</td>
+  <td>2004-10-08 01:00:00</td>
+  <td>2014-06-10 21:00:00</td>
+  <td>70%</td>
+</tr>
+<tr>
+  <td>Validation</td>
+  <td>18,169</td>
+  <td>2014-06-10 22:00:00</td>
+  <td>2016-07-06 22:00:00</td>
+  <td>15%</td>
+</tr>
+<tr>
+  <td>Test</td>
+  <td>18,170</td>
+  <td>2016-07-06 23:00:00</td>
+  <td>2018-08-03 00:00:00</td>
+  <td>15%</td>
+</tr>
+</tbody>
+</table>
+<h3>Feature engineering</h3>
+<ul>
+<li>Lag features: <code>[1, 2, 3, 6, 12, 24, 48, 168]</code></li>
+<li>Rolling windows: <code>[6, 12, 24, 168]</code>; rolling calculations are shifted by one timestamp before aggregation.</li>
+<li>Calendar features: <code>True</code></li>
+<li>Total feature count: <strong>22</strong></li>
+</ul>
+<h2>4. Walk-forward cross-validation</h2>
+<p>Expanding-window CV uses <strong>5 folds</strong> inside the Train partition only. Each fold trains on an earlier block and validates on the following block. Validation and Test partitions are not included in CV.</p>
+<table>
+<thead>
+<tr>
+  <th>Model</th>
+  <th>Mean RMSE</th>
+  <th>Std RMSE</th>
+  <th>Mean MAE</th>
+  <th>Mean R²</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Naive Last-Value</td>
+  <td>575.926</td>
+  <td>33.729</td>
+  <td>441.614</td>
+  <td>0.950</td>
+</tr>
+<tr>
+  <td>Linear Regression</td>
+  <td>277.589</td>
+  <td>29.939</td>
+  <td>199.313</td>
+  <td>0.988</td>
+</tr>
+<tr>
+  <td>CART</td>
+  <td>513.221</td>
+  <td>37.486</td>
+  <td>405.312</td>
+  <td>0.960</td>
+</tr>
+<tr>
+  <td>Random Forest</td>
+  <td>756.342</td>
+  <td>73.556</td>
+  <td>583.523</td>
+  <td>0.913</td>
+</tr>
+<tr>
+  <td>XGBoost-style</td>
+  <td>1,435.365</td>
+  <td>72.273</td>
+  <td>1,129.681</td>
+  <td>0.690</td>
+</tr>
+</tbody>
+</table>
+<h2>5. Model comparison</h2>
+<table>
+<thead>
+<tr>
+  <th>Model</th>
+  <th>CV RMSE mean</th>
+  <th>Validation RMSE</th>
+  <th>Test MAE</th>
+  <th>Test RMSE</th>
+  <th>Test MAPE (%)</th>
+  <th>Test R²</th>
+  <th>Fit s</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Naive Last-Value</td>
+  <td>575.926</td>
+  <td>534.446</td>
+  <td>417.325</td>
+  <td>534.753</td>
+  <td>2.853</td>
+  <td>0.954</td>
+  <td>0.00</td>
+</tr>
+<tr>
+  <td>Linear Regression</td>
+  <td>277.589</td>
+  <td>246.137</td>
+  <td>171.907</td>
+  <td>228.494</td>
+  <td>1.170</td>
+  <td>0.992</td>
+  <td>0.05</td>
+</tr>
+<tr>
+  <td>CART</td>
+  <td>513.221</td>
+  <td>466.009</td>
+  <td>375.121</td>
+  <td>465.906</td>
+  <td>2.558</td>
+  <td>0.965</td>
+  <td>0.35</td>
+</tr>
+<tr>
+  <td>Random Forest</td>
+  <td>756.342</td>
+  <td>755.079</td>
+  <td>557.222</td>
+  <td>705.227</td>
+  <td>3.900</td>
+  <td>0.920</td>
+  <td>0.29</td>
+</tr>
+<tr>
+  <td>XGBoost-style</td>
+  <td>1,435.365</td>
+  <td>1,458.039</td>
+  <td>1,135.129</td>
+  <td>1,396.239</td>
+  <td>8.191</td>
+  <td>0.684</td>
+  <td>0.18</td>
+</tr>
+</tbody>
+</table>
+<h3>Model selection protocol</h3>
+<ol>
+<li>Candidate algorithms are trained on Train and compared on Validation.</li>
+<li>The champion is selected by the lowest Validation RMSE; Test is not used to select the champion.</li>
+<li>Each candidate is refitted on Train + Validation, then evaluated once on the held-out Test partition.</li>
+<li>Tree-based models may cap their internal training rows to a deterministic evenly spaced subset for runtime. The actual number of rows used is recorded in <code>model_summary.csv</code>.</li>
+</ol>
+<h2>6. Inference phase</h2>
+<p>The selected model was refitted on Train + Validation and used for <strong>24 recursive hourly steps</strong>. Every predicted value is appended to history and is used to build the next lag/rolling row. No future ground truth is used for this future forecast.</p>
+<h2>7. Legacy notebook experiment snapshot (separate experiment)</h2>
+<p>The archived notebook contains a prior experiment using the library implementations of scikit-learn and XGBoost. Its values are preserved for provenance only; they are not current results from the NumPy scratch models and should not be compared as a controlled, apples-to-apples benchmark.</p>
+<p>Legacy snapshot file is archived separately in <code>reports/lab03/legacy/</code>.</p>
+<h2>8. Figures</h2>
+<h3>Hourly Series</h3>
+<p><img src="figures/01_hourly_series.png" alt="hourly_series" /></p>
+<h3>Temporal Split</h3>
+<p><img src="figures/02_temporal_split.png" alt="temporal_split" /></p>
+<h3>Test And Residuals</h3>
+<p><img src="figures/03_test_and_residuals.png" alt="test_and_residuals" /></p>
+<h3>Test Model Comparison</h3>
+<p><img src="figures/04_test_model_comparison.png" alt="test_model_comparison" /></p>
+<h3>Future 24H Forecast</h3>
+<p><img src="figures/05_future_24h_forecast.png" alt="future_24h_forecast" /></p>
+<h2>9. Evaluation metrics</h2>
+<ul>
+<li><strong>MAE:</strong> average absolute error, in target units; lower is better.</li>
+<li><strong>MSE:</strong> average squared error; penalizes large errors more strongly.</li>
+<li><strong>RMSE:</strong> square root of MSE, in target units; lower is better.</li>
+<li><strong>MAPE:</strong> average absolute percentage error over non-zero actual values; unsuitable when actual values are zero or close to zero.</li>
+<li><strong>sMAPE:</strong> symmetric percentage error using |actual| + |prediction| in the denominator.</li>
+<li><strong>R²:</strong> proportion of target variance explained relative to a mean baseline; can be negative on out-of-sample data.</li>
+</ul>
+<h2>10. Reproducibility and limitations</h2>
+<ul>
+<li>Re-run from the repository root by opening <code>notebooks/lab03/Lab03_TimeSeries.ipynb</code> and choosing Run All.</li>
+<li>Place the original <code>AEP_hourly.csv</code> in <code>data/raw/</code> with columns <code>Datetime</code> and <code>AEP_MW</code> for the real-data experiment.</li>
+<li>If the AEP file is absent, the pipeline can run a clearly labelled synthetic smoke test; its scores are not AEP findings.</li>
+<li>Linear Regression, CART, Random Forest and the XGBoost-style booster are implemented in this project with NumPy; no scikit-learn or XGBoost estimators/metrics are called by the new pipeline.</li>
+<li>The booster is an educational second-order gradient-boosted-tree implementation with histogram split candidates, not the official XGBoost library.</li>
+<li>The standalone CART uses a quantile candidate-threshold approximation to limit runtime; it is not exhaustive threshold search.</li>
+<li>The Test evaluation is rolling one-step ahead. Multi-step free-running prediction is represented separately by the recursive future inference output.</li>
+</ul>
+</body></html>

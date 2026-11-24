@@ -1,6 +1,6 @@
 # Lab 03 - Time Series Forecasting Report
 
-**Run ID:** `20261125_043541`  
+**Run ID:** `20261125_050808`  
 **Dataset:** `AEP_hourly.csv` (`real_source`)  
 **Selected model:** **Linear Regression** (selected by Validation RMSE)  
 **Run status:** `SUCCESS`
@@ -55,10 +55,10 @@ Expanding-window CV uses **5 folds** inside the Train partition only. Each fold 
 | Model | CV RMSE mean | Validation RMSE | Test MAE | Test RMSE | Test MAPE (%) | Test R² | Fit s |
 |---|---|---|---|---|---|---|---|
 | Naive Last-Value | 575.926 | 534.446 | 417.325 | 534.753 | 2.853 | 0.954 | 0.00 |
-| Linear Regression | 277.589 | 246.137 | 171.907 | 228.494 | 1.170 | 0.992 | 0.07 |
-| CART | 513.221 | 466.009 | 375.121 | 465.906 | 2.558 | 0.965 | 0.50 |
-| Random Forest | 756.342 | 755.079 | 557.222 | 705.227 | 3.900 | 0.920 | 0.35 |
-| XGBoost-style | 1,435.365 | 1,458.039 | 1,135.129 | 1,396.239 | 8.191 | 0.684 | 0.20 |
+| Linear Regression | 277.589 | 246.137 | 171.907 | 228.494 | 1.170 | 0.992 | 0.08 |
+| CART | 513.221 | 466.009 | 375.121 | 465.906 | 2.558 | 0.965 | 0.61 |
+| Random Forest | 756.342 | 755.079 | 557.222 | 705.227 | 3.900 | 0.920 | 0.44 |
+| XGBoost-style | 1,435.365 | 1,458.039 | 1,135.129 | 1,396.239 | 8.191 | 0.684 | 0.25 |
 
 ### Model selection protocol
 
@@ -69,7 +69,7 @@ Expanding-window CV uses **5 folds** inside the Train partition only. Each fold 
 
 ## 6. Inference phase
 
-The selected model was refitted on Train + Validation and used for **24 recursive hourly steps**. Every predicted value is appended to history and is used to build the next lag/rolling row. No future ground truth is used for this future forecast.
+The champion selected by Validation was refitted on 121128 labeled observations through 2018-08-03 00:00:00 after Test evaluation, then used for **24 recursive hourly steps**. Every predicted value is appended to history and is used to build the next lag/rolling row. No future ground truth is used for this future forecast. This is separate from the Train + Validation fit used for Test scoring.
 
 ## 7. Legacy notebook experiment snapshot (separate experiment)
 
@@ -81,23 +81,43 @@ Legacy snapshot file is archived separately in `reports/lab03/legacy/`.
 
 ### Hourly Series
 
-![hourly_series](notebook_runs/20261125_043541/figures/01_hourly_series.png)
+![hourly_series](notebook_runs/20261125_050808/figures/01_hourly_series.png)
 
 ### Temporal Split
 
-![temporal_split](notebook_runs/20261125_043541/figures/02_temporal_split.png)
+![temporal_split](notebook_runs/20261125_050808/figures/02_temporal_split.png)
 
 ### Test And Residuals
 
-![test_and_residuals](notebook_runs/20261125_043541/figures/03_test_and_residuals.png)
+![test_and_residuals](notebook_runs/20261125_050808/figures/03_test_and_residuals.png)
 
 ### Test Model Comparison
 
-![test_model_comparison](notebook_runs/20261125_043541/figures/04_test_model_comparison.png)
+![test_model_comparison](notebook_runs/20261125_050808/figures/04_test_model_comparison.png)
 
 ### Future 24H Forecast
 
-![future_24h_forecast](notebook_runs/20261125_043541/figures/05_future_24h_forecast.png)
+![future_24h_forecast](notebook_runs/20261125_050808/figures/05_future_24h_forecast.png)
+
+### Temporal Profiles
+
+![temporal_profiles](notebook_runs/20261125_050808/figures/06_temporal_profiles.png)
+
+### Daily Trend
+
+![daily_trend](notebook_runs/20261125_050808/figures/07_daily_trend.png)
+
+### Walk Forward Cv
+
+![walk_forward_cv](notebook_runs/20261125_050808/figures/08_walk_forward_cv.png)
+
+### Test Error Profiles
+
+![test_error_profiles](notebook_runs/20261125_050808/figures/09_test_error_profiles.png)
+
+### Feature Effects
+
+![feature_effects](notebook_runs/20261125_050808/figures/10_feature_effects.png)
 
 ## 9. Evaluation metrics
 

@@ -217,4 +217,43 @@ lab02:
       seasonal_period: 12
       report_prefix: "LAB_02_DATASET2_REPORT"
 
+# ==============================================================================
+# CẤU HÌNH LAB 03 — FORECASTING HAI CHUỖI THỜI GIAN
+# ==============================================================================
+lab03:
+  project:
+    name: "Lab03_TimeSeries_Forecasting"
+    version: "2.0.0"
+    lab_id: "lab03"
+    course: "Time Series Analysis (Phân tích Chuỗi Thời gian)"
+    institution: "University of Transport in Ho Chi Minh City (UTH)"
+    random_seed: 42
+  paths:
+    data_raw: "data/raw/AEP_hourly.csv"
+    data_processed_dir: "data/processed/lab03"
+    models_dir: "models/lab03"
+    reports_dir: "reports/lab03"
+    figures_dir: "reports/lab03/notebook_runs"
+    model_summary_dir: "reports/model_summary/lab03"
+    logs_dir: "logs/lab03"
+    progress_dir: "progress_results/lab03"
+    docs_dir: "docs/lab03"
+    notebooks_dir: "notebooks/lab03"
+    scripts_dir: "script/lab03"
+  data:
+    target_col: "AEP_MW"
+    date_col: "Datetime"
+    freq: "h"
+    fallback_synthetic: false
+  preprocessing:
+    split:
+      train_ratio: 0.70
+      val_ratio: 0.15
+      test_ratio: 0.15
+      shuffle: false
+    cross_validation:
+      enabled: true
+      n_splits: 5
+      gap: 0
+
 

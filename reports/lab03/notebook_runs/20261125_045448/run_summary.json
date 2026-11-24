@@ -1,0 +1,52 @@
+{
+  "run_id": "20261125_045448",
+  "dataset": {
+    "dataset_name": "AEP_hourly.csv",
+    "dataset_type": "real_source",
+    "source_path": "C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\data\\raw\\AEP_hourly.csv",
+    "raw_rows": 121273,
+    "rows_after_drop_invalid": 121269,
+    "duplicate_timestamps_removed": 4,
+    "missing_periods_inserted": 27,
+    "observations_after_cleaning": 121296,
+    "start": "2004-10-01 01:00:00",
+    "end": "2018-08-03 00:00:00",
+    "frequency": "h",
+    "target_column": "AEP_MW"
+  },
+  "feature_count": 22,
+  "split_rows": {
+    "train": 84789,
+    "validation": 18169,
+    "test": 18170
+  },
+  "champion_selected_by_validation": "Linear Regression",
+  "validation_metrics": {
+    "MAE": 181.6751295998698,
+    "MSE": 60583.41830060059,
+    "RMSE": 246.13699092294232,
+    "MAPE (%)": 1.236957479950783,
+    "sMAPE (%)": 1.2368946367692253,
+    "R2": 0.990283689511727,
+    "fit_seconds": 0.037024299999757204,
+    "predict_seconds": 0.0004772000011143973
+  },
+  "test_metrics": {
+    "MAE": 171.90684813153234,
+    "MSE": 52209.58459166281,
+    "RMSE": 228.49416752219915,
+    "MAPE (%)": 1.1696539355928426,
+    "sMAPE (%)": 1.1693064016193455,
+    "R2": 0.9915496394380067
+  },
+  "forecast_horizon_hours": 24,
+  "forecast_start": "2018-08-03 01:00:00",
+  "forecast_end": "2018-08-04 00:00:00",
+  "figure_dir": "C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\lab03\\notebook_runs\\20261125_045448\\figures",
+  "reports": {
+    "md": "C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\lab03\\Lab03_Report.md",
+    "html": "C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\lab03\\Lab03_Report.html",
+    "pdf": "C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\lab03\\Lab03_Report.pdf"
+  },
+  "model_summary_dir": "C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\model_summary\\lab03"
+}

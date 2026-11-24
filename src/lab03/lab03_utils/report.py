@@ -122,7 +122,8 @@ def _markdown(report):
         "",
         "## 6. Inference phase",
         "",
-        f"The selected model was refitted on Train + Validation and used for **{report['forecast_horizon']} recursive hourly steps**. Every predicted value is appended to history and is used to build the next lag/rolling row. No future ground truth is used for this future forecast.",
+        f"The champion selected by Validation was refitted on {report.get('forecast_training_rows', 'all available labeled observations')} labeled observations"
+        f"{' through ' + str(report['forecast_training_end']) if report.get('forecast_training_end') else ''} after Test evaluation, then used for **{report['forecast_horizon']} recursive hourly steps**. Every predicted value is appended to history and is used to build the next lag/rolling row. No future ground truth is used for this future forecast. This is separate from the Train + Validation fit used for Test scoring.",
         "",
         "## 7. Legacy notebook experiment snapshot (separate experiment)",
         "",
@@ -280,7 +281,9 @@ def _build_pdf(report, pdf_path):
         Spacer(1, 8), Paragraph("6. Inference and methodology notes", styles["LabH1"]),
         Paragraph(
             f"Champion selected on Validation RMSE: {html.escape(str(report['champion']))}. "
-            f"The final model is refitted on Train + Validation and recursively predicts "
+            f"The future-forecast model is refitted on "
+            f"{html.escape(str(report.get('forecast_training_rows', 'all available labeled observations')))} labeled observations"
+            f"{' through ' + html.escape(str(report['forecast_training_end'])) if report.get('forecast_training_end') else ''} after Test evaluation and recursively predicts "
             f"{report['forecast_horizon']} future hourly steps. The held-out Test evaluation is "
             "rolling one-step ahead: lag features for a test timestamp may include earlier actual test observations.",
             styles["LabBody"]),

@@ -7,7 +7,7 @@ th,td{border:1px solid #c9d2dc;padding:7px 9px;text-align:left}th{background:#e8
 li{margin:4px 0}img{max-width:100%;height:auto;border:1px solid #e3e7ec;border-radius:4px}
 blockquote{border-left:4px solid #8b9bad;padding:5px 14px;color:#4a5562;background:#f7f9fb}
 </style></head><body><h1>Lab 03 - Time Series Forecasting Report</h1>
-<p><strong>Run ID:</strong> <code>20261125_043541</code><br />
+<p><strong>Run ID:</strong> <code>20261125_050808</code><br />
 <strong>Dataset:</strong> <code>AEP_hourly.csv</code> (<code>real_source</code>)<br />
 <strong>Selected model:</strong> <strong>Linear Regression</strong> (selected by Validation RMSE)<br />
 <strong>Run status:</strong> <code>SUCCESS</code></p>
@@ -153,7 +153,7 @@ blockquote{border-left:4px solid #8b9bad;padding:5px 14px;color:#4a5562;backgrou
   <td>228.494</td>
   <td>1.170</td>
   <td>0.992</td>
-  <td>0.07</td>
+  <td>0.08</td>
 </tr>
 <tr>
   <td>CART</td>
@@ -163,7 +163,7 @@ blockquote{border-left:4px solid #8b9bad;padding:5px 14px;color:#4a5562;backgrou
   <td>465.906</td>
   <td>2.558</td>
   <td>0.965</td>
-  <td>0.50</td>
+  <td>0.61</td>
 </tr>
 <tr>
   <td>Random Forest</td>
@@ -173,7 +173,7 @@ blockquote{border-left:4px solid #8b9bad;padding:5px 14px;color:#4a5562;backgrou
   <td>705.227</td>
   <td>3.900</td>
   <td>0.920</td>
-  <td>0.35</td>
+  <td>0.44</td>
 </tr>
 <tr>
   <td>XGBoost-style</td>
@@ -183,7 +183,7 @@ blockquote{border-left:4px solid #8b9bad;padding:5px 14px;color:#4a5562;backgrou
   <td>1,396.239</td>
   <td>8.191</td>
   <td>0.684</td>
-  <td>0.20</td>
+  <td>0.25</td>
 </tr>
 </tbody>
 </table>
@@ -195,21 +195,31 @@ blockquote{border-left:4px solid #8b9bad;padding:5px 14px;color:#4a5562;backgrou
 <li>Tree-based models may cap their internal training rows to a deterministic evenly spaced subset for runtime. The actual number of rows used is recorded in <code>model_summary.csv</code>.</li>
 </ol>
 <h2>6. Inference phase</h2>
-<p>The selected model was refitted on Train + Validation and used for <strong>24 recursive hourly steps</strong>. Every predicted value is appended to history and is used to build the next lag/rolling row. No future ground truth is used for this future forecast.</p>
+<p>The champion selected by Validation was refitted on 121128 labeled observations through 2018-08-03 00:00:00 after Test evaluation, then used for <strong>24 recursive hourly steps</strong>. Every predicted value is appended to history and is used to build the next lag/rolling row. No future ground truth is used for this future forecast. This is separate from the Train + Validation fit used for Test scoring.</p>
 <h2>7. Legacy notebook experiment snapshot (separate experiment)</h2>
 <p>The archived notebook contains a prior experiment using the library implementations of scikit-learn and XGBoost. Its values are preserved for provenance only; they are not current results from the NumPy scratch models and should not be compared as a controlled, apples-to-apples benchmark.</p>
 <p>Legacy snapshot file is archived separately in <code>reports/lab03/legacy/</code>.</p>
 <h2>8. Figures</h2>
 <h3>Hourly Series</h3>
-<p><img src="notebook_runs/20261125_043541/figures/01_hourly_series.png" alt="hourly_series" /></p>
+<p><img src="notebook_runs/20261125_050808/figures/01_hourly_series.png" alt="hourly_series" /></p>
 <h3>Temporal Split</h3>
-<p><img src="notebook_runs/20261125_043541/figures/02_temporal_split.png" alt="temporal_split" /></p>
+<p><img src="notebook_runs/20261125_050808/figures/02_temporal_split.png" alt="temporal_split" /></p>
 <h3>Test And Residuals</h3>
-<p><img src="notebook_runs/20261125_043541/figures/03_test_and_residuals.png" alt="test_and_residuals" /></p>
+<p><img src="notebook_runs/20261125_050808/figures/03_test_and_residuals.png" alt="test_and_residuals" /></p>
 <h3>Test Model Comparison</h3>
-<p><img src="notebook_runs/20261125_043541/figures/04_test_model_comparison.png" alt="test_model_comparison" /></p>
+<p><img src="notebook_runs/20261125_050808/figures/04_test_model_comparison.png" alt="test_model_comparison" /></p>
 <h3>Future 24H Forecast</h3>
-<p><img src="notebook_runs/20261125_043541/figures/05_future_24h_forecast.png" alt="future_24h_forecast" /></p>
+<p><img src="notebook_runs/20261125_050808/figures/05_future_24h_forecast.png" alt="future_24h_forecast" /></p>
+<h3>Temporal Profiles</h3>
+<p><img src="notebook_runs/20261125_050808/figures/06_temporal_profiles.png" alt="temporal_profiles" /></p>
+<h3>Daily Trend</h3>
+<p><img src="notebook_runs/20261125_050808/figures/07_daily_trend.png" alt="daily_trend" /></p>
+<h3>Walk Forward Cv</h3>
+<p><img src="notebook_runs/20261125_050808/figures/08_walk_forward_cv.png" alt="walk_forward_cv" /></p>
+<h3>Test Error Profiles</h3>
+<p><img src="notebook_runs/20261125_050808/figures/09_test_error_profiles.png" alt="test_error_profiles" /></p>
+<h3>Feature Effects</h3>
+<p><img src="notebook_runs/20261125_050808/figures/10_feature_effects.png" alt="feature_effects" /></p>
 <h2>9. Evaluation metrics</h2>
 <ul>
 <li><strong>MAE:</strong> average absolute error, in target units; lower is better.</li>

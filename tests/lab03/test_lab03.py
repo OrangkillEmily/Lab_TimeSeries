@@ -84,7 +84,9 @@ class Lab03Tests(unittest.TestCase):
     def test_root_config_is_lab03_only_and_requires_real_data_by_default(self):
         root = Path(__file__).resolve().parents[2]
         config = yaml.safe_load((root / "config.yaml").read_text(encoding="utf-8"))
-        self.assertEqual(set(config.keys()), {"lab03"})
+        self.assertIn("lab03", config)
+        self.assertIn("lab01", config)
+        self.assertIn("lab02", config)
         self.assertFalse(config["lab03"]["data"]["fallback_synthetic"])
         self.assertEqual(config["lab03"]["preprocessing"]["cross_validation"]["n_splits"], 5)
 
@@ -130,7 +132,9 @@ class Lab03Tests(unittest.TestCase):
             "model_rows": [{"model": "Naive Baseline", "cv_RMSE_mean": None,
                             "validation_RMSE": 1.0, "test_MAE": 1.0, "test_RMSE": 1.2,
                             "test_MAPE (%)": 2.0, "test_R2": 0.9, "fit_seconds": 0.01}],
-            "forecast_horizon": 24, "figures": {}, "figure_relative_paths": {},
+            "forecast_horizon": 24, "forecast_training_rows": 99,
+            "forecast_training_end": "2020-01-05 00:00:00",
+            "figures": {}, "figure_relative_paths": {},
             "legacy_snapshot": [],
         }
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -138,6 +142,9 @@ class Lab03Tests(unittest.TestCase):
             for key in ("md", "html", "pdf"):
                 self.assertTrue(Path(paths[key]).exists())
                 self.assertGreater(Path(paths[key]).stat().st_size, 0)
+            report_text = Path(paths["md"]).read_text(encoding="utf-8")
+            self.assertIn("99 labeled observations through 2020-01-05 00:00:00", report_text)
+            self.assertIn("separate from the Train + Validation fit used for Test scoring", report_text)
 
 
 if __name__ == "__main__":
