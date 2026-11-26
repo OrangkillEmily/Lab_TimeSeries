@@ -2,7 +2,7 @@
 
 ## 1. Thông tin Phiên Thực nghiệm & Bộ dữ liệu (Provenance & Dataset Info)
 - **Run ID**: `20261124_193611_5cd58d`
-- **Thời điểm xuất báo cáo**: `2026-11-24 19:44:12`
+- **Thời điểm xuất báo cáo**: `2026-11-26 21:07:52`
 - **Dataset Key**: `dataset1` (`data/raw/electricity_load.csv`)
 - **Tên bộ dữ liệu**: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 - **Tổng số quan sát**: 35,065 giờ (2011-01-01 00:00:00 to 2015-01-01 00:00:00)

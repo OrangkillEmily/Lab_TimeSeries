@@ -1,6 +1,6 @@
 # BÁO CÁO TỔNG HỢP HỒ SƠ THỐNG KÊ TOÀN BỘ MÔ HÌNH LAB 04 (MASTER MODEL SUMMARY)
 
-- **Run ID**: `20261124_193611_5cd58d` | **Thời điểm kết xuất**: `2026-11-24 19:44:12`
+- **Run ID**: `20261124_193611_5cd58d` | **Thời điểm kết xuất**: `2026-11-26 21:07:52`
 - **Thiết bị tính toán**: `NVIDIA GeForce RTX 3050 6GB Laptop GPU`
 - **Tổng số thực thể đánh giá mô hình trong Lab 04**: **36 thực thể (Thành công: 36/36, Thất bại: 0)**
   1. **Dataset 1 — Electricity Load & Weather (`reports/model_summary/lab04/dataset1/`)**: **24 thực thể mô hình** (03 Hold-out + 03 Weather Ablation + 03 Walk-Forward 168h + 15 Fold Models thuộc 5-Fold TimeSeriesSplit CV).
@@ -11,7 +11,7 @@
 
 ## 1. Thông tin Phiên Thực nghiệm & Bộ dữ liệu (Provenance & Dataset Info)
 - **Run ID**: `20261124_193611_5cd58d`
-- **Thời điểm xuất báo cáo**: `2026-11-24 19:44:12`
+- **Thời điểm xuất báo cáo**: `2026-11-26 21:07:52`
 - **Dataset Key**: `dataset1` (`data/raw/electricity_load.csv`)
 - **Tên bộ dữ liệu**: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 - **Tổng số quan sát**: 35,065 giờ (2011-01-01 00:00:00 to 2015-01-01 00:00:00)
@@ -1154,7 +1154,7 @@ OUT-OF-SAMPLE FOLD 5 VALIDATION METRICS (Original Scale kW, n_val=4,967):
 
 ## 1. Thông tin Phiên Thực nghiệm & Bộ dữ liệu Đồ thị Không gian - Thời gian (Provenance & Graph Info)
 - **Run ID**: `20261124_193611_5cd58d`
-- **Thời điểm xuất báo cáo**: `2026-11-24 19:44:12`
+- **Thời điểm xuất báo cáo**: `2026-11-26 21:07:52`
 - **Dataset Key**: `dataset2` (`data/raw/pems-bay.h5` + `data/sensor_graph/adj_mx_bay.pkl`)
 - **Tên bộ dữ liệu**: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 - **Kích thước chuỗi không gian - thời gian**: 8,640 bước thời gian (5 phút/bước) × 207 trạm cảm biến cao tốc

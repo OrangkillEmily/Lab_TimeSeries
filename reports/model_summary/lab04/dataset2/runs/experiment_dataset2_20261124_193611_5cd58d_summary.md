@@ -2,7 +2,7 @@
 
 ## 1. Thông tin Phiên Thực nghiệm & Bộ dữ liệu Đồ thị Không gian - Thời gian (Provenance & Graph Info)
 - **Run ID**: `20261124_193611_5cd58d`
-- **Thời điểm xuất báo cáo**: `2026-11-24 19:44:12`
+- **Thời điểm xuất báo cáo**: `2026-11-26 21:07:52`
 - **Dataset Key**: `dataset2` (`data/raw/pems-bay.h5` + `data/sensor_graph/adj_mx_bay.pkl`)
 - **Tên bộ dữ liệu**: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 - **Kích thước chuỗi không gian - thời gian**: 8,640 bước thời gian (5 phút/bước) × 207 trạm cảm biến cao tốc

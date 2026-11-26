@@ -1,8 +1,8 @@
 # BÁO CÁO TỔNG HỢP MÔ HÌNH (MODEL SUMMARY) — PEMS-BAY SPATIO-TEMPORAL HIGHWAY TRAFFIC SPEED (207 SENSORS, 5-MIN, 01/2017)
 
 ## 1. Thông tin Phiên Thực nghiệm & Bộ dữ liệu Đồ thị Không gian - Thời gian (Provenance & Graph Info)
-- **Run ID**: `20261124_193611_5cd58d`
-- **Thời điểm xuất báo cáo**: `2026-11-24 19:44:12`
+- **Run ID**: `20261126_212116_d28130`
+- **Thời điểm xuất báo cáo**: `2026-11-26 21:30:02`
 - **Dataset Key**: `dataset2` (`data/raw/pems-bay.h5` + `data/sensor_graph/adj_mx_bay.pkl`)
 - **Tên bộ dữ liệu**: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 - **Kích thước chuỗi không gian - thời gian**: 8,640 bước thời gian (5 phút/bước) × 207 trạm cảm biến cao tốc
@@ -15,22 +15,22 @@
 
 | # | Model & Horizon | Family | Horizon | Params | MSE | RMSE (mph) | MAE (mph) | MAPE (%) | R² | Max Error | Device | Train Time (s) |
 |---:|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|:---|---:|
-| 1 | DCRNN (Graph Diffusion + GRU) — Horizon 15_min (15 min / t+3) | `DCRNN` | `Horizon_15_min` | 21,290 | 7.5867 | 2.7544 | 1.2991 | 2.6945 | 0.9201 | 48.11 | `cuda` | 67.9647 |
-| 2 | DCRNN (Graph Diffusion + GRU) — Horizon 30_min (30 min / t+6) | `DCRNN` | `Horizon_30_min` | 21,290 | 15.2795 | 3.9089 | 1.7241 | 3.8977 | 0.8390 | 55.70 | `cuda` | 67.9647 |
-| 3 | DCRNN (Graph Diffusion + GRU) — Horizon 60_min (60 min / t+12) | `DCRNN` | `Horizon_60_min` | 21,290 | 27.7368 | 5.2666 | 2.3004 | 5.6861 | 0.7079 | 58.60 | `cuda` | 67.9647 |
-| 4 | DCRNN (Graph Diffusion + GRU) — Horizon Average_All_Horizons (35 min / t+7) | `DCRNN` | `Horizon_Average_All_Horizons` | 21,290 | 16.8677 | 3.9766 | 1.7745 | 4.0928 | 0.8223 | 58.60 | `cuda` | 67.9647 |
-| 5 | Multi-Horizon TCN (Causal Conv1D) — Horizon 15_min (15 min / t+3) | `Multi_Horizon_TCN` | `Horizon_15_min` | 3,370 | 8.7019 | 2.9499 | 1.3532 | 2.8495 | 0.9083 | 52.68 | `cuda` | 15.3117 |
-| 6 | Multi-Horizon TCN (Causal Conv1D) — Horizon 30_min (30 min / t+6) | `Multi_Horizon_TCN` | `Horizon_30_min` | 3,370 | 19.0428 | 4.3638 | 1.8605 | 4.2009 | 0.7994 | 55.81 | `cuda` | 15.3117 |
-| 7 | Multi-Horizon TCN (Causal Conv1D) — Horizon 60_min (60 min / t+12) | `Multi_Horizon_TCN` | `Horizon_60_min` | 3,370 | 36.9984 | 6.0826 | 2.6396 | 6.6155 | 0.6104 | 58.77 | `cuda` | 15.3117 |
-| 8 | Multi-Horizon TCN (Causal Conv1D) — Horizon Average_All_Horizons (35 min / t+7) | `Multi_Horizon_TCN` | `Horizon_Average_All_Horizons` | 3,370 | 21.5810 | 4.4654 | 1.9511 | 4.5553 | 0.7727 | 58.77 | `cuda` | 15.3117 |
-| 9 | Multi-Horizon LSTM (Temporal Only) — Horizon 15_min (15 min / t+3) | `Multi_Horizon_LSTM` | `Horizon_15_min` | 110,292 | 8.5194 | 2.9188 | 1.4283 | 2.9292 | 0.9102 | 47.20 | `cuda` | 8.9257 |
-| 10 | Multi-Horizon LSTM (Temporal Only) — Horizon 30_min (30 min / t+6) | `Multi_Horizon_LSTM` | `Horizon_30_min` | 110,292 | 16.6435 | 4.0796 | 1.9189 | 4.1104 | 0.8247 | 52.46 | `cuda` | 8.9257 |
-| 11 | Multi-Horizon LSTM (Temporal Only) — Horizon 60_min (60 min / t+12) | `Multi_Horizon_LSTM` | `Horizon_60_min` | 110,292 | 30.0549 | 5.4822 | 2.5517 | 5.5572 | 0.6835 | 56.68 | `cuda` | 8.9257 |
-| 12 | Multi-Horizon LSTM (Temporal Only) — Horizon Average_All_Horizons (35 min / t+7) | `Multi_Horizon_LSTM` | `Horizon_Average_All_Horizons` | 110,292 | 18.4059 | 4.1602 | 1.9663 | 4.1989 | 0.8061 | 56.68 | `cuda` | 8.9257 |
+| 1 | DCRNN (Graph Diffusion + GRU) — Horizon 15_min (15 min / t+3) | `DCRNN` | `Horizon_15_min` | 21,290 | 7.6507 | 2.7660 | 1.3042 | 2.6945 | 0.9194 | 47.17 | `cuda` | 76.5697 |
+| 2 | DCRNN (Graph Diffusion + GRU) — Horizon 30_min (30 min / t+6) | `DCRNN` | `Horizon_30_min` | 21,290 | 15.4797 | 3.9344 | 1.7431 | 3.9328 | 0.8369 | 55.80 | `cuda` | 76.5697 |
+| 3 | DCRNN (Graph Diffusion + GRU) — Horizon 60_min (60 min / t+12) | `DCRNN` | `Horizon_60_min` | 21,290 | 28.2709 | 5.3170 | 2.3391 | 5.7632 | 0.7023 | 58.68 | `cuda` | 76.5697 |
+| 4 | DCRNN (Graph Diffusion + GRU) — Horizon Average_All_Horizons (35 min / t+7) | `DCRNN` | `Horizon_Average_All_Horizons` | 21,290 | 17.1338 | 4.0058 | 1.7955 | 4.1302 | 0.8195 | 58.68 | `cuda` | 76.5697 |
+| 5 | Multi-Horizon TCN (Causal Conv1D) — Horizon 15_min (15 min / t+3) | `Multi_Horizon_TCN` | `Horizon_15_min` | 3,370 | 8.7847 | 2.9639 | 1.3618 | 2.8593 | 0.9074 | 51.11 | `cuda` | 16.6378 |
+| 6 | Multi-Horizon TCN (Causal Conv1D) — Horizon 30_min (30 min / t+6) | `Multi_Horizon_TCN` | `Horizon_30_min` | 3,370 | 19.2893 | 4.3920 | 1.8612 | 4.1519 | 0.7968 | 55.87 | `cuda` | 16.6378 |
+| 7 | Multi-Horizon TCN (Causal Conv1D) — Horizon 60_min (60 min / t+12) | `Multi_Horizon_TCN` | `Horizon_60_min` | 3,370 | 37.3559 | 6.1119 | 2.6389 | 6.5628 | 0.6066 | 58.84 | `cuda` | 16.6378 |
+| 8 | Multi-Horizon TCN (Causal Conv1D) — Horizon Average_All_Horizons (35 min / t+7) | `Multi_Horizon_TCN` | `Horizon_Average_All_Horizons` | 3,370 | 21.8100 | 4.4893 | 1.9540 | 4.5247 | 0.7703 | 58.84 | `cuda` | 16.6378 |
+| 9 | Multi-Horizon LSTM (Temporal Only) — Horizon 15_min (15 min / t+3) | `Multi_Horizon_LSTM` | `Horizon_15_min` | 110,292 | 8.7421 | 2.9567 | 1.4212 | 2.8873 | 0.9079 | 47.15 | `cuda` | 10.1018 |
+| 10 | Multi-Horizon LSTM (Temporal Only) — Horizon 30_min (30 min / t+6) | `Multi_Horizon_LSTM` | `Horizon_30_min` | 110,292 | 17.0914 | 4.1342 | 1.9185 | 4.1057 | 0.8200 | 53.07 | `cuda` | 10.1018 |
+| 11 | Multi-Horizon LSTM (Temporal Only) — Horizon 60_min (60 min / t+12) | `Multi_Horizon_LSTM` | `Horizon_60_min` | 110,292 | 28.8125 | 5.3677 | 2.6231 | 5.8884 | 0.6966 | 54.61 | `cuda` | 10.1018 |
+| 12 | Multi-Horizon LSTM (Temporal Only) — Horizon Average_All_Horizons (35 min / t+7) | `Multi_Horizon_LSTM` | `Horizon_Average_All_Horizons` | 110,292 | 18.2153 | 4.1529 | 1.9876 | 4.2938 | 0.8082 | 54.61 | `cuda` | 10.1018 |
 
-### Diễn giải Đa Tiêu chí Tự động (Run ID: `20261124_193611_5cd58d` — Dataset 2: PEMS-BAY Traffic Graph)
+### Diễn giải Đa Tiêu chí Tự động (Run ID: `20261126_212116_d28130` — Dataset 2: PEMS-BAY Traffic Graph)
 
-- **Mô hình vượt trội nhất ở cả 3 tầm nhìn (15 phút, 30 phút, 60 phút)**: **DCRNN (Graph Diffusion + GRU)** đạt trung bình `RMSE = 3.9766 mph`, `MAE = 1.7745 mph`, `MAPE = 4.0928%` và `R² = 0.8223`.
+- **Mô hình vượt trội nhất ở cả 3 tầm nhìn (15 phút, 30 phút, 60 phút)**: **DCRNN (Graph Diffusion + GRU)** đạt trung bình `RMSE = 4.0058 mph`, `MAE = 1.7955 mph`, `MAPE = 4.1302%` và `R² = 0.8195`.
 - **Vai trò quyết định của Đồ thị Không gian (`adj_mx_bay.pkl`) ở tầm nhìn xa 60 phút ($t+12$)**: Khi dự báo xa 60 phút, sóng tắc nghẽn giao thông lan truyền từ các nút lân cận trên mạng lưới cao tốc. Do đó **DCRNN** (`RMSE = 5.2817 mph`, `MAE = 2.3040 mph`, `R² = 0.7063`) bỏ xa cả **Multi-Horizon LSTM** (`RMSE = 5.3491 mph`, `MAE = 2.4986 mph`) và **Multi-Horizon TCN** (`RMSE = 6.0961 mph`, `MAE = 2.6243 mph`).
 - **Hiệu quả tham số (Parameter Efficiency)**: **DCRNN** chỉ cần `21,290` tham số khả huấn luyện (nhờ chia sẻ bộ lọc khuếch tán đồ thị trên 5 ma trận hỗ trợ $\mathcal{S} \in \mathbb{R}^{5 \times 207 \times 207}$), ít hơn gấp 5.18 lần so với **Multi-Horizon LSTM** (`110,292` tham số).
 
@@ -40,7 +40,7 @@
 ```text
 DCRNN (Graph Diffusion + GRU) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (15_min, 15 min ahead)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (15_min, 15 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -51,66 +51,66 @@ Model: DCRNN (Graph Diffusion + GRU) — Horizon 15_min (15 min / t+3)
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.119470   Best Val Loss:       0.230090
-Final Train Loss:             0.090960   Best Epoch:           12 / 12  
-Hardware Device:                  cuda   Train / Pred:    67.9647s / 0.0850s
+Initial Train Loss:           0.119740   Best Val Loss:       0.234030
+Final Train Loss:             0.095190   Best Epoch:           12 / 12  
+Hardware Device:                  cuda   Train / Pred:    76.5697s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from dcrnn_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
 supports_stack*            (5, 207, 207)    214,245  +0.00483  0.06024     [-0.974, +1.498]
-cell1.gate_linear.weight   (64, 165)         10,560  +0.00328  0.17942     [-0.949, +0.833]
-cell1.gate_linear.bias     (64,)                 64  -0.00059  0.13166     [-0.525, +0.224]
-cell1.cand_linear.weight   (32, 165)          5,280  +0.00187  0.08680     [-0.454, +0.367]
-cell1.cand_linear.bias     (32,)                 32  -0.00769  0.05903     [-0.104, +0.153]
-norm.weight                (32,)                 32  +1.03368  0.07079     [+0.929, +1.239]
-norm.bias                  (32,)                 32  +0.00069  0.01864     [-0.046, +0.054]
-proj.0.weight              (32, 160)          5,120  +0.00079  0.06632     [-0.355, +0.283]
-proj.0.bias                (32,)                 32  -0.03269  0.04898     [-0.102, +0.080]
-proj.2.weight              (3, 32)               96  +0.00123  0.12815     [-0.232, +0.271]
-proj.2.bias                (3,)                   3  +0.05229  0.10033     [-0.089, +0.129]
-ar_highway.weight          (3, 12)               36  +0.06657  0.22843     [-0.058, +0.897]
-ar_highway.bias            (3,)                   3  -0.00989  0.03417     [-0.043, +0.037]
+cell1.gate_linear.weight   (64, 165)         10,560  -0.00166  0.04219     [-0.277, +0.302]
+cell1.gate_linear.bias     (64,)                 64  +0.01599  0.11371     [-0.370, +0.293]
+cell1.cand_linear.weight   (32, 165)          5,280  +0.00256  0.06560     [-0.285, +0.313]
+cell1.cand_linear.bias     (32,)                 32  -0.00627  0.06259     [-0.097, +0.161]
+norm.weight                (32,)                 32  +0.81386  0.08318     [+0.653, +0.993]
+norm.bias                  (32,)                 32  -0.00140  0.01603     [-0.036, +0.030]
+proj.0.weight              (32, 160)          5,120  -0.00015  0.05324     [-0.330, +0.255]
+proj.0.bias                (32,)                 32  -0.03019  0.04046     [-0.095, +0.059]
+proj.2.weight              (3, 32)               96  +0.00570  0.13003     [-0.248, +0.383]
+proj.2.bias                (3,)                   3  +0.05342  0.10199     [-0.090, +0.134]
+ar_highway.weight          (3, 12)               36  +0.06777  0.22110     [-0.035, +0.870]
+ar_highway.bias            (3,)                   3  -0.00777  0.03064     [-0.035, +0.035]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_highway.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:-0.011 L7:-0.002 L4:-0.024 L3:-0.049 L2:+0.064 L1:+0.897
-  30_min (t+6) : L12:-0.009 L7:+0.006 L4:-0.031 L3:-0.058 L2:+0.065 L1:+0.831
-  60_min (t+12): L12:-0.007 L7:+0.000 L4:-0.028 L3:-0.052 L2:+0.055 L1:+0.721
+  15_min (t+3) : L12:-0.013 L7:-0.004 L4:-0.009 L3:-0.035 L2:+0.062 L1:+0.870
+  30_min (t+6) : L12:-0.011 L7:+0.003 L4:-0.015 L3:-0.035 L2:+0.070 L1:+0.805
+  60_min (t+12): L12:-0.013 L7:-0.003 L4:-0.010 L3:-0.026 L2:+0.063 L1:+0.709
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.11947            0.26165        +0.14218               
-    2                0.10931            0.25225        +0.14294               
-    3                0.10410            0.24648        +0.14238               
-    4                0.10077            0.24020        +0.13943               
-    5                0.09888            0.24222        +0.14334               
-    6                0.09701            0.23819        +0.14118               
-    7                0.09567            0.23683        +0.14116               
-    8                0.09426            0.23340        +0.13914               
-    9                0.09284            0.23268        +0.13984               
-   10                0.09211            0.23241        +0.14030               
-   11                0.09138            0.23183        +0.14045               
-   12                0.09096            0.23009        +0.13913 <-- Best Checkpoint
+    1                0.11974            0.26234        +0.14260               
+    2                0.11137            0.25427        +0.14290               
+    3                0.10684            0.25273        +0.14589               
+    4                0.10352            0.24396        +0.14044               
+    5                0.10156            0.24228        +0.14072               
+    6                0.10010            0.24377        +0.14367               
+    7                0.09895            0.24041        +0.14146               
+    8                0.09810            0.23778        +0.13968               
+    9                0.09677            0.23604        +0.13927               
+   10                0.09621            0.23657        +0.14036               
+   11                0.09547            0.23604        +0.14057               
+   12                0.09519            0.23403        +0.13884 <-- Best Checkpoint
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    7.5867   2.7544   1.2991   2.6945%   0.9201    48.11
-30_min                   6   15.2795   3.9089   1.7241   3.8977%   0.8390    55.70
-60_min                  12   27.7368   5.2666   2.3004   5.6861%   0.7079    58.60
-Average_All_Horizons     7   16.8677   3.9766   1.7745   4.0928%   0.8223    58.60
+15_min                   3    7.6507   2.7660   1.3042   2.6945%   0.9194    47.17
+30_min                   6   15.4797   3.9344   1.7431   3.9328%   0.8369    55.80
+60_min                  12   28.2709   5.3170   2.3391   5.7632%   0.7023    58.68
+Average_All_Horizons     7   17.1338   4.0058   1.7955   4.1302%   0.8195    58.68
 ==============================================================================
-Ljung-Box (L=24) (Q):    1973.72   Jarque-Bera (JB):       943.55
+Ljung-Box (L=24) (Q):    2374.52   Jarque-Bera (JB):       900.87
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.8514   Skew:                  -0.6081
-Prob(H) (two-sided):       0.0966   Kurtosis:               7.0179
-Durbin-Watson (DW):        0.3784   MedAE (mph):           0.2216
-Residual Mean (mph):     -0.0881   Residual Std:           2.7530
+Heteroskedasticity(H):     0.9023   Skew:                  -0.7309
+Prob(H) (two-sided):       0.2879   Kurtosis:               6.8326
+Durbin-Watson (DW):        0.3536   MedAE (mph):           0.2134
+Residual Mean (mph):     -0.0335   Residual Std:           2.7658
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =         7.5867 | RMSE =     2.7544 mph | MAE =     1.2991 mph
-  MAPE =        2.6945% | R²   =     0.9201     | Max Error =    48.1141 mph
+  MSE  =         7.6507 | RMSE =     2.7660 mph | MAE =     1.3042 mph
+  MAPE =        2.6945% | R²   =     0.9194     | Max Error =    47.1732 mph
 ==============================================================================
 ```
 
@@ -118,7 +118,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 DCRNN (Graph Diffusion + GRU) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (30_min, 30 min ahead)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (30_min, 30 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -129,66 +129,66 @@ Model: DCRNN (Graph Diffusion + GRU) — Horizon 30_min (30 min / t+6)
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.119470   Best Val Loss:       0.230090
-Final Train Loss:             0.090960   Best Epoch:           12 / 12  
-Hardware Device:                  cuda   Train / Pred:    67.9647s / 0.0850s
+Initial Train Loss:           0.119740   Best Val Loss:       0.234030
+Final Train Loss:             0.095190   Best Epoch:           12 / 12  
+Hardware Device:                  cuda   Train / Pred:    76.5697s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from dcrnn_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
 supports_stack*            (5, 207, 207)    214,245  +0.00483  0.06024     [-0.974, +1.498]
-cell1.gate_linear.weight   (64, 165)         10,560  +0.00328  0.17942     [-0.949, +0.833]
-cell1.gate_linear.bias     (64,)                 64  -0.00059  0.13166     [-0.525, +0.224]
-cell1.cand_linear.weight   (32, 165)          5,280  +0.00187  0.08680     [-0.454, +0.367]
-cell1.cand_linear.bias     (32,)                 32  -0.00769  0.05903     [-0.104, +0.153]
-norm.weight                (32,)                 32  +1.03368  0.07079     [+0.929, +1.239]
-norm.bias                  (32,)                 32  +0.00069  0.01864     [-0.046, +0.054]
-proj.0.weight              (32, 160)          5,120  +0.00079  0.06632     [-0.355, +0.283]
-proj.0.bias                (32,)                 32  -0.03269  0.04898     [-0.102, +0.080]
-proj.2.weight              (3, 32)               96  +0.00123  0.12815     [-0.232, +0.271]
-proj.2.bias                (3,)                   3  +0.05229  0.10033     [-0.089, +0.129]
-ar_highway.weight          (3, 12)               36  +0.06657  0.22843     [-0.058, +0.897]
-ar_highway.bias            (3,)                   3  -0.00989  0.03417     [-0.043, +0.037]
+cell1.gate_linear.weight   (64, 165)         10,560  -0.00166  0.04219     [-0.277, +0.302]
+cell1.gate_linear.bias     (64,)                 64  +0.01599  0.11371     [-0.370, +0.293]
+cell1.cand_linear.weight   (32, 165)          5,280  +0.00256  0.06560     [-0.285, +0.313]
+cell1.cand_linear.bias     (32,)                 32  -0.00627  0.06259     [-0.097, +0.161]
+norm.weight                (32,)                 32  +0.81386  0.08318     [+0.653, +0.993]
+norm.bias                  (32,)                 32  -0.00140  0.01603     [-0.036, +0.030]
+proj.0.weight              (32, 160)          5,120  -0.00015  0.05324     [-0.330, +0.255]
+proj.0.bias                (32,)                 32  -0.03019  0.04046     [-0.095, +0.059]
+proj.2.weight              (3, 32)               96  +0.00570  0.13003     [-0.248, +0.383]
+proj.2.bias                (3,)                   3  +0.05342  0.10199     [-0.090, +0.134]
+ar_highway.weight          (3, 12)               36  +0.06777  0.22110     [-0.035, +0.870]
+ar_highway.bias            (3,)                   3  -0.00777  0.03064     [-0.035, +0.035]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_highway.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:-0.011 L7:-0.002 L4:-0.024 L3:-0.049 L2:+0.064 L1:+0.897
-  30_min (t+6) : L12:-0.009 L7:+0.006 L4:-0.031 L3:-0.058 L2:+0.065 L1:+0.831
-  60_min (t+12): L12:-0.007 L7:+0.000 L4:-0.028 L3:-0.052 L2:+0.055 L1:+0.721
+  15_min (t+3) : L12:-0.013 L7:-0.004 L4:-0.009 L3:-0.035 L2:+0.062 L1:+0.870
+  30_min (t+6) : L12:-0.011 L7:+0.003 L4:-0.015 L3:-0.035 L2:+0.070 L1:+0.805
+  60_min (t+12): L12:-0.013 L7:-0.003 L4:-0.010 L3:-0.026 L2:+0.063 L1:+0.709
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.11947            0.26165        +0.14218               
-    2                0.10931            0.25225        +0.14294               
-    3                0.10410            0.24648        +0.14238               
-    4                0.10077            0.24020        +0.13943               
-    5                0.09888            0.24222        +0.14334               
-    6                0.09701            0.23819        +0.14118               
-    7                0.09567            0.23683        +0.14116               
-    8                0.09426            0.23340        +0.13914               
-    9                0.09284            0.23268        +0.13984               
-   10                0.09211            0.23241        +0.14030               
-   11                0.09138            0.23183        +0.14045               
-   12                0.09096            0.23009        +0.13913 <-- Best Checkpoint
+    1                0.11974            0.26234        +0.14260               
+    2                0.11137            0.25427        +0.14290               
+    3                0.10684            0.25273        +0.14589               
+    4                0.10352            0.24396        +0.14044               
+    5                0.10156            0.24228        +0.14072               
+    6                0.10010            0.24377        +0.14367               
+    7                0.09895            0.24041        +0.14146               
+    8                0.09810            0.23778        +0.13968               
+    9                0.09677            0.23604        +0.13927               
+   10                0.09621            0.23657        +0.14036               
+   11                0.09547            0.23604        +0.14057               
+   12                0.09519            0.23403        +0.13884 <-- Best Checkpoint
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    7.5867   2.7544   1.2991   2.6945%   0.9201    48.11
-30_min                   6   15.2795   3.9089   1.7241   3.8977%   0.8390    55.70
-60_min                  12   27.7368   5.2666   2.3004   5.6861%   0.7079    58.60
-Average_All_Horizons     7   16.8677   3.9766   1.7745   4.0928%   0.8223    58.60
+15_min                   3    7.6507   2.7660   1.3042   2.6945%   0.9194    47.17
+30_min                   6   15.4797   3.9344   1.7431   3.9328%   0.8369    55.80
+60_min                  12   28.2709   5.3170   2.3391   5.7632%   0.7023    58.68
+Average_All_Horizons     7   17.1338   4.0058   1.7955   4.1302%   0.8195    58.68
 ==============================================================================
-Ljung-Box (L=24) (Q):    4176.75   Jarque-Bera (JB):       765.99
+Ljung-Box (L=24) (Q):    4689.25   Jarque-Bera (JB):       806.11
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.7850   Skew:                  -1.0607
-Prob(H) (two-sided):       0.0124   Kurtosis:               6.1315
-Durbin-Watson (DW):        0.1327   MedAE (mph):           0.3028
-Residual Mean (mph):     -0.1858   Residual Std:           3.9045
+Heteroskedasticity(H):     0.8804   Skew:                  -1.1292
+Prob(H) (two-sided):       0.1879   Kurtosis:               6.1552
+Durbin-Watson (DW):        0.1223   MedAE (mph):           0.3076
+Residual Mean (mph):     -0.1205   Residual Std:           3.9326
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =        15.2795 | RMSE =     3.9089 mph | MAE =     1.7241 mph
-  MAPE =        3.8977% | R²   =     0.8390     | Max Error =    55.7045 mph
+  MSE  =        15.4797 | RMSE =     3.9344 mph | MAE =     1.7431 mph
+  MAPE =        3.9328% | R²   =     0.8369     | Max Error =    55.7953 mph
 ==============================================================================
 ```
 
@@ -196,7 +196,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 DCRNN (Graph Diffusion + GRU) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (60_min, 60 min ahead)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (60_min, 60 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -207,66 +207,66 @@ Model: DCRNN (Graph Diffusion + GRU) — Horizon 60_min (60 min / t+12)
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.119470   Best Val Loss:       0.230090
-Final Train Loss:             0.090960   Best Epoch:           12 / 12  
-Hardware Device:                  cuda   Train / Pred:    67.9647s / 0.0850s
+Initial Train Loss:           0.119740   Best Val Loss:       0.234030
+Final Train Loss:             0.095190   Best Epoch:           12 / 12  
+Hardware Device:                  cuda   Train / Pred:    76.5697s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from dcrnn_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
 supports_stack*            (5, 207, 207)    214,245  +0.00483  0.06024     [-0.974, +1.498]
-cell1.gate_linear.weight   (64, 165)         10,560  +0.00328  0.17942     [-0.949, +0.833]
-cell1.gate_linear.bias     (64,)                 64  -0.00059  0.13166     [-0.525, +0.224]
-cell1.cand_linear.weight   (32, 165)          5,280  +0.00187  0.08680     [-0.454, +0.367]
-cell1.cand_linear.bias     (32,)                 32  -0.00769  0.05903     [-0.104, +0.153]
-norm.weight                (32,)                 32  +1.03368  0.07079     [+0.929, +1.239]
-norm.bias                  (32,)                 32  +0.00069  0.01864     [-0.046, +0.054]
-proj.0.weight              (32, 160)          5,120  +0.00079  0.06632     [-0.355, +0.283]
-proj.0.bias                (32,)                 32  -0.03269  0.04898     [-0.102, +0.080]
-proj.2.weight              (3, 32)               96  +0.00123  0.12815     [-0.232, +0.271]
-proj.2.bias                (3,)                   3  +0.05229  0.10033     [-0.089, +0.129]
-ar_highway.weight          (3, 12)               36  +0.06657  0.22843     [-0.058, +0.897]
-ar_highway.bias            (3,)                   3  -0.00989  0.03417     [-0.043, +0.037]
+cell1.gate_linear.weight   (64, 165)         10,560  -0.00166  0.04219     [-0.277, +0.302]
+cell1.gate_linear.bias     (64,)                 64  +0.01599  0.11371     [-0.370, +0.293]
+cell1.cand_linear.weight   (32, 165)          5,280  +0.00256  0.06560     [-0.285, +0.313]
+cell1.cand_linear.bias     (32,)                 32  -0.00627  0.06259     [-0.097, +0.161]
+norm.weight                (32,)                 32  +0.81386  0.08318     [+0.653, +0.993]
+norm.bias                  (32,)                 32  -0.00140  0.01603     [-0.036, +0.030]
+proj.0.weight              (32, 160)          5,120  -0.00015  0.05324     [-0.330, +0.255]
+proj.0.bias                (32,)                 32  -0.03019  0.04046     [-0.095, +0.059]
+proj.2.weight              (3, 32)               96  +0.00570  0.13003     [-0.248, +0.383]
+proj.2.bias                (3,)                   3  +0.05342  0.10199     [-0.090, +0.134]
+ar_highway.weight          (3, 12)               36  +0.06777  0.22110     [-0.035, +0.870]
+ar_highway.bias            (3,)                   3  -0.00777  0.03064     [-0.035, +0.035]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_highway.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:-0.011 L7:-0.002 L4:-0.024 L3:-0.049 L2:+0.064 L1:+0.897
-  30_min (t+6) : L12:-0.009 L7:+0.006 L4:-0.031 L3:-0.058 L2:+0.065 L1:+0.831
-  60_min (t+12): L12:-0.007 L7:+0.000 L4:-0.028 L3:-0.052 L2:+0.055 L1:+0.721
+  15_min (t+3) : L12:-0.013 L7:-0.004 L4:-0.009 L3:-0.035 L2:+0.062 L1:+0.870
+  30_min (t+6) : L12:-0.011 L7:+0.003 L4:-0.015 L3:-0.035 L2:+0.070 L1:+0.805
+  60_min (t+12): L12:-0.013 L7:-0.003 L4:-0.010 L3:-0.026 L2:+0.063 L1:+0.709
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.11947            0.26165        +0.14218               
-    2                0.10931            0.25225        +0.14294               
-    3                0.10410            0.24648        +0.14238               
-    4                0.10077            0.24020        +0.13943               
-    5                0.09888            0.24222        +0.14334               
-    6                0.09701            0.23819        +0.14118               
-    7                0.09567            0.23683        +0.14116               
-    8                0.09426            0.23340        +0.13914               
-    9                0.09284            0.23268        +0.13984               
-   10                0.09211            0.23241        +0.14030               
-   11                0.09138            0.23183        +0.14045               
-   12                0.09096            0.23009        +0.13913 <-- Best Checkpoint
+    1                0.11974            0.26234        +0.14260               
+    2                0.11137            0.25427        +0.14290               
+    3                0.10684            0.25273        +0.14589               
+    4                0.10352            0.24396        +0.14044               
+    5                0.10156            0.24228        +0.14072               
+    6                0.10010            0.24377        +0.14367               
+    7                0.09895            0.24041        +0.14146               
+    8                0.09810            0.23778        +0.13968               
+    9                0.09677            0.23604        +0.13927               
+   10                0.09621            0.23657        +0.14036               
+   11                0.09547            0.23604        +0.14057               
+   12                0.09519            0.23403        +0.13884 <-- Best Checkpoint
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    7.5867   2.7544   1.2991   2.6945%   0.9201    48.11
-30_min                   6   15.2795   3.9089   1.7241   3.8977%   0.8390    55.70
-60_min                  12   27.7368   5.2666   2.3004   5.6861%   0.7079    58.60
-Average_All_Horizons     7   16.8677   3.9766   1.7745   4.0928%   0.8223    58.60
+15_min                   3    7.6507   2.7660   1.3042   2.6945%   0.9194    47.17
+30_min                   6   15.4797   3.9344   1.7431   3.9328%   0.8369    55.80
+60_min                  12   28.2709   5.3170   2.3391   5.7632%   0.7023    58.68
+Average_All_Horizons     7   17.1338   4.0058   1.7955   4.1302%   0.8195    58.68
 ==============================================================================
-Ljung-Box (L=24) (Q):    7723.98   Jarque-Bera (JB):       836.30
+Ljung-Box (L=24) (Q):    8025.06   Jarque-Bera (JB):       870.90
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.7953   Skew:                  -1.2949
-Prob(H) (two-sided):       0.0180   Kurtosis:               5.9855
-Durbin-Watson (DW):        0.0437   MedAE (mph):           0.4440
-Residual Mean (mph):     -0.3568   Residual Std:           5.2545
+Heteroskedasticity(H):     0.8964   Skew:                  -1.3027
+Prob(H) (two-sided):       0.2586   Kurtosis:               6.0786
+Durbin-Watson (DW):        0.0402   MedAE (mph):           0.4732
+Residual Mean (mph):     -0.2918   Residual Std:           5.3090
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =        27.7368 | RMSE =     5.2666 mph | MAE =     2.3004 mph
-  MAPE =        5.6861% | R²   =     0.7079     | Max Error =    58.6043 mph
+  MSE  =        28.2709 | RMSE =     5.3170 mph | MAE =     2.3391 mph
+  MAPE =        5.7632% | R²   =     0.7023     | Max Error =    58.6765 mph
 ==============================================================================
 ```
 
@@ -274,7 +274,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 DCRNN (Graph Diffusion + GRU) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (Average_All_Horizons, 35 min ahead)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (Average_All_Horizons, 35 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -285,66 +285,66 @@ Model: DCRNN (Graph Diffusion + GRU) — Horizon Average_All_Horizons (35 min / 
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.119470   Best Val Loss:       0.230090
-Final Train Loss:             0.090960   Best Epoch:           12 / 12  
-Hardware Device:                  cuda   Train / Pred:    67.9647s / 0.0850s
+Initial Train Loss:           0.119740   Best Val Loss:       0.234030
+Final Train Loss:             0.095190   Best Epoch:           12 / 12  
+Hardware Device:                  cuda   Train / Pred:    76.5697s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from dcrnn_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
 supports_stack*            (5, 207, 207)    214,245  +0.00483  0.06024     [-0.974, +1.498]
-cell1.gate_linear.weight   (64, 165)         10,560  +0.00328  0.17942     [-0.949, +0.833]
-cell1.gate_linear.bias     (64,)                 64  -0.00059  0.13166     [-0.525, +0.224]
-cell1.cand_linear.weight   (32, 165)          5,280  +0.00187  0.08680     [-0.454, +0.367]
-cell1.cand_linear.bias     (32,)                 32  -0.00769  0.05903     [-0.104, +0.153]
-norm.weight                (32,)                 32  +1.03368  0.07079     [+0.929, +1.239]
-norm.bias                  (32,)                 32  +0.00069  0.01864     [-0.046, +0.054]
-proj.0.weight              (32, 160)          5,120  +0.00079  0.06632     [-0.355, +0.283]
-proj.0.bias                (32,)                 32  -0.03269  0.04898     [-0.102, +0.080]
-proj.2.weight              (3, 32)               96  +0.00123  0.12815     [-0.232, +0.271]
-proj.2.bias                (3,)                   3  +0.05229  0.10033     [-0.089, +0.129]
-ar_highway.weight          (3, 12)               36  +0.06657  0.22843     [-0.058, +0.897]
-ar_highway.bias            (3,)                   3  -0.00989  0.03417     [-0.043, +0.037]
+cell1.gate_linear.weight   (64, 165)         10,560  -0.00166  0.04219     [-0.277, +0.302]
+cell1.gate_linear.bias     (64,)                 64  +0.01599  0.11371     [-0.370, +0.293]
+cell1.cand_linear.weight   (32, 165)          5,280  +0.00256  0.06560     [-0.285, +0.313]
+cell1.cand_linear.bias     (32,)                 32  -0.00627  0.06259     [-0.097, +0.161]
+norm.weight                (32,)                 32  +0.81386  0.08318     [+0.653, +0.993]
+norm.bias                  (32,)                 32  -0.00140  0.01603     [-0.036, +0.030]
+proj.0.weight              (32, 160)          5,120  -0.00015  0.05324     [-0.330, +0.255]
+proj.0.bias                (32,)                 32  -0.03019  0.04046     [-0.095, +0.059]
+proj.2.weight              (3, 32)               96  +0.00570  0.13003     [-0.248, +0.383]
+proj.2.bias                (3,)                   3  +0.05342  0.10199     [-0.090, +0.134]
+ar_highway.weight          (3, 12)               36  +0.06777  0.22110     [-0.035, +0.870]
+ar_highway.bias            (3,)                   3  -0.00777  0.03064     [-0.035, +0.035]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_highway.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:-0.011 L7:-0.002 L4:-0.024 L3:-0.049 L2:+0.064 L1:+0.897
-  30_min (t+6) : L12:-0.009 L7:+0.006 L4:-0.031 L3:-0.058 L2:+0.065 L1:+0.831
-  60_min (t+12): L12:-0.007 L7:+0.000 L4:-0.028 L3:-0.052 L2:+0.055 L1:+0.721
+  15_min (t+3) : L12:-0.013 L7:-0.004 L4:-0.009 L3:-0.035 L2:+0.062 L1:+0.870
+  30_min (t+6) : L12:-0.011 L7:+0.003 L4:-0.015 L3:-0.035 L2:+0.070 L1:+0.805
+  60_min (t+12): L12:-0.013 L7:-0.003 L4:-0.010 L3:-0.026 L2:+0.063 L1:+0.709
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.11947            0.26165        +0.14218               
-    2                0.10931            0.25225        +0.14294               
-    3                0.10410            0.24648        +0.14238               
-    4                0.10077            0.24020        +0.13943               
-    5                0.09888            0.24222        +0.14334               
-    6                0.09701            0.23819        +0.14118               
-    7                0.09567            0.23683        +0.14116               
-    8                0.09426            0.23340        +0.13914               
-    9                0.09284            0.23268        +0.13984               
-   10                0.09211            0.23241        +0.14030               
-   11                0.09138            0.23183        +0.14045               
-   12                0.09096            0.23009        +0.13913 <-- Best Checkpoint
+    1                0.11974            0.26234        +0.14260               
+    2                0.11137            0.25427        +0.14290               
+    3                0.10684            0.25273        +0.14589               
+    4                0.10352            0.24396        +0.14044               
+    5                0.10156            0.24228        +0.14072               
+    6                0.10010            0.24377        +0.14367               
+    7                0.09895            0.24041        +0.14146               
+    8                0.09810            0.23778        +0.13968               
+    9                0.09677            0.23604        +0.13927               
+   10                0.09621            0.23657        +0.14036               
+   11                0.09547            0.23604        +0.14057               
+   12                0.09519            0.23403        +0.13884 <-- Best Checkpoint
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    7.5867   2.7544   1.2991   2.6945%   0.9201    48.11
-30_min                   6   15.2795   3.9089   1.7241   3.8977%   0.8390    55.70
-60_min                  12   27.7368   5.2666   2.3004   5.6861%   0.7079    58.60
-Average_All_Horizons     7   16.8677   3.9766   1.7745   4.0928%   0.8223    58.60
+15_min                   3    7.6507   2.7660   1.3042   2.6945%   0.9194    47.17
+30_min                   6   15.4797   3.9344   1.7431   3.9328%   0.8369    55.80
+60_min                  12   28.2709   5.3170   2.3391   5.7632%   0.7023    58.68
+Average_All_Horizons     7   17.1338   4.0058   1.7955   4.1302%   0.8195    58.68
 ==============================================================================
-Ljung-Box (L=24) (Q):     187.26   Jarque-Bera (JB):      3258.89
+Ljung-Box (L=24) (Q):     188.64   Jarque-Bera (JB):      3177.57
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     1.2200   Skew:                  -0.1323
-Prob(H) (two-sided):       0.1425   Kurtosis:              10.7972
-Durbin-Watson (DW):        1.7550   MedAE (mph):           1.2067
-Residual Mean (mph):     -0.2102   Residual Std:           3.9707
+Heteroskedasticity(H):     1.2200   Skew:                  -0.0928
+Prob(H) (two-sided):       0.1425   Kurtosis:              10.7015
+Durbin-Watson (DW):        1.7550   MedAE (mph):           1.2209
+Residual Mean (mph):     -0.1486   Residual Std:           4.0025
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =        16.8677 | RMSE =     3.9766 mph | MAE =     1.7745 mph
-  MAPE =        4.0928% | R²   =     0.8223     | Max Error =    58.6043 mph
+  MSE  =        17.1338 | RMSE =     4.0058 mph | MAE =     1.7955 mph
+  MAPE =        4.1302% | R²   =     0.8195     | Max Error =    58.6765 mph
 ==============================================================================
 ```
 
@@ -352,7 +352,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 Multi-Horizon TCN (Causal Conv1D) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (15_min, 15 min ahead)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (15_min, 15 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -363,59 +363,59 @@ Model: Multi-Horizon TCN (Causal Conv1D) — Horizon 15_min (15 min / t+3)
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.119540   Best Val Loss:       0.259410
-Final Train Loss:             0.112840   Best Epoch:           10 / 10  
-Hardware Device:                  cuda   Train / Pred:    15.3117s / 0.0850s
+Initial Train Loss:           0.119590   Best Val Loss:       0.260680
+Final Train Loss:             0.113520   Best Epoch:            8 / 10  
+Hardware Device:                  cuda   Train / Pred:    16.6378s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from tcn_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
-conv1.weight               (32, 1, 3)            96  -0.03180  0.39511     [-0.715, +0.944]
-conv1.bias                 (32,)                 32  +0.00644  0.31037     [-0.502, +0.524]
-conv2.weight               (32, 32, 3)        3,072  -0.01147  0.11678     [-0.675, +0.713]
-conv2.bias                 (32,)                 32  -0.01704  0.06051     [-0.112, +0.081]
-head.weight                (3, 32)               96  +0.00514  0.16485     [-0.442, +0.372]
-head.bias                  (3,)                   3  +0.02752  0.05627     [-0.016, +0.107]
-ar_linear.weight           (3, 12)               36  +0.06506  0.23014     [-0.076, +0.842]
-ar_linear.bias             (3,)                   3  +0.00338  0.01774     [-0.019, +0.024]
+conv1.weight               (32, 1, 3)            96  -0.04114  0.31531     [-0.677, +0.693]
+conv1.bias                 (32,)                 32  +0.04474  0.21499     [-0.420, +0.431]
+conv2.weight               (32, 32, 3)        3,072  -0.00734  0.05901     [-0.372, +0.339]
+conv2.bias                 (32,)                 32  -0.01026  0.04679     [-0.087, +0.078]
+head.weight                (3, 32)               96  +0.00040  0.15863     [-0.422, +0.326]
+head.bias                  (3,)                   3  +0.02260  0.05335     [-0.018, +0.098]
+ar_linear.weight           (3, 12)               36  +0.06669  0.22517     [-0.076, +0.836]
+ar_linear.bias             (3,)                   3  +0.00013  0.01703     [-0.022, +0.020]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_linear.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:-0.036 L7:-0.001 L4:+0.013 L3:+0.004 L2:+0.005 L1:+0.842
-  30_min (t+6) : L12:-0.050 L7:+0.001 L4:+0.006 L3:+0.006 L2:+0.014 L1:+0.827
-  60_min (t+12): L12:-0.076 L7:-0.010 L4:+0.005 L3:+0.004 L2:+0.007 L1:+0.810
+  15_min (t+3) : L12:-0.036 L7:+0.004 L4:+0.013 L3:+0.005 L2:+0.012 L1:+0.836
+  30_min (t+6) : L12:-0.050 L7:+0.009 L4:+0.008 L3:+0.005 L2:+0.017 L1:+0.812
+  60_min (t+12): L12:-0.076 L7:+0.006 L4:+0.010 L3:+0.004 L2:+0.007 L1:+0.785
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.11954            0.26682        +0.14728               
-    2                0.11625            0.26499        +0.14874               
-    3                0.11473            0.26186        +0.14713               
-    4                0.11411            0.26202        +0.14791               
-    5                0.11399            0.26250        +0.14851               
-    6                0.11352            0.26294        +0.14942               
-    7                0.11373            0.26011        +0.14638               
-    8                0.11304            0.25946        +0.14642               
-    9                0.11294            0.25991        +0.14697               
-   10                0.11284            0.25941        +0.14657 <-- Best Checkpoint
+    1                0.11959            0.26756        +0.14797               
+    2                0.11654            0.26429        +0.14775               
+    3                0.11518            0.26291        +0.14773               
+    4                0.11461            0.26251        +0.14790               
+    5                0.11458            0.26406        +0.14948               
+    6                0.11412            0.26398        +0.14986               
+    7                0.11433            0.26240        +0.14807               
+    8                0.11372            0.26068        +0.14696 <-- Best Checkpoint
+    9                0.11361            0.26133        +0.14772               
+   10                0.11352            0.26072        +0.14720               
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    8.7019   2.9499   1.3532   2.8495%   0.9083    52.68
-30_min                   6   19.0428   4.3638   1.8605   4.2009%   0.7994    55.81
-60_min                  12   36.9984   6.0826   2.6396   6.6155%   0.6104    58.77
-Average_All_Horizons     7   21.5810   4.4654   1.9511   4.5553%   0.7727    58.77
+15_min                   3    8.7847   2.9639   1.3618   2.8593%   0.9074    51.11
+30_min                   6   19.2893   4.3920   1.8612   4.1519%   0.7968    55.87
+60_min                  12   37.3559   6.1119   2.6389   6.5628%   0.6066    58.84
+Average_All_Horizons     7   21.8100   4.4893   1.9540   4.5247%   0.7703    58.84
 ==============================================================================
-Ljung-Box (L=24) (Q):    6833.44   Jarque-Bera (JB):       424.32
+Ljung-Box (L=24) (Q):    6915.76   Jarque-Bera (JB):       434.83
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.7228   Skew:                  -0.4636
-Prob(H) (two-sided):       0.0008   Kurtosis:               5.6581
-Durbin-Watson (DW):        0.1432   MedAE (mph):           0.2571
-Residual Mean (mph):     -0.0345   Residual Std:           2.9497
+Heteroskedasticity(H):     0.7195   Skew:                  -0.4068
+Prob(H) (two-sided):       0.0007   Kurtosis:               5.7312
+Durbin-Watson (DW):        0.1393   MedAE (mph):           0.2593
+Residual Mean (mph):     -0.0233   Residual Std:           2.9638
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =         8.7019 | RMSE =     2.9499 mph | MAE =     1.3532 mph
-  MAPE =        2.8495% | R²   =     0.9083     | Max Error =    52.6765 mph
+  MSE  =         8.7847 | RMSE =     2.9639 mph | MAE =     1.3618 mph
+  MAPE =        2.8593% | R²   =     0.9074     | Max Error =    51.1119 mph
 ==============================================================================
 ```
 
@@ -423,7 +423,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 Multi-Horizon TCN (Causal Conv1D) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (30_min, 30 min ahead)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (30_min, 30 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -434,59 +434,59 @@ Model: Multi-Horizon TCN (Causal Conv1D) — Horizon 30_min (30 min / t+6)
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.119540   Best Val Loss:       0.259410
-Final Train Loss:             0.112840   Best Epoch:           10 / 10  
-Hardware Device:                  cuda   Train / Pred:    15.3117s / 0.0850s
+Initial Train Loss:           0.119590   Best Val Loss:       0.260680
+Final Train Loss:             0.113520   Best Epoch:            8 / 10  
+Hardware Device:                  cuda   Train / Pred:    16.6378s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from tcn_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
-conv1.weight               (32, 1, 3)            96  -0.03180  0.39511     [-0.715, +0.944]
-conv1.bias                 (32,)                 32  +0.00644  0.31037     [-0.502, +0.524]
-conv2.weight               (32, 32, 3)        3,072  -0.01147  0.11678     [-0.675, +0.713]
-conv2.bias                 (32,)                 32  -0.01704  0.06051     [-0.112, +0.081]
-head.weight                (3, 32)               96  +0.00514  0.16485     [-0.442, +0.372]
-head.bias                  (3,)                   3  +0.02752  0.05627     [-0.016, +0.107]
-ar_linear.weight           (3, 12)               36  +0.06506  0.23014     [-0.076, +0.842]
-ar_linear.bias             (3,)                   3  +0.00338  0.01774     [-0.019, +0.024]
+conv1.weight               (32, 1, 3)            96  -0.04114  0.31531     [-0.677, +0.693]
+conv1.bias                 (32,)                 32  +0.04474  0.21499     [-0.420, +0.431]
+conv2.weight               (32, 32, 3)        3,072  -0.00734  0.05901     [-0.372, +0.339]
+conv2.bias                 (32,)                 32  -0.01026  0.04679     [-0.087, +0.078]
+head.weight                (3, 32)               96  +0.00040  0.15863     [-0.422, +0.326]
+head.bias                  (3,)                   3  +0.02260  0.05335     [-0.018, +0.098]
+ar_linear.weight           (3, 12)               36  +0.06669  0.22517     [-0.076, +0.836]
+ar_linear.bias             (3,)                   3  +0.00013  0.01703     [-0.022, +0.020]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_linear.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:-0.036 L7:-0.001 L4:+0.013 L3:+0.004 L2:+0.005 L1:+0.842
-  30_min (t+6) : L12:-0.050 L7:+0.001 L4:+0.006 L3:+0.006 L2:+0.014 L1:+0.827
-  60_min (t+12): L12:-0.076 L7:-0.010 L4:+0.005 L3:+0.004 L2:+0.007 L1:+0.810
+  15_min (t+3) : L12:-0.036 L7:+0.004 L4:+0.013 L3:+0.005 L2:+0.012 L1:+0.836
+  30_min (t+6) : L12:-0.050 L7:+0.009 L4:+0.008 L3:+0.005 L2:+0.017 L1:+0.812
+  60_min (t+12): L12:-0.076 L7:+0.006 L4:+0.010 L3:+0.004 L2:+0.007 L1:+0.785
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.11954            0.26682        +0.14728               
-    2                0.11625            0.26499        +0.14874               
-    3                0.11473            0.26186        +0.14713               
-    4                0.11411            0.26202        +0.14791               
-    5                0.11399            0.26250        +0.14851               
-    6                0.11352            0.26294        +0.14942               
-    7                0.11373            0.26011        +0.14638               
-    8                0.11304            0.25946        +0.14642               
-    9                0.11294            0.25991        +0.14697               
-   10                0.11284            0.25941        +0.14657 <-- Best Checkpoint
+    1                0.11959            0.26756        +0.14797               
+    2                0.11654            0.26429        +0.14775               
+    3                0.11518            0.26291        +0.14773               
+    4                0.11461            0.26251        +0.14790               
+    5                0.11458            0.26406        +0.14948               
+    6                0.11412            0.26398        +0.14986               
+    7                0.11433            0.26240        +0.14807               
+    8                0.11372            0.26068        +0.14696 <-- Best Checkpoint
+    9                0.11361            0.26133        +0.14772               
+   10                0.11352            0.26072        +0.14720               
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    8.7019   2.9499   1.3532   2.8495%   0.9083    52.68
-30_min                   6   19.0428   4.3638   1.8605   4.2009%   0.7994    55.81
-60_min                  12   36.9984   6.0826   2.6396   6.6155%   0.6104    58.77
-Average_All_Horizons     7   21.5810   4.4654   1.9511   4.5553%   0.7727    58.77
+15_min                   3    8.7847   2.9639   1.3618   2.8593%   0.9074    51.11
+30_min                   6   19.2893   4.3920   1.8612   4.1519%   0.7968    55.87
+60_min                  12   37.3559   6.1119   2.6389   6.5628%   0.6066    58.84
+Average_All_Horizons     7   21.8100   4.4893   1.9540   4.5247%   0.7703    58.84
 ==============================================================================
-Ljung-Box (L=24) (Q):    8754.20   Jarque-Bera (JB):       456.22
+Ljung-Box (L=24) (Q):    8657.05   Jarque-Bera (JB):       554.50
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.7119   Skew:                  -0.2467
-Prob(H) (two-sided):       0.0005   Kurtosis:               5.8771
-Durbin-Watson (DW):        0.0454   MedAE (mph):           0.3784
-Residual Mean (mph):     -0.0681   Residual Std:           4.3633
+Heteroskedasticity(H):     0.7125   Skew:                  -0.0010
+Prob(H) (two-sided):       0.0005   Kurtosis:               6.2181
+Durbin-Watson (DW):        0.0443   MedAE (mph):           0.3540
+Residual Mean (mph):     -0.0605   Residual Std:           4.3915
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =        19.0428 | RMSE =     4.3638 mph | MAE =     1.8605 mph
-  MAPE =        4.2009% | R²   =     0.7994     | Max Error =    55.8093 mph
+  MSE  =        19.2893 | RMSE =     4.3920 mph | MAE =     1.8612 mph
+  MAPE =        4.1519% | R²   =     0.7968     | Max Error =    55.8675 mph
 ==============================================================================
 ```
 
@@ -494,7 +494,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 Multi-Horizon TCN (Causal Conv1D) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (60_min, 60 min ahead)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (60_min, 60 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -505,59 +505,59 @@ Model: Multi-Horizon TCN (Causal Conv1D) — Horizon 60_min (60 min / t+12)
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.119540   Best Val Loss:       0.259410
-Final Train Loss:             0.112840   Best Epoch:           10 / 10  
-Hardware Device:                  cuda   Train / Pred:    15.3117s / 0.0850s
+Initial Train Loss:           0.119590   Best Val Loss:       0.260680
+Final Train Loss:             0.113520   Best Epoch:            8 / 10  
+Hardware Device:                  cuda   Train / Pred:    16.6378s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from tcn_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
-conv1.weight               (32, 1, 3)            96  -0.03180  0.39511     [-0.715, +0.944]
-conv1.bias                 (32,)                 32  +0.00644  0.31037     [-0.502, +0.524]
-conv2.weight               (32, 32, 3)        3,072  -0.01147  0.11678     [-0.675, +0.713]
-conv2.bias                 (32,)                 32  -0.01704  0.06051     [-0.112, +0.081]
-head.weight                (3, 32)               96  +0.00514  0.16485     [-0.442, +0.372]
-head.bias                  (3,)                   3  +0.02752  0.05627     [-0.016, +0.107]
-ar_linear.weight           (3, 12)               36  +0.06506  0.23014     [-0.076, +0.842]
-ar_linear.bias             (3,)                   3  +0.00338  0.01774     [-0.019, +0.024]
+conv1.weight               (32, 1, 3)            96  -0.04114  0.31531     [-0.677, +0.693]
+conv1.bias                 (32,)                 32  +0.04474  0.21499     [-0.420, +0.431]
+conv2.weight               (32, 32, 3)        3,072  -0.00734  0.05901     [-0.372, +0.339]
+conv2.bias                 (32,)                 32  -0.01026  0.04679     [-0.087, +0.078]
+head.weight                (3, 32)               96  +0.00040  0.15863     [-0.422, +0.326]
+head.bias                  (3,)                   3  +0.02260  0.05335     [-0.018, +0.098]
+ar_linear.weight           (3, 12)               36  +0.06669  0.22517     [-0.076, +0.836]
+ar_linear.bias             (3,)                   3  +0.00013  0.01703     [-0.022, +0.020]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_linear.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:-0.036 L7:-0.001 L4:+0.013 L3:+0.004 L2:+0.005 L1:+0.842
-  30_min (t+6) : L12:-0.050 L7:+0.001 L4:+0.006 L3:+0.006 L2:+0.014 L1:+0.827
-  60_min (t+12): L12:-0.076 L7:-0.010 L4:+0.005 L3:+0.004 L2:+0.007 L1:+0.810
+  15_min (t+3) : L12:-0.036 L7:+0.004 L4:+0.013 L3:+0.005 L2:+0.012 L1:+0.836
+  30_min (t+6) : L12:-0.050 L7:+0.009 L4:+0.008 L3:+0.005 L2:+0.017 L1:+0.812
+  60_min (t+12): L12:-0.076 L7:+0.006 L4:+0.010 L3:+0.004 L2:+0.007 L1:+0.785
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.11954            0.26682        +0.14728               
-    2                0.11625            0.26499        +0.14874               
-    3                0.11473            0.26186        +0.14713               
-    4                0.11411            0.26202        +0.14791               
-    5                0.11399            0.26250        +0.14851               
-    6                0.11352            0.26294        +0.14942               
-    7                0.11373            0.26011        +0.14638               
-    8                0.11304            0.25946        +0.14642               
-    9                0.11294            0.25991        +0.14697               
-   10                0.11284            0.25941        +0.14657 <-- Best Checkpoint
+    1                0.11959            0.26756        +0.14797               
+    2                0.11654            0.26429        +0.14775               
+    3                0.11518            0.26291        +0.14773               
+    4                0.11461            0.26251        +0.14790               
+    5                0.11458            0.26406        +0.14948               
+    6                0.11412            0.26398        +0.14986               
+    7                0.11433            0.26240        +0.14807               
+    8                0.11372            0.26068        +0.14696 <-- Best Checkpoint
+    9                0.11361            0.26133        +0.14772               
+   10                0.11352            0.26072        +0.14720               
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    8.7019   2.9499   1.3532   2.8495%   0.9083    52.68
-30_min                   6   19.0428   4.3638   1.8605   4.2009%   0.7994    55.81
-60_min                  12   36.9984   6.0826   2.6396   6.6155%   0.6104    58.77
-Average_All_Horizons     7   21.5810   4.4654   1.9511   4.5553%   0.7727    58.77
+15_min                   3    8.7847   2.9639   1.3618   2.8593%   0.9074    51.11
+30_min                   6   19.2893   4.3920   1.8612   4.1519%   0.7968    55.87
+60_min                  12   37.3559   6.1119   2.6389   6.5628%   0.6066    58.84
+Average_All_Horizons     7   21.8100   4.4893   1.9540   4.5247%   0.7703    58.84
 ==============================================================================
-Ljung-Box (L=24) (Q):   11130.17   Jarque-Bera (JB):       302.77
+Ljung-Box (L=24) (Q):   11026.79   Jarque-Bera (JB):       312.34
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.6868   Skew:                  -0.4529
-Prob(H) (two-sided):       0.0001   Kurtosis:               5.1987
-Durbin-Watson (DW):        0.0167   MedAE (mph):           0.6010
-Residual Mean (mph):     -0.2492   Residual Std:           6.0775
+Heteroskedasticity(H):     0.6821   Skew:                  -0.2864
+Prob(H) (two-sided):       0.0001   Kurtosis:               5.3464
+Durbin-Watson (DW):        0.0164   MedAE (mph):           0.5727
+Residual Mean (mph):     -0.2632   Residual Std:           6.1063
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =        36.9984 | RMSE =     6.0826 mph | MAE =     2.6396 mph
-  MAPE =        6.6155% | R²   =     0.6104     | Max Error =    58.7673 mph
+  MSE  =        37.3559 | RMSE =     6.1119 mph | MAE =     2.6389 mph
+  MAPE =        6.5628% | R²   =     0.6066     | Max Error =    58.8394 mph
 ==============================================================================
 ```
 
@@ -565,7 +565,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 Multi-Horizon TCN (Causal Conv1D) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (Average_All_Horizons, 35 min ahead)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (Average_All_Horizons, 35 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -576,59 +576,59 @@ Model: Multi-Horizon TCN (Causal Conv1D) — Horizon Average_All_Horizons (35 mi
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.119540   Best Val Loss:       0.259410
-Final Train Loss:             0.112840   Best Epoch:           10 / 10  
-Hardware Device:                  cuda   Train / Pred:    15.3117s / 0.0850s
+Initial Train Loss:           0.119590   Best Val Loss:       0.260680
+Final Train Loss:             0.113520   Best Epoch:            8 / 10  
+Hardware Device:                  cuda   Train / Pred:    16.6378s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from tcn_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
-conv1.weight               (32, 1, 3)            96  -0.03180  0.39511     [-0.715, +0.944]
-conv1.bias                 (32,)                 32  +0.00644  0.31037     [-0.502, +0.524]
-conv2.weight               (32, 32, 3)        3,072  -0.01147  0.11678     [-0.675, +0.713]
-conv2.bias                 (32,)                 32  -0.01704  0.06051     [-0.112, +0.081]
-head.weight                (3, 32)               96  +0.00514  0.16485     [-0.442, +0.372]
-head.bias                  (3,)                   3  +0.02752  0.05627     [-0.016, +0.107]
-ar_linear.weight           (3, 12)               36  +0.06506  0.23014     [-0.076, +0.842]
-ar_linear.bias             (3,)                   3  +0.00338  0.01774     [-0.019, +0.024]
+conv1.weight               (32, 1, 3)            96  -0.04114  0.31531     [-0.677, +0.693]
+conv1.bias                 (32,)                 32  +0.04474  0.21499     [-0.420, +0.431]
+conv2.weight               (32, 32, 3)        3,072  -0.00734  0.05901     [-0.372, +0.339]
+conv2.bias                 (32,)                 32  -0.01026  0.04679     [-0.087, +0.078]
+head.weight                (3, 32)               96  +0.00040  0.15863     [-0.422, +0.326]
+head.bias                  (3,)                   3  +0.02260  0.05335     [-0.018, +0.098]
+ar_linear.weight           (3, 12)               36  +0.06669  0.22517     [-0.076, +0.836]
+ar_linear.bias             (3,)                   3  +0.00013  0.01703     [-0.022, +0.020]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_linear.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:-0.036 L7:-0.001 L4:+0.013 L3:+0.004 L2:+0.005 L1:+0.842
-  30_min (t+6) : L12:-0.050 L7:+0.001 L4:+0.006 L3:+0.006 L2:+0.014 L1:+0.827
-  60_min (t+12): L12:-0.076 L7:-0.010 L4:+0.005 L3:+0.004 L2:+0.007 L1:+0.810
+  15_min (t+3) : L12:-0.036 L7:+0.004 L4:+0.013 L3:+0.005 L2:+0.012 L1:+0.836
+  30_min (t+6) : L12:-0.050 L7:+0.009 L4:+0.008 L3:+0.005 L2:+0.017 L1:+0.812
+  60_min (t+12): L12:-0.076 L7:+0.006 L4:+0.010 L3:+0.004 L2:+0.007 L1:+0.785
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.11954            0.26682        +0.14728               
-    2                0.11625            0.26499        +0.14874               
-    3                0.11473            0.26186        +0.14713               
-    4                0.11411            0.26202        +0.14791               
-    5                0.11399            0.26250        +0.14851               
-    6                0.11352            0.26294        +0.14942               
-    7                0.11373            0.26011        +0.14638               
-    8                0.11304            0.25946        +0.14642               
-    9                0.11294            0.25991        +0.14697               
-   10                0.11284            0.25941        +0.14657 <-- Best Checkpoint
+    1                0.11959            0.26756        +0.14797               
+    2                0.11654            0.26429        +0.14775               
+    3                0.11518            0.26291        +0.14773               
+    4                0.11461            0.26251        +0.14790               
+    5                0.11458            0.26406        +0.14948               
+    6                0.11412            0.26398        +0.14986               
+    7                0.11433            0.26240        +0.14807               
+    8                0.11372            0.26068        +0.14696 <-- Best Checkpoint
+    9                0.11361            0.26133        +0.14772               
+   10                0.11352            0.26072        +0.14720               
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    8.7019   2.9499   1.3532   2.8495%   0.9083    52.68
-30_min                   6   19.0428   4.3638   1.8605   4.2009%   0.7994    55.81
-60_min                  12   36.9984   6.0826   2.6396   6.6155%   0.6104    58.77
-Average_All_Horizons     7   21.5810   4.4654   1.9511   4.5553%   0.7727    58.77
+15_min                   3    8.7847   2.9639   1.3618   2.8593%   0.9074    51.11
+30_min                   6   19.2893   4.3920   1.8612   4.1519%   0.7968    55.87
+60_min                  12   37.3559   6.1119   2.6389   6.5628%   0.6066    58.84
+Average_All_Horizons     7   21.8100   4.4893   1.9540   4.5247%   0.7703    58.84
 ==============================================================================
-Ljung-Box (L=24) (Q):     210.28   Jarque-Bera (JB):      3655.36
+Ljung-Box (L=24) (Q):     211.41   Jarque-Bera (JB):      3732.79
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     1.2200   Skew:                  -0.0657
-Prob(H) (two-sided):       0.1425   Kurtosis:              11.2616
-Durbin-Watson (DW):        1.7550   MedAE (mph):           1.3267
-Residual Mean (mph):     -0.1173   Residual Std:           4.4635
+Heteroskedasticity(H):     1.2200   Skew:                  -0.0645
+Prob(H) (two-sided):       0.1425   Kurtosis:              11.3487
+Durbin-Watson (DW):        1.7550   MedAE (mph):           1.3287
+Residual Mean (mph):     -0.1157   Residual Std:           4.4872
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =        21.5810 | RMSE =     4.4654 mph | MAE =     1.9511 mph
-  MAPE =        4.5553% | R²   =     0.7727     | Max Error =    58.7673 mph
+  MSE  =        21.8100 | RMSE =     4.4893 mph | MAE =     1.9540 mph
+  MAPE =        4.5247% | R²   =     0.7703     | Max Error =    58.8394 mph
 ==============================================================================
 ```
 
@@ -636,7 +636,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 Multi-Horizon LSTM (Temporal Baseline) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (15_min, 15 min ahead)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (15_min, 15 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -647,57 +647,58 @@ Model: Multi-Horizon LSTM (Temporal Only) — Horizon 15_min (15 min / t+3)
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.106210   Best Val Loss:       0.216930
-Final Train Loss:             0.067730   Best Epoch:            4 / 8   
-Hardware Device:                  cuda   Train / Pred:    8.9257s / 0.0850s
+Initial Train Loss:           0.108880   Best Val Loss:       0.232870
+Final Train Loss:             0.083890   Best Epoch:            5 / 9   
+Hardware Device:                  cuda   Train / Pred:    10.1018s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from lstm_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
-lstm.weight_ih_l0          (256, 207)        52,992  -0.00308  0.10151     [-0.501, +0.468]
-lstm.weight_hh_l0          (256, 64)         16,384  +0.00488  0.12429     [-0.645, +0.567]
-lstm.bias_ih_l0            (256,)               256  +0.00500  0.08308     [-0.198, +0.207]
-lstm.bias_hh_l0            (256,)               256  +0.01379  0.08142     [-0.177, +0.195]
-head.weight                (621, 64)         39,744  -0.00687  0.17543     [-0.876, +0.824]
-head.bias                  (621,)               621  -0.00713  0.11989     [-0.411, +0.341]
-ar_linear.weight           (3, 12)               36  +0.04937  0.19177     [-0.129, +0.828]
-ar_linear.bias             (3,)                   3  -0.02207  0.01584     [-0.044, -0.006]
+lstm.weight_ih_l0          (256, 207)        52,992  -0.00097  0.02854     [-0.203, +0.216]
+lstm.weight_hh_l0          (256, 64)         16,384  +0.00075  0.03245     [-0.224, +0.210]
+lstm.bias_ih_l0            (256,)               256  +0.03445  0.03684     [-0.072, +0.131]
+lstm.bias_hh_l0            (256,)               256  +0.03502  0.03677     [-0.069, +0.131]
+head.weight                (621, 64)         39,744  -0.00370  0.06038     [-0.316, +0.311]
+head.bias                  (621,)               621  -0.00278  0.05888     [-0.275, +0.170]
+ar_linear.weight           (3, 12)               36  +0.06347  0.21869     [-0.036, +0.894]
+ar_linear.bias             (3,)                   3  -0.03276  0.01438     [-0.052, -0.017]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_linear.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:+0.001 L7:-0.003 L4:-0.028 L3:-0.020 L2:+0.028 L1:+0.828
-  30_min (t+6) : L12:+0.010 L7:+0.008 L4:-0.027 L3:-0.040 L2:-0.033 L1:+0.690
-  60_min (t+12): L12:+0.020 L7:+0.011 L4:-0.018 L3:-0.062 L2:-0.129 L1:+0.471
+  15_min (t+3) : L12:-0.008 L7:-0.002 L4:-0.029 L3:-0.012 L2:+0.061 L1:+0.894
+  30_min (t+6) : L12:-0.003 L7:+0.005 L4:-0.023 L3:-0.016 L2:+0.033 L1:+0.805
+  60_min (t+12): L12:+0.008 L7:+0.004 L4:-0.018 L3:-0.031 L2:-0.036 L1:+0.640
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.10621            0.23572        +0.12951               
-    2                0.08720            0.22561        +0.13841               
-    3                0.08024            0.21968        +0.13944               
-    4                0.07586            0.21693        +0.14107 <-- Best Checkpoint
-    5                0.07267            0.21747        +0.14480               
-    6                0.07050            0.22136        +0.15086               
-    7                0.06886            0.21962        +0.15076               
-    8                0.06773            0.22047        +0.15274               
+    1                0.10888            0.24098        +0.13210               
+    2                0.09426            0.23658        +0.14232               
+    3                0.09110            0.23529        +0.14419               
+    4                0.08919            0.23644        +0.14725               
+    5                0.08800            0.23287        +0.14487 <-- Best Checkpoint
+    6                0.08688            0.23464        +0.14776               
+    7                0.08573            0.23493        +0.14920               
+    8                0.08456            0.23511        +0.15055               
+    9                0.08389            0.23495        +0.15106               
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    8.5194   2.9188   1.4283   2.9292%   0.9102    47.20
-30_min                   6   16.6435   4.0796   1.9189   4.1104%   0.8247    52.46
-60_min                  12   30.0549   5.4822   2.5517   5.5572%   0.6835    56.68
-Average_All_Horizons     7   18.4059   4.1602   1.9663   4.1989%   0.8061    56.68
+15_min                   3    8.7421   2.9567   1.4212   2.8873%   0.9079    47.15
+30_min                   6   17.0914   4.1342   1.9185   4.1057%   0.8200    53.07
+60_min                  12   28.8125   5.3677   2.6231   5.8884%   0.6966    54.61
+Average_All_Horizons     7   18.2153   4.1529   1.9876   4.2938%   0.8082    54.61
 ==============================================================================
-Ljung-Box (L=24) (Q):    6588.81   Jarque-Bera (JB):      7491.45
+Ljung-Box (L=24) (Q):    5869.53   Jarque-Bera (JB):      4105.66
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.1347   Skew:                   2.4605
-Prob(H) (two-sided):       0.0000   Kurtosis:              13.7565
-Durbin-Watson (DW):        0.1386   MedAE (mph):           0.2369
-Residual Mean (mph):      0.1375   Residual Std:           2.9156
+Heteroskedasticity(H):     0.2649   Skew:                   1.8311
+Prob(H) (two-sided):       0.0000   Kurtosis:              10.9542
+Durbin-Watson (DW):        0.1486   MedAE (mph):           0.2607
+Residual Mean (mph):      0.1650   Residual Std:           2.9521
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =         8.5194 | RMSE =     2.9188 mph | MAE =     1.4283 mph
-  MAPE =        2.9292% | R²   =     0.9102     | Max Error =    47.2004 mph
+  MSE  =         8.7421 | RMSE =     2.9567 mph | MAE =     1.4212 mph
+  MAPE =        2.8873% | R²   =     0.9079     | Max Error =    47.1492 mph
 ==============================================================================
 ```
 
@@ -705,7 +706,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 Multi-Horizon LSTM (Temporal Baseline) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (30_min, 30 min ahead)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (30_min, 30 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -716,57 +717,58 @@ Model: Multi-Horizon LSTM (Temporal Only) — Horizon 30_min (30 min / t+6)
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.106210   Best Val Loss:       0.216930
-Final Train Loss:             0.067730   Best Epoch:            4 / 8   
-Hardware Device:                  cuda   Train / Pred:    8.9257s / 0.0850s
+Initial Train Loss:           0.108880   Best Val Loss:       0.232870
+Final Train Loss:             0.083890   Best Epoch:            5 / 9   
+Hardware Device:                  cuda   Train / Pred:    10.1018s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from lstm_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
-lstm.weight_ih_l0          (256, 207)        52,992  -0.00308  0.10151     [-0.501, +0.468]
-lstm.weight_hh_l0          (256, 64)         16,384  +0.00488  0.12429     [-0.645, +0.567]
-lstm.bias_ih_l0            (256,)               256  +0.00500  0.08308     [-0.198, +0.207]
-lstm.bias_hh_l0            (256,)               256  +0.01379  0.08142     [-0.177, +0.195]
-head.weight                (621, 64)         39,744  -0.00687  0.17543     [-0.876, +0.824]
-head.bias                  (621,)               621  -0.00713  0.11989     [-0.411, +0.341]
-ar_linear.weight           (3, 12)               36  +0.04937  0.19177     [-0.129, +0.828]
-ar_linear.bias             (3,)                   3  -0.02207  0.01584     [-0.044, -0.006]
+lstm.weight_ih_l0          (256, 207)        52,992  -0.00097  0.02854     [-0.203, +0.216]
+lstm.weight_hh_l0          (256, 64)         16,384  +0.00075  0.03245     [-0.224, +0.210]
+lstm.bias_ih_l0            (256,)               256  +0.03445  0.03684     [-0.072, +0.131]
+lstm.bias_hh_l0            (256,)               256  +0.03502  0.03677     [-0.069, +0.131]
+head.weight                (621, 64)         39,744  -0.00370  0.06038     [-0.316, +0.311]
+head.bias                  (621,)               621  -0.00278  0.05888     [-0.275, +0.170]
+ar_linear.weight           (3, 12)               36  +0.06347  0.21869     [-0.036, +0.894]
+ar_linear.bias             (3,)                   3  -0.03276  0.01438     [-0.052, -0.017]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_linear.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:+0.001 L7:-0.003 L4:-0.028 L3:-0.020 L2:+0.028 L1:+0.828
-  30_min (t+6) : L12:+0.010 L7:+0.008 L4:-0.027 L3:-0.040 L2:-0.033 L1:+0.690
-  60_min (t+12): L12:+0.020 L7:+0.011 L4:-0.018 L3:-0.062 L2:-0.129 L1:+0.471
+  15_min (t+3) : L12:-0.008 L7:-0.002 L4:-0.029 L3:-0.012 L2:+0.061 L1:+0.894
+  30_min (t+6) : L12:-0.003 L7:+0.005 L4:-0.023 L3:-0.016 L2:+0.033 L1:+0.805
+  60_min (t+12): L12:+0.008 L7:+0.004 L4:-0.018 L3:-0.031 L2:-0.036 L1:+0.640
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.10621            0.23572        +0.12951               
-    2                0.08720            0.22561        +0.13841               
-    3                0.08024            0.21968        +0.13944               
-    4                0.07586            0.21693        +0.14107 <-- Best Checkpoint
-    5                0.07267            0.21747        +0.14480               
-    6                0.07050            0.22136        +0.15086               
-    7                0.06886            0.21962        +0.15076               
-    8                0.06773            0.22047        +0.15274               
+    1                0.10888            0.24098        +0.13210               
+    2                0.09426            0.23658        +0.14232               
+    3                0.09110            0.23529        +0.14419               
+    4                0.08919            0.23644        +0.14725               
+    5                0.08800            0.23287        +0.14487 <-- Best Checkpoint
+    6                0.08688            0.23464        +0.14776               
+    7                0.08573            0.23493        +0.14920               
+    8                0.08456            0.23511        +0.15055               
+    9                0.08389            0.23495        +0.15106               
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    8.5194   2.9188   1.4283   2.9292%   0.9102    47.20
-30_min                   6   16.6435   4.0796   1.9189   4.1104%   0.8247    52.46
-60_min                  12   30.0549   5.4822   2.5517   5.5572%   0.6835    56.68
-Average_All_Horizons     7   18.4059   4.1602   1.9663   4.1989%   0.8061    56.68
+15_min                   3    8.7421   2.9567   1.4212   2.8873%   0.9079    47.15
+30_min                   6   17.0914   4.1342   1.9185   4.1057%   0.8200    53.07
+60_min                  12   28.8125   5.3677   2.6231   5.8884%   0.6966    54.61
+Average_All_Horizons     7   18.2153   4.1529   1.9876   4.2938%   0.8082    54.61
 ==============================================================================
-Ljung-Box (L=24) (Q):    8640.23   Jarque-Bera (JB):     12177.08
+Ljung-Box (L=24) (Q):    7876.35   Jarque-Bera (JB):      5721.53
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.0828   Skew:                   3.0878
-Prob(H) (two-sided):       0.0000   Kurtosis:              16.7584
-Durbin-Watson (DW):        0.0469   MedAE (mph):           0.3700
-Residual Mean (mph):      0.3406   Residual Std:           4.0654
+Heteroskedasticity(H):     0.2231   Skew:                   2.1816
+Prob(H) (two-sided):       0.0000   Kurtosis:              12.3715
+Durbin-Watson (DW):        0.0505   MedAE (mph):           0.4389
+Residual Mean (mph):      0.3527   Residual Std:           4.1191
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =        16.6435 | RMSE =     4.0796 mph | MAE =     1.9189 mph
-  MAPE =        4.1104% | R²   =     0.8247     | Max Error =    52.4626 mph
+  MSE  =        17.0914 | RMSE =     4.1342 mph | MAE =     1.9185 mph
+  MAPE =        4.1057% | R²   =     0.8200     | Max Error =    53.0697 mph
 ==============================================================================
 ```
 
@@ -774,7 +776,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 Multi-Horizon LSTM (Temporal Baseline) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (60_min, 60 min ahead)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (60_min, 60 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -785,57 +787,58 @@ Model: Multi-Horizon LSTM (Temporal Only) — Horizon 60_min (60 min / t+12)
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.106210   Best Val Loss:       0.216930
-Final Train Loss:             0.067730   Best Epoch:            4 / 8   
-Hardware Device:                  cuda   Train / Pred:    8.9257s / 0.0850s
+Initial Train Loss:           0.108880   Best Val Loss:       0.232870
+Final Train Loss:             0.083890   Best Epoch:            5 / 9   
+Hardware Device:                  cuda   Train / Pred:    10.1018s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from lstm_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
-lstm.weight_ih_l0          (256, 207)        52,992  -0.00308  0.10151     [-0.501, +0.468]
-lstm.weight_hh_l0          (256, 64)         16,384  +0.00488  0.12429     [-0.645, +0.567]
-lstm.bias_ih_l0            (256,)               256  +0.00500  0.08308     [-0.198, +0.207]
-lstm.bias_hh_l0            (256,)               256  +0.01379  0.08142     [-0.177, +0.195]
-head.weight                (621, 64)         39,744  -0.00687  0.17543     [-0.876, +0.824]
-head.bias                  (621,)               621  -0.00713  0.11989     [-0.411, +0.341]
-ar_linear.weight           (3, 12)               36  +0.04937  0.19177     [-0.129, +0.828]
-ar_linear.bias             (3,)                   3  -0.02207  0.01584     [-0.044, -0.006]
+lstm.weight_ih_l0          (256, 207)        52,992  -0.00097  0.02854     [-0.203, +0.216]
+lstm.weight_hh_l0          (256, 64)         16,384  +0.00075  0.03245     [-0.224, +0.210]
+lstm.bias_ih_l0            (256,)               256  +0.03445  0.03684     [-0.072, +0.131]
+lstm.bias_hh_l0            (256,)               256  +0.03502  0.03677     [-0.069, +0.131]
+head.weight                (621, 64)         39,744  -0.00370  0.06038     [-0.316, +0.311]
+head.bias                  (621,)               621  -0.00278  0.05888     [-0.275, +0.170]
+ar_linear.weight           (3, 12)               36  +0.06347  0.21869     [-0.036, +0.894]
+ar_linear.bias             (3,)                   3  -0.03276  0.01438     [-0.052, -0.017]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_linear.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:+0.001 L7:-0.003 L4:-0.028 L3:-0.020 L2:+0.028 L1:+0.828
-  30_min (t+6) : L12:+0.010 L7:+0.008 L4:-0.027 L3:-0.040 L2:-0.033 L1:+0.690
-  60_min (t+12): L12:+0.020 L7:+0.011 L4:-0.018 L3:-0.062 L2:-0.129 L1:+0.471
+  15_min (t+3) : L12:-0.008 L7:-0.002 L4:-0.029 L3:-0.012 L2:+0.061 L1:+0.894
+  30_min (t+6) : L12:-0.003 L7:+0.005 L4:-0.023 L3:-0.016 L2:+0.033 L1:+0.805
+  60_min (t+12): L12:+0.008 L7:+0.004 L4:-0.018 L3:-0.031 L2:-0.036 L1:+0.640
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.10621            0.23572        +0.12951               
-    2                0.08720            0.22561        +0.13841               
-    3                0.08024            0.21968        +0.13944               
-    4                0.07586            0.21693        +0.14107 <-- Best Checkpoint
-    5                0.07267            0.21747        +0.14480               
-    6                0.07050            0.22136        +0.15086               
-    7                0.06886            0.21962        +0.15076               
-    8                0.06773            0.22047        +0.15274               
+    1                0.10888            0.24098        +0.13210               
+    2                0.09426            0.23658        +0.14232               
+    3                0.09110            0.23529        +0.14419               
+    4                0.08919            0.23644        +0.14725               
+    5                0.08800            0.23287        +0.14487 <-- Best Checkpoint
+    6                0.08688            0.23464        +0.14776               
+    7                0.08573            0.23493        +0.14920               
+    8                0.08456            0.23511        +0.15055               
+    9                0.08389            0.23495        +0.15106               
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    8.5194   2.9188   1.4283   2.9292%   0.9102    47.20
-30_min                   6   16.6435   4.0796   1.9189   4.1104%   0.8247    52.46
-60_min                  12   30.0549   5.4822   2.5517   5.5572%   0.6835    56.68
-Average_All_Horizons     7   18.4059   4.1602   1.9663   4.1989%   0.8061    56.68
+15_min                   3    8.7421   2.9567   1.4212   2.8873%   0.9079    47.15
+30_min                   6   17.0914   4.1342   1.9185   4.1057%   0.8200    53.07
+60_min                  12   28.8125   5.3677   2.6231   5.8884%   0.6966    54.61
+Average_All_Horizons     7   18.2153   4.1529   1.9876   4.2938%   0.8082    54.61
 ==============================================================================
-Ljung-Box (L=24) (Q):   10918.80   Jarque-Bera (JB):     14778.93
+Ljung-Box (L=24) (Q):   10527.75   Jarque-Bera (JB):      5571.20
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.0461   Skew:                   3.4950
-Prob(H) (two-sided):       0.0000   Kurtosis:              18.0720
-Durbin-Watson (DW):        0.0219   MedAE (mph):           0.5196
-Residual Mean (mph):      0.5697   Residual Std:           5.4526
+Heteroskedasticity(H):     0.1751   Skew:                   2.2680
+Prob(H) (two-sided):       0.0000   Kurtosis:              12.1367
+Durbin-Watson (DW):        0.0214   MedAE (mph):           0.6689
+Residual Mean (mph):      0.6516   Residual Std:           5.3280
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =        30.0549 | RMSE =     5.4822 mph | MAE =     2.5517 mph
-  MAPE =        5.5572% | R²   =     0.6835     | Max Error =    56.6844 mph
+  MSE  =        28.8125 | RMSE =     5.3677 mph | MAE =     2.6231 mph
+  MAPE =        5.8884% | R²   =     0.6966     | Max Error =    54.6087 mph
 ==============================================================================
 ```
 
@@ -843,7 +846,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
 ```text
 Multi-Horizon LSTM (Temporal Baseline) Deep Learning Model Summary - PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (Average_All_Horizons, 35 min ahead)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: PEMS-BAY Multi-Horizon Traffic Forecasting (Average_All_Horizons, 35 min ahead)
 Data: PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)
 Date range: 2017-01-01 00:00:00 to 2017-01-30 23:55:00 (Freq: 5min)
 Observations: 8,640 (Train: 6,025, Val: 1,285, Eval/Test: 265,995)
@@ -854,56 +857,57 @@ Model: Multi-Horizon LSTM (Temporal Only) — Horizon Average_All_Horizons (35 m
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.106210   Best Val Loss:       0.216930
-Final Train Loss:             0.067730   Best Epoch:            4 / 8   
-Hardware Device:                  cuda   Train / Pred:    8.9257s / 0.0850s
+Initial Train Loss:           0.108880   Best Val Loss:       0.232870
+Final Train Loss:             0.083890   Best Epoch:            5 / 9   
+Hardware Device:                  cuda   Train / Pred:    10.1018s / 0.0850s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from lstm_pems_bay.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
-lstm.weight_ih_l0          (256, 207)        52,992  -0.00308  0.10151     [-0.501, +0.468]
-lstm.weight_hh_l0          (256, 64)         16,384  +0.00488  0.12429     [-0.645, +0.567]
-lstm.bias_ih_l0            (256,)               256  +0.00500  0.08308     [-0.198, +0.207]
-lstm.bias_hh_l0            (256,)               256  +0.01379  0.08142     [-0.177, +0.195]
-head.weight                (621, 64)         39,744  -0.00687  0.17543     [-0.876, +0.824]
-head.bias                  (621,)               621  -0.00713  0.11989     [-0.411, +0.341]
-ar_linear.weight           (3, 12)               36  +0.04937  0.19177     [-0.129, +0.828]
-ar_linear.bias             (3,)                   3  -0.02207  0.01584     [-0.044, -0.006]
+lstm.weight_ih_l0          (256, 207)        52,992  -0.00097  0.02854     [-0.203, +0.216]
+lstm.weight_hh_l0          (256, 64)         16,384  +0.00075  0.03245     [-0.224, +0.210]
+lstm.bias_ih_l0            (256,)               256  +0.03445  0.03684     [-0.072, +0.131]
+lstm.bias_hh_l0            (256,)               256  +0.03502  0.03677     [-0.069, +0.131]
+head.weight                (621, 64)         39,744  -0.00370  0.06038     [-0.316, +0.311]
+head.bias                  (621,)               621  -0.00278  0.05888     [-0.275, +0.170]
+ar_linear.weight           (3, 12)               36  +0.06347  0.21869     [-0.036, +0.894]
+ar_linear.bias             (3,)                   3  -0.03276  0.01438     [-0.052, -0.017]
 ------------------------------------------------------------------------------
 LEARNED MULTI-HORIZON AUTOREGRESSIVE WEIGHTS (ar_linear.weight, 12 Lookback Steps):
-  15_min (t+3) : L12:+0.001 L7:-0.003 L4:-0.028 L3:-0.020 L2:+0.028 L1:+0.828
-  30_min (t+6) : L12:+0.010 L7:+0.008 L4:-0.027 L3:-0.040 L2:-0.033 L1:+0.690
-  60_min (t+12): L12:+0.020 L7:+0.011 L4:-0.018 L3:-0.062 L2:-0.129 L1:+0.471
+  15_min (t+3) : L12:-0.008 L7:-0.002 L4:-0.029 L3:-0.012 L2:+0.061 L1:+0.894
+  30_min (t+6) : L12:-0.003 L7:+0.005 L4:-0.023 L3:-0.016 L2:+0.033 L1:+0.805
+  60_min (t+12): L12:+0.008 L7:+0.004 L4:-0.018 L3:-0.031 L2:-0.036 L1:+0.640
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch  Train Loss (SmoothL1)     Val Scaled MAE   Val-Train Gap         Status
 ------------------------------------------------------------------------------
-    1                0.10621            0.23572        +0.12951               
-    2                0.08720            0.22561        +0.13841               
-    3                0.08024            0.21968        +0.13944               
-    4                0.07586            0.21693        +0.14107 <-- Best Checkpoint
-    5                0.07267            0.21747        +0.14480               
-    6                0.07050            0.22136        +0.15086               
-    7                0.06886            0.21962        +0.15076               
-    8                0.06773            0.22047        +0.15274               
+    1                0.10888            0.24098        +0.13210               
+    2                0.09426            0.23658        +0.14232               
+    3                0.09110            0.23529        +0.14419               
+    4                0.08919            0.23644        +0.14725               
+    5                0.08800            0.23287        +0.14487 <-- Best Checkpoint
+    6                0.08688            0.23464        +0.14776               
+    7                0.08573            0.23493        +0.14920               
+    8                0.08456            0.23511        +0.15055               
+    9                0.08389            0.23495        +0.15106               
 ------------------------------------------------------------------------------
 MULTI-HORIZON SPATIO-TEMPORAL EVALUATION BREAKDOWN (mph across 207 Sensors):
 Horizon              Steps       MSE     RMSE      MAE  MAPE (%)       R²   MaxErr
 ------------------------------------------------------------------------------
-15_min                   3    8.5194   2.9188   1.4283   2.9292%   0.9102    47.20
-30_min                   6   16.6435   4.0796   1.9189   4.1104%   0.8247    52.46
-60_min                  12   30.0549   5.4822   2.5517   5.5572%   0.6835    56.68
-Average_All_Horizons     7   18.4059   4.1602   1.9663   4.1989%   0.8061    56.68
+15_min                   3    8.7421   2.9567   1.4212   2.8873%   0.9079    47.15
+30_min                   6   17.0914   4.1342   1.9185   4.1057%   0.8200    53.07
+60_min                  12   28.8125   5.3677   2.6231   5.8884%   0.6966    54.61
+Average_All_Horizons     7   18.2153   4.1529   1.9876   4.2938%   0.8082    54.61
 ==============================================================================
-Ljung-Box (L=24) (Q):     195.91   Jarque-Bera (JB):      2358.99
+Ljung-Box (L=24) (Q):     195.56   Jarque-Bera (JB):      2195.46
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     1.2200   Skew:                   0.2107
-Prob(H) (two-sided):       0.1425   Kurtosis:               9.6243
-Durbin-Watson (DW):        1.7550   MedAE (mph):           1.3371
-Residual Mean (mph):      0.3493   Residual Std:           4.1445
+Heteroskedasticity(H):     1.2200   Skew:                   0.2358
+Prob(H) (two-sided):       0.1425   Kurtosis:               9.3861
+Durbin-Watson (DW):        1.7550   MedAE (mph):           1.3516
+Residual Mean (mph):      0.3898   Residual Std:           4.1331
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale mph, n_eval=265,995):
-  MSE  =        18.4059 | RMSE =     4.1602 mph | MAE =     1.9663 mph
-  MAPE =        4.1989% | R²   =     0.8061     | Max Error =    56.6844 mph
+  MSE  =        18.2153 | RMSE =     4.1529 mph | MAE =     1.9876 mph
+  MAPE =        4.2938% | R²   =     0.8082     | Max Error =    54.6087 mph
 ==============================================================================
 ```
