@@ -1,4 +1,5 @@
 """Focused no-leakage and scratch-model tests; run with python -m unittest."""
+import json
 import unittest
 import tempfile
 from pathlib import Path
@@ -104,8 +105,8 @@ class Lab03Tests(unittest.TestCase):
 
     def test_all_model_and_phase_docs_have_required_sections(self):
         root = Path(__file__).resolve().parents[2]
-        required = ["## Purpose", "## Input - Output", "## How to do",
-                    "## Evaluation Metrics", "## Used Data"]
+        required = ["## Mục đích", "## Đầu vào - Đầu ra", "## Cách thực hiện",
+                    "## Chỉ số đánh giá", "## Dữ liệu sử dụng"]
         for folder in [root / "docs/lab03/models", root / "docs/lab03/phases"]:
             docs = list(folder.glob("*.md"))
             self.assertGreater(len(docs), 0)
@@ -118,7 +119,7 @@ class Lab03Tests(unittest.TestCase):
         from src.lab03.lab03_utils.report import write_report_bundle
         report = {
             "run_id": "unit-test", "status": "SUCCESS", "champion": "Naive Baseline",
-            "summary_text": "A small report-generation test.",
+            "summary_text": "Bản kiểm tra tạo báo cáo.",
             "dataset": {"dataset_name": "unit_test.csv", "dataset_type": "synthetic_demo",
                         "observations_after_cleaning": 100, "start": "2020-01-01",
                         "end": "2020-01-05", "frequency": "h",
@@ -134,7 +135,8 @@ class Lab03Tests(unittest.TestCase):
                             "test_MAPE (%)": 2.0, "test_R2": 0.9, "fit_seconds": 0.01}],
             "forecast_horizon": 24, "forecast_training_rows": 99,
             "forecast_training_end": "2020-01-05 00:00:00",
-            "figures": {}, "figure_relative_paths": {},
+            "figures": {"series": "missing_chart.png"},
+            "figure_relative_paths": {"series": "notebook_runs/unit-test/figures/missing_chart.png"},
             "legacy_snapshot": [],
         }
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -143,9 +145,84 @@ class Lab03Tests(unittest.TestCase):
                 self.assertTrue(Path(paths[key]).exists())
                 self.assertGreater(Path(paths[key]).stat().st_size, 0)
             report_text = Path(paths["md"]).read_text(encoding="utf-8")
-            self.assertIn("99 labeled observations through 2020-01-05 00:00:00", report_text)
-            self.assertIn("separate from the Train + Validation fit used for Test scoring", report_text)
+            self.assertIn("99 quan sát có nhãn đến 2020-01-05 00:00:00", report_text)
+            self.assertIn("notebook_runs/unit-test/figures/missing_chart.png", report_text)
+            self.assertIn("# Báo cáo dự báo chuỗi thời gian", report_text)
+            self.assertIn("Bản kiểm tra tạo báo cáo.", report_text)
+            self.assertIn("### Chuỗi tải điện theo giờ", report_text)
+            self.assertIn("Mốc đối chứng giá trị gần nhất", report_text)
+            self.assertIn("dữ liệu mô phỏng", report_text)
+            self.assertIn("Trạng thái lần chạy:** **Thành công**", report_text)
+            self.assertIn("- Đặc trưng lịch: Có", report_text)
+            self.assertIn("Lab03_Visual_Exploration.ipynb", report_text)
+            self.assertNotIn("Lab03_TimeSeries.ipynb", report_text)
 
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Lab03PipelineTests(unittest.TestCase):
+    """End-to-end pipeline smoke test using --fast overrides against the real AEP CSV."""
+
+    @classmethod
+    def setUpClass(cls):
+        import sys
+        from pathlib import Path
+        root = Path(__file__).resolve().parents[2]
+        if str(root) not in sys.path:
+            sys.path.insert(0, str(root))
+        from src.lab03.pipeline import run_pipeline
+        cls.run_pipeline = staticmethod(run_pipeline)
+        cls.root = root
+        cls.result = cls.run_pipeline(run_id="unittest_fast_run", fast=True)
+
+    @classmethod
+    def tearDownClass(cls):
+        import shutil
+        run_dir = Path(cls.result["run_dir"])
+        if run_dir.exists():
+            shutil.rmtree(run_dir, ignore_errors=True)
+        for p in (cls.root / "logs" / "lab03" / "pipeline_unittest_fast_run.log",
+                 cls.root / "progress_results" / "lab03" / "run_summary_unittest_fast_run.json"):
+            if p.exists():
+                p.unlink()
+
+    def test_pipeline_completes_and_picks_a_champion(self):
+        self.assertEqual(self.result["status"], "COMPLETED")
+        self.assertIn(self.result["champion"], {"Naive Last-Value", "Linear Regression", "CART",
+                                                 "Random Forest", "XGBoost-style"})
+
+    def test_pipeline_writes_timestamped_log_and_progress_status(self):
+        log_path = self.root / "logs" / "lab03" / f"pipeline_{self.result['run_id']}.log"
+        self.assertTrue(log_path.is_file())
+        text = log_path.read_text(encoding="utf-8")
+        self.assertIn("[PIPELINE] [START]", text)
+        self.assertIn("[PIPELINE] [SUCCESS]", text)
+        self.assertRegex(text.splitlines()[0], r"^\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\]")
+        progress_path = self.root / "progress_results" / "lab03" / f"run_summary_{self.result['run_id']}.json"
+        self.assertTrue(progress_path.is_file())
+        payload = json.loads(progress_path.read_text(encoding="utf-8"))
+        self.assertEqual(payload["status"], "COMPLETED")
+        for stage in ("data_ingestion", "feature_engineering", "data_splitting", "model_selection",
+                     "evaluation", "inference", "visualization", "model_summary", "reporting"):
+            self.assertIn(stage, payload["stages"])
+
+    def test_pipeline_produces_report_bundle_and_model_summary(self):
+        for key in ("md", "html", "pdf"):
+            path = Path(self.result["report"][key])
+            self.assertTrue(path.is_file())
+            self.assertGreater(path.stat().st_size, 200)
+        summary_csv = Path(self.result["model_summary_dir"]) / "model_summary.csv"
+        self.assertTrue(summary_csv.is_file())
+        import pandas as pd
+        df = pd.read_csv(summary_csv)
+        self.assertEqual(len(df), 5)
+        self.assertEqual(int(df["selected_champion"].sum()), 1)
+
+    def test_pipeline_saves_all_five_models_and_figures(self):
+        model_dir = Path(self.result["run_dir"]) / "models"
+        for slug in ("naive_last_value", "linear_regression", "cart", "random_forest", "xgboost_style", "champion"):
+            self.assertTrue((model_dir / f"{slug}.pkl").is_file(), f"missing {slug}.pkl")
+        figure_dir = Path(self.result["run_dir"]) / "figures"
+        self.assertGreaterEqual(len(list(figure_dir.glob("*.png"))), 8)

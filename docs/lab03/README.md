@@ -1,43 +1,41 @@
-# Documentation Index — Lab 03
+# Tài liệu Lab 03
 
-## Start here
+## Bắt đầu tại đây
 
-1. [Lab 03 notebook](../../notebooks/lab03/Lab03_TimeSeries.ipynb) — runnable end-to-end experiment.
-2. [Execution Guide](EXECUTION_GUIDE.md) — environment, notebook launch and completion checks.
-3. [File Guide](FILE_GUIDE.md) — responsibilities of every directory and key module.
-4. [Architecture](ARCHITECTURE.md) — pipeline phases and leakage controls.
-5. [Methodology](methodology.md) — forecasting protocol, features and metric definitions.
-6. [Model Summary Specification](MODEL_SUMMARY_SPEC.md) — generated model comparison fields and interpretation.
-7. [Deliverable Checklist](DELIVERABLE_CHECKLIST.md) — requirement coverage.
+1. [Notebook khám phá trực quan Lab 03](../../notebooks/lab03/Lab03_Visual_Exploration.ipynb) — notebook tạo và lưu 19 biểu đồ khám phá, đánh giá mô hình và dự báo.
+2. [Hướng dẫn chạy](EXECUTION_GUIDE.md) — môi trường, cách chạy pipeline và notebook, cùng các bước kiểm tra kết quả.
+3. [Hướng dẫn tệp](FILE_GUIDE.md) — vai trò của từng thư mục và mô-đun chính.
+4. [Kiến trúc](ARCHITECTURE.md) — các giai đoạn pipeline và biện pháp ngăn rò rỉ dữ liệu.
+5. [Phương pháp](methodology.md) — quy trình dự báo, đặc trưng và định nghĩa chỉ số.
+6. [Đặc tả tóm tắt mô hình](MODEL_SUMMARY_SPEC.md) — các trường so sánh mô hình được tạo và cách diễn giải.
+7. [Danh sách kiểm tra sản phẩm bàn giao](DELIVERABLE_CHECKLIST.md) — mức độ đáp ứng yêu cầu.
 
-## Algorithm documentation
+## Tài liệu thuật toán
 
-Each model has a dedicated implementation file in `src/lab03/lab03_models/` and a corresponding detailed explanation:
+Mỗi mô hình có một tệp cài đặt trong `src/lab03/lab03_models/` và một tài liệu giải thích chi tiết tương ứng:
 
-- [Naive Last-Value Baseline](models/Naive_Baseline.md)
-- [Linear Regression Scratch](models/Linear_Regression_Scratch.md)
-- [CART Decision Tree Scratch](models/CART_Decision_Tree_Scratch.md)
-- [Random Forest Scratch](models/Random_Forest_Scratch.md)
-- [XGBoost-style Scratch](models/XGBoost_Style_Scratch.md)
+- [Mốc đối chứng giá trị gần nhất](models/Naive_Baseline.md)
+- [Hồi quy tuyến tính tự cài đặt](models/Linear_Regression_Scratch.md)
+- [Cây quyết định CART tự cài đặt](models/CART_Decision_Tree_Scratch.md)
+- [Rừng ngẫu nhiên tự cài đặt](models/Random_Forest_Scratch.md)
+- [Mô hình kiểu XGBoost tự cài đặt](models/XGBoost_Style_Scratch.md)
 
-Every model document contains Purpose, Input - Output, How to do, Evaluation Metrics and Used Data.
+Tài liệu của từng mô hình gồm mục đích, đầu vào/đầu ra, cách thực hiện, chỉ số đánh giá và dữ liệu sử dụng.
 
-## Pipeline phase documentation
+## Tài liệu các giai đoạn pipeline
 
-- [Data Ingestion](phases/Data_Ingestion_Phase.md)
-- [Data Cleaning](phases/Data_Cleaning_Phase.md)
-- [Feature Engineering](phases/Feature_Engineering_Phase.md)
-- [Data Splitting](phases/Data_Splitting_Phase.md)
-- [Cross Validation](phases/Cross_Validation_Phase.md)
-- [Training](phases/Training_Phase.md)
-- [Model Selection](phases/Model_Selection_Phase.md)
-- [Inference](phases/Inference_Phase.md)
-- [Evaluation](phases/Evaluation_Phase.md)
-- [Reporting](phases/Reporting_Phase.md)
-- [Experiment Tracking / Logging](phases/Experiment_Tracking_Phase.md)
+- [Nạp dữ liệu](phases/Data_Ingestion_Phase.md)
+- [Làm sạch dữ liệu](phases/Data_Cleaning_Phase.md)
+- [Tạo đặc trưng](phases/Feature_Engineering_Phase.md)
+- [Chia dữ liệu](phases/Data_Splitting_Phase.md)
+- [Kiểm định chéo](phases/Cross_Validation_Phase.md)
+- [Huấn luyện](phases/Training_Phase.md)
+- [Chọn mô hình](phases/Model_Selection_Phase.md)
+- [Suy luận](phases/Inference_Phase.md)
+- [Đánh giá](phases/Evaluation_Phase.md)
+- [Lập báo cáo](phases/Reporting_Phase.md)
+- [Theo dõi thí nghiệm và ghi nhật ký](phases/Experiment_Tracking_Phase.md)
 
-Every phase document contains Purpose, Input - Output, How to do, Evaluation Metrics and Used Data.
+## Tài liệu lưu trữ
 
-## Legacy material
-
-The earlier legacy notebook is not present in the current worktree. The runnable Lab03 implementation is [Lab03_TimeSeries.ipynb](../../notebooks/lab03/Lab03_TimeSeries.ipynb).
+Kết quả thí nghiệm notebook cũ được lưu riêng tại `reports/lab03/legacy/Legacy_Experiment_Results.md`; không gộp chúng với kết quả của pipeline NumPy hiện tại.

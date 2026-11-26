@@ -1,26 +1,31 @@
-# Lab 03 Deliverable Checklist
+# Danh sách kiểm tra sản phẩm bàn giao Lab 03
 
-## Completed in the runnable notebook
+## Pipeline chạy bằng một lệnh
 
-- [x] Current notebook uses the available `src/lab03` data, features, CV, metrics and scratch-model modules.
-- [x] Real AEP data is present at `data/raw/AEP_hourly.csv`; the notebook fails clearly instead of silently substituting synthetic data.
-- [x] Chronological 70/15/15 split, five expanding-window CV folds on Train, Validation-based selection and held-out Test evaluation.
-- [x] Past-only lag/rolling features and separate rolling Test versus 24-hour recursive forecast protocols.
-- [x] Each run saves its data, figures, predictions, five candidate models, champion forecast model and run summary under `reports/lab03/notebook_runs/<run_id>/`.
-- [x] Latest Markdown, HTML and PDF reports are written under `reports/lab03/`.
-- [x] Latest `model_summary.csv`, `.json`, `.md`, CV fold metrics and Validation/Test JSON metrics are written under `reports/model_summary/lab03/`.
-- [x] Model summary contains CV, Validation and Test metrics, timing, training-row counts, feature count, model parameters and model artifact paths.
-- [x] Notebook was executed end-to-end with the bundled AEP data; reports and all five model-summary artifacts were checked.
+- [x] `src/lab03/pipeline.py` điều phối toàn bộ quy trình; `script/lab03/run_lab03.py` và `scripts/run_lab.py --lab 03` gọi chung pipeline. Hỗ trợ `--fast`, `--no-cv` và `--run-id`.
+- [x] Cấu hình `lab03` có dữ liệu, đặc trưng, dự báo, mô hình và các ghi đè dùng cho chạy nhanh; `src/lab03/utils.py` cung cấp các hàm cấu hình/đường dẫn/thư mục.
+- [x] `src/lab03/logging_utils.py` ghi nhật ký có dấu thời gian và cập nhật trạng thái tiến trình sau từng giai đoạn.
+- [x] Pipeline chạy trên `AEP_hourly.csv`, thực hiện chia dữ liệu theo thời gian, chọn mô hình trên tập Xác thực, đánh giá trên tập Kiểm tra và tạo dự báo tương lai.
+- [x] Kiểm thử pipeline xác nhận trạng thái hoàn tất, mô hình được chọn, nhật ký/trạng thái, báo cáo, mô hình đã lưu và biểu đồ.
 
-## Remaining gaps
+## Notebook khám phá trực quan
 
-- [ ] A root `pipeline.py` and `scripts/run_lab.py` do not exist. The documented `script/lab03/run_lab03.py` imports the missing root pipeline, so it is not a working CLI entry point. Use the notebook for now.
-- [ ] Root `config.yaml` has shared Lab01/Lab02/Lab04 sections but no Lab03 section. One existing Lab03 test still expects a Lab03-only configuration and therefore fails.
-- [ ] The notebook does not yet write timestamped START/SUCCESS logs or progress-status files.
-- [ ] The earlier legacy notebook is no longer present in the current worktree; its old `src.lab03_utils` imports were unavailable.
+- [x] [Notebook Lab03_Visual_Exploration](../../notebooks/lab03/Lab03_Visual_Exploration.ipynb) dùng trực tiếp các mô-đun hiện có trong `src/lab03/`.
+- [x] Notebook đọc dữ liệu thật từ `data/raw/AEP_hourly.csv`; không tự chuyển sang dữ liệu tổng hợp nếu thiếu tệp.
+- [x] Thực hiện chia 70/15/15 theo thời gian, kiểm định chéo năm fold trong tập Huấn luyện, chọn mô hình bằng tập Xác thực và đánh giá trên tập Kiểm tra.
+- [x] Đặc trưng độ trễ/cửa sổ trượt chỉ dùng dữ liệu quá khứ; kết quả kiểm tra cuốn chiếu được tách khỏi dự báo tương lai đệ quy 24 giờ.
+- [x] Tạo 19 biểu đồ, lưu dưới `reports/lab03/notebook_runs/notebook_visual_exploration/`.
 
-## Validation notes
+## Báo cáo và sản phẩm đầu ra
 
-- Notebook execution on the bundled real dataset succeeds and produces non-empty MD/HTML/PDF reports and model-summary outputs.
-- The report-bundle unit test covers non-empty Markdown, HTML and PDF generation.
-- The full Lab03 unit-test runner currently has one pre-existing configuration assertion failure; the other eight tests pass.
+- [x] Báo cáo Markdown, HTML và PDF được tạo bằng tiếng Việt.
+- [x] Báo cáo mới nhất trỏ đến biểu đồ trong đúng thư mục của lần chạy tương ứng.
+- [x] Tóm tắt mô hình Markdown có tiêu đề/cột tiếng Việt; CSV/JSON giữ nguyên tên trường để tương thích xử lý dữ liệu.
+- [x] Kết quả notebook cũ được lưu riêng trong `reports/lab03/legacy/`, không trộn với kết quả pipeline hiện tại.
+
+## Xác minh
+
+- Chạy `python script/lab03/run_lab03.py` hoặc `python scripts/run_lab.py --lab 03` để thực hiện pipeline đầy đủ.
+- Chạy `python script/lab03/run_lab03.py --fast` để kiểm tra nhanh.
+- Chạy `python -m unittest tests.lab03.test_lab03` để kiểm tra các thành phần Lab 03.
+- Chạy notebook bằng **Run All** trong Jupyter để kiểm tra toàn bộ ô và biểu đồ.

@@ -255,5 +255,67 @@ lab03:
       enabled: true
       n_splits: 5
       gap: 0
+  features:
+    lags: [1, 2, 3, 6, 12, 24, 48, 168]
+    rolling_windows: [6, 12, 24, 168]
+    include_calendar: true
+  forecast:
+    horizon_hours: 24
+  models:
+    linear_regression:
+      ridge: 1.0e-8
+    decision_tree:
+      max_depth: 8
+      min_samples_split: 20
+      min_samples_leaf: 10
+      max_features: null
+      max_thresholds: 12
+      random_state: 42
+      max_train_rows: 15000
+    random_forest:
+      n_estimators: 24
+      max_depth: 7
+      min_samples_split: 20
+      min_samples_leaf: 10
+      max_features: sqrt
+      max_samples: 0.75
+      max_thresholds: 10
+      random_state: 42
+      max_train_rows: 15000
+    xgboost_style:
+      n_estimators: 28
+      learning_rate: 0.06
+      max_depth: 3
+      min_child_weight: 5.0
+      subsample: 0.8
+      colsample_bytree: 0.8
+      reg_lambda: 1.0
+      reg_alpha: 0.0
+      gamma: 0.0
+      max_bins: 16
+      max_train_rows: 18000
+      random_state: 42
+  fast_overrides:
+    fast_max_rows: 3500
+    models:
+      decision_tree:
+        max_depth: 4
+        min_samples_split: 10
+        min_samples_leaf: 4
+        max_thresholds: 5
+        max_train_rows: 1500
+      random_forest:
+        n_estimators: 3
+        max_depth: 3
+        min_samples_split: 10
+        min_samples_leaf: 4
+        max_thresholds: 5
+        max_train_rows: 1500
+      xgboost_style:
+        n_estimators: 3
+        max_depth: 2
+        min_child_weight: 2.0
+        max_bins: 8
+        max_train_rows: 1500
 
 

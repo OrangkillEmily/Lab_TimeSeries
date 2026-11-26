@@ -1,66 +1,66 @@
-# Lab 03 Architecture and Data Flow
+# Kiến trúc và luồng dữ liệu Lab 03
 
 ```text
 AEP_hourly.csv
     |
     v
-Data Ingestion -> Data Cleaning -> Regularized hourly Series
+Nạp dữ liệu -> Làm sạch dữ liệu -> Chuỗi giờ đã chuẩn hóa
     |                                  |
     +----------------------------------+
                        |
                        v
-             Lag/Rolling/Calendar Features
+             Đặc trưng độ trễ/cửa sổ trượt/lịch
                        |
                        v
-          Chronological 70/15/15 Split
+          Chia theo thời gian 70/15/15
               /           |          \
              v            v           v
-          Train       Validation     Test
+       Huấn luyện      Xác thực      Kiểm tra
              |
-             +--> 5-fold expanding-window CV
+             +--> Kiểm định chéo cửa sổ mở rộng 5 fold
              |
-             +--> Fit candidate estimators
+             +--> Khớp các mô hình ứng viên
                           |
                           v
-               Validation RMSE Selection
+              Chọn theo RMSE xác thực
                           |
                           v
-                Refit on Train + Validation
+             Khớp lại trên Huấn luyện + Xác thực
                           |
                           v
-               Held-out Test Evaluation
+                 Đánh giá trên tập Kiểm tra
                           |
               +-----------+-----------+
               |                       |
               v                       v
-       Rolling Test Predict     24-step Recursive Future
+      Dự báo cuốn chiếu trên Test   Dự báo tương lai đệ quy 24 bước
               |                       |
               +-----------+-----------+
                           |
                           v
-     Metrics + Model Summary + Figures + Logs + Reports
+      Chỉ số + Tóm tắt mô hình + Biểu đồ + Nhật ký + Báo cáo
 ```
 
-## Separation of responsibilities
+## Phân chia trách nhiệm
 
-- `pipeline.py` coordinates phases and owns the run lifecycle.
-- `src/lab03/data.py` owns raw data parsing, regularization and splitting.
-- `src/lab03/features.py` owns causal feature generation.
-- `src/lab03/cv.py` owns expanding-window folds.
-- `src/lab03/lab03_models/` owns all estimators; each model is isolated in one module.
-- `src/lab03/metrics.py` computes metrics independently of estimators.
-- `src/lab03/plotting.py` saves visual artifacts.
-- `src/lab03/lab03_utils/report.py` creates the three report formats.
+- `pipeline.py` điều phối các giai đoạn và quản lý vòng đời mỗi lần chạy.
+- `src/lab03/data.py` xử lý đọc dữ liệu thô, chuẩn hóa tần suất và chia dữ liệu.
+- `src/lab03/features.py` tạo đặc trưng chỉ dựa trên thông tin quá khứ.
+- `src/lab03/cv.py` tạo các fold cửa sổ mở rộng.
+- `src/lab03/lab03_models/` chứa các mô hình; mỗi mô hình được tách thành một mô-đun.
+- `src/lab03/metrics.py` tính chỉ số độc lập với mô hình.
+- `src/lab03/plotting.py` lưu các sản phẩm trực quan.
+- `src/lab03/lab03_utils/report.py` tạo báo cáo Markdown, HTML và PDF.
 
-## Leakage controls
+## Biện pháp ngăn rò rỉ dữ liệu
 
-1. Chronological split; no random shuffle.
-2. CV is limited to Train and validates on blocks later than its training prefix.
-3. Lag/rolling features use observations strictly before target timestamp.
-4. Every model in a CV fold is newly initialized and fit only on fold train.
-5. Candidate selection uses Validation RMSE; Test cannot select or tune a model.
-6. Future recursive inference feeds predictions back into the lag history and never reads future actual values.
+1. Chia theo thứ tự thời gian, không xáo trộn ngẫu nhiên.
+2. Kiểm định chéo chỉ dùng tập Huấn luyện; mỗi fold xác thực trên đoạn sau phần dữ liệu dùng để huấn luyện.
+3. Đặc trưng độ trễ/cửa sổ trượt chỉ dùng quan sát trước timestamp mục tiêu.
+4. Mỗi fold khởi tạo mô hình mới và chỉ khớp trên phần huấn luyện của fold đó.
+5. Chọn mô hình theo RMSE trên tập Xác thực; không dùng tập Kiểm tra để chọn hoặc tinh chỉnh mô hình.
+6. Dự báo tương lai đệ quy đưa dự báo vào lịch sử và không đọc giá trị thực trong tương lai.
 
-## Experiment provenance
+## Nguồn gốc thí nghiệm
 
-The original executed notebook and its previous library-estimator results are preserved under `notebooks/lab03/archive/`, `legacy/` and `reports/lab03/legacy/`. Their previous split/modeling implementation differs from the new scratch pipeline and remains separate in all reports.
+Các kết quả notebook cũ được lưu riêng trong `reports/lab03/legacy/`. Quy trình chia dữ liệu, mô hình thư viện và cách triển khai trước đây khác pipeline tự cài đặt hiện tại; vì vậy hai nhóm kết quả được tách biệt trong báo cáo.

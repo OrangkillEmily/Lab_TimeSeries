@@ -1,139 +1,139 @@
-# Lab 03 - Time Series Forecasting Report
+# Báo cáo dự báo chuỗi thời gian — Lab 03
 
-**Run ID:** `20261125_050808`  
-**Dataset:** `AEP_hourly.csv` (`real_source`)  
-**Selected model:** **Linear Regression** (selected by Validation RMSE)  
-**Run status:** `SUCCESS`
+**Mã lần chạy:** `report_fix_20261127`  
+**Bộ dữ liệu:** `AEP_hourly.csv` (**dữ liệu thật**)  
+**Mô hình được chọn:** **Hồi quy tuyến tính** (theo RMSE trên tập xác thực)  
+**Trạng thái lần chạy:** **Hoàn tất**
 
-> **Important:** Test metrics are reported only after model selection. The Test features are rolling one-step-ahead features, so actual observations from earlier test timestamps are available to form later lag features. This is not the same as a fixed-origin 24-hour forecast.
+> **Lưu ý:** Chỉ tính chỉ số trên tập kiểm tra sau khi đã chọn mô hình. Đặc trưng ở tập kiểm tra dùng giao thức dự báo cuốn chiếu trước một bước; giá trị thực tế ở các thời điểm kiểm tra trước đó có thể được dùng để tạo độ trễ cho thời điểm tiếp theo. Giao thức này khác với dự báo 24 giờ từ một mốc cố định.
 
-## 1. Executive summary
+## 1. Tóm tắt kết quả
 
-On AEP_hourly.csv, 121,296 cleaned hourly observations were used. Linear Regression was selected using Validation RMSE (246.14 MW). Its held-out Test RMSE was 228.49 MW. A recursive 24-hour forecast was generated.
+Lab 03 huấn luyện 5 mô hình tự cài đặt trên dữ liệu AEP_hourly thật. Mô hình được chọn theo RMSE xác thực thấp nhất là **Hồi quy tuyến tính** (RMSE xác thực=246.14, RMSE kiểm tra=228.49).
 
-## 2. Dataset and data quality
+## 2. Dữ liệu và chất lượng dữ liệu
 
-- Source path: `C:\Users\Bin\Documents\Lab_TimeSeries\data\raw\AEP_hourly.csv`
-- Dataset type: **real_source**
-- Observations after cleaning: **121,296**
-- Time span: **2004-10-01 01:00:00** to **2018-08-03 00:00:00**
-- Frequency: **h**
-- Duplicate timestamps removed: **4**
-- Missing periods inserted: **27**
-- Missing values remaining after cleaning: **0**
+- Đường dẫn nguồn: `C:\Users\Bin\Documents\Lab_TimeSeries\data\raw\AEP_hourly.csv`
+- Loại dữ liệu: **dữ liệu thật**
+- Số quan sát sau làm sạch: **121,296**
+- Khoảng thời gian: **2004-10-01 01:00:00** đến **2018-08-03 00:00:00**
+- Tần suất: **h**
+- Số mốc thời gian trùng đã loại: **4**
+- Số khoảng thời gian thiếu đã bổ sung: **27**
+- Số giá trị thiếu còn lại sau làm sạch: **0**
 
-## 3. Preprocessing and chronological split
+## 3. Tiền xử lý và chia dữ liệu theo thời gian
 
-Feature rows are ordered by timestamp. Train/Validation/Test are contiguous chronological partitions with no shuffle.
-| Partition | Rows | Start | End | Target ratio |
+Các dòng đặc trưng được sắp theo mốc thời gian. Tập huấn luyện, tập xác thực và tập kiểm tra là các đoạn thời gian liên tiếp, không xáo trộn.
+| Tập dữ liệu | Số dòng | Bắt đầu | Kết thúc | Tỷ lệ mục tiêu |
 |---|---|---|---|---|
-| Train | 84,789 | 2004-10-08 01:00:00 | 2014-06-10 21:00:00 | 70% |
-| Validation | 18,169 | 2014-06-10 22:00:00 | 2016-07-06 22:00:00 | 15% |
-| Test | 18,170 | 2016-07-06 23:00:00 | 2018-08-03 00:00:00 | 15% |
+| Huấn luyện | 84,789 | 2004-10-08 01:00:00 | 2014-06-10 21:00:00 | 70% |
+| Xác thực | 18,169 | 2014-06-10 22:00:00 | 2016-07-06 22:00:00 | 15% |
+| Kiểm tra | 18,170 | 2016-07-06 23:00:00 | 2018-08-03 00:00:00 | 15% |
 
-### Feature engineering
+### Tạo đặc trưng
 
-- Lag features: `[1, 2, 3, 6, 12, 24, 48, 168]`
-- Rolling windows: `[6, 12, 24, 168]`; rolling calculations are shifted by one timestamp before aggregation.
-- Calendar features: `True`
-- Total feature count: **22**
+- Đặc trưng độ trễ: `[1, 2, 3, 6, 12, 24, 48, 168]`
+- Cửa sổ trượt: `[6, 12, 24, 168]`; phép tính được dịch một mốc thời gian trước khi tổng hợp.
+- Đặc trưng lịch: Có
+- Tổng số đặc trưng: **22**
 
-## 4. Walk-forward cross-validation
+## 4. Kiểm định chéo cuốn chiếu theo thời gian
 
-Expanding-window CV uses **5 folds** inside the Train partition only. Each fold trains on an earlier block and validates on the following block. Validation and Test partitions are not included in CV.
+Kiểm định chéo cửa sổ mở rộng sử dụng **5 lượt chia** chỉ trong tập huấn luyện. Mỗi lượt huấn luyện trên đoạn trước và xác thực trên đoạn kế tiếp. Tập xác thực và tập kiểm tra bên ngoài không tham gia kiểm định chéo.
 
-| Model | Mean RMSE | Std RMSE | Mean MAE | Mean R² |
+| Mô hình | RMSE trung bình | Độ lệch chuẩn RMSE | MAE trung bình | R² trung bình |
 |---|---|---|---|---|
-| Naive Last-Value | 575.926 | 33.729 | 441.614 | 0.950 |
-| Linear Regression | 277.589 | 29.939 | 199.313 | 0.988 |
-| CART | 513.221 | 37.486 | 405.312 | 0.960 |
-| Random Forest | 756.342 | 73.556 | 583.523 | 0.913 |
-| XGBoost-style | 1,435.365 | 72.273 | 1,129.681 | 0.690 |
+| Cây hồi quy CART | 337.364 | 19.742 | 254.786 | 0.983 |
+| Hồi quy tuyến tính | 277.589 | 29.939 | 199.313 | 0.988 |
+| Giá trị gần nhất | 575.926 | 33.729 | 441.614 | 0.950 |
+| Rừng ngẫu nhiên | 498.419 | 36.476 | 379.359 | 0.963 |
+| Mô hình tăng cường kiểu XGBoost | 775.685 | 66.806 | 585.731 | 0.909 |
 
-## 5. Model comparison
+## 5. So sánh mô hình
 
-| Model | CV RMSE mean | Validation RMSE | Test MAE | Test RMSE | Test MAPE (%) | Test R² | Fit s |
+| Mô hình | RMSE CV trung bình | RMSE xác thực | MAE kiểm tra | RMSE kiểm tra | MAPE kiểm tra (%) | R² kiểm tra | Thời gian khớp (giây) |
 |---|---|---|---|---|---|---|---|
-| Naive Last-Value | 575.926 | 534.446 | 417.325 | 534.753 | 2.853 | 0.954 | 0.00 |
-| Linear Regression | 277.589 | 246.137 | 171.907 | 228.494 | 1.170 | 0.992 | 0.08 |
-| CART | 513.221 | 466.009 | 375.121 | 465.906 | 2.558 | 0.965 | 0.61 |
-| Random Forest | 756.342 | 755.079 | 557.222 | 705.227 | 3.900 | 0.920 | 0.44 |
-| XGBoost-style | 1,435.365 | 1,458.039 | 1,135.129 | 1,396.239 | 8.191 | 0.684 | 0.25 |
+| Giá trị gần nhất | 575.926 | 534.446 | 417.325 | 534.753 | 2.853 | 0.954 | 0.00 |
+| Hồi quy tuyến tính | 277.589 | 246.137 | 171.907 | 228.494 | 1.170 | 0.992 | 0.05 |
+| Cây hồi quy CART | 337.364 | 322.511 | 244.089 | 316.215 | 1.656 | 0.984 | 4.91 |
+| Rừng ngẫu nhiên | 498.419 | 493.904 | 365.590 | 460.137 | 2.532 | 0.966 | 8.04 |
+| Mô hình tăng cường kiểu XGBoost | 775.685 | 777.448 | 576.028 | 726.126 | 4.152 | 0.915 | 0.65 |
 
-### Model selection protocol
+### Quy trình chọn mô hình
 
-1. Candidate algorithms are trained on Train and compared on Validation.
-2. The champion is selected by the lowest Validation RMSE; Test is not used to select the champion.
-3. Each candidate is refitted on Train + Validation, then evaluated once on the held-out Test partition.
-4. Tree-based models may cap their internal training rows to a deterministic evenly spaced subset for runtime. The actual number of rows used is recorded in `model_summary.csv`.
+1. Các thuật toán ứng viên được huấn luyện trên tập huấn luyện và so sánh trên tập xác thực.
+2. Mô hình tốt nhất được chọn theo RMSE xác thực thấp nhất; không dùng tập kiểm tra để chọn mô hình.
+3. Mỗi ứng viên được khớp lại trên tập huấn luyện + tập xác thực, sau đó đánh giá một lần trên tập kiểm tra được giữ riêng.
+4. Để giảm thời gian chạy, mô hình dạng cây có thể giới hạn số dòng huấn luyện bằng cách chọn đều các dòng theo thời gian. Số dòng thực tế được ghi trong `model_summary.csv`.
 
-## 6. Inference phase
+## 6. Giai đoạn suy luận
 
-The champion selected by Validation was refitted on 121128 labeled observations through 2018-08-03 00:00:00 after Test evaluation, then used for **24 recursive hourly steps**. Every predicted value is appended to history and is used to build the next lag/rolling row. No future ground truth is used for this future forecast. This is separate from the Train + Validation fit used for Test scoring.
+Sau khi đánh giá tập kiểm tra, mô hình tốt nhất theo tập xác thực được khớp lại trên 121,128 quan sát có nhãn đến 2018-08-03 00:00:00, rồi dùng để **dự báo đệ quy 24 giờ**. Mỗi giá trị dự báo được nối vào lịch sử để tạo độ trễ/cửa sổ trượt cho bước tiếp theo. Không sử dụng giá trị thực tương lai. Đây là mô hình riêng với mô hình khớp trên tập huấn luyện + tập xác thực để chấm điểm tập kiểm tra.
 
-## 7. Legacy notebook experiment snapshot (separate experiment)
+## 7. Kết quả thí nghiệm notebook lưu trữ (thí nghiệm riêng)
 
-The archived notebook contains a prior experiment using the library implementations of scikit-learn and XGBoost. Its values are preserved for provenance only; they are not current results from the NumPy scratch models and should not be compared as a controlled, apples-to-apples benchmark.
+Notebook lưu trữ có một thí nghiệm trước đây dùng các thư viện scikit-learn và XGBoost. Các giá trị được giữ lại để truy xuất nguồn gốc; đây không phải kết quả hiện tại từ mô hình NumPy tự cài đặt và không nên xem là phép so sánh đối chứng tương đương.
 
-Legacy snapshot file is archived separately in `reports/lab03/legacy/`.
+Kết quả lưu trữ được ghi riêng tại `reports/lab03/legacy/`.
 
-## 8. Figures
+## 8. Biểu đồ
 
-### Hourly Series
+### Chuỗi tải điện theo giờ
 
-![hourly_series](notebook_runs/20261125_050808/figures/01_hourly_series.png)
+![Chuỗi tải điện theo giờ](notebook_runs/report_fix_20261127/figures/01_hourly_series.png)
 
-### Temporal Split
+### Chia dữ liệu theo thời gian
 
-![temporal_split](notebook_runs/20261125_050808/figures/02_temporal_split.png)
+![Chia dữ liệu theo thời gian](notebook_runs/report_fix_20261127/figures/02_temporal_split.png)
 
-### Test And Residuals
+### Dự báo cuốn chiếu trên tập kiểm tra
 
-![test_and_residuals](notebook_runs/20261125_050808/figures/03_test_and_residuals.png)
+![Dự báo cuốn chiếu trên tập kiểm tra](notebook_runs/report_fix_20261127/figures/03_test_forecast.png)
 
-### Test Model Comparison
+### Chẩn đoán phần dư
 
-![test_model_comparison](notebook_runs/20261125_050808/figures/04_test_model_comparison.png)
+![Chẩn đoán phần dư](notebook_runs/report_fix_20261127/figures/04_residual_diagnostics.png)
 
-### Future 24H Forecast
+### So sánh mô hình
 
-![future_24h_forecast](notebook_runs/20261125_050808/figures/05_future_24h_forecast.png)
+![So sánh mô hình](notebook_runs/report_fix_20261127/figures/05_test_model_comparison.png)
 
-### Temporal Profiles
+### Kiểm định chéo cuốn chiếu
 
-![temporal_profiles](notebook_runs/20261125_050808/figures/06_temporal_profiles.png)
+![Kiểm định chéo cuốn chiếu](notebook_runs/report_fix_20261127/figures/06_walk_forward_cv.png)
 
-### Daily Trend
+### Mức quan trọng của đặc trưng
 
-![daily_trend](notebook_runs/20261125_050808/figures/07_daily_trend.png)
+![Mức quan trọng của đặc trưng](notebook_runs/report_fix_20261127/figures/07_feature_importance.png)
 
-### Walk Forward Cv
+### Dự báo tương lai đệ quy
 
-![walk_forward_cv](notebook_runs/20261125_050808/figures/08_walk_forward_cv.png)
+![Dự báo tương lai đệ quy](notebook_runs/report_fix_20261127/figures/08_recursive_future_forecast.png)
 
-### Test Error Profiles
+### Giá trị thực tế và dự báo
 
-![test_error_profiles](notebook_runs/20261125_050808/figures/09_test_error_profiles.png)
+![Giá trị thực tế và dự báo](notebook_runs/report_fix_20261127/figures/09_actual_vs_prediction_residuals.png)
 
-### Feature Effects
+### MAE theo thứ trong tuần và giờ
 
-![feature_effects](notebook_runs/20261125_050808/figures/10_feature_effects.png)
+![MAE theo thứ trong tuần và giờ](notebook_runs/report_fix_20261127/figures/10_test_mae_weekday_hour.png)
 
-## 9. Evaluation metrics
+## 9. Các chỉ số đánh giá
 
-- **MAE:** average absolute error, in target units; lower is better.
-- **MSE:** average squared error; penalizes large errors more strongly.
-- **RMSE:** square root of MSE, in target units; lower is better.
-- **MAPE:** average absolute percentage error over non-zero actual values; unsuitable when actual values are zero or close to zero.
-- **sMAPE:** symmetric percentage error using |actual| + |prediction| in the denominator.
-- **R²:** proportion of target variance explained relative to a mean baseline; can be negative on out-of-sample data.
+- **MAE:** sai số tuyệt đối trung bình theo đơn vị của biến mục tiêu; càng thấp càng tốt.
+- **MSE:** sai số bình phương trung bình; phạt sai số lớn mạnh hơn.
+- **RMSE:** căn bậc hai của MSE, cùng đơn vị với biến mục tiêu; càng thấp càng tốt.
+- **MAPE:** sai số phần trăm tuyệt đối trung bình trên các giá trị thực khác 0; không phù hợp khi giá trị thực bằng hoặc gần 0.
+- **sMAPE:** sai số phần trăm đối xứng, dùng |giá trị thực| + |giá trị dự báo| làm mẫu số.
+- **R²:** tỷ lệ biến thiên của biến mục tiêu được giải thích so với mốc dự báo trung bình; có thể âm trên dữ liệu ngoài mẫu.
 
-## 10. Reproducibility and limitations
+## 10. Khả năng tái lập và giới hạn
 
-- Re-run from the repository root by opening `notebooks/lab03/Lab03_TimeSeries.ipynb` and choosing Run All.
-- Place the original `AEP_hourly.csv` in `data/raw/` with columns `Datetime` and `AEP_MW` for the real-data experiment.
-- If the AEP file is absent, the pipeline can run a clearly labelled synthetic smoke test; its scores are not AEP findings.
-- Linear Regression, CART, Random Forest and the XGBoost-style booster are implemented in this project with NumPy; no scikit-learn or XGBoost estimators/metrics are called by the new pipeline.
-- The booster is an educational second-order gradient-boosted-tree implementation with histogram split candidates, not the official XGBoost library.
-- The standalone CART uses a quantile candidate-threshold approximation to limit runtime; it is not exhaustive threshold search.
-- The Test evaluation is rolling one-step ahead. Multi-step free-running prediction is represented separately by the recursive future inference output.
+- Để chạy lại, mở `notebooks/lab03/Lab03_Visual_Exploration.ipynb` từ thư mục gốc của kho mã và chạy lần lượt tất cả ô lệnh.
+- Đặt tệp gốc `AEP_hourly.csv` trong `data/raw/`, gồm các cột `Datetime` và `AEP_MW`, để chạy thí nghiệm trên dữ liệu thật.
+- Nếu thiếu tệp AEP, chỉ chạy kiểm tra nhanh với dữ liệu tổng hợp khi được ghi nhãn rõ ràng; điểm số đó không phải kết quả trên AEP.
+- Linear Regression, CART, Random Forest và bộ tăng cường kiểu XGBoost được cài đặt bằng NumPy; pipeline mới không gọi estimator/chỉ số của scikit-learn hoặc XGBoost.
+- Bộ tăng cường là bản cài đặt phục vụ học tập của cây tăng cường gradient bậc hai với các ngưỡng chia dạng histogram, không phải thư viện XGBoost chính thức.
+- CART độc lập dùng xấp xỉ ngưỡng ứng viên theo phân vị để giới hạn thời gian; không tìm kiếm toàn bộ ngưỡng có thể.
+- Đánh giá trên tập kiểm tra là dự báo cuốn chiếu trước một bước. Dự báo tự hồi quy nhiều bước được trình bày riêng trong kết quả suy luận tương lai.

@@ -1,0 +1,135 @@
+[2026-11-27 04:42:34] [PIPELINE] [START] Lab 03 pipeline starting | run_id=report_fix_20261127 | fast=False | run_cv=True
+[2026-11-27 04:42:34] [DATA_INGESTION] [START] Loading and regularizing AEP_hourly.csv
+[2026-11-27 04:42:35] [DATA_INGESTION] [SUCCESS] Completed in 1.40s | 121,296 hourly rows | 2004-10-01 01:00:00 -> 2018-08-03 00:00:00
+[2026-11-27 04:42:35] [FEATURE_ENGINEERING] [START] Building causal lag/rolling/calendar features
+[2026-11-27 04:42:35] [FEATURE_ENGINEERING] [SUCCESS] Completed in 0.32s | X=(121128, 22), y=(121128,), leakage check passed
+[2026-11-27 04:42:35] [DATA_SPLITTING] [START] Chronological 70/15/15 split
+[2026-11-27 04:42:35] [DATA_SPLITTING] [SUCCESS] Completed in 0.01s | train=84789, val=18169, test=18170
+[2026-11-27 04:42:35] [CROSS_VALIDATION] [START] 5-fold expanding-window CV on Train
+[2026-11-27 04:43:51] [CROSS_VALIDATION] [SUCCESS] Completed in 75.76s | 5 folds x 5 models = 25 rows
+[2026-11-27 04:43:51] [TRAINING] [START] Fitting candidates on Train, scoring on Validation
+[2026-11-27 04:43:51] [TRAINING] [INFO] Naive Last-Value: validation RMSE=534.446 (fit=0.00s)
+[2026-11-27 04:43:51] [TRAINING] [INFO] Linear Regression: validation RMSE=246.137 (fit=0.07s)
+[2026-11-27 04:43:57] [TRAINING] [INFO] CART: validation RMSE=322.511 (fit=5.39s)
+[2026-11-27 04:44:12] [TRAINING] [INFO] Random Forest: validation RMSE=493.904 (fit=15.21s)
+[2026-11-27 04:44:14] [TRAINING] [INFO] XGBoost-style: validation RMSE=777.448 (fit=2.05s)
+[2026-11-27 04:44:14] [TRAINING] [SUCCESS] Completed in 23.03s | champion=Linear Regression (validation RMSE=246.14)
+[2026-11-27 04:44:14] [EVALUATION] [START] Refitting on Train+Validation, scoring held-out Test
+[2026-11-27 04:44:52] [EVALUATION] [SUCCESS] Completed in 38.17s | champion Test RMSE=228.49
+[2026-11-27 04:44:52] [INFERENCE] [START] Recursive multi-step forecast beyond the last observation
+[2026-11-27 04:44:53] [INFERENCE] [SUCCESS] Completed in 0.47s | 24h forecast 2018-08-03 01:00:00 -> 2018-08-04 00:00:00
+[2026-11-27 04:44:53] [VISUALIZATION] [START] Saving all evaluation figures
+[2026-11-27 04:45:01] [VISUALIZATION] [SUCCESS] Completed in 8.62s | 10 figures written to C:\Users\Bin\Documents\Lab_TimeSeries\reports\lab03\notebook_runs\report_fix_20261127\figures
+[2026-11-27 04:45:01] [MODEL_SUMMARY] [START] Writing model_summary.{csv,json,md} and side metric files
+[2026-11-27 04:45:01] [MODEL_SUMMARY] [SUCCESS] Completed in 0.10s | 5 models written to C:\Users\Bin\Documents\Lab_TimeSeries\reports\model_summary\lab03
+[2026-11-27 04:45:01] [REPORTING] [START] Writing Lab03_Report.{md,html,pdf}
+[2026-11-27 04:45:07] [REPORTING] [SUCCESS] Completed in 5.14s | report -> C:\Users\Bin\Documents\Lab_TimeSeries\reports\lab03\Lab03_Report.pdf
+[2026-11-27 04:45:07] [PIPELINE] [SUCCESS] Lab 03 pipeline COMPLETED in 153.1s | champion=Linear Regression
+[2026-11-27 04:49:34] [PIPELINE] [START] Lab 03 pipeline starting | run_id=report_fix_20261127 | fast=False | run_cv=True
+[2026-11-27 04:49:34] [DATA_INGESTION] [START] Loading and regularizing AEP_hourly.csv
+[2026-11-27 04:49:35] [DATA_INGESTION] [SUCCESS] Completed in 1.41s | 121,296 hourly rows | 2004-10-01 01:00:00 -> 2018-08-03 00:00:00
+[2026-11-27 04:49:35] [FEATURE_ENGINEERING] [START] Building causal lag/rolling/calendar features
+[2026-11-27 04:49:36] [FEATURE_ENGINEERING] [SUCCESS] Completed in 0.35s | X=(121128, 22), y=(121128,), leakage check passed
+[2026-11-27 04:49:36] [DATA_SPLITTING] [START] Chronological 70/15/15 split
+[2026-11-27 04:49:36] [DATA_SPLITTING] [SUCCESS] Completed in 0.01s | train=84789, val=18169, test=18170
+[2026-11-27 04:49:36] [CROSS_VALIDATION] [START] 5-fold expanding-window CV on Train
+[2026-11-27 04:50:44] [CROSS_VALIDATION] [SUCCESS] Completed in 68.89s | 5 folds x 5 models = 25 rows
+[2026-11-27 04:50:44] [TRAINING] [START] Fitting candidates on Train, scoring on Validation
+[2026-11-27 04:50:44] [TRAINING] [INFO] Naive Last-Value: validation RMSE=534.446 (fit=0.00s)
+[2026-11-27 04:50:44] [TRAINING] [INFO] Linear Regression: validation RMSE=246.137 (fit=0.04s)
+[2026-11-27 04:50:49] [TRAINING] [INFO] CART: validation RMSE=322.511 (fit=4.18s)
+[2026-11-27 04:50:57] [TRAINING] [INFO] Random Forest: validation RMSE=493.904 (fit=8.48s)
+[2026-11-27 04:50:58] [TRAINING] [INFO] XGBoost-style: validation RMSE=777.448 (fit=0.69s)
+[2026-11-27 04:50:58] [TRAINING] [SUCCESS] Completed in 13.52s | champion=Linear Regression (validation RMSE=246.14)
+[2026-11-27 04:50:58] [EVALUATION] [START] Refitting on Train+Validation, scoring held-out Test
+[2026-11-27 04:51:11] [EVALUATION] [SUCCESS] Completed in 13.19s | champion Test RMSE=228.49
+[2026-11-27 04:51:11] [INFERENCE] [START] Recursive multi-step forecast beyond the last observation
+[2026-11-27 04:51:12] [INFERENCE] [SUCCESS] Completed in 0.42s | 24h forecast 2018-08-03 01:00:00 -> 2018-08-04 00:00:00
+[2026-11-27 04:51:12] [VISUALIZATION] [START] Saving all evaluation figures
+[2026-11-27 04:51:18] [VISUALIZATION] [SUCCESS] Completed in 5.99s | 10 figures written to C:\Users\Bin\Documents\Lab_TimeSeries\reports\lab03\notebook_runs\report_fix_20261127\figures
+[2026-11-27 04:51:18] [MODEL_SUMMARY] [START] Writing model_summary.{csv,json,md} and side metric files
+[2026-11-27 04:51:18] [MODEL_SUMMARY] [SUCCESS] Completed in 0.08s | 5 models written to C:\Users\Bin\Documents\Lab_TimeSeries\reports\model_summary\lab03
+[2026-11-27 04:51:18] [REPORTING] [START] Writing Lab03_Report.{md,html,pdf}
+[2026-11-27 04:51:21] [REPORTING] [SUCCESS] Completed in 3.64s | report -> C:\Users\Bin\Documents\Lab_TimeSeries\reports\lab03\Lab03_Report.pdf
+[2026-11-27 04:51:21] [PIPELINE] [SUCCESS] Lab 03 pipeline COMPLETED in 107.5s | champion=Linear Regression
+[2026-11-27 04:53:11] [PIPELINE] [START] Lab 03 pipeline starting | run_id=report_fix_20261127 | fast=False | run_cv=True
+[2026-11-27 04:53:11] [DATA_INGESTION] [START] Loading and regularizing AEP_hourly.csv
+[2026-11-27 04:53:12] [DATA_INGESTION] [SUCCESS] Completed in 1.10s | 121,296 hourly rows | 2004-10-01 01:00:00 -> 2018-08-03 00:00:00
+[2026-11-27 04:53:12] [FEATURE_ENGINEERING] [START] Building causal lag/rolling/calendar features
+[2026-11-27 04:53:12] [FEATURE_ENGINEERING] [SUCCESS] Completed in 0.36s | X=(121128, 22), y=(121128,), leakage check passed
+[2026-11-27 04:53:12] [DATA_SPLITTING] [START] Chronological 70/15/15 split
+[2026-11-27 04:53:12] [DATA_SPLITTING] [SUCCESS] Completed in 0.01s | train=84789, val=18169, test=18170
+[2026-11-27 04:53:12] [CROSS_VALIDATION] [START] 5-fold expanding-window CV on Train
+[2026-11-27 04:54:20] [CROSS_VALIDATION] [SUCCESS] Completed in 67.37s | 5 folds x 5 models = 25 rows
+[2026-11-27 04:54:20] [TRAINING] [START] Fitting candidates on Train, scoring on Validation
+[2026-11-27 04:54:20] [TRAINING] [INFO] Naive Last-Value: validation RMSE=534.446 (fit=0.00s)
+[2026-11-27 04:54:20] [TRAINING] [INFO] Linear Regression: validation RMSE=246.137 (fit=0.03s)
+[2026-11-27 04:54:24] [TRAINING] [INFO] CART: validation RMSE=322.511 (fit=4.64s)
+[2026-11-27 04:54:33] [TRAINING] [INFO] Random Forest: validation RMSE=493.904 (fit=8.25s)
+[2026-11-27 04:54:33] [TRAINING] [INFO] XGBoost-style: validation RMSE=777.448 (fit=0.72s)
+[2026-11-27 04:54:33] [TRAINING] [SUCCESS] Completed in 13.77s | champion=Linear Regression (validation RMSE=246.14)
+[2026-11-27 04:54:33] [EVALUATION] [START] Refitting on Train+Validation, scoring held-out Test
+[2026-11-27 04:54:46] [EVALUATION] [SUCCESS] Completed in 13.10s | champion Test RMSE=228.49
+[2026-11-27 04:54:46] [INFERENCE] [START] Recursive multi-step forecast beyond the last observation
+[2026-11-27 04:54:47] [INFERENCE] [SUCCESS] Completed in 0.38s | 24h forecast 2018-08-03 01:00:00 -> 2018-08-04 00:00:00
+[2026-11-27 04:54:47] [VISUALIZATION] [START] Saving all evaluation figures
+[2026-11-27 04:54:53] [VISUALIZATION] [SUCCESS] Completed in 5.81s | 10 figures written to C:\Users\Bin\Documents\Lab_TimeSeries\reports\lab03\notebook_runs\report_fix_20261127\figures
+[2026-11-27 04:54:53] [MODEL_SUMMARY] [START] Writing model_summary.{csv,json,md} and side metric files
+[2026-11-27 04:54:53] [MODEL_SUMMARY] [SUCCESS] Completed in 0.07s | 5 models written to C:\Users\Bin\Documents\Lab_TimeSeries\reports\model_summary\lab03
+[2026-11-27 04:54:53] [REPORTING] [START] Writing Lab03_Report.{md,html,pdf}
+[2026-11-27 04:54:56] [REPORTING] [SUCCESS] Completed in 3.66s | report -> C:\Users\Bin\Documents\Lab_TimeSeries\reports\lab03\Lab03_Report.pdf
+[2026-11-27 04:54:56] [PIPELINE] [SUCCESS] Lab 03 pipeline COMPLETED in 105.6s | champion=Linear Regression
+[2026-11-27 04:56:06] [PIPELINE] [START] Lab 03 pipeline starting | run_id=report_fix_20261127 | fast=False | run_cv=True
+[2026-11-27 04:56:06] [DATA_INGESTION] [START] Loading and regularizing AEP_hourly.csv
+[2026-11-27 04:56:07] [DATA_INGESTION] [SUCCESS] Completed in 1.47s | 121,296 hourly rows | 2004-10-01 01:00:00 -> 2018-08-03 00:00:00
+[2026-11-27 04:56:07] [FEATURE_ENGINEERING] [START] Building causal lag/rolling/calendar features
+[2026-11-27 04:56:08] [FEATURE_ENGINEERING] [SUCCESS] Completed in 0.50s | X=(121128, 22), y=(121128,), leakage check passed
+[2026-11-27 04:56:08] [DATA_SPLITTING] [START] Chronological 70/15/15 split
+[2026-11-27 04:56:08] [DATA_SPLITTING] [SUCCESS] Completed in 0.01s | train=84789, val=18169, test=18170
+[2026-11-27 04:56:08] [CROSS_VALIDATION] [START] 5-fold expanding-window CV on Train
+[2026-11-27 04:57:17] [CROSS_VALIDATION] [SUCCESS] Completed in 69.25s | 5 folds x 5 models = 25 rows
+[2026-11-27 04:57:17] [TRAINING] [START] Fitting candidates on Train, scoring on Validation
+[2026-11-27 04:57:17] [TRAINING] [INFO] Naive Last-Value: validation RMSE=534.446 (fit=0.00s)
+[2026-11-27 04:57:17] [TRAINING] [INFO] Linear Regression: validation RMSE=246.137 (fit=0.04s)
+[2026-11-27 04:57:21] [TRAINING] [INFO] CART: validation RMSE=322.511 (fit=3.92s)
+[2026-11-27 04:57:31] [TRAINING] [INFO] Random Forest: validation RMSE=493.904 (fit=9.46s)
+[2026-11-27 04:57:32] [TRAINING] [INFO] XGBoost-style: validation RMSE=777.448 (fit=0.81s)
+[2026-11-27 04:57:32] [TRAINING] [SUCCESS] Completed in 14.36s | champion=Linear Regression (validation RMSE=246.14)
+[2026-11-27 04:57:32] [EVALUATION] [START] Refitting on Train+Validation, scoring held-out Test
+[2026-11-27 04:57:46] [EVALUATION] [SUCCESS] Completed in 14.16s | champion Test RMSE=228.49
+[2026-11-27 04:57:46] [INFERENCE] [START] Recursive multi-step forecast beyond the last observation
+[2026-11-27 04:57:46] [INFERENCE] [SUCCESS] Completed in 0.35s | 24h forecast 2018-08-03 01:00:00 -> 2018-08-04 00:00:00
+[2026-11-27 04:57:46] [VISUALIZATION] [START] Saving all evaluation figures
+[2026-11-27 04:57:53] [VISUALIZATION] [SUCCESS] Completed in 6.44s | 10 figures written to C:\Users\Bin\Documents\Lab_TimeSeries\reports\lab03\notebook_runs\report_fix_20261127\figures
+[2026-11-27 04:57:53] [MODEL_SUMMARY] [START] Writing model_summary.{csv,json,md} and side metric files
+[2026-11-27 04:57:53] [MODEL_SUMMARY] [SUCCESS] Completed in 0.07s | 5 models written to C:\Users\Bin\Documents\Lab_TimeSeries\reports\model_summary\lab03
+[2026-11-27 04:57:53] [REPORTING] [START] Writing Lab03_Report.{md,html,pdf}
+[2026-11-27 04:57:57] [REPORTING] [SUCCESS] Completed in 4.01s | report -> C:\Users\Bin\Documents\Lab_TimeSeries\reports\lab03\Lab03_Report.pdf
+[2026-11-27 04:57:57] [PIPELINE] [SUCCESS] Lab 03 pipeline COMPLETED in 110.6s | champion=Linear Regression
+[2026-11-27 04:59:23] [PIPELINE] [START] Lab 03 pipeline starting | run_id=report_fix_20261127 | fast=False | run_cv=True
+[2026-11-27 04:59:23] [DATA_INGESTION] [START] Loading and regularizing AEP_hourly.csv
+[2026-11-27 04:59:25] [DATA_INGESTION] [SUCCESS] Completed in 1.44s | 121,296 hourly rows | 2004-10-01 01:00:00 -> 2018-08-03 00:00:00
+[2026-11-27 04:59:25] [FEATURE_ENGINEERING] [START] Building causal lag/rolling/calendar features
+[2026-11-27 04:59:25] [FEATURE_ENGINEERING] [SUCCESS] Completed in 0.39s | X=(121128, 22), y=(121128,), leakage check passed
+[2026-11-27 04:59:25] [DATA_SPLITTING] [START] Chronological 70/15/15 split
+[2026-11-27 04:59:25] [DATA_SPLITTING] [SUCCESS] Completed in 0.01s | train=84789, val=18169, test=18170
+[2026-11-27 04:59:25] [CROSS_VALIDATION] [START] 5-fold expanding-window CV on Train
+[2026-11-27 05:00:32] [CROSS_VALIDATION] [SUCCESS] Completed in 66.35s | 5 folds x 5 models = 25 rows
+[2026-11-27 05:00:32] [TRAINING] [START] Fitting candidates on Train, scoring on Validation
+[2026-11-27 05:00:32] [TRAINING] [INFO] Naive Last-Value: validation RMSE=534.446 (fit=0.00s)
+[2026-11-27 05:00:32] [TRAINING] [INFO] Linear Regression: validation RMSE=246.137 (fit=0.04s)
+[2026-11-27 05:00:36] [TRAINING] [INFO] CART: validation RMSE=322.511 (fit=4.37s)
+[2026-11-27 05:00:46] [TRAINING] [INFO] Random Forest: validation RMSE=493.904 (fit=9.64s)
+[2026-11-27 05:00:47] [TRAINING] [INFO] XGBoost-style: validation RMSE=777.448 (fit=0.78s)
+[2026-11-27 05:00:47] [TRAINING] [SUCCESS] Completed in 14.98s | champion=Linear Regression (validation RMSE=246.14)
+[2026-11-27 05:00:47] [EVALUATION] [START] Refitting on Train+Validation, scoring held-out Test
+[2026-11-27 05:01:01] [EVALUATION] [SUCCESS] Completed in 13.97s | champion Test RMSE=228.49
+[2026-11-27 05:01:01] [INFERENCE] [START] Recursive multi-step forecast beyond the last observation
+[2026-11-27 05:01:01] [INFERENCE] [SUCCESS] Completed in 0.41s | 24h forecast 2018-08-03 01:00:00 -> 2018-08-04 00:00:00
+[2026-11-27 05:01:01] [VISUALIZATION] [START] Saving all evaluation figures
+[2026-11-27 05:01:08] [VISUALIZATION] [SUCCESS] Completed in 6.98s | 10 figures written to C:\Users\Bin\Documents\Lab_TimeSeries\reports\lab03\notebook_runs\report_fix_20261127\figures
+[2026-11-27 05:01:08] [MODEL_SUMMARY] [START] Writing model_summary.{csv,json,md} and side metric files
+[2026-11-27 05:01:08] [MODEL_SUMMARY] [SUCCESS] Completed in 0.11s | 5 models written to C:\Users\Bin\Documents\Lab_TimeSeries\reports\model_summary\lab03
+[2026-11-27 05:01:08] [REPORTING] [START] Writing Lab03_Report.{md,html,pdf}
+[2026-11-27 05:01:12] [REPORTING] [SUCCESS] Completed in 3.96s | report -> C:\Users\Bin\Documents\Lab_TimeSeries\reports\lab03\Lab03_Report.pdf
+[2026-11-27 05:01:12] [PIPELINE] [SUCCESS] Lab 03 pipeline COMPLETED in 108.6s | champion=Linear Regression

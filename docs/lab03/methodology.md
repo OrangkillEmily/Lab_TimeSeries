@@ -1,50 +1,50 @@
-# Lab 03 Methodology — Hourly Energy Consumption Forecasting
+# Phương pháp Lab 03 - Dự báo mức tiêu thụ điện theo giờ
 
-## 1. Problem formulation
+## 1. Xác định bài toán
 
-Given a univariate hourly load sequence `y_t`, estimate the next-hour value `y_t` from values available before t. The cleaned source target is `AEP_MW`; the time key is `Datetime`.
+Với chuỗi phụ tải theo giờ một biến `y_t`, ước lượng giá trị ở giờ kế tiếp dựa trên những thông tin có trước thời điểm `t`. Biến mục tiêu trong dữ liệu nguồn đã làm sạch là `AEP_MW`; cột thời gian là `Datetime`.
 
-## 2. Data preparation
+## 2. Chuẩn bị dữ liệu
 
-- Sort timestamps and remove duplicates.
-- Regularize to an hourly index.
-- Interpolate only internal gaps up to three consecutive hours.
-- Fail if a longer gap or edge missing value remains.
-- Keep the raw CSV unchanged and persist the cleaned series and audit separately.
+- Sắp xếp timestamp và loại các bản ghi trùng.
+- Chuẩn hóa chỉ mục thành tần suất một giờ.
+- Chỉ nội suy các khoảng trống bên trong chuỗi có độ dài tối đa ba giờ liên tiếp.
+- Dừng nếu còn khoảng trống dài hơn hoặc giá trị thiếu ở hai đầu chuỗi.
+- Giữ nguyên CSV gốc; lưu riêng chuỗi đã làm sạch và nhật ký kiểm toán.
 
-## 3. Supervised features
+## 3. Đặc trưng có giám sát
 
-For each target timestamp t, create lag features `y_(t-k)` for k in 1, 2, 3, 6, 12, 24, 48 and 168. Rolling mean/std use `y.shift(1)` before aggregation over 6, 12, 24 and 168 hours. Calendar variables hour/day-of-week/month are encoded with sine/cosine. Initial rows without enough history are dropped.
+Với mỗi timestamp mục tiêu `t`, tạo đặc trưng trễ `y_(t-k)` tại `k` bằng 1, 2, 3, 6, 12, 24, 48 và 168. Tính trung bình/độ lệch chuẩn trượt sau khi dịch chuỗi một bước (`y.shift(1)`), trên các cửa sổ 6, 12, 24 và 168 giờ. Mã hóa giờ/ngày trong tuần/tháng bằng sin/cos. Loại các dòng đầu chuỗi chưa đủ lịch sử.
 
-## 4. Temporal split and validation protocol
+## 4. Chia theo thời gian và quy trình xác thực
 
-The supervised rows are split chronologically into 70% Train, 15% Validation and 15% Test. No shuffle is allowed. Five expanding-window folds are generated only inside Train. Each fold's training prefix precedes its validation block. This prevents training on observations that occur later than the validation period.
+Chia các dòng có giám sát theo thứ tự thời gian: 70% Huấn luyện, 15% Xác thực và 15% Kiểm tra. Không xáo trộn. Tạo năm fold cửa sổ mở rộng chỉ bên trong tập Huấn luyện. Phần huấn luyện của mỗi fold luôn đứng trước khối dùng để xác thực, tránh khớp mô hình trên dữ liệu xảy ra sau giai đoạn xác thực.
 
-## 5. Candidate algorithms
+## 5. Các thuật toán ứng viên
 
-- Naive Last-Value: predicts `lag_1`.
-- Linear Regression: ordinary least squares with a small ridge stabilizer.
-- CART: greedily maximizes reduction in squared error using quantile-based candidate thresholds.
-- Random Forest: bootstrap aggregation of independent scratch CART trees with random feature subsets.
-- XGBoost-style: sequential histogram gradient-boosted trees using first/second derivatives for squared error and L1/L2 regularization. This is an educational implementation, not the official XGBoost engine.
+- Mốc đối chứng giá trị gần nhất: dự báo bằng `lag_1`.
+- Hồi quy tuyến tính: bình phương tối thiểu thông thường với hệ số Ridge nhỏ để ổn định.
+- CART: tham lam tối đa hóa mức giảm tổng bình phương sai số với ngưỡng ứng viên theo phân vị.
+- Rừng ngẫu nhiên: kết hợp các cây CART tự cài đặt độc lập, lấy mẫu bootstrap và chọn ngẫu nhiên đặc trưng.
+- Mô hình kiểu XGBoost: cây tăng cường gradient dạng histogram, dùng đạo hàm bậc nhất/bậc hai cho sai số bình phương và điều chuẩn L1/L2. Đây là bản cài đặt phục vụ học tập, không phải thư viện XGBoost chính thức.
 
-All four learned estimators are implemented directly with NumPy. Regression metrics are also implemented directly; scikit-learn/XGBoost estimators are not used.
+Bốn mô hình học tham số được cài đặt trực tiếp bằng NumPy. Các chỉ số hồi quy cũng được tự cài đặt; không dùng estimator scikit-learn/XGBoost.
 
-## 6. Model selection and final test
+## 6. Chọn mô hình và kiểm tra cuối
 
-Each candidate is fitted on Train and scored on the same Validation timestamps. The lowest Validation RMSE is champion. After champion is recorded, final candidates are refit on Train+Validation and evaluated on the untouched Test partition. Test scores do not alter selection.
+Khớp từng ứng viên trên tập Huấn luyện và chấm trên cùng các timestamp của tập Xác thực. Chọn mô hình có RMSE xác thực thấp nhất. Sau khi khóa lựa chọn, khớp lại các mô hình cuối trên Huấn luyện + Xác thực rồi đánh giá trên tập Kiểm tra chưa sử dụng. Điểm kiểm tra không làm thay đổi lựa chọn mô hình.
 
-## 7. Two forecast protocols
+## 7. Hai quy trình dự báo
 
-- Test rolling one-step: prior actual Test observations may form later lag features, simulating continuous hourly operation with an observation arriving each hour.
-- Future recursive fixed-origin: only history available at the final origin is used; each new prediction is appended to history and becomes input for the next horizon step. Default horizon is 24 hours.
+- **Dự báo cuốn chiếu trước một bước trên tập Kiểm tra:** giá trị thực trước đó trong tập Kiểm tra có thể được dùng để tạo độ trễ ở bước sau; mô phỏng vận hành liên tục, mỗi giờ có thêm quan sát mới.
+- **Dự báo tương lai đệ quy từ một mốc cố định:** chỉ dùng lịch sử có tại mốc dự báo; nối mỗi giá trị dự báo vào lịch sử để làm đầu vào cho bước tiếp theo. Mặc định dự báo 24 giờ.
 
-The two protocols must not be presented as equivalent.
+Không trình bày hai quy trình này như cùng một bài toán.
 
-## 8. Evaluation metrics
+## 8. Chỉ số đánh giá
 
-MAE, MSE and RMSE are in the target unit (MW); MAPE and sMAPE are percentage metrics; R² compares residual sum of squares with target variation. MAPE omits zero actual values and may be unstable near zero. R² may be negative out of sample.
+MAE, MSE và RMSE cùng đơn vị với mục tiêu (MW); MAPE và sMAPE là phần trăm; R² so sánh tổng bình phương phần dư với độ biến thiên của mục tiêu. MAPE bỏ qua giá trị thực bằng 0 và có thể bất ổn khi giá trị gần 0. R² có thể âm trên dữ liệu ngoài mẫu.
 
-## 9. Reproducibility and provenance
+## 9. Khả năng tái lập và nguồn gốc
 
-Random seeds are set in model configuration. Each run writes a timestamped log, run JSON, metric tables, model artifacts, figures and MD/HTML/PDF report. Original notebook experiments are retained separately; their estimator and split protocol differs from this scratch implementation.
+Seed ngẫu nhiên được đặt trong cấu hình mô hình. Mỗi lần chạy ghi nhật ký có dấu thời gian, JSON kết quả, bảng chỉ số, tệp mô hình, biểu đồ và báo cáo Markdown/HTML/PDF. Kết quả notebook cũ được lưu riêng vì cách cài đặt mô hình và giao thức chia dữ liệu khác với pipeline hiện tại.

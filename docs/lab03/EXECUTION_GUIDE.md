@@ -1,36 +1,51 @@
-# Lab 03 Execution Guide
+# Hướng dẫn chạy Lab 03
 
-## Requirements
+## Yêu cầu
 
-- Python 3.10+
-- Dependencies from the repository root `requirements.txt`
-- The supplied `data/raw/AEP_hourly.csv` file
+- Python 3.10 trở lên.
+- Các thư viện trong `requirements.txt` ở thư mục gốc.
+- Tệp dữ liệu `data/raw/AEP_hourly.csv`.
 
-## Run the notebook
+## Chạy pipeline bằng một lệnh
 
-Open a terminal at the repository root and run:
+Chạy từ thư mục gốc của kho mã:
 
 ```bash
 python -m pip install -r requirements.txt
+python scripts/run_lab.py --lab 03
+python scripts/run_lab.py --lab 03 --fast
+python scripts/run_lab.py --lab 03 --no-cv
+python script/lab03/run_lab03.py [--fast] [--no-cv] [--run-id my_run]
+```
+
+Lệnh đầy đủ đọc và làm sạch dữ liệu, tạo đặc trưng độ trễ/cửa sổ trượt/lịch, chia dữ liệu theo thời gian 70/15/15, chạy kiểm định chéo cửa sổ mở rộng 5 fold trong tập Huấn luyện, chọn mô hình theo RMSE xác thực, đánh giá một lần trên tập Kiểm tra và dự báo đệ quy 24 giờ. Pipeline lưu các mô hình, biểu đồ, tóm tắt mô hình và báo cáo Markdown/HTML/PDF. Mỗi lần chạy cũng ghi nhật ký và trạng thái tiến trình.
+
+Tùy chọn `--fast` dùng cấu hình giảm nhẹ để kiểm tra nhanh. Tùy chọn `--no-cv` bỏ qua kiểm định chéo; không dùng chế độ này nếu yêu cầu kết quả đủ năm fold.
+
+## Chạy notebook trực quan hóa
+
+Từ thư mục gốc của kho mã:
+
+```bash
 python -m jupyter lab
 ```
 
-Open `notebooks/lab03/Lab03_TimeSeries.ipynb` and choose **Run All**. The notebook locates the repository root from its working directory and stops with a clear error if the AEP dataset is missing. It does not silently substitute synthetic data.
+Mở `notebooks/lab03/Lab03_Visual_Exploration.ipynb`, chọn kernel Python phù hợp rồi chạy **Run All**. Notebook tự tìm thư mục gốc từ thư mục làm việc hiện tại và báo lỗi rõ ràng nếu thiếu tệp AEP; notebook không tự thay dữ liệu thật bằng dữ liệu tổng hợp.
 
-The earlier notebook referred to old `src.lab03_utils` modules that are not part of the current source tree. Use the new notebook to run Lab 03.
+Notebook tạo 19 biểu đồ gồm khám phá dữ liệu, chia tập, tương quan đặc trưng, kiểm định chéo, so sánh mô hình, chẩn đoán phần dư, ảnh hưởng đặc trưng và dự báo 24 giờ. Biểu đồ được lưu trong:
 
-## Workflow and outputs
+```text
+reports/lab03/notebook_runs/notebook_visual_exploration/
+```
 
-The notebook loads and regularizes the hourly series, builds causal lag/rolling/calendar features, makes a chronological 70/15/15 split, runs five expanding-window folds on Train, selects a champion using Validation RMSE, evaluates candidates on the held-out Test set and produces a recursive 24-hour forecast.
+## Kết quả pipeline
 
-Every execution creates a unique output directory:
+Mỗi lần chạy pipeline tạo thư mục riêng:
 
 ```text
 reports/lab03/notebook_runs/<run_id>/
 ```
 
-It contains cleaned data, CV/validation/test metrics, Test predictions, the 24-hour forecast, a JSON run summary, figures and the fitted champion model. Test results are reported only after model selection and do not change the selected champion.
+Thư mục gồm dữ liệu đã làm sạch, chỉ số CV/Xác thực/Kiểm tra, dự báo, tóm tắt lần chạy, biểu đồ và mô hình đã khớp. Báo cáo mới nhất được ghi tại `reports/lab03/` dưới dạng `Lab03_Report.md`, `Lab03_Report.html` và `Lab03_Report.pdf`; biểu đồ trong báo cáo dẫn đến đúng thư mục lần chạy. Tóm tắt mô hình được ghi tại `reports/model_summary/lab03/`.
 
-The latest report bundle is also written directly to `reports/lab03/` as `Lab03_Report.md`, `Lab03_Report.html` and `Lab03_Report.pdf`. Latest model-comparison files are written to `reports/model_summary/lab03/`: `model_summary.csv`, `model_summary.json`, `model_summary.md`, `cv_fold_metrics.csv`, `validation_metrics.json` and `test_metrics.json`.
-
-The notebook is the supported Lab 03 entry point. The legacy CLI runner currently depends on a root `pipeline.py` that is not present.
+Kết quả trên tập Kiểm tra chỉ được tính sau khi khóa lựa chọn mô hình. Đánh giá trên tập Kiểm tra là dự báo cuốn chiếu trước một bước; dự báo 24 giờ từ mốc cố định là quy trình đệ quy riêng.

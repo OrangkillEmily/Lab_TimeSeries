@@ -1,0 +1,168 @@
+{"timestamp": "2026-11-27 04:28:55", "run_id": "unittest_fast_run", "stage": "PIPELINE", "status": "START", "message": "Lab 03 pipeline starting | run_id=unittest_fast_run | fast=True | run_cv=True"}
+{"timestamp": "2026-11-27 04:28:55", "run_id": "unittest_fast_run", "stage": "DATA_INGESTION", "status": "START", "message": "Loading and regularizing AEP_hourly.csv"}
+{"timestamp": "2026-11-27 04:28:56", "run_id": "unittest_fast_run", "stage": "DATA_INGESTION", "status": "SUCCESS", "message": "Completed in 1.51s | 121,296 hourly rows | 2004-10-01 01:00:00 -> 2018-08-03 00:00:00"}
+{"timestamp": "2026-11-27 04:28:56", "run_id": "unittest_fast_run", "stage": "FEATURE_ENGINEERING", "status": "START", "message": "Building causal lag/rolling/calendar features"}
+{"timestamp": "2026-11-27 04:28:56", "run_id": "unittest_fast_run", "stage": "FEATURE_ENGINEERING", "status": "ERROR", "message": "KeyError: 'features'", "extra": {"traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\src\\lab03\\logging_utils.py\", line 71, in stage\n    yield ctx\n  File \"C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\src\\lab03\\pipeline.py\", line 120, in run_pipeline\n    f_cfg = cfg[\"features\"]\n            ~~~^^^^^^^^^^^^\nKeyError: 'features'\n"}}
+{"timestamp": "2026-11-27 04:28:56", "run_id": "unittest_fast_run", "stage": "PIPELINE", "status": "ERROR", "message": "Lab 03 pipeline FAILED: KeyError: 'features'"}
+{"timestamp": "2026-11-27 04:30:29", "run_id": "unittest_fast_run", "stage": "PIPELINE", "status": "START", "message": "Lab 03 pipeline starting | run_id=unittest_fast_run | fast=True | run_cv=True"}
+{"timestamp": "2026-11-27 04:30:29", "run_id": "unittest_fast_run", "stage": "DATA_INGESTION", "status": "START", "message": "Loading and regularizing AEP_hourly.csv"}
+{"timestamp": "2026-11-27 04:30:29", "run_id": "unittest_fast_run", "stage": "DATA_INGESTION", "status": "SUCCESS", "message": "Completed in 0.65s | 3,500 hourly rows | 2018-03-10 05:00:00 -> 2018-08-03 00:00:00"}
+{"timestamp": "2026-11-27 04:30:29", "run_id": "unittest_fast_run", "stage": "FEATURE_ENGINEERING", "status": "START", "message": "Building causal lag/rolling/calendar features"}
+{"timestamp": "2026-11-27 04:30:30", "run_id": "unittest_fast_run", "stage": "FEATURE_ENGINEERING", "status": "SUCCESS", "message": "Completed in 0.04s | X=(3332, 22), y=(3332,), leakage check passed"}
+{"timestamp": "2026-11-27 04:30:30", "run_id": "unittest_fast_run", "stage": "DATA_SPLITTING", "status": "START", "message": "Chronological 70/15/15 split"}
+{"timestamp": "2026-11-27 04:30:30", "run_id": "unittest_fast_run", "stage": "DATA_SPLITTING", "status": "SUCCESS", "message": "Completed in 0.01s | train=2332, val=499, test=501"}
+{"timestamp": "2026-11-27 04:30:30", "run_id": "unittest_fast_run", "stage": "CROSS_VALIDATION", "status": "START", "message": "5-fold expanding-window CV on Train"}
+{"timestamp": "2026-11-27 04:30:32", "run_id": "unittest_fast_run", "stage": "CROSS_VALIDATION", "status": "SUCCESS", "message": "Completed in 2.28s | 5 folds x 5 models = 25 rows"}
+{"timestamp": "2026-11-27 04:30:32", "run_id": "unittest_fast_run", "stage": "TRAINING", "status": "START", "message": "Fitting candidates on Train, scoring on Validation"}
+{"timestamp": "2026-11-27 04:30:32", "run_id": "unittest_fast_run", "stage": "TRAINING", "status": "INFO", "message": "Naive Last-Value: validation RMSE=695.753 (fit=0.00s)"}
+{"timestamp": "2026-11-27 04:30:32", "run_id": "unittest_fast_run", "stage": "TRAINING", "status": "INFO", "message": "Linear Regression: validation RMSE=200.159 (fit=0.00s)"}
+{"timestamp": "2026-11-27 04:30:32", "run_id": "unittest_fast_run", "stage": "TRAINING", "status": "INFO", "message": "CART: validation RMSE=705.981 (fit=0.32s)"}
+{"timestamp": "2026-11-27 04:30:32", "run_id": "unittest_fast_run", "stage": "TRAINING", "status": "INFO", "message": "Random Forest: validation RMSE=1082.436 (fit=0.09s)"}
+{"timestamp": "2026-11-27 04:30:32", "run_id": "unittest_fast_run", "stage": "TRAINING", "status": "INFO", "message": "XGBoost-style: validation RMSE=2961.252 (fit=0.04s)"}
+{"timestamp": "2026-11-27 04:30:32", "run_id": "unittest_fast_run", "stage": "TRAINING", "status": "SUCCESS", "message": "Completed in 0.47s | champion=Linear Regression (validation RMSE=200.16)"}
+{"timestamp": "2026-11-27 04:30:32", "run_id": "unittest_fast_run", "stage": "EVALUATION", "status": "START", "message": "Refitting on Train+Validation, scoring held-out Test"}
+{"timestamp": "2026-11-27 04:30:33", "run_id": "unittest_fast_run", "stage": "EVALUATION", "status": "SUCCESS", "message": "Completed in 0.51s | champion Test RMSE=180.19"}
+{"timestamp": "2026-11-27 04:30:33", "run_id": "unittest_fast_run", "stage": "INFERENCE", "status": "START", "message": "Recursive multi-step forecast beyond the last observation"}
+{"timestamp": "2026-11-27 04:30:33", "run_id": "unittest_fast_run", "stage": "INFERENCE", "status": "SUCCESS", "message": "Completed in 0.15s | 24h forecast 2018-08-03 01:00:00 -> 2018-08-04 00:00:00"}
+{"timestamp": "2026-11-27 04:30:33", "run_id": "unittest_fast_run", "stage": "VISUALIZATION", "status": "START", "message": "Saving all evaluation figures"}
+{"timestamp": "2026-11-27 04:30:39", "run_id": "unittest_fast_run", "stage": "VISUALIZATION", "status": "SUCCESS", "message": "Completed in 5.94s | 10 figures written to C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\lab03\\notebook_runs\\unittest_fast_run\\figures"}
+{"timestamp": "2026-11-27 04:30:39", "run_id": "unittest_fast_run", "stage": "MODEL_SUMMARY", "status": "START", "message": "Writing model_summary.{csv,json,md} and side metric files"}
+{"timestamp": "2026-11-27 04:30:39", "run_id": "unittest_fast_run", "stage": "MODEL_SUMMARY", "status": "SUCCESS", "message": "Completed in 0.22s | 5 models written to C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\model_summary\\lab03"}
+{"timestamp": "2026-11-27 04:30:39", "run_id": "unittest_fast_run", "stage": "REPORTING", "status": "START", "message": "Writing Lab03_Report.{md,html,pdf}"}
+{"timestamp": "2026-11-27 04:30:45", "run_id": "unittest_fast_run", "stage": "REPORTING", "status": "SUCCESS", "message": "Completed in 5.80s | report -> C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\lab03\\Lab03_Report.pdf"}
+{"timestamp": "2026-11-27 04:30:45", "run_id": "unittest_fast_run", "stage": "PIPELINE", "status": "SUCCESS", "message": "Lab 03 pipeline COMPLETED in 16.1s | champion=Linear Regression"}
+{"timestamp": "2026-11-27 04:42:34", "run_id": "report_fix_20261127", "stage": "PIPELINE", "status": "START", "message": "Lab 03 pipeline starting | run_id=report_fix_20261127 | fast=False | run_cv=True"}
+{"timestamp": "2026-11-27 04:42:34", "run_id": "report_fix_20261127", "stage": "DATA_INGESTION", "status": "START", "message": "Loading and regularizing AEP_hourly.csv"}
+{"timestamp": "2026-11-27 04:42:35", "run_id": "report_fix_20261127", "stage": "DATA_INGESTION", "status": "SUCCESS", "message": "Completed in 1.40s | 121,296 hourly rows | 2004-10-01 01:00:00 -> 2018-08-03 00:00:00"}
+{"timestamp": "2026-11-27 04:42:35", "run_id": "report_fix_20261127", "stage": "FEATURE_ENGINEERING", "status": "START", "message": "Building causal lag/rolling/calendar features"}
+{"timestamp": "2026-11-27 04:42:35", "run_id": "report_fix_20261127", "stage": "FEATURE_ENGINEERING", "status": "SUCCESS", "message": "Completed in 0.32s | X=(121128, 22), y=(121128,), leakage check passed"}
+{"timestamp": "2026-11-27 04:42:35", "run_id": "report_fix_20261127", "stage": "DATA_SPLITTING", "status": "START", "message": "Chronological 70/15/15 split"}
+{"timestamp": "2026-11-27 04:42:35", "run_id": "report_fix_20261127", "stage": "DATA_SPLITTING", "status": "SUCCESS", "message": "Completed in 0.01s | train=84789, val=18169, test=18170"}
+{"timestamp": "2026-11-27 04:42:35", "run_id": "report_fix_20261127", "stage": "CROSS_VALIDATION", "status": "START", "message": "5-fold expanding-window CV on Train"}
+{"timestamp": "2026-11-27 04:43:51", "run_id": "report_fix_20261127", "stage": "CROSS_VALIDATION", "status": "SUCCESS", "message": "Completed in 75.76s | 5 folds x 5 models = 25 rows"}
+{"timestamp": "2026-11-27 04:43:51", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "START", "message": "Fitting candidates on Train, scoring on Validation"}
+{"timestamp": "2026-11-27 04:43:51", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "Naive Last-Value: validation RMSE=534.446 (fit=0.00s)"}
+{"timestamp": "2026-11-27 04:43:51", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "Linear Regression: validation RMSE=246.137 (fit=0.07s)"}
+{"timestamp": "2026-11-27 04:43:57", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "CART: validation RMSE=322.511 (fit=5.39s)"}
+{"timestamp": "2026-11-27 04:44:12", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "Random Forest: validation RMSE=493.904 (fit=15.21s)"}
+{"timestamp": "2026-11-27 04:44:14", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "XGBoost-style: validation RMSE=777.448 (fit=2.05s)"}
+{"timestamp": "2026-11-27 04:44:14", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "SUCCESS", "message": "Completed in 23.03s | champion=Linear Regression (validation RMSE=246.14)"}
+{"timestamp": "2026-11-27 04:44:14", "run_id": "report_fix_20261127", "stage": "EVALUATION", "status": "START", "message": "Refitting on Train+Validation, scoring held-out Test"}
+{"timestamp": "2026-11-27 04:44:52", "run_id": "report_fix_20261127", "stage": "EVALUATION", "status": "SUCCESS", "message": "Completed in 38.17s | champion Test RMSE=228.49"}
+{"timestamp": "2026-11-27 04:44:52", "run_id": "report_fix_20261127", "stage": "INFERENCE", "status": "START", "message": "Recursive multi-step forecast beyond the last observation"}
+{"timestamp": "2026-11-27 04:44:53", "run_id": "report_fix_20261127", "stage": "INFERENCE", "status": "SUCCESS", "message": "Completed in 0.47s | 24h forecast 2018-08-03 01:00:00 -> 2018-08-04 00:00:00"}
+{"timestamp": "2026-11-27 04:44:53", "run_id": "report_fix_20261127", "stage": "VISUALIZATION", "status": "START", "message": "Saving all evaluation figures"}
+{"timestamp": "2026-11-27 04:45:01", "run_id": "report_fix_20261127", "stage": "VISUALIZATION", "status": "SUCCESS", "message": "Completed in 8.62s | 10 figures written to C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\lab03\\notebook_runs\\report_fix_20261127\\figures"}
+{"timestamp": "2026-11-27 04:45:01", "run_id": "report_fix_20261127", "stage": "MODEL_SUMMARY", "status": "START", "message": "Writing model_summary.{csv,json,md} and side metric files"}
+{"timestamp": "2026-11-27 04:45:01", "run_id": "report_fix_20261127", "stage": "MODEL_SUMMARY", "status": "SUCCESS", "message": "Completed in 0.10s | 5 models written to C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\model_summary\\lab03"}
+{"timestamp": "2026-11-27 04:45:01", "run_id": "report_fix_20261127", "stage": "REPORTING", "status": "START", "message": "Writing Lab03_Report.{md,html,pdf}"}
+{"timestamp": "2026-11-27 04:45:07", "run_id": "report_fix_20261127", "stage": "REPORTING", "status": "SUCCESS", "message": "Completed in 5.14s | report -> C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\lab03\\Lab03_Report.pdf"}
+{"timestamp": "2026-11-27 04:45:07", "run_id": "report_fix_20261127", "stage": "PIPELINE", "status": "SUCCESS", "message": "Lab 03 pipeline COMPLETED in 153.1s | champion=Linear Regression"}
+{"timestamp": "2026-11-27 04:49:34", "run_id": "report_fix_20261127", "stage": "PIPELINE", "status": "START", "message": "Lab 03 pipeline starting | run_id=report_fix_20261127 | fast=False | run_cv=True"}
+{"timestamp": "2026-11-27 04:49:34", "run_id": "report_fix_20261127", "stage": "DATA_INGESTION", "status": "START", "message": "Loading and regularizing AEP_hourly.csv"}
+{"timestamp": "2026-11-27 04:49:35", "run_id": "report_fix_20261127", "stage": "DATA_INGESTION", "status": "SUCCESS", "message": "Completed in 1.41s | 121,296 hourly rows | 2004-10-01 01:00:00 -> 2018-08-03 00:00:00"}
+{"timestamp": "2026-11-27 04:49:35", "run_id": "report_fix_20261127", "stage": "FEATURE_ENGINEERING", "status": "START", "message": "Building causal lag/rolling/calendar features"}
+{"timestamp": "2026-11-27 04:49:36", "run_id": "report_fix_20261127", "stage": "FEATURE_ENGINEERING", "status": "SUCCESS", "message": "Completed in 0.35s | X=(121128, 22), y=(121128,), leakage check passed"}
+{"timestamp": "2026-11-27 04:49:36", "run_id": "report_fix_20261127", "stage": "DATA_SPLITTING", "status": "START", "message": "Chronological 70/15/15 split"}
+{"timestamp": "2026-11-27 04:49:36", "run_id": "report_fix_20261127", "stage": "DATA_SPLITTING", "status": "SUCCESS", "message": "Completed in 0.01s | train=84789, val=18169, test=18170"}
+{"timestamp": "2026-11-27 04:49:36", "run_id": "report_fix_20261127", "stage": "CROSS_VALIDATION", "status": "START", "message": "5-fold expanding-window CV on Train"}
+{"timestamp": "2026-11-27 04:50:44", "run_id": "report_fix_20261127", "stage": "CROSS_VALIDATION", "status": "SUCCESS", "message": "Completed in 68.89s | 5 folds x 5 models = 25 rows"}
+{"timestamp": "2026-11-27 04:50:44", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "START", "message": "Fitting candidates on Train, scoring on Validation"}
+{"timestamp": "2026-11-27 04:50:44", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "Naive Last-Value: validation RMSE=534.446 (fit=0.00s)"}
+{"timestamp": "2026-11-27 04:50:44", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "Linear Regression: validation RMSE=246.137 (fit=0.04s)"}
+{"timestamp": "2026-11-27 04:50:49", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "CART: validation RMSE=322.511 (fit=4.18s)"}
+{"timestamp": "2026-11-27 04:50:57", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "Random Forest: validation RMSE=493.904 (fit=8.48s)"}
+{"timestamp": "2026-11-27 04:50:58", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "XGBoost-style: validation RMSE=777.448 (fit=0.69s)"}
+{"timestamp": "2026-11-27 04:50:58", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "SUCCESS", "message": "Completed in 13.52s | champion=Linear Regression (validation RMSE=246.14)"}
+{"timestamp": "2026-11-27 04:50:58", "run_id": "report_fix_20261127", "stage": "EVALUATION", "status": "START", "message": "Refitting on Train+Validation, scoring held-out Test"}
+{"timestamp": "2026-11-27 04:51:11", "run_id": "report_fix_20261127", "stage": "EVALUATION", "status": "SUCCESS", "message": "Completed in 13.19s | champion Test RMSE=228.49"}
+{"timestamp": "2026-11-27 04:51:11", "run_id": "report_fix_20261127", "stage": "INFERENCE", "status": "START", "message": "Recursive multi-step forecast beyond the last observation"}
+{"timestamp": "2026-11-27 04:51:12", "run_id": "report_fix_20261127", "stage": "INFERENCE", "status": "SUCCESS", "message": "Completed in 0.42s | 24h forecast 2018-08-03 01:00:00 -> 2018-08-04 00:00:00"}
+{"timestamp": "2026-11-27 04:51:12", "run_id": "report_fix_20261127", "stage": "VISUALIZATION", "status": "START", "message": "Saving all evaluation figures"}
+{"timestamp": "2026-11-27 04:51:18", "run_id": "report_fix_20261127", "stage": "VISUALIZATION", "status": "SUCCESS", "message": "Completed in 5.99s | 10 figures written to C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\lab03\\notebook_runs\\report_fix_20261127\\figures"}
+{"timestamp": "2026-11-27 04:51:18", "run_id": "report_fix_20261127", "stage": "MODEL_SUMMARY", "status": "START", "message": "Writing model_summary.{csv,json,md} and side metric files"}
+{"timestamp": "2026-11-27 04:51:18", "run_id": "report_fix_20261127", "stage": "MODEL_SUMMARY", "status": "SUCCESS", "message": "Completed in 0.08s | 5 models written to C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\model_summary\\lab03"}
+{"timestamp": "2026-11-27 04:51:18", "run_id": "report_fix_20261127", "stage": "REPORTING", "status": "START", "message": "Writing Lab03_Report.{md,html,pdf}"}
+{"timestamp": "2026-11-27 04:51:21", "run_id": "report_fix_20261127", "stage": "REPORTING", "status": "SUCCESS", "message": "Completed in 3.64s | report -> C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\lab03\\Lab03_Report.pdf"}
+{"timestamp": "2026-11-27 04:51:21", "run_id": "report_fix_20261127", "stage": "PIPELINE", "status": "SUCCESS", "message": "Lab 03 pipeline COMPLETED in 107.5s | champion=Linear Regression"}
+{"timestamp": "2026-11-27 04:53:11", "run_id": "report_fix_20261127", "stage": "PIPELINE", "status": "START", "message": "Lab 03 pipeline starting | run_id=report_fix_20261127 | fast=False | run_cv=True"}
+{"timestamp": "2026-11-27 04:53:11", "run_id": "report_fix_20261127", "stage": "DATA_INGESTION", "status": "START", "message": "Loading and regularizing AEP_hourly.csv"}
+{"timestamp": "2026-11-27 04:53:12", "run_id": "report_fix_20261127", "stage": "DATA_INGESTION", "status": "SUCCESS", "message": "Completed in 1.10s | 121,296 hourly rows | 2004-10-01 01:00:00 -> 2018-08-03 00:00:00"}
+{"timestamp": "2026-11-27 04:53:12", "run_id": "report_fix_20261127", "stage": "FEATURE_ENGINEERING", "status": "START", "message": "Building causal lag/rolling/calendar features"}
+{"timestamp": "2026-11-27 04:53:12", "run_id": "report_fix_20261127", "stage": "FEATURE_ENGINEERING", "status": "SUCCESS", "message": "Completed in 0.36s | X=(121128, 22), y=(121128,), leakage check passed"}
+{"timestamp": "2026-11-27 04:53:12", "run_id": "report_fix_20261127", "stage": "DATA_SPLITTING", "status": "START", "message": "Chronological 70/15/15 split"}
+{"timestamp": "2026-11-27 04:53:12", "run_id": "report_fix_20261127", "stage": "DATA_SPLITTING", "status": "SUCCESS", "message": "Completed in 0.01s | train=84789, val=18169, test=18170"}
+{"timestamp": "2026-11-27 04:53:12", "run_id": "report_fix_20261127", "stage": "CROSS_VALIDATION", "status": "START", "message": "5-fold expanding-window CV on Train"}
+{"timestamp": "2026-11-27 04:54:20", "run_id": "report_fix_20261127", "stage": "CROSS_VALIDATION", "status": "SUCCESS", "message": "Completed in 67.37s | 5 folds x 5 models = 25 rows"}
+{"timestamp": "2026-11-27 04:54:20", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "START", "message": "Fitting candidates on Train, scoring on Validation"}
+{"timestamp": "2026-11-27 04:54:20", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "Naive Last-Value: validation RMSE=534.446 (fit=0.00s)"}
+{"timestamp": "2026-11-27 04:54:20", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "Linear Regression: validation RMSE=246.137 (fit=0.03s)"}
+{"timestamp": "2026-11-27 04:54:24", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "CART: validation RMSE=322.511 (fit=4.64s)"}
+{"timestamp": "2026-11-27 04:54:33", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "Random Forest: validation RMSE=493.904 (fit=8.25s)"}
+{"timestamp": "2026-11-27 04:54:33", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "XGBoost-style: validation RMSE=777.448 (fit=0.72s)"}
+{"timestamp": "2026-11-27 04:54:33", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "SUCCESS", "message": "Completed in 13.77s | champion=Linear Regression (validation RMSE=246.14)"}
+{"timestamp": "2026-11-27 04:54:33", "run_id": "report_fix_20261127", "stage": "EVALUATION", "status": "START", "message": "Refitting on Train+Validation, scoring held-out Test"}
+{"timestamp": "2026-11-27 04:54:46", "run_id": "report_fix_20261127", "stage": "EVALUATION", "status": "SUCCESS", "message": "Completed in 13.10s | champion Test RMSE=228.49"}
+{"timestamp": "2026-11-27 04:54:46", "run_id": "report_fix_20261127", "stage": "INFERENCE", "status": "START", "message": "Recursive multi-step forecast beyond the last observation"}
+{"timestamp": "2026-11-27 04:54:47", "run_id": "report_fix_20261127", "stage": "INFERENCE", "status": "SUCCESS", "message": "Completed in 0.38s | 24h forecast 2018-08-03 01:00:00 -> 2018-08-04 00:00:00"}
+{"timestamp": "2026-11-27 04:54:47", "run_id": "report_fix_20261127", "stage": "VISUALIZATION", "status": "START", "message": "Saving all evaluation figures"}
+{"timestamp": "2026-11-27 04:54:53", "run_id": "report_fix_20261127", "stage": "VISUALIZATION", "status": "SUCCESS", "message": "Completed in 5.81s | 10 figures written to C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\lab03\\notebook_runs\\report_fix_20261127\\figures"}
+{"timestamp": "2026-11-27 04:54:53", "run_id": "report_fix_20261127", "stage": "MODEL_SUMMARY", "status": "START", "message": "Writing model_summary.{csv,json,md} and side metric files"}
+{"timestamp": "2026-11-27 04:54:53", "run_id": "report_fix_20261127", "stage": "MODEL_SUMMARY", "status": "SUCCESS", "message": "Completed in 0.07s | 5 models written to C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\model_summary\\lab03"}
+{"timestamp": "2026-11-27 04:54:53", "run_id": "report_fix_20261127", "stage": "REPORTING", "status": "START", "message": "Writing Lab03_Report.{md,html,pdf}"}
+{"timestamp": "2026-11-27 04:54:56", "run_id": "report_fix_20261127", "stage": "REPORTING", "status": "SUCCESS", "message": "Completed in 3.66s | report -> C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\lab03\\Lab03_Report.pdf"}
+{"timestamp": "2026-11-27 04:54:56", "run_id": "report_fix_20261127", "stage": "PIPELINE", "status": "SUCCESS", "message": "Lab 03 pipeline COMPLETED in 105.6s | champion=Linear Regression"}
+{"timestamp": "2026-11-27 04:56:06", "run_id": "report_fix_20261127", "stage": "PIPELINE", "status": "START", "message": "Lab 03 pipeline starting | run_id=report_fix_20261127 | fast=False | run_cv=True"}
+{"timestamp": "2026-11-27 04:56:06", "run_id": "report_fix_20261127", "stage": "DATA_INGESTION", "status": "START", "message": "Loading and regularizing AEP_hourly.csv"}
+{"timestamp": "2026-11-27 04:56:07", "run_id": "report_fix_20261127", "stage": "DATA_INGESTION", "status": "SUCCESS", "message": "Completed in 1.47s | 121,296 hourly rows | 2004-10-01 01:00:00 -> 2018-08-03 00:00:00"}
+{"timestamp": "2026-11-27 04:56:07", "run_id": "report_fix_20261127", "stage": "FEATURE_ENGINEERING", "status": "START", "message": "Building causal lag/rolling/calendar features"}
+{"timestamp": "2026-11-27 04:56:08", "run_id": "report_fix_20261127", "stage": "FEATURE_ENGINEERING", "status": "SUCCESS", "message": "Completed in 0.50s | X=(121128, 22), y=(121128,), leakage check passed"}
+{"timestamp": "2026-11-27 04:56:08", "run_id": "report_fix_20261127", "stage": "DATA_SPLITTING", "status": "START", "message": "Chronological 70/15/15 split"}
+{"timestamp": "2026-11-27 04:56:08", "run_id": "report_fix_20261127", "stage": "DATA_SPLITTING", "status": "SUCCESS", "message": "Completed in 0.01s | train=84789, val=18169, test=18170"}
+{"timestamp": "2026-11-27 04:56:08", "run_id": "report_fix_20261127", "stage": "CROSS_VALIDATION", "status": "START", "message": "5-fold expanding-window CV on Train"}
+{"timestamp": "2026-11-27 04:57:17", "run_id": "report_fix_20261127", "stage": "CROSS_VALIDATION", "status": "SUCCESS", "message": "Completed in 69.25s | 5 folds x 5 models = 25 rows"}
+{"timestamp": "2026-11-27 04:57:17", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "START", "message": "Fitting candidates on Train, scoring on Validation"}
+{"timestamp": "2026-11-27 04:57:17", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "Naive Last-Value: validation RMSE=534.446 (fit=0.00s)"}
+{"timestamp": "2026-11-27 04:57:17", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "Linear Regression: validation RMSE=246.137 (fit=0.04s)"}
+{"timestamp": "2026-11-27 04:57:21", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "CART: validation RMSE=322.511 (fit=3.92s)"}
+{"timestamp": "2026-11-27 04:57:31", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "Random Forest: validation RMSE=493.904 (fit=9.46s)"}
+{"timestamp": "2026-11-27 04:57:32", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "XGBoost-style: validation RMSE=777.448 (fit=0.81s)"}
+{"timestamp": "2026-11-27 04:57:32", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "SUCCESS", "message": "Completed in 14.36s | champion=Linear Regression (validation RMSE=246.14)"}
+{"timestamp": "2026-11-27 04:57:32", "run_id": "report_fix_20261127", "stage": "EVALUATION", "status": "START", "message": "Refitting on Train+Validation, scoring held-out Test"}
+{"timestamp": "2026-11-27 04:57:46", "run_id": "report_fix_20261127", "stage": "EVALUATION", "status": "SUCCESS", "message": "Completed in 14.16s | champion Test RMSE=228.49"}
+{"timestamp": "2026-11-27 04:57:46", "run_id": "report_fix_20261127", "stage": "INFERENCE", "status": "START", "message": "Recursive multi-step forecast beyond the last observation"}
+{"timestamp": "2026-11-27 04:57:46", "run_id": "report_fix_20261127", "stage": "INFERENCE", "status": "SUCCESS", "message": "Completed in 0.35s | 24h forecast 2018-08-03 01:00:00 -> 2018-08-04 00:00:00"}
+{"timestamp": "2026-11-27 04:57:46", "run_id": "report_fix_20261127", "stage": "VISUALIZATION", "status": "START", "message": "Saving all evaluation figures"}
+{"timestamp": "2026-11-27 04:57:53", "run_id": "report_fix_20261127", "stage": "VISUALIZATION", "status": "SUCCESS", "message": "Completed in 6.44s | 10 figures written to C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\lab03\\notebook_runs\\report_fix_20261127\\figures"}
+{"timestamp": "2026-11-27 04:57:53", "run_id": "report_fix_20261127", "stage": "MODEL_SUMMARY", "status": "START", "message": "Writing model_summary.{csv,json,md} and side metric files"}
+{"timestamp": "2026-11-27 04:57:53", "run_id": "report_fix_20261127", "stage": "MODEL_SUMMARY", "status": "SUCCESS", "message": "Completed in 0.07s | 5 models written to C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\model_summary\\lab03"}
+{"timestamp": "2026-11-27 04:57:53", "run_id": "report_fix_20261127", "stage": "REPORTING", "status": "START", "message": "Writing Lab03_Report.{md,html,pdf}"}
+{"timestamp": "2026-11-27 04:57:57", "run_id": "report_fix_20261127", "stage": "REPORTING", "status": "SUCCESS", "message": "Completed in 4.01s | report -> C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\lab03\\Lab03_Report.pdf"}
+{"timestamp": "2026-11-27 04:57:57", "run_id": "report_fix_20261127", "stage": "PIPELINE", "status": "SUCCESS", "message": "Lab 03 pipeline COMPLETED in 110.6s | champion=Linear Regression"}
+{"timestamp": "2026-11-27 04:59:23", "run_id": "report_fix_20261127", "stage": "PIPELINE", "status": "START", "message": "Lab 03 pipeline starting | run_id=report_fix_20261127 | fast=False | run_cv=True"}
+{"timestamp": "2026-11-27 04:59:23", "run_id": "report_fix_20261127", "stage": "DATA_INGESTION", "status": "START", "message": "Loading and regularizing AEP_hourly.csv"}
+{"timestamp": "2026-11-27 04:59:25", "run_id": "report_fix_20261127", "stage": "DATA_INGESTION", "status": "SUCCESS", "message": "Completed in 1.44s | 121,296 hourly rows | 2004-10-01 01:00:00 -> 2018-08-03 00:00:00"}
+{"timestamp": "2026-11-27 04:59:25", "run_id": "report_fix_20261127", "stage": "FEATURE_ENGINEERING", "status": "START", "message": "Building causal lag/rolling/calendar features"}
+{"timestamp": "2026-11-27 04:59:25", "run_id": "report_fix_20261127", "stage": "FEATURE_ENGINEERING", "status": "SUCCESS", "message": "Completed in 0.39s | X=(121128, 22), y=(121128,), leakage check passed"}
+{"timestamp": "2026-11-27 04:59:25", "run_id": "report_fix_20261127", "stage": "DATA_SPLITTING", "status": "START", "message": "Chronological 70/15/15 split"}
+{"timestamp": "2026-11-27 04:59:25", "run_id": "report_fix_20261127", "stage": "DATA_SPLITTING", "status": "SUCCESS", "message": "Completed in 0.01s | train=84789, val=18169, test=18170"}
+{"timestamp": "2026-11-27 04:59:25", "run_id": "report_fix_20261127", "stage": "CROSS_VALIDATION", "status": "START", "message": "5-fold expanding-window CV on Train"}
+{"timestamp": "2026-11-27 05:00:32", "run_id": "report_fix_20261127", "stage": "CROSS_VALIDATION", "status": "SUCCESS", "message": "Completed in 66.35s | 5 folds x 5 models = 25 rows"}
+{"timestamp": "2026-11-27 05:00:32", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "START", "message": "Fitting candidates on Train, scoring on Validation"}
+{"timestamp": "2026-11-27 05:00:32", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "Naive Last-Value: validation RMSE=534.446 (fit=0.00s)"}
+{"timestamp": "2026-11-27 05:00:32", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "Linear Regression: validation RMSE=246.137 (fit=0.04s)"}
+{"timestamp": "2026-11-27 05:00:36", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "CART: validation RMSE=322.511 (fit=4.37s)"}
+{"timestamp": "2026-11-27 05:00:46", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "Random Forest: validation RMSE=493.904 (fit=9.64s)"}
+{"timestamp": "2026-11-27 05:00:47", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "INFO", "message": "XGBoost-style: validation RMSE=777.448 (fit=0.78s)"}
+{"timestamp": "2026-11-27 05:00:47", "run_id": "report_fix_20261127", "stage": "TRAINING", "status": "SUCCESS", "message": "Completed in 14.98s | champion=Linear Regression (validation RMSE=246.14)"}
+{"timestamp": "2026-11-27 05:00:47", "run_id": "report_fix_20261127", "stage": "EVALUATION", "status": "START", "message": "Refitting on Train+Validation, scoring held-out Test"}
+{"timestamp": "2026-11-27 05:01:01", "run_id": "report_fix_20261127", "stage": "EVALUATION", "status": "SUCCESS", "message": "Completed in 13.97s | champion Test RMSE=228.49"}
+{"timestamp": "2026-11-27 05:01:01", "run_id": "report_fix_20261127", "stage": "INFERENCE", "status": "START", "message": "Recursive multi-step forecast beyond the last observation"}
+{"timestamp": "2026-11-27 05:01:01", "run_id": "report_fix_20261127", "stage": "INFERENCE", "status": "SUCCESS", "message": "Completed in 0.41s | 24h forecast 2018-08-03 01:00:00 -> 2018-08-04 00:00:00"}
+{"timestamp": "2026-11-27 05:01:01", "run_id": "report_fix_20261127", "stage": "VISUALIZATION", "status": "START", "message": "Saving all evaluation figures"}
+{"timestamp": "2026-11-27 05:01:08", "run_id": "report_fix_20261127", "stage": "VISUALIZATION", "status": "SUCCESS", "message": "Completed in 6.98s | 10 figures written to C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\lab03\\notebook_runs\\report_fix_20261127\\figures"}
+{"timestamp": "2026-11-27 05:01:08", "run_id": "report_fix_20261127", "stage": "MODEL_SUMMARY", "status": "START", "message": "Writing model_summary.{csv,json,md} and side metric files"}
+{"timestamp": "2026-11-27 05:01:08", "run_id": "report_fix_20261127", "stage": "MODEL_SUMMARY", "status": "SUCCESS", "message": "Completed in 0.11s | 5 models written to C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\model_summary\\lab03"}
+{"timestamp": "2026-11-27 05:01:08", "run_id": "report_fix_20261127", "stage": "REPORTING", "status": "START", "message": "Writing Lab03_Report.{md,html,pdf}"}
+{"timestamp": "2026-11-27 05:01:12", "run_id": "report_fix_20261127", "stage": "REPORTING", "status": "SUCCESS", "message": "Completed in 3.96s | report -> C:\\Users\\Bin\\Documents\\Lab_TimeSeries\\reports\\lab03\\Lab03_Report.pdf"}
+{"timestamp": "2026-11-27 05:01:12", "run_id": "report_fix_20261127", "stage": "PIPELINE", "status": "SUCCESS", "message": "Lab 03 pipeline COMPLETED in 108.6s | champion=Linear Regression"}

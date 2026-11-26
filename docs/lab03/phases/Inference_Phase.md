@@ -1,33 +1,33 @@
-# Inference Phase
+# Giai đoạn suy luận
 
-## Purpose
+## Mục đích
 
 Tạo dự báo cho các điểm Test theo giao thức rolling one-step và sinh dự báo tương lai 24 giờ theo giao thức recursive fixed-origin. Hai bài toán được phân biệt vì cách sử dụng thông tin quan sát khác nhau.
 
-## Input - Output
+## Đầu vào - Đầu ra
 
-**Input:** candidate model đã refit Train+Validation, feature schema, lịch sử target, `recursive_horizon=24`.
+**Đầu vào:** mô hình ứng viên đã khớp lại trên Huấn luyện + Xác thực, cấu trúc đặc trưng, lịch sử biến mục tiêu, `recursive_horizon=24`.
 
-**Output:** `test_predictions.csv` căn chỉnh với actual; `recursive_forecast.csv` gồm 24 timestamp hourly sau thời điểm cuối dữ liệu; figure so sánh dự báo.
+**Đầu ra:** `test_predictions.csv` căn chỉnh với giá trị thực; `recursive_forecast.csv` gồm 24 timestamp theo giờ sau thời điểm cuối dữ liệu; biểu đồ so sánh dự báo.
 
-## How to do
+## Cách thực hiện
 
-1. Với Test rolling one-step, mỗi hàng Test được tạo feature từ target history đứng trước timestamp đó. Trong vận hành liên tục, actual của các timestamp Test trước có thể được dùng cho bước tiếp theo; đây là one-step-ahead, không phải dự báo nhiều bước từ một origin cố định.
+1. Với dự báo cuốn chiếu trước một bước trên tập Kiểm tra, mỗi dòng được tạo đặc trưng từ lịch sử mục tiêu trước timestamp đó. Trong vận hành liên tục, giá trị thực ở timestamp Kiểm tra trước đó có thể dùng cho bước tiếp theo; đây là dự báo trước một bước, không phải dự báo nhiều bước từ một mốc cố định.
 2. Với forecast tương lai, lấy toàn bộ lịch sử quan sát tới origin cuối cùng.
 3. Xây một hàng feature bằng lag/rolling/calendar schema đã dùng khi fit.
 4. Gọi `predict` để nhận dự báo tại timestamp kế tiếp.
-5. Nối giá trị dự báo vào history (không có actual tương lai) rồi lặp cho tới đủ 24 bước.
-6. Ghi cả prediction lẫn timestamp, giữ nguyên tên champion và run metadata.
+5. Nối giá trị dự báo vào lịch sử (không có giá trị thực tương lai) rồi lặp cho đủ 24 bước.
+6. Ghi dự báo và timestamp, giữ nguyên tên mô hình tốt nhất và metadata lần chạy.
 
-## Evaluation Metrics
+## Chỉ số đánh giá
 
-Test rolling one-step: MAE, MSE, RMSE, MAPE, sMAPE, R² khi có actual. Recursive future không có ground truth trong cùng run, do đó không bịa metric; chỉ nghiệm thu horizon đúng 24, timestamp cách nhau một giờ và dự báo hữu hạn. Khi có actual tương lai mới, có thể đánh giá backtest riêng.
+Dự báo cuốn chiếu một bước trên tập Kiểm tra: MAE, MSE, RMSE, MAPE, sMAPE, R² khi có giá trị thực. Dự báo tương lai đệ quy không có giá trị chuẩn trong cùng lần chạy nên không tạo chỉ số giả; chỉ xác nhận đúng 24 mốc, timestamp cách nhau một giờ và dự báo hữu hạn. Khi có giá trị thực tương lai, có thể đánh giá bằng một phép kiểm thử hồi cứu riêng.
 
-## Used Data
+## Dữ liệu sử dụng
 
 Test feature tại t chỉ dùng lịch sử tới t-1; future recursive dùng quan sát lịch sử đến origin và các prediction vừa sinh ra. Không dùng actual tương lai trong recursive loop.
 
-## Implementation Reference
+## Tham chiếu cài đặt
 
 - `src/lab03/features.py:make_next_step_features`
 - `src/lab03/features.py:recursive_forecast`
