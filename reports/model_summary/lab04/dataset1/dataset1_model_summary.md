@@ -1,8 +1,8 @@
 # BÁO CÁO TỔNG HỢP MÔ HÌNH (MODEL SUMMARY) — ELECTRICITY LOAD & WEATHER MULTIVARIATE TIME SERIES (UCI LD2011-2014, 01/2011 - 01/2015)
 
 ## 1. Thông tin Phiên Thực nghiệm & Bộ dữ liệu (Provenance & Dataset Info)
-- **Run ID**: `20261124_193611_5cd58d`
-- **Thời điểm xuất báo cáo**: `2026-11-24 19:44:12`
+- **Run ID**: `20261126_212116_d28130`
+- **Thời điểm xuất báo cáo**: `2026-11-26 21:30:02`
 - **Dataset Key**: `dataset1` (`data/raw/electricity_load.csv`)
 - **Tên bộ dữ liệu**: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 - **Tổng số quan sát**: 35,065 giờ (2011-01-01 00:00:00 to 2015-01-01 00:00:00)
@@ -23,39 +23,39 @@
 
 | # | Model | Family | Regime | Params / Feats | RMSE (kW) | MAE (kW) | MAPE (%) | R² | DW Stat | Ljung-Box Q | Device | Time (s) |
 |---:|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|:---|---:|
-| 1 | VAR(24) [Multivariate Differenced d=1, Hold-out] | VAR | `Hold-out_Test_15pct` | 97 | 7,122.36 | 4,576.49 | 2.0010 | 0.9935 | 2.3686 | 800.16 | `cpu` | 3.0565 |
-| 2 | XGBoost Multivariate Regressor [106 Features, Hold-out] | XGBoost | `Hold-out_Test_15pct` | 106 | 6,320.97 | 4,273.05 | 1.8683 | 0.9948 | 1.8247 | 1,165.65 | `cuda` | 5.2138 |
-| 3 | Stacked 2-Layer LSTM + Residual Highway [Multivariate, Hold-out] | LSTM | `Hold-out_Test_15pct` | 30,589 | 6,570.41 | 4,524.04 | 2.0185 | 0.9944 | 1.9519 | 721.46 | `cuda` | 97.0233 |
-| 4 | AR(24) [Univariate Differenced d=1, No Weather Ablation] | AR-Ablation | `Ablation_No_Weather` | 25 | 7,120.99 | 4,569.45 | 1.9958 | 0.9935 | 2.3702 | 808.92 | `cpu` | 1.9867 |
-| 5 | XGBoost Univariate [No Weather, 34 Load/Calendar Features] | XGBoost-Ablation | `Ablation_No_Weather` | 34 | 6,285.65 | 4,270.67 | 1.8571 | 0.9949 | 1.8921 | 833.61 | `cuda` | 3.3890 |
-| 6 | Stacked 2-Layer LSTM + Highway [No Weather, Input_Dim=1] | LSTM-Ablation | `Ablation_No_Weather` | 29,818 | 7,078.22 | 4,930.62 | 2.2122 | 0.9935 | 1.7710 | 1,407.58 | `cuda` | 63.0651 |
-| 7 | XGBoost [Walk-Forward Backtesting 168h Online Feedback] | XGBoost-WalkForward | `Walk_Forward_168h` | 106 | 5,356.26 | 3,973.05 | 1.8012 | 0.9940 | 2.5319 | 64.42 | `cuda` | 5.2138 |
-| 8 | VAR [Walk-Forward Backtesting 168h Online Feedback] | VAR-WalkForward | `Walk_Forward_168h` | 97 | 5,282.87 | 3,937.53 | 1.8182 | 0.9941 | 2.9518 | 77.87 | `cpu` | 3.0565 |
-| 9 | LSTM [Walk-Forward Backtesting 168h Online Feedback] | LSTM-WalkForward | `Walk_Forward_168h` | 30,589 | 5,810.71 | 4,238.78 | 1.9522 | 0.9929 | 2.8172 | 160.81 | `cuda` | 97.0233 |
-| 10 | VAR [5-Fold TimeSeriesSplit — Fold 1/5] | VAR-CV-Fold1 | `5Fold_CV_Fold_1` | 97 | 5,787.58 | 3,841.17 | 1.7099 | 0.9938 | 1.7117 | 648.28 | `cpu` | 0.7028 |
-| 11 | XGBoost [5-Fold TimeSeriesSplit — Fold 1/5] | XGBoost-CV-Fold1 | `5Fold_CV_Fold_1` | 106 | 11,718.06 | 6,691.03 | 3.5454 | 0.9747 | 0.5293 | 15,585.70 | `cuda` | 6.1018 |
-| 12 | LSTM [5-Fold TimeSeriesSplit — Fold 1/5] | LSTM-CV-Fold1 | `5Fold_CV_Fold_1` | 30,589 | 8,537.15 | 5,980.96 | 2.8019 | 0.9866 | 1.2214 | 5,160.10 | `cuda` | 9.2671 |
-| 13 | VAR [5-Fold TimeSeriesSplit — Fold 2/5] | VAR-CV-Fold2 | `5Fold_CV_Fold_2` | 97 | 8,793.84 | 5,499.72 | 2.8433 | 0.9927 | 2.3749 | 795.16 | `cpu` | 1.2285 |
-| 14 | XGBoost [5-Fold TimeSeriesSplit — Fold 2/5] | XGBoost-CV-Fold2 | `5Fold_CV_Fold_2` | 106 | 18,281.70 | 10,829.08 | 4.5498 | 0.9684 | 0.7210 | 13,999.57 | `cuda` | 5.0186 |
-| 15 | LSTM [5-Fold TimeSeriesSplit — Fold 2/5] | LSTM-CV-Fold2 | `5Fold_CV_Fold_2` | 30,589 | 13,336.46 | 8,866.25 | 4.3257 | 0.9832 | 1.5095 | 4,222.09 | `cuda` | 10.0490 |
-| 16 | VAR [5-Fold TimeSeriesSplit — Fold 3/5] | VAR-CV-Fold3 | `5Fold_CV_Fold_3` | 97 | 7,213.96 | 3,871.26 | 2.4843 | 0.9891 | 2.3936 | 918.61 | `cpu` | 1.7816 |
-| 17 | XGBoost [5-Fold TimeSeriesSplit — Fold 3/5] | XGBoost-CV-Fold3 | `5Fold_CV_Fold_3` | 106 | 8,892.65 | 5,870.95 | 3.4442 | 0.9834 | 1.2754 | 4,569.64 | `cuda` | 2.7909 |
-| 18 | LSTM [5-Fold TimeSeriesSplit — Fold 3/5] | LSTM-CV-Fold3 | `5Fold_CV_Fold_3` | 30,589 | 8,183.92 | 5,488.88 | 3.3260 | 0.9860 | 1.6549 | 1,893.45 | `cuda` | 26.6055 |
-| 19 | VAR [5-Fold TimeSeriesSplit — Fold 4/5] | VAR-CV-Fold4 | `5Fold_CV_Fold_4` | 97 | 7,237.27 | 4,600.41 | 1.9333 | 0.9938 | 2.3878 | 632.65 | `cpu` | 2.4096 |
-| 20 | XGBoost [5-Fold TimeSeriesSplit — Fold 4/5] | XGBoost-CV-Fold4 | `5Fold_CV_Fold_4` | 106 | 7,055.79 | 4,715.85 | 1.9782 | 0.9941 | 1.7396 | 715.67 | `cuda` | 4.0364 |
-| 21 | LSTM [5-Fold TimeSeriesSplit — Fold 4/5] | LSTM-CV-Fold4 | `5Fold_CV_Fold_4` | 30,589 | 7,784.54 | 5,585.09 | 2.4227 | 0.9929 | 1.9134 | 1,094.08 | `cuda` | 34.7935 |
-| 22 | VAR [5-Fold TimeSeriesSplit — Fold 5/5] | VAR-CV-Fold5 | `5Fold_CV_Fold_5` | 97 | 5,991.19 | 3,511.07 | 7.5620 | 0.9898 | 2.1684 | 925.27 | `cpu` | 2.9439 |
-| 23 | XGBoost [5-Fold TimeSeriesSplit — Fold 5/5] | XGBoost-CV-Fold5 | `5Fold_CV_Fold_5` | 106 | 5,227.53 | 3,497.29 | 7.3346 | 0.9922 | 1.6790 | 1,147.97 | `cuda` | 4.0384 |
-| 24 | LSTM [5-Fold TimeSeriesSplit — Fold 5/5] | LSTM-CV-Fold5 | `5Fold_CV_Fold_5` | 30,589 | 5,982.23 | 3,977.50 | 7.8120 | 0.9898 | 1.8342 | 950.64 | `cuda` | 42.9271 |
+| 1 | VAR(24) [Multivariate Differenced d=1, Hold-out] | VAR | `Hold-out_Test_15pct` | 97 | 7,122.36 | 4,576.49 | 2.0010 | 0.9935 | 2.3686 | 800.16 | `cpu` | 3.1763 |
+| 2 | XGBoost Multivariate Regressor [106 Features, Hold-out] | XGBoost | `Hold-out_Test_15pct` | 106 | 6,320.97 | 4,273.05 | 1.8683 | 0.9948 | 1.8247 | 1,165.65 | `cuda` | 5.4028 |
+| 3 | Stacked 2-Layer LSTM + Residual Highway [Multivariate, Hold-out] | LSTM | `Hold-out_Test_15pct` | 30,589 | 7,261.76 | 5,086.94 | 2.2904 | 0.9932 | 1.8597 | 1,389.76 | `cuda` | 95.6583 |
+| 4 | AR(24) [Univariate Differenced d=1, No Weather Ablation] | AR-Ablation | `Ablation_No_Weather` | 25 | 7,120.99 | 4,569.45 | 1.9958 | 0.9935 | 2.3702 | 808.92 | `cpu` | 2.0646 |
+| 5 | XGBoost Univariate [No Weather, 34 Load/Calendar Features] | XGBoost-Ablation | `Ablation_No_Weather` | 34 | 6,285.65 | 4,270.67 | 1.8571 | 0.9949 | 1.8921 | 833.61 | `cuda` | 3.5118 |
+| 6 | Stacked 2-Layer LSTM + Highway [No Weather, Input_Dim=1] | LSTM-Ablation | `Ablation_No_Weather` | 29,818 | 8,273.93 | 5,759.45 | 2.6038 | 0.9912 | 1.7599 | 2,363.09 | `cuda` | 62.1779 |
+| 7 | XGBoost [Walk-Forward Backtesting 168h Online Feedback] | XGBoost-WalkForward | `Walk_Forward_168h` | 106 | 5,356.26 | 3,973.05 | 1.8012 | 0.9940 | 2.5319 | 64.42 | `cuda` | 5.4028 |
+| 8 | VAR [Walk-Forward Backtesting 168h Online Feedback] | VAR-WalkForward | `Walk_Forward_168h` | 97 | 5,282.87 | 3,937.53 | 1.8182 | 0.9941 | 2.9518 | 77.87 | `cpu` | 3.1763 |
+| 9 | LSTM [Walk-Forward Backtesting 168h Online Feedback] | LSTM-WalkForward | `Walk_Forward_168h` | 30,589 | 6,085.37 | 4,437.14 | 2.0562 | 0.9922 | 2.7380 | 132.63 | `cuda` | 95.6583 |
+| 10 | VAR [5-Fold TimeSeriesSplit — Fold 1/5] | VAR-CV-Fold1 | `5Fold_CV_Fold_1` | 97 | 5,787.58 | 3,841.17 | 1.7099 | 0.9938 | 1.7117 | 648.28 | `cpu` | 0.6937 |
+| 11 | XGBoost [5-Fold TimeSeriesSplit — Fold 1/5] | XGBoost-CV-Fold1 | `5Fold_CV_Fold_1` | 106 | 11,718.06 | 6,691.03 | 3.5454 | 0.9747 | 0.5293 | 15,585.70 | `cuda` | 6.0736 |
+| 12 | LSTM [5-Fold TimeSeriesSplit — Fold 1/5] | LSTM-CV-Fold1 | `5Fold_CV_Fold_1` | 30,589 | 8,575.52 | 6,027.31 | 2.8569 | 0.9865 | 1.2278 | 4,599.47 | `cuda` | 9.8307 |
+| 13 | VAR [5-Fold TimeSeriesSplit — Fold 2/5] | VAR-CV-Fold2 | `5Fold_CV_Fold_2` | 97 | 8,793.84 | 5,499.72 | 2.8433 | 0.9927 | 2.3749 | 795.16 | `cpu` | 1.2955 |
+| 14 | XGBoost [5-Fold TimeSeriesSplit — Fold 2/5] | XGBoost-CV-Fold2 | `5Fold_CV_Fold_2` | 106 | 18,281.70 | 10,829.08 | 4.5498 | 0.9684 | 0.7210 | 13,999.57 | `cuda` | 5.2923 |
+| 15 | LSTM [5-Fold TimeSeriesSplit — Fold 2/5] | LSTM-CV-Fold2 | `5Fold_CV_Fold_2` | 30,589 | 13,342.79 | 8,874.60 | 4.3271 | 0.9831 | 1.5093 | 4,241.94 | `cuda` | 9.9802 |
+| 16 | VAR [5-Fold TimeSeriesSplit — Fold 3/5] | VAR-CV-Fold3 | `5Fold_CV_Fold_3` | 97 | 7,213.96 | 3,871.26 | 2.4843 | 0.9891 | 2.3936 | 918.61 | `cpu` | 1.8385 |
+| 17 | XGBoost [5-Fold TimeSeriesSplit — Fold 3/5] | XGBoost-CV-Fold3 | `5Fold_CV_Fold_3` | 106 | 8,892.65 | 5,870.95 | 3.4442 | 0.9834 | 1.2754 | 4,569.64 | `cuda` | 2.8010 |
+| 18 | LSTM [5-Fold TimeSeriesSplit — Fold 3/5] | LSTM-CV-Fold3 | `5Fold_CV_Fold_3` | 30,589 | 8,493.66 | 5,425.84 | 3.3237 | 0.9849 | 1.6563 | 2,427.53 | `cuda` | 26.8652 |
+| 19 | VAR [5-Fold TimeSeriesSplit — Fold 4/5] | VAR-CV-Fold4 | `5Fold_CV_Fold_4` | 97 | 7,237.27 | 4,600.41 | 1.9333 | 0.9938 | 2.3878 | 632.65 | `cpu` | 2.5299 |
+| 20 | XGBoost [5-Fold TimeSeriesSplit — Fold 4/5] | XGBoost-CV-Fold4 | `5Fold_CV_Fold_4` | 106 | 7,055.79 | 4,715.85 | 1.9782 | 0.9941 | 1.7396 | 715.67 | `cuda` | 4.0180 |
+| 21 | LSTM [5-Fold TimeSeriesSplit — Fold 4/5] | LSTM-CV-Fold4 | `5Fold_CV_Fold_4` | 30,589 | 8,282.94 | 5,869.65 | 2.5263 | 0.9919 | 1.9455 | 1,530.46 | `cuda` | 37.2380 |
+| 22 | VAR [5-Fold TimeSeriesSplit — Fold 5/5] | VAR-CV-Fold5 | `5Fold_CV_Fold_5` | 97 | 5,991.19 | 3,511.07 | 7.5620 | 0.9898 | 2.1684 | 925.27 | `cpu` | 3.9248 |
+| 23 | XGBoost [5-Fold TimeSeriesSplit — Fold 5/5] | XGBoost-CV-Fold5 | `5Fold_CV_Fold_5` | 106 | 5,227.53 | 3,497.29 | 7.3346 | 0.9922 | 1.6790 | 1,147.97 | `cuda` | 4.5294 |
+| 24 | LSTM [5-Fold TimeSeriesSplit — Fold 5/5] | LSTM-CV-Fold5 | `5Fold_CV_Fold_5` | 30,589 | 6,797.43 | 4,479.68 | 8.1031 | 0.9869 | 1.5447 | 3,298.58 | `cuda` | 54.4185 |
 
-### Diễn giải Đa Tiêu chí Tự động (Run ID: `20261124_193611_5cd58d` — Dataset 1: Electricity Load & Weather)
+### Diễn giải Đa Tiêu chí Tự động (Run ID: `20261126_212116_d28130` — Dataset 1: Electricity Load & Weather)
 
 #### A. Mô hình Tốt nhất theo Từng Quy trình Kiểm định Độc lập (Regime-Specific Leaders)
 - **Tiêu chí 1 — Độ chính xác cao nhất trên Tập Hold-out Test độc lập (15% - 5,260 giờ)**: **XGBoost** (`RMSE = 6,320.97 kW`, `MAE = 4,273.05 kW`, `MAPE = 1.8683%`, `R² = 0.9948`).
 - **Tiêu chí 2 — Độ ổn định cao nhất trên Kiểm định Chéo 5-Fold TimeSeriesSplit (Expanding Window)**: **VAR** (`RMSE = 7,004.77 ± 1,204.93 kW`, `MAE = 4,264.73 ± 796.89 kW`, `R² = 0.9918 ± 0.0022`).
 - **Tiêu chí 3 — Hiệu năng cao nhất trong Vận hành Cuốn chiếu Walk-Forward Backtesting (168 giờ)**: **VAR** (`RMSE = 5,282.87 kW`, `MAE = 3,937.53 kW`, `MAPE = 1.8182%`, `R² = 0.9941`).
-- **Tiêu chí 4 — Mô hình khai thác biến ngoại sinh thời tiết hiệu quả nhất (Feature Ablation Impact)**: **Stacked 2-Layer LSTM + Residual Highway** giúp giảm `7.17%` sai số RMSE (từ `7,078.22 kW` khi không có thời tiết xuống `6,570.41 kW` khi kết hợp `temperature`, `humidity`, `wind_speed`) và giảm `8.76%` MAPE.
-- **Tiêu chí 5 — Khử tự tương quan phần dư bậc 1 tốt nhất (Durbin-Watson gần 2.00 nhất & Ljung-Box Q thấp nhất trên Hold-out Test)**: **Stacked 2-Layer LSTM + Residual Highway** (`DW = 1.9519`, `Ljung-Box Q(24) = 721.46`, `Heteroskedasticity H = 1.1835`).
+- **Tiêu chí 4 — Mô hình khai thác biến ngoại sinh thời tiết hiệu quả nhất (Feature Ablation Impact)**: **Stacked 2-Layer LSTM + Residual Highway** giúp giảm `12.23%` sai số RMSE (từ `8,273.93 kW` khi không có thời tiết xuống `7,261.76 kW` khi kết hợp `temperature`, `humidity`, `wind_speed`) và giảm `12.04%` MAPE.
+- **Tiêu chí 5 — Khử tự tương quan phần dư bậc 1 tốt nhất (Durbin-Watson gần 2.00 nhất & Ljung-Box Q thấp nhất trên Hold-out Test)**: **Stacked 2-Layer LSTM + Residual Highway** (`DW = 1.8597`, `Ljung-Box Q(24) = 1389.76`, `Heteroskedasticity H = 1.2337`).
 
 ## 3. Hồ sơ Thống kê Chi tiết Từng Mô hình (Individual Model Cards — 24 Models)
 
@@ -63,7 +63,7 @@
 ```text
 VAR / AR Multivariate Model Summary - Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: Hold-out Split (70% Train - 15% Val - 15% Test)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: Hold-out Split (70% Train - 15% Val - 15% Test)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Date range: 2011-01-01 00:00:00 to 2015-01-01 00:00:00 (Freq: 1h)
 Observations: 35,065 (Train: 24,545, Val: 5,260, Eval/Test: 5,260)
@@ -76,7 +76,7 @@ Model: VAR(24) [Multivariate Differenced d=1, Hold-out]
 Log Likelihood (Load Eq):  -250953.731   AIC (Load Eq):     502101.462
 BIC (Load Eq):              502887.865   HQIC (Load Eq):    502356.233
 FPE (Final Pred Error):    45779369.30   Device:                   cpu
-Converged:                        True   Train / Pred:    3.0565s / 0.2574s
+Converged:                        True   Train / Pred:    3.1763s / 0.2444s
 ------------------------------------------------------------------------------
 CROSS-VARIABLE LAG INFLUENCE ON TARGET EQUATION (Delta_load_t, p=24 Lags):
 Variable          Lags    Sum(Coef)      L1 Norm      L2 Norm    Dominant Lag
@@ -208,7 +208,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=5,260):
 ```text
 XGBoost Gradient Boosting Model Summary - Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: Hold-out Split (70% Train - 15% Val - 15% Test)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: Hold-out Split (70% Train - 15% Val - 15% Test)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Date range: 2011-01-01 00:00:00 to 2015-01-01 00:00:00 (Freq: 1h)
 Observations: 35,065 (Train: 24,545, Val: 5,260, Eval/Test: 5,260)
@@ -222,7 +222,7 @@ Model: XGBoost Multivariate Regressor [106 Features, Hold-out]
 ==============================================================================
 Train Scaled RMSE (Tree 1 -> End): 0.955722 -> 0.043671
 Val Scaled RMSE   (Tree 1 -> Best): 0.821423 -> 0.065047
-Converged:                        True   Train / Pred:    5.2138s / 0.0995s
+Converged:                        True   Train / Pred:    5.4028s / 0.1025s
 ------------------------------------------------------------------------------
 BOOSTING ITERATION CONVERGENCE TRAJECTORY (Extracted from evals_result_):
   Tree #  Train RMSE (Scaled)  Val RMSE (Scaled)      Gen Gap           Status
@@ -381,7 +381,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=5,260):
 ```text
 Stacked 2-Layer LSTM Deep Learning Model Summary - Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: Hold-out Split (70% Train - 15% Val - 15% Test)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: Hold-out Split (70% Train - 15% Val - 15% Test)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Date range: 2011-01-01 00:00:00 to 2015-01-01 00:00:00 (Freq: 1h)
 Observations: 35,065 (Train: 24,545, Val: 5,260, Eval/Test: 5,260)
@@ -392,83 +392,83 @@ Model: Stacked 2-Layer LSTM + Residual Highway [Multivariate, Hold-out]
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.016259   Best Val Loss:       0.004957
-Final Train Loss:             0.005305   Best Epoch:           27 / 30  
-Hardware Device:                  cuda   Train / Pred:    97.0233s / 0.8064s
+Initial Train Loss:           0.016343   Best Val Loss:       0.006058
+Final Train Loss:             0.007327   Best Epoch:           27 / 30  
+Hardware Device:                  cuda   Train / Pred:    95.6583s / 0.7846s
 ------------------------------------------------------------------------------
 LAYER-BY-LAYER TENSOR PARAMETER ANATOMY (Extracted from lstm_model.pt):
 Layer / Tensor Name        Shape             Params      Mean      Std           [Min, Max]
 ------------------------------------------------------------------------------
-lstm1.weight_ih_l0         (256, 4)           1,024  -0.00198  0.11173     [-0.464, +0.330]
-lstm1.weight_hh_l0         (256, 64)         16,384  +0.00103  0.10558     [-0.583, +0.512]
-lstm1.bias_ih_l0           (256,)               256  +0.01927  0.05633     [-0.092, +0.243]
-lstm1.bias_hh_l0           (256,)               256  +0.01927  0.05633     [-0.092, +0.243]
-lstm2.weight_ih_l0         (128, 64)          8,192  -0.00034  0.14125     [-0.621, +0.676]
-lstm2.weight_hh_l0         (128, 32)          4,096  +0.00617  0.12757     [-0.497, +0.596]
-lstm2.bias_ih_l0           (128,)               128  -0.00120  0.04343     [-0.102, +0.165]
-lstm2.bias_hh_l0           (128,)               128  -0.00120  0.04343     [-0.102, +0.165]
-norm.weight                (32,)                 32  +0.95623  0.10525     [+0.710, +1.295]
-norm.bias                  (32,)                 32  -0.06904  0.07343     [-0.309, +0.004]
-head.weight                (1, 32)               32  +0.00796  0.08202     [-0.174, +0.212]
-head.bias                  (1,)                   1  +0.00796  0.00000     [+0.008, +0.008]
-highway.weight             (1, 27)               27  +0.03547  0.15168     [-0.075, +0.779]
-highway.bias               (1,)                   1  +0.00796  0.00000     [+0.008, +0.008]
+lstm1.weight_ih_l0         (256, 4)           1,024  -0.00400  0.05805     [-0.271, +0.281]
+lstm1.weight_hh_l0         (256, 64)         16,384  +0.00104  0.02379     [-0.247, +0.304]
+lstm1.bias_ih_l0           (256,)               256  +0.03442  0.04273     [-0.064, +0.258]
+lstm1.bias_hh_l0           (256,)               256  +0.03442  0.04273     [-0.064, +0.258]
+lstm2.weight_ih_l0         (128, 64)          8,192  -0.00031  0.02823     [-0.231, +0.198]
+lstm2.weight_hh_l0         (128, 32)          4,096  +0.00089  0.01963     [-0.225, +0.200]
+lstm2.bias_ih_l0           (128,)               128  +0.00588  0.02126     [-0.053, +0.098]
+lstm2.bias_hh_l0           (128,)               128  +0.00588  0.02126     [-0.053, +0.098]
+norm.weight                (32,)                 32  +0.34969  0.28509     [+0.000, +0.873]
+norm.bias                  (32,)                 32  -0.01988  0.03597     [-0.165, +0.070]
+head.weight                (1, 32)               32  -0.00651  0.07588     [-0.225, +0.172]
+head.bias                  (1,)                   1  +0.01009  0.00000     [+0.010, +0.010]
+highway.weight             (1, 27)               27  +0.03681  0.15894     [-0.067, +0.799]
+highway.bias               (1,)                   1  +0.01009  0.00000     [+0.010, +0.010]
 ------------------------------------------------------------------------------
 LEARNED AUTOREGRESSIVE RESIDUAL HIGHWAY WEIGHTS (All 27 Connections: 24 Load Lags + 3 Exog):
-  t-24:+0.1644 | t-23:+0.0738 | t-22:-0.0340 | t-21:+0.0034 | t-20:+0.0222 | t-19:+0.0110
-  t-18:+0.0066 | t-17:+0.0307 | t-16:-0.0185 | t-15:+0.0235 | t-14:+0.0087 | t-13:-0.0749
-  t-12:+0.0481 | t-11:-0.0281 | t-10:-0.0226 | t-09:+0.0061 | t-08:-0.0168 | t-07:-0.0098
-  t-06:+0.0055 | t-05:-0.0332 | t-04:-0.0132 | t-03:+0.0255 | t-02:-0.0049 | t-01:+0.7792
-  Exogenous Step t: temp_t=+0.0115 | humidity_t=-0.0068 | wind_t=+0.0004 | bias=+0.0080
+  t-24:+0.1917 | t-23:+0.0788 | t-22:-0.0567 | t-21:+0.0284 | t-20:+0.0384 | t-19:+0.0004
+  t-18:+0.0064 | t-17:+0.0232 | t-16:-0.0515 | t-15:+0.0269 | t-14:+0.0263 | t-13:-0.0659
+  t-12:+0.0766 | t-11:-0.0212 | t-10:-0.0515 | t-09:+0.0254 | t-08:+0.0201 | t-07:-0.0225
+  t-06:-0.0543 | t-05:-0.0332 | t-04:+0.0277 | t-03:+0.0474 | t-02:-0.0675 | t-01:+0.7992
+  Exogenous Step t: temp_t=+0.0134 | humidity_t=-0.0139 | wind_t=+0.0017 | bias=+0.0101
 ------------------------------------------------------------------------------
 EPOCH-BY-EPOCH TRAINING & VALIDATION CONVERGENCE HISTORY:
 Epoch    Train MSE      Val MSE    Train MAE      Val MAE             Status
 ------------------------------------------------------------------------------
-    1     0.016259     0.009691     0.089218     0.060351                   
-    2     0.012045     0.008947     0.075351     0.059780                   
-    3     0.011105     0.008665     0.072109     0.059786                   
-    4     0.010616     0.008472     0.070968     0.059671                   
-    5     0.009995     0.007529     0.069129     0.055175                   
-    6     0.009110     0.006536     0.065825     0.051541                   
-    7     0.008008     0.006475     0.061754     0.052572                   
-    8     0.007594     0.006711     0.060215     0.055340                   
-    9     0.007201     0.005733     0.058652     0.049135                   
-   10     0.006923     0.006210     0.057255     0.051682                   
-   11     0.006787     0.005810     0.056667     0.049450                   
-   12     0.006678     0.005765     0.056178     0.049969                   
-   13     0.006391     0.005473     0.054647     0.047805                   
-   14     0.006408     0.006965     0.054504     0.056557                   
-   15     0.006255     0.005729     0.054068     0.049244                   
-   16     0.006182     0.005532     0.053390     0.047783                   
-   17     0.005963     0.005628     0.052450     0.048282                   
-   18     0.005887     0.005575     0.052132     0.047650                   
-   19     0.005858     0.005205     0.051669     0.046013                   
-   20     0.005742     0.005434     0.051144     0.047059                   
-   21     0.005698     0.005107     0.050823     0.045291                   
-   22     0.005632     0.005035     0.050558     0.044806                   
-   23     0.005548     0.005079     0.050015     0.045327                   
-   24     0.005499     0.004981     0.049738     0.044990                   
-   25     0.005457     0.005129     0.049555     0.045424                   
-   26     0.005405     0.005019     0.049242     0.044714                   
-   27     0.005368     0.004957     0.049028     0.044649 <-- Best Checkpoint
-   28     0.005351     0.004991     0.048919     0.044671                   
-   29     0.005316     0.004996     0.048724     0.044675                   
-   30     0.005305     0.005018     0.048624     0.044685                   
+    1     0.016343     0.009794     0.089531     0.060618                   
+    2     0.012418     0.009984     0.076701     0.063789                   
+    3     0.011559     0.009448     0.073626     0.062706                   
+    4     0.011101     0.008679     0.072410     0.059267                   
+    5     0.010781     0.008551     0.070875     0.058458                   
+    6     0.010593     0.008365     0.070379     0.058856                   
+    7     0.010520     0.008109     0.070227     0.058470                   
+    8     0.010181     0.008173     0.069136     0.060279                   
+    9     0.010024     0.008013     0.068422     0.058138                   
+   10     0.009897     0.007710     0.068099     0.056984                   
+   11     0.009868     0.007602     0.068295     0.055990                   
+   12     0.009635     0.007154     0.067631     0.054951                   
+   13     0.009400     0.007559     0.066515     0.057660                   
+   14     0.009121     0.007505     0.065666     0.058476                   
+   15     0.008819     0.006964     0.064778     0.054160                   
+   16     0.008672     0.006603     0.064323     0.052888                   
+   17     0.008444     0.006810     0.063251     0.054354                   
+   18     0.008222     0.006555     0.062737     0.052643                   
+   19     0.008165     0.006416     0.062442     0.052167                   
+   20     0.007959     0.006869     0.061613     0.055182                   
+   21     0.007900     0.006378     0.061542     0.052092                   
+   22     0.007831     0.006386     0.061252     0.052477                   
+   23     0.007679     0.006285     0.060662     0.051880                   
+   24     0.007578     0.006242     0.060252     0.051950                   
+   25     0.007552     0.006292     0.060171     0.051872                   
+   26     0.007454     0.006279     0.059840     0.051784                   
+   27     0.007435     0.006058     0.059633     0.050657 <-- Best Checkpoint
+   28     0.007378     0.006172     0.059423     0.051458                   
+   29     0.007348     0.006125     0.059291     0.051180                   
+   30     0.007327     0.006347     0.059316     0.052131                   
 ==============================================================================
-Ljung-Box (L=24) (Q):     721.46   Jarque-Bera (JB):    351072.00
+Ljung-Box (L=24) (Q):    1389.76   Jarque-Bera (JB):    192920.70
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     1.1835   Skew:                   0.8881
-Prob(H) (two-sided):       0.0004   Kurtosis:              42.9837
-Durbin-Watson (DW):        1.9519   MedAE (kW):        3345.3542
-Residual Mean (kW):   -363.1559   Residual Std:        6560.3620
+Heteroskedasticity(H):     1.2337   Skew:                   0.7823
+Prob(H) (two-sided):       0.0000   Kurtosis:              32.6277
+Durbin-Watson (DW):        1.8597   MedAE (kW):        3918.2485
+Residual Mean (kW):   -574.2743   Residual Std:        7239.0132
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=5,260):
-  MSE  = 43,170,232.1359 | RMSE = 6,570.4058 kW | MAE = 4,524.0441 kW
-  MAPE =        2.0185% | R²   =     0.9944     | Max Error = 128,134.0402 kW
-  [In-Sample Train (70%)] RMSE = 6,104.3941 kW | MAE = 4,069.9218 kW | MAPE = 1.9624% | R² = 0.9948
-  [Validation Set (15%)]  RMSE = 5,968.2838 kW | MAE = 3,784.7711 kW | MAPE = 7.1742% | R² = 0.9901
-  [5-Fold Expanding CV]   RMSE = 8,764.86 ± 2,738.29 kW | MAE = 5,979.73 ± 1,784.49 kW | R² = 0.9877 ± 0.0037
-  [Weather Ablation]      With Weather RMSE = 6,570.41 kW vs. Without Weather RMSE = 7,078.22 kW (Delta = +7.17%)
+  MSE  = 52,733,103.5374 | RMSE = 7,261.7562 kW | MAE = 5,086.9411 kW
+  MAPE =        2.2904% | R²   =     0.9932     | Max Error = 127,720.1362 kW
+  [In-Sample Train (70%)] RMSE = 7,185.8302 kW | MAE = 4,966.5911 kW | MAPE = 2.4022% | R² = 0.9928
+  [Validation Set (15%)]  RMSE = 6,597.6520 kW | MAE = 4,294.0822 kW | MAPE = 7.5874% | R² = 0.9879
+  [5-Fold Expanding CV]   RMSE = 9,098.47 ± 2,480.59 kW | MAE = 6,135.42 ± 1,645.48 kW | R² = 0.9867 ± 0.0033
+  [Weather Ablation]      With Weather RMSE = 7,261.76 kW vs. Without Weather RMSE = 8,273.93 kW (Delta = +12.23%)
 ==============================================================================
 ```
 
@@ -476,7 +476,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=5,260):
 ```text
 VAR / AR Multivariate Model Summary - Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: Feature Ablation Study (Univariate Load Only — No Weather)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: Feature Ablation Study (Univariate Load Only — No Weather)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Date range: 2011-01-01 00:00:00 to 2015-01-01 00:00:00 (Freq: 1h)
 Observations: 35,065 (Train: 24,545, Val: 5,260, Eval/Test: 5,260)
@@ -489,7 +489,7 @@ Model: AR(24) [Univariate Differenced d=1, No Weather Ablation]
 Log Likelihood (Load Eq):  -252304.446   AIC (Load Eq):     504658.892
 BIC (Load Eq):              504861.573   HQIC (Load Eq):    504724.555
 FPE (Final Pred Error):    50812036.41   Device:                   cpu
-Converged:                        True   Train / Pred:    1.9867s / 0.1931s
+Converged:                        True   Train / Pred:    2.0646s / 0.1833s
 ------------------------------------------------------------------------------
 KEY AUTOREGRESSIVE PARAMETER ESTIMATES (const, L1..L3, L6, L12, L23, L24):
 param                       coef     std err         z    P>|z|      [0.025      0.975]
@@ -522,7 +522,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=5,260):
 ```text
 XGBoost Gradient Boosting Model Summary - Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: Feature Ablation Study (Univariate Load Only — No Weather)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: Feature Ablation Study (Univariate Load Only — No Weather)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Date range: 2011-01-01 00:00:00 to 2015-01-01 00:00:00 (Freq: 1h)
 Observations: 35,065 (Train: 24,545, Val: 5,260, Eval/Test: 5,260)
@@ -534,7 +534,7 @@ Model: XGBoost Univariate [No Weather, 34 Load/Calendar Features]
 ==============================================================================
             XGBoost Boosting Convergence & Feature Importance Fit             
 ==============================================================================
-Converged:                        True   Train / Pred:    3.3890s / 0.0747s
+Converged:                        True   Train / Pred:    3.5118s / 0.0769s
 ------------------------------------------------------------------------------
 FEATURE IMPORTANCE AGGREGATED BY FUNCTIONAL GROUP (34 Engineered Features):
 Feature Group                                  Count  Share (%)    Top Feature
@@ -580,7 +580,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=5,260):
 ```text
 Stacked 2-Layer LSTM (Univariate Ablation) Deep Learning Model Summary - Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: Feature Ablation Study (Univariate Load Only — No Weather)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: Feature Ablation Study (Univariate Load Only — No Weather)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Date range: 2011-01-01 00:00:00 to 2015-01-01 00:00:00 (Freq: 1h)
 Observations: 35,065 (Train: 24,545, Val: 5,260, Eval/Test: 5,260)
@@ -591,19 +591,19 @@ Model: Stacked 2-Layer LSTM + Highway [No Weather, Input_Dim=1]
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Hardware Device:                  cuda   Train / Pred:    63.0651s / 0.6048s
+Hardware Device:                  cuda   Train / Pred:    62.1779s / 0.5884s
 ==============================================================================
-Ljung-Box (L=24) (Q):    1407.58   Jarque-Bera (JB):    176311.86
+Ljung-Box (L=24) (Q):    2363.09   Jarque-Bera (JB):     63448.23
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     1.1876   Skew:                   0.9160
-Prob(H) (two-sided):       0.0003   Kurtosis:              31.3039
-Durbin-Watson (DW):        1.7710   MedAE (kW):        3734.5786
-Residual Mean (kW):    -74.1782   Residual Std:        7077.8314
+Heteroskedasticity(H):     1.1680   Skew:                   0.7231
+Prob(H) (two-sided):       0.0012   Kurtosis:              19.9531
+Durbin-Watson (DW):        1.7599   MedAE (kW):        4116.1244
+Residual Mean (kW):   -852.0479   Residual Std:        8229.9441
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=5,260):
-  MSE  = 50,101,199.7840 | RMSE = 7,078.2201 kW | MAE = 4,930.6207 kW
-  MAPE =        2.2122% | R²   =     0.9935     | Max Error = 124,077.7816 kW
-  [Weather Ablation]      With Weather RMSE = 6,570.41 kW vs. Without Weather RMSE = 7,078.22 kW (Delta = +7.17%)
+  MSE  = 68,457,965.6337 | RMSE = 8,273.9329 kW | MAE = 5,759.4490 kW
+  MAPE =        2.6038% | R²   =     0.9912     | Max Error = 125,567.8358 kW
+  [Weather Ablation]      With Weather RMSE = 7,261.76 kW vs. Without Weather RMSE = 8,273.93 kW (Delta = +12.23%)
 ==============================================================================
 ```
 
@@ -611,7 +611,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=5,260):
 ```text
 XGBoost Gradient Boosting Model Summary - Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: Walk-Forward Backtesting (168 Hours Rolling 1-Step Feedback)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: Walk-Forward Backtesting (168 Hours Rolling 1-Step Feedback)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Date range: 2014-05-26 21:00:00 to 2014-06-02 20:00:00 (Freq: 1h)
 Observations: 35,065 (Train: 24,545, Val: 5,260, Eval/Test: 168)
@@ -625,7 +625,7 @@ Model: XGBoost [Walk-Forward Backtesting 168h Online Feedback]
 ==============================================================================
 Train Scaled RMSE (Tree 1 -> End): 0.955722 -> 0.043671
 Val Scaled RMSE   (Tree 1 -> Best): 0.821423 -> 0.065047
-Converged:                        True   Train / Pred:    5.2138s / 0.0995s
+Converged:                        True   Train / Pred:    5.4028s / 0.1025s
 ------------------------------------------------------------------------------
 BOOSTING ITERATION CONVERGENCE TRAJECTORY (Extracted from evals_result_):
   Tree #  Train RMSE (Scaled)  Val RMSE (Scaled)      Gen Gap           Status
@@ -689,7 +689,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=168):
 ```text
 VAR / AR Multivariate Model Summary - Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: Walk-Forward Backtesting (168 Hours Rolling 1-Step Feedback)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: Walk-Forward Backtesting (168 Hours Rolling 1-Step Feedback)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Date range: 2014-05-26 21:00:00 to 2014-06-02 20:00:00 (Freq: 1h)
 Observations: 35,065 (Train: 24,545, Val: 5,260, Eval/Test: 168)
@@ -702,7 +702,7 @@ Model: VAR [Walk-Forward Backtesting 168h Online Feedback]
 Log Likelihood (Load Eq):  -250953.731   AIC (Load Eq):     502101.462
 BIC (Load Eq):              502887.865   HQIC (Load Eq):    502356.233
 FPE (Final Pred Error):    45779369.30   Device:                   cpu
-Converged:                        True   Train / Pred:    3.0565s / 0.2574s
+Converged:                        True   Train / Pred:    3.1763s / 0.2444s
 ------------------------------------------------------------------------------
 CROSS-VARIABLE LAG INFLUENCE ON TARGET EQUATION (Delta_load_t, p=24 Lags):
 Variable          Lags    Sum(Coef)      L1 Norm      L2 Norm    Dominant Lag
@@ -751,7 +751,7 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=168):
 ```text
 Stacked 2-Layer LSTM (Walk-Forward 168h) Deep Learning Model Summary - Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Regime: Walk-Forward Backtesting (168 Hours Rolling 1-Step Feedback)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Regime: Walk-Forward Backtesting (168 Hours Rolling 1-Step Feedback)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Date range: 2014-05-26 21:00:00 to 2014-06-02 20:00:00 (Freq: 1h)
 Observations: 35,065 (Train: 24,545, Val: 5,260, Eval/Test: 168)
@@ -762,20 +762,20 @@ Model: LSTM [Walk-Forward Backtesting 168h Online Feedback]
 ==============================================================================
           PyTorch Deep Learning Convergence & Parameter Anatomy               
 ==============================================================================
-Initial Train Loss:           0.016259   Best Val Loss:       0.004957
-Final Train Loss:             0.005305   Best Epoch:           27 / 30  
-Hardware Device:                  cuda   Train / Pred:    97.0233s / 0.8064s
+Initial Train Loss:           0.016343   Best Val Loss:       0.006058
+Final Train Loss:             0.007327   Best Epoch:           27 / 30  
+Hardware Device:                  cuda   Train / Pred:    95.6583s / 0.7846s
 ==============================================================================
-Ljung-Box (L=24) (Q):     160.81   Jarque-Bera (JB):        54.02
+Ljung-Box (L=24) (Q):     132.63   Jarque-Bera (JB):        58.44
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     2.5308   Skew:                  -0.1508
-Prob(H) (two-sided):       0.0007   Kurtosis:               5.7615
-Durbin-Watson (DW):        2.8172   MedAE (kW):        3115.1892
-Residual Mean (kW):    355.7829   Residual Std:        5799.8054
+Heteroskedasticity(H):     2.7485   Skew:                  -0.0529
+Prob(H) (two-sided):       0.0002   Kurtosis:               5.8874
+Durbin-Watson (DW):        2.7380   MedAE (kW):        3198.6657
+Residual Mean (kW):    736.7856   Residual Std:        6040.5995
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=168):
-  MSE  = 33,764,323.7447 | RMSE = 5,810.7077 kW | MAE = 4,238.7778 kW
-  MAPE =        1.9522% | R²   =     0.9929     | Max Error = 26,100.6662 kW
+  MSE  = 37,031,694.8909 | RMSE = 6,085.3673 kW | MAE = 4,437.1365 kW
+  MAPE =        2.0562% | R²   =     0.9922     | Max Error = 27,290.6400 kW
 ==============================================================================
 ```
 
@@ -783,11 +783,11 @@ OUT-OF-SAMPLE EVALUATION METRICS (Original Scale kW, n_eval=168):
 ```text
 5-Fold Expanding Window CV Model Summary - VAR [5-Fold TimeSeriesSplit — Fold 1/5]
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 1 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Fold: 1 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Window Period: Train [2011-01-01 00:00:00..2011-07-27 01:00:00] -> Val [2011-07-27 02:00:00..2012-02-19 00:00:00]
 Observations: Train^(k) = 4,970 hours | Val^(k) = 4,967 hours | Device: cpu
-Model Family: VAR | Params / Features: 97 | Train Time: 0.7028s
+Model Family: VAR | Params / Features: 97 | Train Time: 0.6937s
 ==============================================================================
 Ljung-Box (L=24) (Q):     648.28   Jarque-Bera (JB):    101226.76
 Prob(Q):                   0.0000   Prob(JB):               0.0000
@@ -807,11 +807,11 @@ OUT-OF-SAMPLE FOLD 1 VALIDATION METRICS (Original Scale kW, n_val=4,967):
 ```text
 5-Fold Expanding Window CV Model Summary - XGBoost [5-Fold TimeSeriesSplit — Fold 1/5]
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 1 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Fold: 1 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Window Period: Train [2011-01-01 00:00:00..2011-07-27 01:00:00] -> Val [2011-07-27 02:00:00..2012-02-19 00:00:00]
 Observations: Train^(k) = 4,970 hours | Val^(k) = 4,967 hours | Device: cuda
-Model Family: XGBoost | Params / Features: 106 | Train Time: 6.1018s
+Model Family: XGBoost | Params / Features: 106 | Train Time: 6.0736s
 ==============================================================================
 Ljung-Box (L=24) (Q):   15585.70   Jarque-Bera (JB):    187417.69
 Prob(Q):                   0.0000   Prob(JB):               0.0000
@@ -831,23 +831,23 @@ OUT-OF-SAMPLE FOLD 1 VALIDATION METRICS (Original Scale kW, n_val=4,967):
 ```text
 5-Fold Expanding Window CV Model Summary - LSTM [5-Fold TimeSeriesSplit — Fold 1/5]
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 1 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Fold: 1 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Window Period: Train [2011-01-01 00:00:00..2011-07-27 01:00:00] -> Val [2011-07-27 02:00:00..2012-02-19 00:00:00]
 Observations: Train^(k) = 4,970 hours | Val^(k) = 4,967 hours | Device: cuda
-Model Family: LSTM | Params / Features: 30,589 | Train Time: 9.2671s
+Model Family: LSTM | Params / Features: 30,589 | Train Time: 9.8307s
 ==============================================================================
-Ljung-Box (L=24) (Q):    5160.10   Jarque-Bera (JB):     13070.06
+Ljung-Box (L=24) (Q):    4599.47   Jarque-Bera (JB):     12279.18
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     2.2902   Skew:                  -0.7043
-Prob(H) (two-sided):       0.0000   Kurtosis:              10.8210
-Durbin-Watson (DW):        1.2214   MedAE (kW):            4420.27
-Residual Mean (kW):     -541.2321   Residual Std (kW):   8519.9778
+Heteroskedasticity(H):     2.5308   Skew:                  -0.6948
+Prob(H) (two-sided):       0.0000   Kurtosis:              10.5763
+Durbin-Watson (DW):        1.2278   MedAE (kW):            4484.55
+Residual Mean (kW):    -1271.3837   Residual Std (kW):   8480.7518
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE FOLD 1 VALIDATION METRICS (Original Scale kW, n_val=4,967):
-  MSE  = 72,882,953.1316 | RMSE = 8,537.1513 kW | MAE = 5,980.9555 kW
-  MAPE =        2.8019% | R²   =     0.9866    | Max Error =  67,703.68 kW
-  [5-Fold CV Mean ± Std]  RMSE = 8,764.86 ± 2,738.29 kW | R² = 0.9877 ± 0.0037
+  MSE  = 73,539,567.9087 | RMSE = 8,575.5214 kW | MAE = 6,027.3117 kW
+  MAPE =        2.8569% | R²   =     0.9865    | Max Error =  68,147.16 kW
+  [5-Fold CV Mean ± Std]  RMSE = 9,098.47 ± 2,480.59 kW | R² = 0.9867 ± 0.0033
 ==============================================================================
 ```
 
@@ -855,11 +855,11 @@ OUT-OF-SAMPLE FOLD 1 VALIDATION METRICS (Original Scale kW, n_val=4,967):
 ```text
 5-Fold Expanding Window CV Model Summary - VAR [5-Fold TimeSeriesSplit — Fold 2/5]
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 2 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Fold: 2 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Window Period: Train [2011-01-01 00:00:00..2012-02-19 00:00:00] -> Val [2012-02-19 01:00:00..2012-09-12 23:00:00]
 Observations: Train^(k) = 9,937 hours | Val^(k) = 4,967 hours | Device: cpu
-Model Family: VAR | Params / Features: 97 | Train Time: 1.2285s
+Model Family: VAR | Params / Features: 97 | Train Time: 1.2955s
 ==============================================================================
 Ljung-Box (L=24) (Q):     795.16   Jarque-Bera (JB):    224823.35
 Prob(Q):                   0.0000   Prob(JB):               0.0000
@@ -879,11 +879,11 @@ OUT-OF-SAMPLE FOLD 2 VALIDATION METRICS (Original Scale kW, n_val=4,967):
 ```text
 5-Fold Expanding Window CV Model Summary - XGBoost [5-Fold TimeSeriesSplit — Fold 2/5]
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 2 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Fold: 2 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Window Period: Train [2011-01-01 00:00:00..2012-02-19 00:00:00] -> Val [2012-02-19 01:00:00..2012-09-12 23:00:00]
 Observations: Train^(k) = 9,937 hours | Val^(k) = 4,967 hours | Device: cuda
-Model Family: XGBoost | Params / Features: 106 | Train Time: 5.0186s
+Model Family: XGBoost | Params / Features: 106 | Train Time: 5.2923s
 ==============================================================================
 Ljung-Box (L=24) (Q):   13999.57   Jarque-Bera (JB):      9625.28
 Prob(Q):                   0.0000   Prob(JB):               0.0000
@@ -903,23 +903,23 @@ OUT-OF-SAMPLE FOLD 2 VALIDATION METRICS (Original Scale kW, n_val=4,967):
 ```text
 5-Fold Expanding Window CV Model Summary - LSTM [5-Fold TimeSeriesSplit — Fold 2/5]
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 2 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Fold: 2 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Window Period: Train [2011-01-01 00:00:00..2012-02-19 00:00:00] -> Val [2012-02-19 01:00:00..2012-09-12 23:00:00]
 Observations: Train^(k) = 9,937 hours | Val^(k) = 4,967 hours | Device: cuda
-Model Family: LSTM | Params / Features: 30,589 | Train Time: 10.0490s
+Model Family: LSTM | Params / Features: 30,589 | Train Time: 9.9802s
 ==============================================================================
-Ljung-Box (L=24) (Q):    4222.09   Jarque-Bera (JB):     12240.29
+Ljung-Box (L=24) (Q):    4241.94   Jarque-Bera (JB):     12132.47
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     3.8104   Skew:                   0.7302
-Prob(H) (two-sided):       0.0000   Kurtosis:              10.5505
-Durbin-Watson (DW):        1.5095   MedAE (kW):            6054.22
-Residual Mean (kW):      317.8793   Residual Std (kW):  13332.6704
+Heteroskedasticity(H):     3.8377   Skew:                   0.7217
+Prob(H) (two-sided):       0.0000   Kurtosis:              10.5193
+Durbin-Watson (DW):        1.5093   MedAE (kW):            6062.58
+Residual Mean (kW):      276.8142   Residual Std (kW):  13339.9155
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE FOLD 2 VALIDATION METRICS (Original Scale kW, n_val=4,967):
-  MSE  = 177,861,148.2063 | RMSE = 13,336.4594 kW | MAE = 8,866.2547 kW
-  MAPE =        4.3257% | R²   =     0.9832    | Max Error = 130,657.77 kW
-  [5-Fold CV Mean ± Std]  RMSE = 8,764.86 ± 2,738.29 kW | R² = 0.9877 ± 0.0037
+  MSE  = 178,029,971.4231 | RMSE = 13,342.7872 kW | MAE = 8,874.6042 kW
+  MAPE =        4.3271% | R²   =     0.9831    | Max Error = 130,445.90 kW
+  [5-Fold CV Mean ± Std]  RMSE = 9,098.47 ± 2,480.59 kW | R² = 0.9867 ± 0.0033
 ==============================================================================
 ```
 
@@ -927,11 +927,11 @@ OUT-OF-SAMPLE FOLD 2 VALIDATION METRICS (Original Scale kW, n_val=4,967):
 ```text
 5-Fold Expanding Window CV Model Summary - VAR [5-Fold TimeSeriesSplit — Fold 3/5]
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 3 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Fold: 3 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Window Period: Train [2011-01-01 00:00:00..2012-09-12 23:00:00] -> Val [2012-09-13 00:00:00..2013-04-07 22:00:00]
 Observations: Train^(k) = 14,904 hours | Val^(k) = 4,967 hours | Device: cpu
-Model Family: VAR | Params / Features: 97 | Train Time: 1.7816s
+Model Family: VAR | Params / Features: 97 | Train Time: 1.8385s
 ==============================================================================
 Ljung-Box (L=24) (Q):     918.61   Jarque-Bera (JB):   2087237.63
 Prob(Q):                   0.0000   Prob(JB):               0.0000
@@ -951,11 +951,11 @@ OUT-OF-SAMPLE FOLD 3 VALIDATION METRICS (Original Scale kW, n_val=4,967):
 ```text
 5-Fold Expanding Window CV Model Summary - XGBoost [5-Fold TimeSeriesSplit — Fold 3/5]
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 3 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Fold: 3 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Window Period: Train [2011-01-01 00:00:00..2012-09-12 23:00:00] -> Val [2012-09-13 00:00:00..2013-04-07 22:00:00]
 Observations: Train^(k) = 14,904 hours | Val^(k) = 4,967 hours | Device: cuda
-Model Family: XGBoost | Params / Features: 106 | Train Time: 2.7909s
+Model Family: XGBoost | Params / Features: 106 | Train Time: 2.8010s
 ==============================================================================
 Ljung-Box (L=24) (Q):    4569.64   Jarque-Bera (JB):    152544.57
 Prob(Q):                   0.0000   Prob(JB):               0.0000
@@ -975,23 +975,23 @@ OUT-OF-SAMPLE FOLD 3 VALIDATION METRICS (Original Scale kW, n_val=4,967):
 ```text
 5-Fold Expanding Window CV Model Summary - LSTM [5-Fold TimeSeriesSplit — Fold 3/5]
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 3 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Fold: 3 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Window Period: Train [2011-01-01 00:00:00..2012-09-12 23:00:00] -> Val [2012-09-13 00:00:00..2013-04-07 22:00:00]
 Observations: Train^(k) = 14,904 hours | Val^(k) = 4,967 hours | Device: cuda
-Model Family: LSTM | Params / Features: 30,589 | Train Time: 26.6055s
+Model Family: LSTM | Params / Features: 30,589 | Train Time: 26.8652s
 ==============================================================================
-Ljung-Box (L=24) (Q):    1893.45   Jarque-Bera (JB):    245030.42
+Ljung-Box (L=24) (Q):    2427.53   Jarque-Bera (JB):    194348.86
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     0.4990   Skew:                  -0.2947
-Prob(H) (two-sided):       0.0000   Kurtosis:              37.4037
-Durbin-Watson (DW):        1.6549   MedAE (kW):            4054.09
-Residual Mean (kW):      -85.7942   Residual Std (kW):   8183.4698
+Heteroskedasticity(H):     0.4363   Skew:                   0.0628
+Prob(H) (two-sided):       0.0000   Kurtosis:              33.6440
+Durbin-Watson (DW):        1.6563   MedAE (kW):            3681.78
+Residual Mean (kW):     -674.1705   Residual Std (kW):   8466.8627
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE FOLD 3 VALIDATION METRICS (Original Scale kW, n_val=4,967):
-  MSE  = 66,976,539.1108 | RMSE = 8,183.9195 kW | MAE = 5,488.8784 kW
-  MAPE =        3.3260% | R²   =     0.9860    | Max Error = 127,752.50 kW
-  [5-Fold CV Mean ± Std]  RMSE = 8,764.86 ± 2,738.29 kW | R² = 0.9877 ± 0.0037
+  MSE  = 72,142,270.6073 | RMSE = 8,493.6606 kW | MAE = 5,425.8383 kW
+  MAPE =        3.3237% | R²   =     0.9849    | Max Error = 126,281.07 kW
+  [5-Fold CV Mean ± Std]  RMSE = 9,098.47 ± 2,480.59 kW | R² = 0.9867 ± 0.0033
 ==============================================================================
 ```
 
@@ -999,11 +999,11 @@ OUT-OF-SAMPLE FOLD 3 VALIDATION METRICS (Original Scale kW, n_val=4,967):
 ```text
 5-Fold Expanding Window CV Model Summary - VAR [5-Fold TimeSeriesSplit — Fold 4/5]
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 4 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Fold: 4 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Window Period: Train [2011-01-01 00:00:00..2013-04-07 22:00:00] -> Val [2013-04-07 23:00:00..2013-10-31 21:00:00]
 Observations: Train^(k) = 19,871 hours | Val^(k) = 4,967 hours | Device: cpu
-Model Family: VAR | Params / Features: 97 | Train Time: 2.4096s
+Model Family: VAR | Params / Features: 97 | Train Time: 2.5299s
 ==============================================================================
 Ljung-Box (L=24) (Q):     632.65   Jarque-Bera (JB):    238866.95
 Prob(Q):                   0.0000   Prob(JB):               0.0000
@@ -1023,11 +1023,11 @@ OUT-OF-SAMPLE FOLD 4 VALIDATION METRICS (Original Scale kW, n_val=4,967):
 ```text
 5-Fold Expanding Window CV Model Summary - XGBoost [5-Fold TimeSeriesSplit — Fold 4/5]
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 4 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Fold: 4 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Window Period: Train [2011-01-01 00:00:00..2013-04-07 22:00:00] -> Val [2013-04-07 23:00:00..2013-10-31 21:00:00]
 Observations: Train^(k) = 19,871 hours | Val^(k) = 4,967 hours | Device: cuda
-Model Family: XGBoost | Params / Features: 106 | Train Time: 4.0364s
+Model Family: XGBoost | Params / Features: 106 | Train Time: 4.0180s
 ==============================================================================
 Ljung-Box (L=24) (Q):     715.67   Jarque-Bera (JB):     85997.73
 Prob(Q):                   0.0000   Prob(JB):               0.0000
@@ -1047,23 +1047,23 @@ OUT-OF-SAMPLE FOLD 4 VALIDATION METRICS (Original Scale kW, n_val=4,967):
 ```text
 5-Fold Expanding Window CV Model Summary - LSTM [5-Fold TimeSeriesSplit — Fold 4/5]
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 4 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Fold: 4 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Window Period: Train [2011-01-01 00:00:00..2013-04-07 22:00:00] -> Val [2013-04-07 23:00:00..2013-10-31 21:00:00]
 Observations: Train^(k) = 19,871 hours | Val^(k) = 4,967 hours | Device: cuda
-Model Family: LSTM | Params / Features: 30,589 | Train Time: 34.7935s
+Model Family: LSTM | Params / Features: 30,589 | Train Time: 37.2380s
 ==============================================================================
-Ljung-Box (L=24) (Q):    1094.08   Jarque-Bera (JB):     56595.42
+Ljung-Box (L=24) (Q):    1530.46   Jarque-Bera (JB):     34893.70
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     1.3448   Skew:                   0.9478
-Prob(H) (two-sided):       0.0000   Kurtosis:              19.4277
-Durbin-Watson (DW):        1.9134   MedAE (kW):            4381.60
-Residual Mean (kW):     -377.4048   Residual Std (kW):   7775.3843
+Heteroskedasticity(H):     1.4897   Skew:                   1.0316
+Prob(H) (two-sided):       0.0000   Kurtosis:              15.8197
+Durbin-Watson (DW):        1.9455   MedAE (kW):            4337.44
+Residual Mean (kW):     -820.0129   Residual Std (kW):   8242.2467
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE FOLD 4 VALIDATION METRICS (Original Scale kW, n_val=4,967):
-  MSE  = 60,599,035.9841 | RMSE = 7,784.5383 kW | MAE = 5,585.0868 kW
-  MAPE =        2.4227% | R²   =     0.9929    | Max Error = 117,036.81 kW
-  [5-Fold CV Mean ± Std]  RMSE = 8,764.86 ± 2,738.29 kW | R² = 0.9877 ± 0.0037
+  MSE  = 68,607,052.3876 | RMSE = 8,282.9374 kW | MAE = 5,869.6513 kW
+  MAPE =        2.5263% | R²   =     0.9919    | Max Error = 115,021.50 kW
+  [5-Fold CV Mean ± Std]  RMSE = 9,098.47 ± 2,480.59 kW | R² = 0.9867 ± 0.0033
 ==============================================================================
 ```
 
@@ -1071,11 +1071,11 @@ OUT-OF-SAMPLE FOLD 4 VALIDATION METRICS (Original Scale kW, n_val=4,967):
 ```text
 5-Fold Expanding Window CV Model Summary - VAR [5-Fold TimeSeriesSplit — Fold 5/5]
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 5 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Fold: 5 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Window Period: Train [2011-01-01 00:00:00..2013-10-31 21:00:00] -> Val [2013-10-31 22:00:00..2014-05-26 20:00:00]
 Observations: Train^(k) = 24,838 hours | Val^(k) = 4,967 hours | Device: cpu
-Model Family: VAR | Params / Features: 97 | Train Time: 2.9439s
+Model Family: VAR | Params / Features: 97 | Train Time: 3.9248s
 ==============================================================================
 Ljung-Box (L=24) (Q):     925.27   Jarque-Bera (JB):   2660436.85
 Prob(Q):                   0.0000   Prob(JB):               0.0000
@@ -1095,11 +1095,11 @@ OUT-OF-SAMPLE FOLD 5 VALIDATION METRICS (Original Scale kW, n_val=4,967):
 ```text
 5-Fold Expanding Window CV Model Summary - XGBoost [5-Fold TimeSeriesSplit — Fold 5/5]
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 5 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Fold: 5 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Window Period: Train [2011-01-01 00:00:00..2013-10-31 21:00:00] -> Val [2013-10-31 22:00:00..2014-05-26 20:00:00]
 Observations: Train^(k) = 24,838 hours | Val^(k) = 4,967 hours | Device: cuda
-Model Family: XGBoost | Params / Features: 106 | Train Time: 4.0384s
+Model Family: XGBoost | Params / Features: 106 | Train Time: 4.5294s
 ==============================================================================
 Ljung-Box (L=24) (Q):    1147.97   Jarque-Bera (JB):   1199272.62
 Prob(Q):                   0.0000   Prob(JB):               0.0000
@@ -1119,22 +1119,22 @@ OUT-OF-SAMPLE FOLD 5 VALIDATION METRICS (Original Scale kW, n_val=4,967):
 ```text
 5-Fold Expanding Window CV Model Summary - LSTM [5-Fold TimeSeriesSplit — Fold 5/5]
 ==============================================================================
-Run ID: 20261124_193611_5cd58d | Status: SUCCESS | Fold: 5 / 5 (Leakage-Free In-Fold Scaler)
+Run ID: 20261126_212116_d28130 | Status: SUCCESS | Fold: 5 / 5 (Leakage-Free In-Fold Scaler)
 Data: Electricity Load & Weather Multivariate Time Series (UCI LD2011-2014, 01/2011 - 01/2015)
 Window Period: Train [2011-01-01 00:00:00..2013-10-31 21:00:00] -> Val [2013-10-31 22:00:00..2014-05-26 20:00:00]
 Observations: Train^(k) = 24,838 hours | Val^(k) = 4,967 hours | Device: cuda
-Model Family: LSTM | Params / Features: 30,589 | Train Time: 42.9271s
+Model Family: LSTM | Params / Features: 30,589 | Train Time: 54.4185s
 ==============================================================================
-Ljung-Box (L=24) (Q):     950.64   Jarque-Bera (JB):   1118923.11
+Ljung-Box (L=24) (Q):    3298.58   Jarque-Bera (JB):    428819.56
 Prob(Q):                   0.0000   Prob(JB):               0.0000
-Heteroskedasticity(H):     1.4570   Skew:                  -1.0503
-Prob(H) (two-sided):       0.0000   Kurtosis:              76.4990
-Durbin-Watson (DW):        1.8342   MedAE (kW):            2896.01
-Residual Mean (kW):     -359.2133   Residual Std (kW):   5971.4322
+Heteroskedasticity(H):     0.8439   Skew:                  -0.4135
+Prob(H) (two-sided):       0.0006   Kurtosis:              48.5118
+Durbin-Watson (DW):        1.5447   MedAE (kW):            3309.87
+Residual Mean (kW):      -39.3184   Residual Std (kW):   6797.3144
 ------------------------------------------------------------------------------
 OUT-OF-SAMPLE FOLD 5 VALIDATION METRICS (Original Scale kW, n_val=4,967):
-  MSE  = 35,787,037.1541 | RMSE = 5,982.2268 kW | MAE = 3,977.4965 kW
-  MAPE =        7.8120% | R²   =     0.9898    | Max Error = 130,637.10 kW
-  [5-Fold CV Mean ± Std]  RMSE = 8,764.86 ± 2,738.29 kW | R² = 0.9877 ± 0.0037
+  MSE  = 46,205,028.3817 | RMSE = 6,797.4281 kW | MAE = 4,479.6781 kW
+  MAPE =        8.1031% | R²   =     0.9869    | Max Error = 130,802.36 kW
+  [5-Fold CV Mean ± Std]  RMSE = 9,098.47 ± 2,480.59 kW | R² = 0.9867 ± 0.0033
 ==============================================================================
 ```

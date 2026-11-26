@@ -1,6 +1,6 @@
 {
   "run_id": "20261124_193611_5cd58d",
-  "generated_at": "2026-11-24 19:44:12",
+  "generated_at": "2026-11-26 21:07:52",
   "dataset_info": {
     "dataset_name": "dataset2",
     "dataset_title": "PEMS-BAY Spatio-Temporal Highway Traffic Speed (207 Sensors, 5-min, 01/2017)",
@@ -736,7 +736,7 @@
       "execution_info": {
         "run_id": "20261124_193611_5cd58d",
         "status": "SUCCESS",
-        "timestamp": "2026-11-24 19:44:12",
+        "timestamp": "2026-11-26 21:07:52",
         "train_duration_seconds": 67.9647
       }
     },
@@ -841,7 +841,7 @@
       "execution_info": {
         "run_id": "20261124_193611_5cd58d",
         "status": "SUCCESS",
-        "timestamp": "2026-11-24 19:44:12",
+        "timestamp": "2026-11-26 21:07:52",
         "train_duration_seconds": 67.9647
       }
     },
@@ -946,7 +946,7 @@
       "execution_info": {
         "run_id": "20261124_193611_5cd58d",
         "status": "SUCCESS",
-        "timestamp": "2026-11-24 19:44:12",
+        "timestamp": "2026-11-26 21:07:52",
         "train_duration_seconds": 67.9647
       }
     },
@@ -1051,7 +1051,7 @@
       "execution_info": {
         "run_id": "20261124_193611_5cd58d",
         "status": "SUCCESS",
-        "timestamp": "2026-11-24 19:44:12",
+        "timestamp": "2026-11-26 21:07:52",
         "train_duration_seconds": 67.9647
       }
     },
@@ -1340,7 +1340,7 @@
       "execution_info": {
         "run_id": "20261124_193611_5cd58d",
         "status": "SUCCESS",
-        "timestamp": "2026-11-24 19:44:12",
+        "timestamp": "2026-11-26 21:07:52",
         "train_duration_seconds": 15.3117
       }
     },
@@ -1441,7 +1441,7 @@
       "execution_info": {
         "run_id": "20261124_193611_5cd58d",
         "status": "SUCCESS",
-        "timestamp": "2026-11-24 19:44:12",
+        "timestamp": "2026-11-26 21:07:52",
         "train_duration_seconds": 15.3117
       }
     },
@@ -1542,7 +1542,7 @@
       "execution_info": {
         "run_id": "20261124_193611_5cd58d",
         "status": "SUCCESS",
-        "timestamp": "2026-11-24 19:44:12",
+        "timestamp": "2026-11-26 21:07:52",
         "train_duration_seconds": 15.3117
       }
     },
@@ -1643,7 +1643,7 @@
       "execution_info": {
         "run_id": "20261124_193611_5cd58d",
         "status": "SUCCESS",
-        "timestamp": "2026-11-24 19:44:12",
+        "timestamp": "2026-11-26 21:07:52",
         "train_duration_seconds": 15.3117
       }
     },
@@ -2544,7 +2544,7 @@
       "execution_info": {
         "run_id": "20261124_193611_5cd58d",
         "status": "SUCCESS",
-        "timestamp": "2026-11-24 19:44:12",
+        "timestamp": "2026-11-26 21:07:52",
         "train_duration_seconds": 8.9257
       }
     },
@@ -2641,7 +2641,7 @@
       "execution_info": {
         "run_id": "20261124_193611_5cd58d",
         "status": "SUCCESS",
-        "timestamp": "2026-11-24 19:44:12",
+        "timestamp": "2026-11-26 21:07:52",
         "train_duration_seconds": 8.9257
       }
     },
@@ -2738,7 +2738,7 @@
       "execution_info": {
         "run_id": "20261124_193611_5cd58d",
         "status": "SUCCESS",
-        "timestamp": "2026-11-24 19:44:12",
+        "timestamp": "2026-11-26 21:07:52",
         "train_duration_seconds": 8.9257
       }
     },
@@ -2835,7 +2835,7 @@
       "execution_info": {
         "run_id": "20261124_193611_5cd58d",
         "status": "SUCCESS",
-        "timestamp": "2026-11-24 19:44:12",
+        "timestamp": "2026-11-26 21:07:52",
         "train_duration_seconds": 8.9257
       }
     }

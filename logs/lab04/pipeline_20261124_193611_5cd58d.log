@@ -14,3 +14,6 @@
 [2026-11-24 19:44:02] [REPORTING] [START] Bắt đầu kết xuất bộ 3 báo cáo tự động (HTML, PDF, Markdown) chuẩn giao diện Lab04_ML.
 [2026-11-24 19:44:12] [REPORTING] [SUCCESS] Hoàn tất xuất báo cáo trong 10.01s | HTML=13,529,907B | PDF=10,601,551B | MD=13,845B.
 [2026-11-24 19:44:12] [MODEL_SUMMARY] [SUCCESS] Đã trích xuất tự động hồ sơ thống kê cho toàn bộ 36 thực thể mô hình Lab 04 trong 0.43s tại reports/model_summary/lab04/.
+[2026-11-26 20:59:00] [MODEL_SUMMARY] [SUCCESS] Đã trích xuất tự động hồ sơ thống kê cho toàn bộ 36 thực thể mô hình Lab 04 trong 0.78s tại reports/model_summary/lab04/.
+[2026-11-26 21:03:54] [MODEL_SUMMARY] [SUCCESS] Đã trích xuất tự động hồ sơ thống kê cho toàn bộ 36 thực thể mô hình Lab 04 trong 0.46s tại reports/model_summary/lab04/.
+[2026-11-26 21:07:52] [MODEL_SUMMARY] [SUCCESS] Đã trích xuất tự động hồ sơ thống kê cho toàn bộ 36 thực thể mô hình Lab 04 trong 0.43s tại reports/model_summary/lab04/.

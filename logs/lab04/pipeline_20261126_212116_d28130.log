@@ -1,0 +1,16 @@
+[2026-11-26 21:21:17] [DATA_LOADING] [START] Bắt đầu nạp dữ liệu electricity_load.csv, pems-bay.h5 và sensor_graph/adj_mx_bay.pkl.
+[2026-11-26 21:21:24] [DATA_LOADING] [SUCCESS] Hoàn tất nạp dữ liệu trong 7.87s | Electricity: (35065, 4) | PEMS-BAY: (8640, 207), Adj: (207, 207).
+[2026-11-26 21:21:35] [EDA] [START] Bắt đầu phân tích khám phá dữ liệu (EDA) và khởi tạo 8 biểu đồ chuyên sâu.
+[2026-11-26 21:21:53] [EDA] [SUCCESS] Hoàn tất EDA trong 17.84s | Đã xuất 8 biểu đồ EDA | Biến thời tiết mạnh nhất: humidity (r=-0.9224).
+[2026-11-26 21:21:54] [PREPROCESSING] [START] Bắt đầu tiền xử lý chống rò rỉ dữ liệu, kiểm định ADF và tạo cửa sổ trượt.
+[2026-11-26 21:22:05] [PREPROCESSING] [SUCCESS] Hoàn tất tiền xử lý trong 11.35s | X_xgb_train=(24521, 106) | X_lstm_train=(24521, 24, 4) | 5-Fold TimeSeriesSplit Ready.
+[2026-11-26 21:22:06] [TRAINING] [START] Bắt đầu huấn luyện đa mô hình trên thiết bị: NVIDIA GeForce RTX 3050 6GB Laptop GPU (torch=cuda, xgb=cuda).
+[2026-11-26 21:29:32] [TRAINING] [SUCCESS] Hoàn tất huấn luyện toàn bộ mô hình trong 445.34s | VAR lag=24 | LSTM best_epoch=27 | DCRNN, TCN, LSTM trên PEMS-BAY hoàn tất.
+[2026-11-26 21:29:32] [EVALUATION] [START] Bắt đầu tính toán 5 chỉ số đánh giá (MSE, RMSE, MAE, MAPE, R²) trên tất cả quy trình.
+[2026-11-26 21:29:32] [EVALUATION] [SUCCESS] Hoàn tất đánh giá trong 0.67s | Best Model (Test): XGBoost (RMSE=6320.97, MAPE=1.87%, R²=0.9948).
+[2026-11-26 21:29:33] [MODEL_SUMMARY] [SUCCESS] Đã trích xuất tự động hồ sơ thống kê cho toàn bộ 36 thực thể mô hình Lab 04 trong 0.76s tại reports/model_summary/lab04/.
+[2026-11-26 21:29:33] [VISUALIZATION] [START] Bắt đầu kết xuất bộ biểu đồ đánh giá, chẩn đoán phần dư và đối sánh đa mô hình.
+[2026-11-26 21:29:49] [VISUALIZATION] [SUCCESS] Hoàn tất kết xuất biểu đồ trong 15.86s | Tổng số biểu đồ trong kho reports/lab04/figures/: 24.
+[2026-11-26 21:29:50] [REPORTING] [START] Bắt đầu kết xuất bộ 3 báo cáo tự động (HTML, PDF, Markdown) chuẩn giao diện Lab04_ML.
+[2026-11-26 21:30:02] [REPORTING] [SUCCESS] Hoàn tất xuất báo cáo trong 11.75s | HTML=13,482,295B | PDF=10,579,954B | MD=13,848B.
+[2026-11-26 21:30:02] [MODEL_SUMMARY] [SUCCESS] Đã trích xuất tự động hồ sơ thống kê cho toàn bộ 36 thực thể mô hình Lab 04 trong 0.66s tại reports/model_summary/lab04/.

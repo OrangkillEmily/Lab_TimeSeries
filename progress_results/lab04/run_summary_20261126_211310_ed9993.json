@@ -1,0 +1,24 @@
+{
+  "run_id": "20261126_211310_ed9993",
+  "project": {
+    "name": "Lab04_Multivariate_TimeSeries_Forecasting",
+    "version": "2.0.0",
+    "lab_id": "lab04",
+    "course": "Time Series Analysis (Phân tích Chuỗi Thời gian)",
+    "institution": "University of Transport in Ho Chi Minh City (UTH)",
+    "random_seed": 42
+  },
+  "hardware": {
+    "torch_device": "cuda",
+    "xgb_device": "cuda",
+    "xgb_tree_method": "hist",
+    "device_name": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+    "amp_enabled": true,
+    "vram_gb": 6.0,
+    "cuda_available": true
+  },
+  "started_at": "2026-11-26T21:13:10",
+  "updated_at": "2026-11-26T21:13:10",
+  "status": "IN_PROGRESS",
+  "stages": {}
+}

@@ -3,12 +3,17 @@ Mô-đun Kiến trúc Mô hình Dự báo Chuỗi Thời gian Đa biến (Model 
 Bao gồm 6 kiến trúc mô hình chuẩn học thuật:
 - Nhóm Bài toán Phụ tải Điện & Thời tiết (Mục 5 - 11 trên electricity_load.csv):
   1. VARForecaster: Vector Autoregression trên chuỗi sai phân dừng bậc 1 (Delta Y_t).
-  2. XGBoostForecaster: Extreme Gradient Boosting trên 105 đặc trưng trễ, thống kê trượt và chu kỳ Fourier.
+  2. XGBoostForecaster: Extreme Gradient Boosting trên 106 đặc trưng trễ, thống kê trượt, xu hướng và chu kỳ Fourier.
   3. LSTMForecaster: Mạng Stacked 2-Layer LSTM kết hợp nhánh Autoregressive Residual Highway (PyTorch GPU + AMP FP16).
 - Nhóm Bài toán Giao thông Đồ thị Đa tầm nhìn Nâng cao (Mục 12 trên PEMS-BAY + adj_mx_bay.pkl):
   4. DCRNNTrafficForecaster: Diffusion Convolutional Recurrent Neural Network (Li et al., ICLR 2018).
   5. PEMS_TCN_Forecaster: Multi-Horizon Temporal Convolutional Network (Dilated Causal Conv1D - Slide 10 Chương 4-5).
   6. PEMS_LSTM_Forecaster: Multi-Horizon Temporal Stacked LSTM (Đối chứng không dùng đồ thị không gian).
+
+Tất cả các mô hình Deep Learning đều tuân thủ cấu trúc module hóa chuẩn PyTorch:
+- Tầng Kiến trúc (nn.Module): Tách riêng định nghĩa mạng (__init__ và forward).
+- Tầng Động cơ Huấn luyện & Suy luận dùng chung: train_one_epoch (6 bước chuẩn PyTorch) và predict_in_batches.
+- Tầng Bộ huấn luyện (Forecaster / Trainer): Chọn criterion, torch.optim.Adam, scheduler và EarlyStopping.
 """
 
 import copy
@@ -20,6 +25,7 @@ import numpy as np
 import pandas as pd
 import torch
 import torch.nn as nn
+import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
 from statsmodels.tsa.api import VAR
 import xgboost as xgb
@@ -28,6 +34,122 @@ from src.lab04.utils import get_compute_device, load_config
 
 warnings.filterwarnings("ignore", category=UserWarning)
 warnings.filterwarnings("ignore", category=FutureWarning)
+
+
+# ============================================================================
+# 0. HÀM HỖ TRỢ HUẤN LUYỆN & SUY LUẬN PYTORCH DÙNG CHUNG (6 BƯỚC CHUẨN)
+# ============================================================================
+def train_one_epoch(
+    model: nn.Module,
+    train_dataloader: DataLoader,
+    criterion: nn.Module,
+    optimizer: optim.Optimizer,
+    device: torch.device,
+    grad_clip: float = 1.0,
+    amp_enabled: bool = False,
+    scaler_amp: Optional[torch.amp.GradScaler] = None,
+    epoch_idx: int = 1,
+    num_epochs: int = 1,
+    verbose: bool = False,
+    log_interval: int = 50,
+    log_prefix: str = "",
+) -> Tuple[float, float, bool]:
+    r"""
+    Purpose: Thực thi trọn vẹn 1 epoch huấn luyện theo đúng 6 bước chuẩn PyTorch cho mọi mạng nn.Module.
+    Input-Output:
+        - Input: model, train_dataloader, criterion, optimizer, device và các tùy chọn AMP/logging.
+        - Output: Tuple (avg_loss, avg_mae, optimizer_stepped).
+    How:
+        1. Move data to device (.to(device))
+        2. Zero gradients (optimizer.zero_grad)
+        3. Forward pass (outputs = model(data))
+        4. Calculate loss (loss = criterion(outputs, labels))
+        5. Backward pass (loss.backward)
+        6. Optimization step (optimizer.step)
+    """
+    model.train()
+    ep_loss = 0.0
+    ep_mae = 0.0
+    n_seen = 0
+    optimizer_stepped = False
+    prefix = f"[{log_prefix}] " if log_prefix else ""
+
+    for batch_idx, (data, labels) in enumerate(train_dataloader):
+        # 1. Move data to device (GPU if available, otherwise CPU)
+        data = data.to(device, non_blocking=True)
+        labels = labels.to(device, non_blocking=True)
+
+        # 2. Zero gradients (important before each batch)
+        optimizer.zero_grad(set_to_none=True)
+
+        # 3. Forward pass: compute model outputs
+        with torch.amp.autocast("cuda", enabled=amp_enabled):
+            outputs = model(data)
+            # 4. Calculate loss
+            loss = criterion(outputs, labels)
+
+        # 5. Backward pass: compute gradients & 6. Optimization step: update weights
+        if amp_enabled and scaler_amp is not None:
+            old_scale = scaler_amp.get_scale()
+            scaler_amp.scale(loss).backward()
+            scaler_amp.unscale_(optimizer)
+            nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
+            scaler_amp.step(optimizer)
+            scaler_amp.update()
+            if scaler_amp.get_scale() >= old_scale:
+                optimizer_stepped = True
+        else:
+            loss.backward()
+            nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
+            optimizer.step()
+            optimizer_stepped = True
+
+        bs = data.size(0)
+        ep_loss += loss.item() * bs
+        ep_mae += torch.abs(outputs - labels).sum().item()
+        n_seen += bs
+
+        # Print training statistics (optional, enabled via verbose=True)
+        if verbose and (
+            (batch_idx + 1) % max(int(log_interval), 1) == 0
+            or (batch_idx + 1) == len(train_dataloader)
+        ):
+            print(
+                f"{prefix}Epoch: {epoch_idx}/{num_epochs} | "
+                f"Batch [{batch_idx + 1}/{len(train_dataloader)}], Loss: {loss.item():.4f}"
+            )
+
+    avg_loss = ep_loss / max(n_seen, 1)
+    avg_mae = ep_mae / max(n_seen, 1)
+    return avg_loss, avg_mae, optimizer_stepped
+
+
+def predict_in_batches(
+    model: nn.Module,
+    X: np.ndarray,
+    device: torch.device,
+    batch_size: int = 256,
+    amp_enabled: bool = False,
+    output_dtype: Any = np.float64,
+) -> np.ndarray:
+    r"""
+    Purpose: Suy luận theo lô (batch inference) an toàn bộ nhớ không tính gradient cho mọi mạng nn.Module.
+    Input-Output:
+        - Input: model (nn.Module), X (np.ndarray), device, batch_size, amp_enabled, output_dtype.
+        - Output: Mảng dự báo np.ndarray theo đúng thứ tự thời gian (shuffle=False).
+    How: Chuyển model sang eval(), tắt autograd bằng torch.no_grad() và gom kết quả từng batch về CPU.
+    """
+    model.eval()
+    ds = TensorDataset(torch.tensor(X, dtype=torch.float32))
+    loader = DataLoader(ds, batch_size=batch_size, shuffle=False)
+    preds_list: List[np.ndarray] = []
+    with torch.no_grad():
+        for (data,) in loader:
+            data = data.to(device, non_blocking=True)
+            with torch.amp.autocast("cuda", enabled=amp_enabled):
+                out = model(data)
+            preds_list.append(out.detach().cpu().numpy())
+    return np.concatenate(preds_list, axis=0).astype(output_dtype)
 
 
 # ============================================================================
@@ -93,7 +215,6 @@ class VARForecaster:
         n_samples = len(raw_vals)
         preds_load = np.zeros(n_samples - lookback, dtype=np.float64)
         for idx, t in enumerate(range(lookback, n_samples)):
-            # Dự báo tại thời điểm t dựa trên lịch sử đến t-1 (chỉ số trong diff_vals là t-2, t-3, ...)
             if t - 1 >= p:
                 lag_block = diff_vals[t - 1 - p : t - 1][::-1]  # (p, K)
                 delta_hat = intercept[0] + float(np.sum(coefs[:, 0, :] * lag_block))
@@ -135,9 +256,9 @@ class VARForecaster:
 class XGBoostForecaster:
     r"""
     Purpose: Mô hình Extreme Gradient Boosting (XGBoost) cho dự báo chuỗi thời gian đa biến
-             trên không gian 105 đặc trưng trễ, thống kê cuốn và chu kỳ lượng giác.
+             trên không gian 106 đặc trưng trễ, thống kê cuốn, xu hướng 24h và chu kỳ lượng giác.
     Input-Output:
-        - Input: Ma trận đặc trưng X (N, 105) và vector mục tiêu y (N,).
+        - Input: Ma trận đặc trưng X (N, 106) và vector mục tiêu y (N,).
         - Output: Vector dự báo đã chuẩn hóa hoặc quy đổi ngược về đơn vị gốc (kW).
     How: Sử dụng thuật toán histogram-based gradient boosting (tree_method='hist')
          trên GPU CUDA (nếu khả dụng) kèm EarlyStopping trên tập Validation.
@@ -320,9 +441,8 @@ class LSTMForecaster:
         - Input: Tensor 3D X_train (N, 24, F), y_train (N,), X_val, y_val.
         - Output: Dự báo trên thang chuẩn hóa hoặc thang đo gốc (kW) kèm lịch sử hội tụ từng Epoch.
     How:
-        - Sử dụng DataLoader với shuffle=True cho các cửa sổ trượt bên trong tập Train để khử độ lệch cục bộ,
-          giữ nguyên thứ tự thời gian (shuffle=False) cho Validation và Test.
-        - Tối ưu bằng AdamW + CosineAnnealingLR + Gradient Clipping + EarlyStopping khôi phục trọng số tốt nhất.
+        - Tách bạch khởi tạo nn.MSELoss + torch.optim.Adam, ủy quyền vòng lặp 6 bước cho train_one_epoch()
+          và đánh giá Validation + EarlyStopping khôi phục trọng số tốt nhất.
     """
 
     def __init__(self, input_dim: int = 4, config: Optional[Dict[str, Any]] = None) -> None:
@@ -371,19 +491,24 @@ class LSTMForecaster:
         X_val: Optional[np.ndarray] = None,
         y_val: Optional[np.ndarray] = None,
         epochs_override: Optional[int] = None,
+        verbose: bool = False,
+        log_interval: int = 50,
     ) -> "LSTMForecaster":
         t0 = time.perf_counter()
-        max_epochs = int(epochs_override) if epochs_override is not None else self.epochs
+        num_epochs = int(epochs_override) if epochs_override is not None else self.epochs
 
-        tr_ds = TensorDataset(
+        train_dataset = TensorDataset(
             torch.tensor(X_train, dtype=torch.float32),
             torch.tensor(y_train, dtype=torch.float32),
         )
-        tr_loader = DataLoader(tr_ds, batch_size=self.batch_size, shuffle=True, drop_last=False)
+        train_dataloader = DataLoader(train_dataset, batch_size=self.batch_size, shuffle=True, drop_last=False)
 
-        optimizer = torch.optim.AdamW(self.net.parameters(), lr=self.lr, weight_decay=self.weight_decay)
-        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=max(max_epochs, 1), eta_min=self.lr * 0.05)
+        # Chọn hàm mất mát (Criterion) và bộ tối ưu (Optimizer) chuẩn PyTorch
         criterion = nn.MSELoss()
+        optimizer = optim.Adam(self.net.parameters(), lr=self.lr, weight_decay=self.weight_decay)
+        scheduler = optim.lr_scheduler.CosineAnnealingLR(
+            optimizer, T_max=max(num_epochs, 1), eta_min=self.lr * 0.05
+        )
         scaler_amp = torch.amp.GradScaler("cuda", enabled=self.amp_enabled)
 
         best_val = float("inf")
@@ -391,47 +516,25 @@ class LSTMForecaster:
         best_ep = 1
         wait = 0
 
-        for ep in range(1, max_epochs + 1):
-            self.net.train()
-            ep_loss = 0.0
-            ep_mae = 0.0
-            n_seen = 0
-            optimizer_stepped = False
-
-            for bx, by in tr_loader:
-                bx = bx.to(self.device, non_blocking=True)
-                by = by.to(self.device, non_blocking=True)
-                optimizer.zero_grad(set_to_none=True)
-
-                with torch.amp.autocast("cuda", enabled=self.amp_enabled):
-                    pred = self.net(bx)
-                    loss = criterion(pred, by)
-                
-                if self.amp_enabled:
-                  old_scale = scaler_amp.get_scale()
-                  scaler_amp.scale(loss).backward()
-                  scaler_amp.unscale_(optimizer)
-                  nn.utils.clip_grad_norm_(self.net.parameters(), self.grad_clip)  # (ở SpatioTemporalTrainer là 2.0)
-                  scaler_amp.step(optimizer)
-                  scaler_amp.update()
-                  if scaler_amp.get_scale() >= old_scale:
-                    optimizer_stepped = True
-                else:
-                   loss.backward()
-                   nn.utils.clip_grad_norm_(self.net.parameters(), self.grad_clip)  # (ở SpatioTemporalTrainer là 2.0)
-                   optimizer.step()
-                   optimizer_stepped = True
-
-
-                bs = bx.size(0)
-                ep_loss += loss.item() * bs
-                ep_mae += torch.abs(pred - by).sum().item()
-                n_seen += bs
+        for epoch in range(num_epochs):
+            ep = epoch + 1
+            tr_mse, tr_mae, optimizer_stepped = train_one_epoch(
+                model=self.net,
+                train_dataloader=train_dataloader,
+                criterion=criterion,
+                optimizer=optimizer,
+                device=self.device,
+                grad_clip=self.grad_clip,
+                amp_enabled=self.amp_enabled,
+                scaler_amp=scaler_amp,
+                epoch_idx=ep,
+                num_epochs=num_epochs,
+                verbose=verbose,
+                log_interval=log_interval,
+            )
             if optimizer_stepped:
-               scheduler.step()
-               
-            tr_mse = ep_loss / max(n_seen, 1)
-            tr_mae = ep_mae / max(n_seen, 1)
+                scheduler.step()
+
             self.history["train_loss"].append(round(float(tr_mse), 6))
             self.history["train_mae"].append(round(float(tr_mae), 6))
 
@@ -455,25 +558,27 @@ class LSTMForecaster:
                 best_weights = copy.deepcopy(self.net.state_dict())
                 best_ep = ep
 
+        if verbose:
+            print("Training finished!")
+
         self.net.load_state_dict(best_weights)
         self.history["best_epoch"] = int(best_ep)
-        self.history["best_val_loss"] = round(float(best_val if best_val < float("inf") else self.history["train_loss"][-1]), 6)
+        self.history["best_val_loss"] = round(
+            float(best_val if best_val < float("inf") else self.history["train_loss"][-1]), 6
+        )
         self.history["epochs_executed"] = int(len(self.history["train_loss"]))
         self.train_time_sec = time.perf_counter() - t0
         return self
 
     def predict_scaled(self, X: np.ndarray) -> np.ndarray:
-        self.net.eval()
-        ds = TensorDataset(torch.tensor(X, dtype=torch.float32))
-        loader = DataLoader(ds, batch_size=self.batch_size * 2, shuffle=False)
-        preds_list: List[np.ndarray] = []
-        with torch.no_grad():
-            for (bx,) in loader:
-                bx = bx.to(self.device, non_blocking=True)
-                with torch.amp.autocast("cuda", enabled=self.amp_enabled):
-                    out = self.net(bx)
-                preds_list.append(out.detach().cpu().numpy())
-        return np.concatenate(preds_list, axis=0).astype(np.float64)
+        return predict_in_batches(
+            model=self.net,
+            X=X,
+            device=self.device,
+            batch_size=self.batch_size * 2,
+            amp_enabled=self.amp_enabled,
+            output_dtype=np.float64,
+        )
 
     def predict_original(self, X: np.ndarray, load_mean: float, load_std: float) -> np.ndarray:
         return self.predict_scaled(X) * float(load_std) + float(load_mean)
@@ -519,7 +624,7 @@ class DiffusionConvGRUCell(nn.Module):
         - Input: x_t (B, N, C_in), h_prev (B, N, H), supports_stack (S, N, N).
         - Output: Trạng thái ẩn cập nhật h_t (B, N, H).
     How: Thay thế phép nhân ma trận thông thường trong cổng Reset r_t, Update u_t và Candidate c_t của GRU
-         bằng phép tích chập khuếch tán đồ thị hai chiều qua torch.einsum('snm,bmc->bsnc').
+         bằng phép tích chập khuếch tán đồ thị hai chiều qua torch.einsum('snm,bmc->bnsc').
     """
 
     def __init__(self, num_supports: int, input_dim: int, hidden_dim: int) -> None:
@@ -533,7 +638,6 @@ class DiffusionConvGRUCell(nn.Module):
         self.cand_linear = nn.Linear(total_in, self.hidden_dim)
 
     def _graph_conv(self, x_cat: torch.Tensor, supports_stack: torch.Tensor) -> torch.Tensor:
-        # x_cat: (B, N, C) | supports_stack: (S, N, N) -> out: (B, N, S*C)
         diffused = torch.einsum("snm,bmc->bnsc", supports_stack, x_cat)
         b, n, s, c = diffused.shape
         return diffused.reshape(b, n, s * c)
@@ -585,7 +689,6 @@ class DCRNNNet(nn.Module):
             nn.GELU(),
             nn.Linear(hidden_dim, num_horizons),
         )
-        # Nhánh kết nối tắt thời gian + không gian cho từng tầm nhìn
         self.ar_highway = nn.Linear(lookback, num_horizons)
         with torch.no_grad():
             nn.init.zeros_(self.ar_highway.weight)
@@ -594,7 +697,6 @@ class DCRNNNet(nn.Module):
             self.ar_highway.weight[:, -2] = 0.15
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        # x: (B, L, N)
         b, l_steps, n_nodes = x.shape
         h = torch.zeros(b, n_nodes, self.hidden_dim, device=x.device, dtype=x.dtype)
         for t in range(l_steps):
@@ -602,7 +704,6 @@ class DCRNNNet(nn.Module):
             h = self.cell1(x_t, h, self.supports_stack)
 
         h_norm = self.norm(h)
-        # Tích hợp ngữ cảnh không gian từ các trạm lân cận trên trạng thái ẩn cuối
         spatial_ctx = torch.einsum("snm,bmh->bnsh", self.supports_stack, h_norm).reshape(b, n_nodes, -1)
         delta_out = self.proj(spatial_ctx).permute(0, 2, 1)  # (B, H_out=3, N)
 
@@ -638,7 +739,6 @@ class MultiHorizonTCNNet(nn.Module):
             self.ar_linear.weight[:, -1] = 0.78
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        # x: (B, L, N) -> (B*N, 1, L)
         b, l_steps, n_nodes = x.shape
         x_flat = x.permute(0, 2, 1).reshape(b * n_nodes, 1, l_steps)
 
@@ -689,7 +789,8 @@ class SpatioTemporalTrainer:
     Input-Output:
         - Input: Mạng PyTorch (DCRNNNet / MultiHorizonTCNNet / MultiHorizonPemsLSTMNet) và các tensor PEMS-BAY.
         - Output: Trọng số tối ưu, lịch sử hội tụ và dự báo tốc độ giao thông (mph) tại 3 mốc 15p, 30p, 60p.
-    How: Tối ưu hàm mất mát MAE/Huber kết hợp AdamW + CosineAnnealingLR + EarlyStopping trên GPU.
+    How: Tách bạch khởi tạo SmoothL1Loss + torch.optim.Adam, ủy quyền vòng lặp 6 bước cho train_one_epoch()
+         và theo dõi Validation MAE + EarlyStopping.
     """
 
     def __init__(
@@ -726,17 +827,22 @@ class SpatioTemporalTrainer:
         Y_train_scaled: np.ndarray,
         X_val: np.ndarray,
         Y_val_scaled: np.ndarray,
+        verbose: bool = False,
+        log_interval: int = 20,
     ) -> "SpatioTemporalTrainer":
         t0 = time.perf_counter()
-        tr_ds = TensorDataset(
+        train_dataset = TensorDataset(
             torch.tensor(X_train, dtype=torch.float32),
             torch.tensor(Y_train_scaled, dtype=torch.float32),
         )
-        tr_loader = DataLoader(tr_ds, batch_size=self.batch_size, shuffle=True, drop_last=False)
+        train_dataloader = DataLoader(train_dataset, batch_size=self.batch_size, shuffle=True, drop_last=False)
 
-        optimizer = torch.optim.AdamW(self.net.parameters(), lr=self.lr, weight_decay=1e-4)
-        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=max(self.epochs, 1), eta_min=self.lr * 0.1)
+        # Chọn hàm mất mát (SmoothL1Loss/Huber cho hồi quy giao thông chống nhiễu đột biến) và bộ tối ưu Adam
         criterion = nn.SmoothL1Loss(beta=0.5)
+        optimizer = optim.Adam(self.net.parameters(), lr=self.lr, weight_decay=1e-4)
+        scheduler = optim.lr_scheduler.CosineAnnealingLR(
+            optimizer, T_max=max(self.epochs, 1), eta_min=self.lr * 0.1
+        )
         scaler_amp = torch.amp.GradScaler("cuda", enabled=self.amp_enabled)
 
         best_val = float("inf")
@@ -745,42 +851,26 @@ class SpatioTemporalTrainer:
         patience = 4
         wait = 0
 
-        for ep in range(1, self.epochs + 1):
-            self.net.train()
-            ep_loss = 0.0
-            n_seen = 0
-            optimizer_stepped = False
-            
-            for bx, by in tr_loader:
-                bx = bx.to(self.device, non_blocking=True)
-                by = by.to(self.device, non_blocking=True)
-                optimizer.zero_grad(set_to_none=True)
-                with torch.amp.autocast("cuda", enabled=self.amp_enabled):
-                    pred = self.net(bx)
-                    loss = criterion(pred, by)
-                if self.amp_enabled:
-                    old_scale = scaler_amp.get_scale()
-                    scaler_amp.scale(loss).backward()
-                    scaler_amp.unscale_(optimizer)
-                    nn.utils.clip_grad_norm_(self.net.parameters(), 2.0)
-                    scaler_amp.step(optimizer)
-                    scaler_amp.update()
-                    if scaler_amp.get_scale() >= old_scale:
-                        optimizer_stepped = True
-                else:
-                    loss.backward()
-                    nn.utils.clip_grad_norm_(self.net.parameters(), 2.0)
-                    optimizer.step()
-                    optimizer_stepped = True
-
-                bs = bx.size(0)
-                ep_loss += loss.item() * bs
-                n_seen += bs
-
+        for epoch in range(self.epochs):
+            ep = epoch + 1
+            tr_l, _, optimizer_stepped = train_one_epoch(
+                model=self.net,
+                train_dataloader=train_dataloader,
+                criterion=criterion,
+                optimizer=optimizer,
+                device=self.device,
+                grad_clip=2.0,
+                amp_enabled=self.amp_enabled,
+                scaler_amp=scaler_amp,
+                epoch_idx=ep,
+                num_epochs=self.epochs,
+                verbose=verbose,
+                log_interval=log_interval,
+                log_prefix=self.model_name,
+            )
             if optimizer_stepped:
-                scheduler.step()            
-            
-            tr_l = ep_loss / max(n_seen, 1)
+                scheduler.step()
+
             val_preds = self.predict_scaled(X_val)
             val_l = float(np.mean(np.abs(val_preds - Y_val_scaled)))
 
@@ -797,6 +887,9 @@ class SpatioTemporalTrainer:
                 if wait >= patience:
                     break
 
+        if verbose:
+            print(f"[{self.model_name}] Training finished!")
+
         self.net.load_state_dict(best_w)
         self.history["best_epoch"] = int(best_ep)
         self.history["best_val_loss"] = round(float(best_val), 5)
@@ -805,17 +898,14 @@ class SpatioTemporalTrainer:
         return self
 
     def predict_scaled(self, X: np.ndarray) -> np.ndarray:
-        self.net.eval()
-        ds = TensorDataset(torch.tensor(X, dtype=torch.float32))
-        loader = DataLoader(ds, batch_size=self.batch_size * 2, shuffle=False)
-        preds: List[np.ndarray] = []
-        with torch.no_grad():
-            for (bx,) in loader:
-                bx = bx.to(self.device, non_blocking=True)
-                with torch.amp.autocast("cuda", enabled=self.amp_enabled):
-                    out = self.net(bx)
-                preds.append(out.detach().cpu().numpy())
-        return np.concatenate(preds, axis=0).astype(np.float32)
+        return predict_in_batches(
+            model=self.net,
+            X=X,
+            device=self.device,
+            batch_size=self.batch_size * 2,
+            amp_enabled=self.amp_enabled,
+            output_dtype=np.float32,
+        )
 
     def predict_original(self, X: np.ndarray, mean_val: float, std_val: float) -> np.ndarray:
         return self.predict_scaled(X) * float(std_val) + float(mean_val)
